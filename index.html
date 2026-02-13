@@ -346,66 +346,116 @@ function updateStatusText(msg) {
   if (el) el.textContent = msg;
 }
 
+// ------------------------------------------------------------
+// Phase 1: Quick overview fetch (latest year only, all areas)
+// ------------------------------------------------------------
 async function fetchLiveData() {
   if (!mcpReinfo || !mcpReinfo.connected) return;
 
   try {
-    updateStatusText('リアルタイムデータを取得中...');
+    updateStatusText('概要データを取得中...');
 
-    // Get city list for Mie (area code 24)
     const cityResult = await mcpReinfo.callTool('reinfolib-city-list', { area: '24' });
 
-    // Fetch multiple years × quarters to maximize transaction data
-    const yearQuarters = [
-      { year: '2024', quarter: '4' }, { year: '2024', quarter: '3' },
-      { year: '2024', quarter: '2' }, { year: '2024', quarter: '1' },
-      { year: '2023', quarter: '4' }, { year: '2023', quarter: '3' },
-      { year: '2023', quarter: '2' }, { year: '2023', quarter: '1' },
-      { year: '2022', quarter: '4' }, { year: '2022', quarter: '3' },
-      { year: '2022', quarter: '2' }, { year: '2022', quarter: '1' },
-      { year: '2021', quarter: '4' }, { year: '2021', quarter: '3' },
-      { year: '2021', quarter: '2' }, { year: '2021', quarter: '1' },
-      { year: '2020', quarter: '4' }, { year: '2020', quarter: '3' },
-      { year: '2020', quarter: '2' }, { year: '2020', quarter: '1' },
-    ];
+    // Fetch only latest year for quick overview (7 requests)
     const priceResults = [];
-    let totalTx = 0;
-
     for (const area of AREAS) {
-      const allData = [];
-      for (const yq of yearQuarters) {
-        try {
-          updateStatusText(`${area.name} ${yq.year}年Q${yq.quarter} 取得中...`);
-          const priceData = await mcpReinfo.callTool('reinfolib-real-estate-price', {
-            year: yq.year, quarter: yq.quarter, area: '24', city: area.cityCode
-          });
-          allData.push(priceData);
-        } catch(e) {
-          console.warn(`Price fetch failed for ${area.name} ${yq.year}Q${yq.quarter}:`, e);
-        }
+      try {
+        updateStatusText(`${area.name} の概要データ取得中...`);
+        const priceData = await mcpReinfo.callTool('reinfolib-real-estate-price', {
+          year: '2024', area: '24', city: area.cityCode
+        });
+        priceResults.push({ cityCode: area.cityCode, quarters: [priceData] });
+      } catch(e) {
+        console.warn(`Overview fetch failed for ${area.name}:`, e);
+        priceResults.push({ cityCode: area.cityCode, quarters: [] });
       }
-      // Merge all quarter results
-      priceResults.push({ cityCode: area.cityCode, quarters: allData });
     }
 
     state.mcpLiveData = { cities: cityResult, prices: priceResults };
-
-    // Update area data with live results (merge all quarters)
     updateAreasWithLiveData(priceResults);
 
-    // Count total transactions
+    let totalTx = 0;
     AREAS.forEach(a => { if (a._liveTransactions) totalTx += a._liveTransactions.length; });
-    state.mcpMessage = `ライブデータ取得完了 — ${priceResults.length}エリア・計${totalTx}件の取引データを反映`;
+    state.mcpMessage = `概要データ取得完了（計${totalTx}件） — エリアをクリックすると詳細データを取得します`;
 
-    // One final render to refresh all views with live data
     render();
-
-    // Background geocoding (doesn't block UI, uses cached data if available)
-    geocodeDistrictsBackground().catch(e => console.warn('Background geocoding error:', e));
   } catch(e) {
     state.mcpMessage = `データ取得エラー: ${e.message}（キャッシュデータを使用中）`;
     render();
   }
+}
+
+// ------------------------------------------------------------
+// Phase 2: Deep fetch for a single area (5 years × 4 quarters)
+// ------------------------------------------------------------
+const AREA_FULL_LOADED = new Set();
+let _currentFetchAreaId = null;
+
+async function fetchAreaFullData(areaId) {
+  if (!mcpReinfo || !mcpReinfo.connected) return;
+  if (AREA_FULL_LOADED.has(areaId)) return; // already loaded
+  if (_currentFetchAreaId === areaId) return; // already fetching
+
+  const area = AREAS.find(a => a.id === areaId);
+  if (!area) return;
+
+  _currentFetchAreaId = areaId;
+
+  const yearQuarters = [
+    { year: '2024', quarter: '4' }, { year: '2024', quarter: '3' },
+    { year: '2024', quarter: '2' }, { year: '2024', quarter: '1' },
+    { year: '2023', quarter: '4' }, { year: '2023', quarter: '3' },
+    { year: '2023', quarter: '2' }, { year: '2023', quarter: '1' },
+    { year: '2022', quarter: '4' }, { year: '2022', quarter: '3' },
+    { year: '2022', quarter: '2' }, { year: '2022', quarter: '1' },
+    { year: '2021', quarter: '4' }, { year: '2021', quarter: '3' },
+    { year: '2021', quarter: '2' }, { year: '2021', quarter: '1' },
+    { year: '2020', quarter: '4' }, { year: '2020', quarter: '3' },
+    { year: '2020', quarter: '2' }, { year: '2020', quarter: '1' },
+  ];
+
+  const allData = [];
+  let done = 0;
+  const total = yearQuarters.length;
+
+  for (const yq of yearQuarters) {
+    try {
+      done++;
+      updateStatusText(`${area.name} 詳細取得中... (${done}/${total})`);
+      const priceData = await mcpReinfo.callTool('reinfolib-real-estate-price', {
+        year: yq.year, quarter: yq.quarter, area: '24', city: area.cityCode
+      });
+      allData.push(priceData);
+    } catch(e) {
+      console.warn(`Detail fetch failed for ${area.name} ${yq.year}Q${yq.quarter}:`, e);
+    }
+  }
+
+  // Merge with existing overview data
+  const existingTx = area._liveTransactions || [];
+  updateAreasWithLiveData([{ cityCode: area.cityCode, quarters: allData }]);
+
+  AREA_FULL_LOADED.add(areaId);
+  _currentFetchAreaId = null;
+
+  const txCount = area._liveTransactions ? area._liveTransactions.length : 0;
+  updateStatusText(`${area.name}: 詳細データ取得完了（${txCount}件）`);
+
+  // Refresh map pins for this area
+  if (state.view === 'map' && txMarkerLayer) {
+    if (state.mapSelectedAreaId === areaId) {
+      showTransactionPins(area);
+    }
+    // Update sidebar if showing this area
+    const ranked = getRankedAreas();
+    if (state.mapSelectedAreaId === areaId) {
+      updateMapSidebar(area, ranked);
+    }
+  }
+
+  // Background geocode new districts
+  geocodeDistrictsBackground().catch(e => console.warn('Geocoding error:', e));
 }
 
 function extractTransactionsFromMCPResponse(data) {
@@ -910,6 +960,11 @@ function initializeMap(ranked) {
       updateMapSidebar(area, ranked);
       showTransactionPins(area);
       mapInstance.flyTo([area.lat, area.lng], 13, { duration: 0.8 });
+
+      // Auto-fetch full data for this area if not yet loaded
+      if (!AREA_FULL_LOADED.has(area.id) && mcpReinfo && mcpReinfo.connected) {
+        fetchAreaFullData(area.id);
+      }
     });
 
     mapMarkers[area.id] = marker;
@@ -918,12 +973,15 @@ function initializeMap(ranked) {
   // Show all transaction pins at overview
   showAllTransactionPins(ranked);
 
-  // If area already selected, zoom to it
+  // If area already selected, zoom to it and auto-fetch full data
   if (state.mapSelectedAreaId) {
     const sel = ranked.find(a => a.id === state.mapSelectedAreaId);
     if (sel) {
       showTransactionPins(sel);
       mapInstance.setView([sel.lat, sel.lng], 13);
+      if (!AREA_FULL_LOADED.has(sel.id) && mcpReinfo && mcpReinfo.connected) {
+        fetchAreaFullData(sel.id);
+      }
     }
   }
 }
@@ -1260,7 +1318,17 @@ function updateMapSidebar(area, ranked) {
   const medals = ['🥇','🥈','🥉'];
   const medalStr = rank <= 3 ? medals[rank-1] : `${rank}位`;
 
-  const txSection = area._liveTransactions && area._liveTransactions.length > 0
+  const isFullLoaded = AREA_FULL_LOADED.has(area.id);
+  const isFetching = _currentFetchAreaId === area.id;
+  const txCount = area._liveTransactions ? area._liveTransactions.length : 0;
+
+  const loadingBadge = isFetching
+    ? '<span class="inline-flex items-center gap-1 text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full mb-2"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>詳細データ取得中...</span>'
+    : isFullLoaded
+      ? `<span class="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full mb-2">✅ 全期間データ取得済み（${txCount}件）</span>`
+      : `<span class="text-xs text-gray-400 mb-2">概要データのみ（${txCount}件）</span>`;
+
+  const txSection = txCount > 0
     ? renderTransactionList(area._liveTransactions)
     : (state.mcpStatus === 'connected'
       ? '<p class="text-xs text-gray-400 mt-2">取引データなし</p>'
@@ -1277,6 +1345,7 @@ function updateMapSidebar(area, ranked) {
       </div>
     </div>
     <div class="sidebar-body space-y-4">
+      ${loadingBadge}
       <!-- Key metrics -->
       <div class="grid grid-cols-2 gap-2">
         <div class="bg-blue-50 rounded-lg p-2 text-center">
