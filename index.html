@@ -1216,7 +1216,7 @@ function findStationCoords(stationName) {
 // District Geocoding (Nominatim + localStorage cache)
 // ============================================================
 const DISTRICT_CACHE = new Map();
-const DISTRICT_CACHE_KEY = 'mie-realestate-district-coords-v1';
+const DISTRICT_CACHE_KEY = 'mie-realestate-district-coords-v2';
 
 // Load cached coords from localStorage on startup
 function loadDistrictCache() {
@@ -1243,12 +1243,35 @@ async function geocodeDistrict(district, cityName) {
   const cacheKey = `${cityName}-${district}`;
   if (DISTRICT_CACHE.has(cacheKey)) return DISTRICT_CACHE.get(cacheKey);
 
+  // Try GSI (国土地理院) API first, then Nominatim as fallback
   const queries = [
-    `${district}, ${cityName}, 三重県`,
-    `${district}, ${cityName}`,
+    `三重県${cityName}${district}`,
+    `${cityName}${district}`,
   ];
 
+  // GSI API (more reliable for Japanese addresses)
   for (const q of queries) {
+    try {
+      const url = `https://msearch.gsi.go.jp/address-search/AddressSearch?q=${encodeURIComponent(q)}`;
+      const resp = await fetch(url);
+      if (!resp.ok) continue;
+      const results = await resp.json();
+      if (results.length > 0) {
+        const coords_arr = results[0].geometry.coordinates; // [lng, lat]
+        const lat = parseFloat(coords_arr[1]);
+        const lng = parseFloat(coords_arr[0]);
+        if (lat >= 34.2 && lat <= 35.5 && lng >= 135.8 && lng <= 137.0) {
+          const coords = [lat, lng];
+          DISTRICT_CACHE.set(cacheKey, coords);
+          return coords;
+        }
+      }
+    } catch(e) { /* skip */ }
+  }
+
+  // Nominatim fallback
+  const nomQueries = [`${district}, ${cityName}, 三重県`, `${district}, ${cityName}`];
+  for (const q of nomQueries) {
     try {
       const url = `https://nominatim.openstreetmap.org/search?` +
         `q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=jp`;
@@ -1300,8 +1323,8 @@ async function geocodeDistrictsBackground() {
     await geocodeDistrict(district, cityName);
     // Save every 5 results
     if (done % 5 === 0) saveDistrictCache();
-    // Nominatim rate limit: 1 req/sec
-    if (done < total) await new Promise(r => setTimeout(r, 1100));
+    // Rate limit: 300ms between requests (GSI API is less restrictive than Nominatim)
+    if (done < total) await new Promise(r => setTimeout(r, 300));
   }
 
   saveDistrictCache();
