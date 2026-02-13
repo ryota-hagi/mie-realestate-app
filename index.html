@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>三重県北部 不動産おすすめエリア診断 | 夢のすみか</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -29,6 +31,24 @@
   .pulse-dot { width: 8px; height: 8px; border-radius: 50%; animation: pulse 2s infinite; }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
   .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 500; }
+  /* Map styles */
+  .map-layout { display: flex; gap: 0; height: 600px; }
+  #map-container { flex: 1; border-radius: 12px 0 0 12px; overflow: hidden; z-index: 1; }
+  #map-sidebar { width: 340px; background: white; border-left: 1px solid #e5e7eb; border-radius: 0 12px 12px 0; overflow-y: auto; padding: 0; }
+  .leaflet-container { font-family: 'Noto Sans JP', sans-serif; }
+  .map-marker-icon { transition: transform 0.2s; }
+  .map-marker-icon:hover { transform: scale(1.15); }
+  .sidebar-header { padding: 16px; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; background: white; z-index: 2; }
+  .sidebar-body { padding: 16px; }
+  .tx-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .tx-table th { background: #f9fafb; padding: 6px 8px; text-align: left; font-weight: 500; color: #6b7280; position: sticky; top: 0; }
+  .tx-table td { padding: 6px 8px; border-top: 1px solid #f3f4f6; }
+  .tx-table tr:hover { background: #eff6ff; }
+  @media (max-width: 768px) {
+    .map-layout { flex-direction: column; height: auto; }
+    #map-container { height: 400px; border-radius: 12px 12px 0 0; }
+    #map-sidebar { width: 100%; border-left: none; border-top: 1px solid #e5e7eb; border-radius: 0 0 12px 12px; max-height: 350px; }
+  }
 </style>
 </head>
 <body>
@@ -175,7 +195,7 @@ class MCPClient {
 // ============================================================
 const AREAS = [
   {
-    id: "yokkaichi", name: "四日市市", cityCode: "24202",
+    id: "yokkaichi", name: "四日市市", cityCode: "24202", lat: 34.9650, lng: 136.6244,
     landPriceAvg: 57020, residentialPrice: 48385, commercialPrice: 89007, pricePerTsubo: 188498,
     yoyChange: 1.33, population: 311000, popGrowthRate: -0.3, accessToNagoya: 35,
     hospitals: 42, schools: 58, parks: 35, shopping: 120, safetyScore: 78, childcareScore: 82, naturalScore: 55,
@@ -186,7 +206,7 @@ const AREAS = [
     recAreas: ["富田・富洲原エリア（駅近で割安）","笹川・日永エリア（住環境良好）","水沢・小山田エリア（自然豊か）"]
   },
   {
-    id: "kuwana", name: "桑名市", cityCode: "24205",
+    id: "kuwana", name: "桑名市", cityCode: "24205", lat: 35.0585, lng: 136.6834,
     landPriceAvg: 55543, residentialPrice: 53686, commercialPrice: 86714, pricePerTsubo: 183614,
     yoyChange: 0.82, population: 140000, popGrowthRate: -0.5, accessToNagoya: 25,
     hospitals: 18, schools: 28, parks: 22, shopping: 55, safetyScore: 82, childcareScore: 85, naturalScore: 68,
@@ -197,7 +217,7 @@ const AREAS = [
     recAreas: ["桑名駅周辺（利便性重視）","多度エリア（自然と価格バランス）","長島エリア（ゆったり居住）"]
   },
   {
-    id: "suzuka", name: "鈴鹿市", cityCode: "24207",
+    id: "suzuka", name: "鈴鹿市", cityCode: "24207", lat: 34.8824, lng: 136.5842,
     landPriceAvg: 41015, residentialPrice: 38000, commercialPrice: 62000, pricePerTsubo: 135587,
     yoyChange: 1.11, population: 195000, popGrowthRate: -0.2, accessToNagoya: 55,
     hospitals: 25, schools: 42, parks: 28, shopping: 72, safetyScore: 80, childcareScore: 80, naturalScore: 65,
@@ -208,7 +228,7 @@ const AREAS = [
     recAreas: ["白子駅周辺（利便性◎）","平田・算所エリア（落ち着いた住宅地）","庄野・加佐登エリア（新興住宅地）"]
   },
   {
-    id: "inabe", name: "いなべ市", cityCode: "24212",
+    id: "inabe", name: "いなべ市", cityCode: "24212", lat: 35.1146, lng: 136.5612,
     landPriceAvg: 24500, residentialPrice: 22000, commercialPrice: 35000, pricePerTsubo: 81000,
     yoyChange: 0.45, population: 44000, popGrowthRate: -0.8, accessToNagoya: 65,
     hospitals: 6, schools: 14, parks: 18, shopping: 15, safetyScore: 88, childcareScore: 75, naturalScore: 95,
@@ -219,7 +239,7 @@ const AREAS = [
     recAreas: ["北勢エリア（駅近・利便性）","員弁エリア（閑静な住宅地）","藤原エリア（山間部・格安）"]
   },
   {
-    id: "kameyama", name: "亀山市", cityCode: "24210",
+    id: "kameyama", name: "亀山市", cityCode: "24210", lat: 34.8540, lng: 136.4520,
     landPriceAvg: 29500, residentialPrice: 27000, commercialPrice: 42000, pricePerTsubo: 97500,
     yoyChange: 0.68, population: 49000, popGrowthRate: -0.6, accessToNagoya: 60,
     hospitals: 8, schools: 16, parks: 15, shopping: 22, safetyScore: 85, childcareScore: 76, naturalScore: 80,
@@ -230,7 +250,7 @@ const AREAS = [
     recAreas: ["亀山駅周辺（JRアクセス）","関エリア（宿場町の風情）","野村エリア（新興住宅地）"]
   },
   {
-    id: "komono", name: "菰野町", cityCode: "24341",
+    id: "komono", name: "菰野町", cityCode: "24341", lat: 35.0244, lng: 136.5090,
     landPriceAvg: 31000, residentialPrice: 29000, commercialPrice: 45000, pricePerTsubo: 102500,
     yoyChange: 0.55, population: 41000, popGrowthRate: -0.1, accessToNagoya: 50,
     hospitals: 7, schools: 12, parks: 20, shopping: 25, safetyScore: 86, childcareScore: 83, naturalScore: 92,
@@ -241,7 +261,7 @@ const AREAS = [
     recAreas: ["菰野駅周辺（利便性重視）","湯の山エリア（温泉・自然）","竹成・千草エリア（閑静）"]
   },
   {
-    id: "toin", name: "東員町", cityCode: "24343",
+    id: "toin", name: "東員町", cityCode: "24343", lat: 35.0690, lng: 136.6030,
     landPriceAvg: 35500, residentialPrice: 33000, commercialPrice: 48000, pricePerTsubo: 117400,
     yoyChange: 0.72, population: 26000, popGrowthRate: 0.1, accessToNagoya: 40,
     hospitals: 5, schools: 8, parks: 12, shopping: 18, safetyScore: 87, childcareScore: 88, naturalScore: 72,
@@ -261,12 +281,17 @@ const COLORS = ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06
 const state = {
   view: 'ranking',
   selectedAreaId: null,
+  mapSelectedAreaId: null,
   mcpStatus: 'disconnected', // disconnected | connecting | connected | error
   mcpMessage: '',
   mcpLiveData: null,
   weights: { price: 25, access: 20, growth: 15, living: 15, family: 15, nature: 10 },
   charts: {}
 };
+
+// Map globals (persistent across renders)
+let mapInstance = null;
+let mapMarkers = {};
 
 // ============================================================
 // Score Calculation
@@ -364,6 +389,21 @@ function updateAreasWithLiveData(priceResults) {
         try {
           const parsed = JSON.parse(textContent.text);
           if (parsed.data && Array.isArray(parsed.data)) {
+            // Store full transaction records for map display
+            area._liveTransactions = parsed.data.map(d => ({
+              TradePrice: d.TradePrice ? parseInt(d.TradePrice) : null,
+              Type: d.Type || d.TradeType || '',
+              Area: d.Area ? parseFloat(d.Area) : null,
+              FloorPlan: d.FloorPlan || '',
+              BuildingYear: d.BuildingYear || '',
+              NearestStation: d.NearestStation || '',
+              DistanceToStation: d.TimeToNearestStation || d.DistanceToStation || '',
+              Use: d.Use || d.Purpose || '',
+              District: d.DistrictName || d.Region || '',
+              Structure: d.Structure || '',
+              CityPlanning: d.CityPlanning || '',
+            }));
+
             // Calculate average trade price from live data
             const prices = parsed.data.filter(d => d.TradePrice).map(d => parseInt(d.TradePrice));
             if (prices.length > 0) {
@@ -394,6 +434,7 @@ function render() {
       ${state.view === 'ranking' ? renderRanking(ranked) : ''}
       ${state.view === 'compare' ? renderCompare(ranked) : ''}
       ${state.view === 'detail' ? renderDetail(selected, ranked) : ''}
+      ${state.view === 'map' ? renderMap(ranked) : ''}
       ${renderFooter()}
     </div>
   `;
@@ -401,10 +442,17 @@ function render() {
   // Re-bindイベント
   bindEvents(ranked);
 
-  // チャート描画（DOMが存在してから）
+  // チャート描画・マップ初期化（DOMが存在してから）
   requestAnimationFrame(() => {
     if (state.view === 'compare') drawCompareCharts(ranked);
     if (state.view === 'detail' && selected) drawDetailCharts(selected);
+    if (state.view === 'map') {
+      initializeMap(ranked);
+      if (state.mapSelectedAreaId) {
+        const selArea = ranked.find(a => a.id === state.mapSelectedAreaId);
+        if (selArea) updateMapSidebar(selArea, ranked);
+      }
+    }
   });
 }
 
@@ -412,7 +460,8 @@ function renderHeader() {
   const tabs = [
     { id: 'ranking', label: '🏆 ランキング' },
     { id: 'compare', label: '📊 比較' },
-    { id: 'detail', label: '🔍 詳細' }
+    { id: 'detail', label: '🔍 詳細' },
+    { id: 'map', label: '🗺️ 地図' }
   ];
   return `
     <header class="glass sticky top-0 z-50 border-b border-gray-200 shadow-sm">
@@ -636,6 +685,7 @@ function renderDetail(area, ranked) {
       <div class="flex items-center gap-3 flex-wrap">
         <button id="btn-back" class="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm hover:bg-gray-200 transition-colors">← 戻る</button>
         <h2 class="text-lg font-bold text-gray-800">🔍 ${area.name} の詳細分析</h2>
+        <button id="btn-to-map" class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg text-sm hover:bg-blue-50 transition-colors ml-auto">🗺️ マップで表示</button>
       </div>
 
       <div class="flex flex-wrap gap-2">
@@ -733,6 +783,258 @@ function renderDetail(area, ranked) {
         </div>
       </div>
     </div>
+  `;
+}
+
+// ============================================================
+// Map View
+// ============================================================
+function renderMap(ranked) {
+  const selArea = state.mapSelectedAreaId ? ranked.find(a => a.id === state.mapSelectedAreaId) : null;
+  return `
+    <div class="space-y-4 fade-in">
+      <h2 class="text-lg font-bold text-gray-800">🗺️ エリアマップ</h2>
+      <div class="card overflow-hidden">
+        <div class="map-layout">
+          <div id="map-container"></div>
+          <div id="map-sidebar">
+            ${selArea ? '' : `
+              <div class="flex flex-col items-center justify-center h-full text-center p-8">
+                <div class="text-4xl mb-3">📍</div>
+                <p class="text-sm font-medium text-gray-700 mb-1">エリアを選択してください</p>
+                <p class="text-xs text-gray-400">マップ上のマーカーをクリックすると<br>土地情報・取引データが表示されます</p>
+              </div>
+            `}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function initializeMap(ranked) {
+  const container = document.getElementById('map-container');
+  if (!container || !window.L) return;
+
+  // Destroy existing map if present (container re-created by render)
+  if (mapInstance) {
+    try { mapInstance.remove(); } catch {}
+    mapInstance = null;
+    mapMarkers = {};
+  }
+
+  // Create map centered on northern Mie
+  mapInstance = L.map('map-container', { zoomControl: true }).setView([34.98, 136.56], 10);
+
+  // OpenStreetMap tiles
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a>',
+    maxZoom: 18
+  }).addTo(mapInstance);
+
+  // Create markers
+  ranked.forEach((area, idx) => {
+    const color = COLORS[AREAS.findIndex(a => a.id === area.id) % COLORS.length];
+    const rank = idx + 1;
+    const icon = createMapIcon(color, rank, area.scores.total, area.id === state.mapSelectedAreaId);
+
+    const marker = L.marker([area.lat, area.lng], { icon })
+      .addTo(mapInstance);
+
+    // Tooltip on hover
+    marker.bindTooltip(`${area.name} (${area.scores.total}pt)`, {
+      direction: 'top', offset: [0, -20], className: 'map-tooltip'
+    });
+
+    marker.on('click', () => {
+      state.mapSelectedAreaId = area.id;
+      // Update all marker icons to reflect selection
+      ranked.forEach((a, i) => {
+        const c = COLORS[AREAS.findIndex(x => x.id === a.id) % COLORS.length];
+        mapMarkers[a.id].setIcon(createMapIcon(c, i + 1, a.scores.total, a.id === area.id));
+      });
+      updateMapSidebar(area, ranked);
+      mapInstance.flyTo([area.lat, area.lng], 12, { duration: 0.8 });
+    });
+
+    mapMarkers[area.id] = marker;
+  });
+
+  // If area already selected, zoom to it
+  if (state.mapSelectedAreaId) {
+    const sel = ranked.find(a => a.id === state.mapSelectedAreaId);
+    if (sel) mapInstance.setView([sel.lat, sel.lng], 12);
+  }
+}
+
+function createMapIcon(color, rank, score, isSelected) {
+  const size = isSelected ? 48 : 40;
+  const borderWidth = isSelected ? 3 : 2;
+  const shadow = isSelected ? 'filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));' : 'filter: drop-shadow(0 1px 3px rgba(0,0,0,0.2));';
+  const svgString = `
+    <svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg" style="${shadow}">
+      <circle cx="${size/2}" cy="${size/2}" r="${size/2-2}" fill="${color}" opacity="0.9" stroke="white" stroke-width="${borderWidth}"/>
+      <text x="${size/2}" y="${size/2-2}" text-anchor="middle" fill="white" font-size="${isSelected ? 11 : 10}" font-weight="500" font-family="sans-serif">${rank}位</text>
+      <text x="${size/2}" y="${size/2+10}" text-anchor="middle" fill="white" font-size="${isSelected ? 13 : 11}" font-weight="700" font-family="sans-serif">${score}</text>
+    </svg>`;
+  return L.icon({
+    iconUrl: 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString))),
+    iconSize: [size, size],
+    iconAnchor: [size/2, size/2],
+    popupAnchor: [0, -size/2],
+    tooltipAnchor: [0, -size/2]
+  });
+}
+
+function updateMapSidebar(area, ranked) {
+  const sidebar = document.getElementById('map-sidebar');
+  if (!sidebar) return;
+
+  const rank = ranked.findIndex(a => a.id === area.id) + 1;
+  const medals = ['🥇','🥈','🥉'];
+  const medalStr = rank <= 3 ? medals[rank-1] : `${rank}位`;
+
+  const txSection = area._liveTransactions && area._liveTransactions.length > 0
+    ? renderTransactionList(area._liveTransactions)
+    : (state.mcpStatus === 'connected'
+      ? '<p class="text-xs text-gray-400 mt-2">取引データなし</p>'
+      : '<p class="text-xs text-gray-400 mt-2">MCPに接続すると取引データが表示されます</p>');
+
+  sidebar.innerHTML = `
+    <div class="sidebar-header">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">${medalStr}</span>
+          <h3 class="text-lg font-bold text-gray-900">${area.name}</h3>
+        </div>
+        <span class="text-2xl font-bold text-blue-600">${area.scores.total}<span class="text-xs font-normal text-gray-400">pt</span></span>
+      </div>
+    </div>
+    <div class="sidebar-body space-y-4">
+      <!-- Key metrics -->
+      <div class="grid grid-cols-2 gap-2">
+        <div class="bg-blue-50 rounded-lg p-2 text-center">
+          <div class="text-xs text-gray-500">住宅地価格</div>
+          <div class="text-sm font-bold text-blue-700">${(area.residentialPrice/10000).toFixed(1)}万/m²</div>
+        </div>
+        <div class="bg-green-50 rounded-lg p-2 text-center">
+          <div class="text-xs text-gray-500">名古屋まで</div>
+          <div class="text-sm font-bold text-green-700">${area.accessToNagoya}分</div>
+        </div>
+        <div class="bg-amber-50 rounded-lg p-2 text-center">
+          <div class="text-xs text-gray-500">地価変動</div>
+          <div class="text-sm font-bold text-amber-700">+${area.yoyChange}%</div>
+        </div>
+        <div class="bg-purple-50 rounded-lg p-2 text-center">
+          <div class="text-xs text-gray-500">人口</div>
+          <div class="text-sm font-bold text-purple-700">${(area.population/10000).toFixed(1)}万人</div>
+        </div>
+      </div>
+
+      <!-- Live average price -->
+      ${area._liveAvgTradePrice ? `
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+            <span class="text-xs font-medium text-blue-700">LIVE 平均取引価格</span>
+          </div>
+          <div class="text-lg font-bold text-blue-800">${(area._liveAvgTradePrice / 10000).toFixed(0)}万円</div>
+          <div class="text-xs text-blue-500">${area._liveTransactionCount}件の取引データから算出</div>
+        </div>
+      ` : ''}
+
+      <!-- Description -->
+      <div>
+        <p class="text-xs text-gray-600 leading-relaxed">${area.description}</p>
+      </div>
+
+      <!-- Highlights -->
+      <div class="bg-green-50 rounded-lg p-3">
+        <div class="text-xs font-bold text-green-700 mb-2">✅ ポイント</div>
+        ${area.highlights.map(h => `<div class="text-xs text-green-800 mb-1">• ${h}</div>`).join('')}
+      </div>
+
+      <!-- Transaction data -->
+      <div>
+        <div class="text-xs font-bold text-gray-700 mb-2">📊 取引データ</div>
+        ${txSection}
+      </div>
+
+      <!-- Action buttons -->
+      <div class="flex gap-2">
+        <button data-map-to-detail="${area.id}" class="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-colors text-center">
+          🔍 詳細を見る
+        </button>
+        <button data-map-zoom-out class="px-3 py-2 bg-gray-100 text-gray-600 rounded-lg text-xs font-medium hover:bg-gray-200 transition-colors">
+          🗺️ 全体表示
+        </button>
+      </div>
+    </div>
+  `;
+
+  // Bind sidebar buttons
+  const detailBtn = sidebar.querySelector('[data-map-to-detail]');
+  if (detailBtn) {
+    detailBtn.addEventListener('click', () => {
+      state.selectedAreaId = area.id;
+      state.view = 'detail';
+      render();
+    });
+  }
+
+  const zoomOutBtn = sidebar.querySelector('[data-map-zoom-out]');
+  if (zoomOutBtn) {
+    zoomOutBtn.addEventListener('click', () => {
+      state.mapSelectedAreaId = null;
+      if (mapInstance) mapInstance.flyTo([34.98, 136.56], 10, { duration: 0.8 });
+      // Reset marker icons
+      const ranked2 = getRankedAreas();
+      ranked2.forEach((a, i) => {
+        const c = COLORS[AREAS.findIndex(x => x.id === a.id) % COLORS.length];
+        if (mapMarkers[a.id]) mapMarkers[a.id].setIcon(createMapIcon(c, i + 1, a.scores.total, false));
+      });
+      // Reset sidebar
+      sidebar.innerHTML = `
+        <div class="flex flex-col items-center justify-center h-full text-center p-8">
+          <div class="text-4xl mb-3">📍</div>
+          <p class="text-sm font-medium text-gray-700 mb-1">エリアを選択してください</p>
+          <p class="text-xs text-gray-400">マップ上のマーカーをクリックすると<br>土地情報・取引データが表示されます</p>
+        </div>`;
+    });
+  }
+}
+
+function renderTransactionList(transactions) {
+  if (!transactions || transactions.length === 0) return '';
+
+  const validTx = transactions.filter(t => t.TradePrice);
+  if (validTx.length === 0) return '<p class="text-xs text-gray-400">価格情報なし</p>';
+
+  const displayTx = validTx.slice(0, 15);
+  return `
+    <div style="max-height: 240px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px;">
+      <table class="tx-table">
+        <thead>
+          <tr>
+            <th>価格</th>
+            <th>面積</th>
+            <th>種別</th>
+            <th>最寄駅</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${displayTx.map(t => `
+            <tr>
+              <td class="font-medium text-gray-900">${t.TradePrice >= 10000 ? (t.TradePrice/10000).toFixed(0) + '万' : t.TradePrice.toLocaleString() + '円'}</td>
+              <td>${t.Area ? t.Area + 'm²' : '-'}</td>
+              <td class="text-gray-500">${t.Type || t.Use || '-'}</td>
+              <td class="text-gray-500" style="max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t.NearestStation || '-'}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+    ${validTx.length > 15 ? `<p class="text-xs text-gray-400 mt-1 text-right">他 ${validTx.length - 15}件</p>` : ''}
   `;
 }
 
@@ -956,6 +1258,16 @@ function bindEvents(ranked) {
   // MCP refresh button
   const refreshBtn = document.getElementById('btn-refresh-mcp');
   if (refreshBtn) refreshBtn.addEventListener('click', fetchLiveData);
+
+  // Detail → Map button
+  const toMapBtn = document.getElementById('btn-to-map');
+  if (toMapBtn) {
+    toMapBtn.addEventListener('click', () => {
+      state.mapSelectedAreaId = state.selectedAreaId;
+      state.view = 'map';
+      render();
+    });
+  }
 }
 
 // ============================================================
