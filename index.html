@@ -542,10 +542,20 @@ function updateAreasWithLiveData(priceResults) {
 
     if (allRecords.length === 0) continue;
 
-    // Deduplicate by TradePrice + District + Area combo
+    // Deduplicate by comprehensive key to avoid removing distinct transactions
     const seen = new Set();
     const uniqueRecords = allRecords.filter(d => {
-      const key = `${d.TradePrice}-${d.DistrictName||d.Region||''}-${d.Area||''}`;
+      const key = [
+        d.TradePrice || '',
+        d.DistrictName || d.Region || '',
+        d.Area || '',
+        d.Period || '',
+        d.Type || d.TradeType || '',
+        d.BuildingYear || '',
+        d.NearestStation || '',
+        d.FloorPlan || '',
+        d.Structure || ''
+      ].join('|');
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
@@ -553,7 +563,7 @@ function updateAreasWithLiveData(priceResults) {
 
     // Store full transaction records for map display
     area._liveTransactions = uniqueRecords.map(d => ({
-      TradePrice: d.TradePrice ? parseInt(d.TradePrice) : null,
+      TradePrice: (d.TradePrice != null && d.TradePrice !== '') ? parseInt(d.TradePrice) : null,
       Type: d.Type || d.TradeType || '',
       Area: d.Area ? parseFloat(d.Area) : null,
       FloorPlan: d.FloorPlan || '',
@@ -564,10 +574,11 @@ function updateAreasWithLiveData(priceResults) {
       District: d.DistrictName || d.Region || '',
       Structure: d.Structure || '',
       CityPlanning: d.CityPlanning || '',
+      Period: d.Period || '',
     }));
 
     // Calculate average trade price from live data
-    const prices = uniqueRecords.filter(d => d.TradePrice).map(d => parseInt(d.TradePrice));
+    const prices = uniqueRecords.filter(d => d.TradePrice != null && d.TradePrice !== '').map(d => parseInt(d.TradePrice)).filter(p => !isNaN(p));
     if (prices.length > 0) {
       area._liveAvgTradePrice = Math.round(prices.reduce((a,b) => a+b, 0) / prices.length);
       area._liveTransactionCount = uniqueRecords.length;
@@ -1524,14 +1535,14 @@ function aggregateDistrictMetrics(area, districtName) {
   if (txs.length === 0) return null;
 
   // Prices
-  const prices = txs.filter(t => t.TradePrice).map(t => t.TradePrice);
+  const prices = txs.filter(t => t.TradePrice != null && !isNaN(t.TradePrice)).map(t => t.TradePrice);
   const avgPrice = prices.length > 0 ? prices.reduce((a, b) => a + b, 0) / prices.length : null;
   const minPrice = prices.length > 0 ? Math.min(...prices) : null;
   const maxPrice = prices.length > 0 ? Math.max(...prices) : null;
 
   // Price per m²
   const pricePerM2 = txs
-    .filter(t => t.TradePrice && t.Area && t.Area > 0)
+    .filter(t => t.TradePrice != null && !isNaN(t.TradePrice) && t.Area && t.Area > 0)
     .map(t => t.TradePrice / t.Area);
   const avgPricePerM2 = pricePerM2.length > 0 ? pricePerM2.reduce((a, b) => a + b, 0) / pricePerM2.length : null;
 
@@ -1692,7 +1703,7 @@ function estimateTxPosition(area, tx, idx) {
 
 // Get color based on price (green=cheap, yellow=mid, red=expensive)
 function priceColor(price) {
-  if (!price) return '#9ca3af';
+  if (!price || isNaN(price)) return '#9ca3af';
   if (price < 5000000) return '#22c55e';    // green: <500万
   if (price < 15000000) return '#3b82f6';   // blue: 500-1500万
   if (price < 30000000) return '#f59e0b';   // amber: 1500-3000万
@@ -1715,7 +1726,7 @@ async function showAllTransactionPins(ranked) {
     if (!area._liveTransactions) return;
     const color = COLORS[AREAS.findIndex(a => a.id === area.id) % COLORS.length];
     area._liveTransactions.forEach((tx, i) => {
-      if (tx.TradePrice == null) return;
+      if (tx.TradePrice == null || isNaN(tx.TradePrice)) return;
       const pos = estimateTxPosition(area, tx, i);
       const cm = L.circleMarker([pos.lat, pos.lng], {
         radius: 5,
@@ -1762,7 +1773,7 @@ function showTransactionPins(area) {
   if (!area._liveTransactions) return;
 
   area._liveTransactions.forEach((tx, i) => {
-    if (tx.TradePrice == null) return;
+    if (tx.TradePrice == null || isNaN(tx.TradePrice)) return;
     const pos = estimateTxPosition(area, tx, i);
     const cm = L.circleMarker([pos.lat, pos.lng], {
       radius: 7,
@@ -2144,7 +2155,7 @@ function renderTransactionList(transactions) {
     ...t,
     _origIdx: (t._areaIdx !== undefined) ? t._areaIdx : i
   }));
-  const validTx = indexed.filter(t => t.TradePrice != null);
+  const validTx = indexed.filter(t => t.TradePrice != null && !isNaN(t.TradePrice));
   if (validTx.length === 0) return '<p class="text-xs text-gray-400">価格情報なし</p>';
 
   // Sort by price descending
