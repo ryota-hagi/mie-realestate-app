@@ -1517,7 +1517,10 @@ function findDistrictCoords(district, cityName) {
 // Aggregate metrics for a single district within an area
 function aggregateDistrictMetrics(area, districtName) {
   if (!area._liveTransactions || !districtName) return null;
-  const txs = area._liveTransactions.filter(t => t.District === districtName);
+  // Preserve original index in _liveTransactions for map pin reference
+  const txs = area._liveTransactions
+    .map((t, i) => ({ ...t, _areaIdx: i }))
+    .filter(t => t.District === districtName);
   if (txs.length === 0) return null;
 
   // Prices
@@ -1712,7 +1715,7 @@ async function showAllTransactionPins(ranked) {
     if (!area._liveTransactions) return;
     const color = COLORS[AREAS.findIndex(a => a.id === area.id) % COLORS.length];
     area._liveTransactions.forEach((tx, i) => {
-      if (!tx.TradePrice) return;
+      if (tx.TradePrice == null) return;
       const pos = estimateTxPosition(area, tx, i);
       const cm = L.circleMarker([pos.lat, pos.lng], {
         radius: 5,
@@ -1759,7 +1762,7 @@ function showTransactionPins(area) {
   if (!area._liveTransactions) return;
 
   area._liveTransactions.forEach((tx, i) => {
-    if (!tx.TradePrice) return;
+    if (tx.TradePrice == null) return;
     const pos = estimateTxPosition(area, tx, i);
     const cm = L.circleMarker([pos.lat, pos.lng], {
       radius: 7,
@@ -2136,8 +2139,12 @@ function renderTransactionList(transactions) {
   if (!transactions || transactions.length === 0) return '';
 
   // Keep original index for map pin reference
-  const indexed = transactions.map((t, i) => ({ ...t, _origIdx: i }));
-  const validTx = indexed.filter(t => t.TradePrice);
+  // Use _areaIdx if present (from district filtering), otherwise use array index
+  const indexed = transactions.map((t, i) => ({
+    ...t,
+    _origIdx: (t._areaIdx !== undefined) ? t._areaIdx : i
+  }));
+  const validTx = indexed.filter(t => t.TradePrice != null);
   if (validTx.length === 0) return '<p class="text-xs text-gray-400">価格情報なし</p>';
 
   // Sort by price descending
