@@ -349,27 +349,26 @@ async function fetchLiveData() {
     // Get city list for Mie (area code 24)
     const cityResult = await mcpReinfo.callTool('reinfolib-city-list', { area: '24' });
 
-    // Fetch multiple quarters to get more transaction data
-    // reinfolib API: year format can be YYYYQ (e.g. 20241=Q1, 20244=Q4)
-    const quarters = ['20241','20242','20243','20244','20234','20233'];
+    // Fetch multiple years to get more transaction data
+    const years = ['2024','2023','2022'];
     const priceResults = [];
     let totalTx = 0;
 
     for (const area of AREAS) {
       const allData = [];
-      for (const q of quarters) {
+      for (const yr of years) {
         try {
-          state.mcpMessage = `${area.name} のデータ取得中（${q}）...`;
+          state.mcpMessage = `${area.name} のデータ取得中（${yr}年）...`;
           render();
           const priceData = await mcpReinfo.callTool('reinfolib-real-estate-price', {
-            year: q, area: '24', city: area.cityCode
+            year: yr, area: '24', city: area.cityCode
           });
           allData.push(priceData);
         } catch(e) {
-          console.warn(`Price fetch failed for ${area.name} Q${q}:`, e);
+          console.warn(`Price fetch failed for ${area.name} ${yr}:`, e);
         }
       }
-      // Merge all quarter results
+      // Merge all year results
       priceResults.push({ cityCode: area.cityCode, quarters: allData });
     }
 
