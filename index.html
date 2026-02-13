@@ -292,6 +292,7 @@ const state = {
 // Map globals (persistent across renders)
 let mapInstance = null;
 let mapMarkers = {};
+let txMarkerLayer = null; // LayerGroup for transaction markers
 
 // ============================================================
 // Score Calculation
@@ -348,24 +349,39 @@ async function fetchLiveData() {
     // Get city list for Mie (area code 24)
     const cityResult = await mcpReinfo.callTool('reinfolib-city-list', { area: '24' });
 
-    // Get real estate prices for latest year
+    // Fetch multiple quarters to get more transaction data
+    // reinfolib API: year format can be YYYYQ (e.g. 20241=Q1, 20244=Q4)
+    const quarters = ['20241','20242','20243','20244','20234','20233'];
     const priceResults = [];
+    let totalTx = 0;
+
     for (const area of AREAS) {
-      try {
-        const priceData = await mcpReinfo.callTool('reinfolib-real-estate-price', {
-          year: '2024', area: '24', city: area.cityCode
-        });
-        priceResults.push({ cityCode: area.cityCode, data: priceData });
-      } catch(e) {
-        console.warn(`Price fetch failed for ${area.name}:`, e);
+      const allData = [];
+      for (const q of quarters) {
+        try {
+          state.mcpMessage = `${area.name} のデータ取得中（${q}）...`;
+          render();
+          const priceData = await mcpReinfo.callTool('reinfolib-real-estate-price', {
+            year: q, area: '24', city: area.cityCode
+          });
+          allData.push(priceData);
+        } catch(e) {
+          console.warn(`Price fetch failed for ${area.name} Q${q}:`, e);
+        }
       }
+      // Merge all quarter results
+      priceResults.push({ cityCode: area.cityCode, quarters: allData });
     }
 
     state.mcpLiveData = { cities: cityResult, prices: priceResults };
-    state.mcpMessage = `ライブデータ取得完了 — ${priceResults.length}エリアの最新取引データを反映`;
 
-    // Update area data with live results
+    // Update area data with live results (merge all quarters)
     updateAreasWithLiveData(priceResults);
+
+    // Count total transactions
+    AREAS.forEach(a => { if (a._liveTransactions) totalTx += a._liveTransactions.length; });
+    state.mcpMessage = `ライブデータ取得完了 — ${priceResults.length}エリア・計${totalTx}件の取引データを反映`;
+
     render();
   } catch(e) {
     state.mcpMessage = `データ取得エラー: ${e.message}（キャッシュデータを使用中）`;
@@ -373,47 +389,64 @@ async function fetchLiveData() {
   }
 }
 
+function extractTransactionsFromMCPResponse(data) {
+  let content = data;
+  if (content && content.content) content = content.content;
+  if (!Array.isArray(content)) return [];
+  const textContent = content.find(c => c.type === 'text');
+  if (!textContent) return [];
+  try {
+    const parsed = JSON.parse(textContent.text);
+    if (parsed.data && Array.isArray(parsed.data)) return parsed.data;
+  } catch {}
+  return [];
+}
+
 function updateAreasWithLiveData(priceResults) {
   for (const result of priceResults) {
     const area = AREAS.find(a => a.cityCode === result.cityCode);
-    if (!area || !result.data) continue;
+    if (!area) continue;
 
-    // Extract content from MCP response
-    let content = result.data;
-    if (content && content.content) {
-      content = content.content;
+    // Merge transactions from all quarters
+    const allRecords = [];
+    const sources = result.quarters || (result.data ? [result.data] : []);
+    for (const src of sources) {
+      if (!src) continue;
+      const records = extractTransactionsFromMCPResponse(src);
+      allRecords.push(...records);
     }
-    if (Array.isArray(content)) {
-      const textContent = content.find(c => c.type === 'text');
-      if (textContent) {
-        try {
-          const parsed = JSON.parse(textContent.text);
-          if (parsed.data && Array.isArray(parsed.data)) {
-            // Store full transaction records for map display
-            area._liveTransactions = parsed.data.map(d => ({
-              TradePrice: d.TradePrice ? parseInt(d.TradePrice) : null,
-              Type: d.Type || d.TradeType || '',
-              Area: d.Area ? parseFloat(d.Area) : null,
-              FloorPlan: d.FloorPlan || '',
-              BuildingYear: d.BuildingYear || '',
-              NearestStation: d.NearestStation || '',
-              DistanceToStation: d.TimeToNearestStation || d.DistanceToStation || '',
-              Use: d.Use || d.Purpose || '',
-              District: d.DistrictName || d.Region || '',
-              Structure: d.Structure || '',
-              CityPlanning: d.CityPlanning || '',
-            }));
 
-            // Calculate average trade price from live data
-            const prices = parsed.data.filter(d => d.TradePrice).map(d => parseInt(d.TradePrice));
-            if (prices.length > 0) {
-              const avgPrice = Math.round(prices.reduce((a,b) => a+b, 0) / prices.length);
-              area._liveAvgTradePrice = avgPrice;
-              area._liveTransactionCount = parsed.data.length;
-            }
-          }
-        } catch {}
-      }
+    if (allRecords.length === 0) continue;
+
+    // Deduplicate by TradePrice + District + Area combo
+    const seen = new Set();
+    const uniqueRecords = allRecords.filter(d => {
+      const key = `${d.TradePrice}-${d.DistrictName||d.Region||''}-${d.Area||''}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    // Store full transaction records for map display
+    area._liveTransactions = uniqueRecords.map(d => ({
+      TradePrice: d.TradePrice ? parseInt(d.TradePrice) : null,
+      Type: d.Type || d.TradeType || '',
+      Area: d.Area ? parseFloat(d.Area) : null,
+      FloorPlan: d.FloorPlan || '',
+      BuildingYear: d.BuildingYear || '',
+      NearestStation: d.NearestStation || '',
+      DistanceToStation: d.TimeToNearestStation || d.DistanceToStation || '',
+      Use: d.Use || d.Purpose || '',
+      District: d.DistrictName || d.Region || '',
+      Structure: d.Structure || '',
+      CityPlanning: d.CityPlanning || '',
+    }));
+
+    // Calculate average trade price from live data
+    const prices = uniqueRecords.filter(d => d.TradePrice).map(d => parseInt(d.TradePrice));
+    if (prices.length > 0) {
+      area._liveAvgTradePrice = Math.round(prices.reduce((a,b) => a+b, 0) / prices.length);
+      area._liveTransactionCount = uniqueRecords.length;
     }
   }
 }
@@ -821,6 +854,7 @@ function initializeMap(ranked) {
     try { mapInstance.remove(); } catch {}
     mapInstance = null;
     mapMarkers = {};
+    txMarkerLayer = null;
   }
 
   // Create map centered on northern Mie
@@ -832,39 +866,152 @@ function initializeMap(ranked) {
     maxZoom: 18
   }).addTo(mapInstance);
 
-  // Create markers
+  // Transaction marker layer
+  txMarkerLayer = L.layerGroup().addTo(mapInstance);
+
+  // Create city markers
   ranked.forEach((area, idx) => {
     const color = COLORS[AREAS.findIndex(a => a.id === area.id) % COLORS.length];
     const rank = idx + 1;
     const icon = createMapIcon(color, rank, area.scores.total, area.id === state.mapSelectedAreaId);
 
-    const marker = L.marker([area.lat, area.lng], { icon })
+    const marker = L.marker([area.lat, area.lng], { icon, zIndexOffset: 1000 })
       .addTo(mapInstance);
 
-    // Tooltip on hover
     marker.bindTooltip(`${area.name} (${area.scores.total}pt)`, {
       direction: 'top', offset: [0, -20], className: 'map-tooltip'
     });
 
     marker.on('click', () => {
       state.mapSelectedAreaId = area.id;
-      // Update all marker icons to reflect selection
       ranked.forEach((a, i) => {
         const c = COLORS[AREAS.findIndex(x => x.id === a.id) % COLORS.length];
         mapMarkers[a.id].setIcon(createMapIcon(c, i + 1, a.scores.total, a.id === area.id));
       });
       updateMapSidebar(area, ranked);
-      mapInstance.flyTo([area.lat, area.lng], 12, { duration: 0.8 });
+      showTransactionPins(area);
+      mapInstance.flyTo([area.lat, area.lng], 13, { duration: 0.8 });
     });
 
     mapMarkers[area.id] = marker;
   });
 
+  // Show all transaction pins at overview
+  showAllTransactionPins(ranked);
+
   // If area already selected, zoom to it
   if (state.mapSelectedAreaId) {
     const sel = ranked.find(a => a.id === state.mapSelectedAreaId);
-    if (sel) mapInstance.setView([sel.lat, sel.lng], 12);
+    if (sel) {
+      showTransactionPins(sel);
+      mapInstance.setView([sel.lat, sel.lng], 13);
+    }
   }
+}
+
+// Hash a string to a number (deterministic)
+function hashStr(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h);
+}
+
+// Estimate lat/lng offset from city center based on district name
+function estimateTxPosition(area, tx, idx) {
+  const districtKey = tx.District || tx.NearestStation || `tx-${idx}`;
+  const hash = hashStr(districtKey + area.id);
+  const hash2 = hashStr(districtKey + area.id + 'salt');
+
+  // Spread: 0.01 ~ 0.04 degrees (~1-4km) from city center
+  const angle = (hash % 360) * (Math.PI / 180);
+  const spread = 0.008 + (hash2 % 100) / 100 * 0.032;
+
+  // Add small per-item jitter so same-district items don't overlap
+  const jitterAngle = (idx * 137.508) * (Math.PI / 180); // golden angle
+  const jitter = 0.001 + (idx % 7) * 0.001;
+
+  return {
+    lat: area.lat + Math.cos(angle) * spread + Math.cos(jitterAngle) * jitter,
+    lng: area.lng + Math.sin(angle) * spread + Math.sin(jitterAngle) * jitter
+  };
+}
+
+// Get color based on price (green=cheap, yellow=mid, red=expensive)
+function priceColor(price) {
+  if (!price) return '#9ca3af';
+  if (price < 5000000) return '#22c55e';    // green: <500万
+  if (price < 15000000) return '#3b82f6';   // blue: 500-1500万
+  if (price < 30000000) return '#f59e0b';   // amber: 1500-3000万
+  if (price < 50000000) return '#ef4444';   // red: 3000-5000万
+  return '#7c3aed';                          // purple: >5000万
+}
+
+function showAllTransactionPins(ranked) {
+  if (!txMarkerLayer) return;
+  txMarkerLayer.clearLayers();
+
+  ranked.forEach(area => {
+    if (!area._liveTransactions) return;
+    const color = COLORS[AREAS.findIndex(a => a.id === area.id) % COLORS.length];
+    area._liveTransactions.forEach((tx, i) => {
+      if (!tx.TradePrice) return;
+      const pos = estimateTxPosition(area, tx, i);
+      const cm = L.circleMarker([pos.lat, pos.lng], {
+        radius: 5,
+        fillColor: priceColor(tx.TradePrice),
+        color: '#fff',
+        weight: 1,
+        opacity: 0.8,
+        fillOpacity: 0.6
+      });
+      cm.bindPopup(buildTxPopup(tx, area.name), { maxWidth: 220 });
+      txMarkerLayer.addLayer(cm);
+    });
+  });
+}
+
+function showTransactionPins(area) {
+  if (!txMarkerLayer) return;
+  txMarkerLayer.clearLayers();
+
+  if (!area._liveTransactions) return;
+  const color = COLORS[AREAS.findIndex(a => a.id === area.id) % COLORS.length];
+
+  area._liveTransactions.forEach((tx, i) => {
+    if (!tx.TradePrice) return;
+    const pos = estimateTxPosition(area, tx, i);
+    const cm = L.circleMarker([pos.lat, pos.lng], {
+      radius: 7,
+      fillColor: priceColor(tx.TradePrice),
+      color: '#fff',
+      weight: 1.5,
+      opacity: 0.9,
+      fillOpacity: 0.7
+    });
+    cm.bindPopup(buildTxPopup(tx, area.name), { maxWidth: 240 });
+    txMarkerLayer.addLayer(cm);
+  });
+}
+
+function buildTxPopup(tx, cityName) {
+  const priceStr = tx.TradePrice >= 10000
+    ? `${(tx.TradePrice/10000).toFixed(0)}万円`
+    : `${tx.TradePrice.toLocaleString()}円`;
+  return `
+    <div style="font-family:'Noto Sans JP',sans-serif;font-size:12px;line-height:1.6;">
+      <div style="font-weight:700;font-size:14px;color:#1e40af;margin-bottom:4px;">${priceStr}</div>
+      <table style="font-size:11px;">
+        ${tx.District ? `<tr><td style="color:#6b7280;padding-right:8px;">地区</td><td>${tx.District}</td></tr>` : ''}
+        ${tx.Area ? `<tr><td style="color:#6b7280;padding-right:8px;">面積</td><td>${tx.Area}m²</td></tr>` : ''}
+        ${tx.Type || tx.Use ? `<tr><td style="color:#6b7280;padding-right:8px;">種別</td><td>${tx.Type || tx.Use}</td></tr>` : ''}
+        ${tx.NearestStation ? `<tr><td style="color:#6b7280;padding-right:8px;">最寄駅</td><td>${tx.NearestStation}${tx.DistanceToStation ? ` (${tx.DistanceToStation})` : ''}</td></tr>` : ''}
+        ${tx.BuildingYear ? `<tr><td style="color:#6b7280;padding-right:8px;">築年</td><td>${tx.BuildingYear}</td></tr>` : ''}
+        ${tx.Structure ? `<tr><td style="color:#6b7280;padding-right:8px;">構造</td><td>${tx.Structure}</td></tr>` : ''}
+      </table>
+      <div style="font-size:10px;color:#9ca3af;margin-top:4px;">${cityName}</div>
+    </div>`;
 }
 
 function createMapIcon(color, rank, score, isSelected) {
@@ -956,8 +1103,21 @@ function updateMapSidebar(area, ranked) {
 
       <!-- Transaction data -->
       <div>
-        <div class="text-xs font-bold text-gray-700 mb-2">📊 取引データ</div>
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-xs font-bold text-gray-700">📊 取引データ</div>
+          <div class="text-xs text-gray-400">${area._liveTransactions ? area._liveTransactions.length + '件' : ''}</div>
+        </div>
         ${txSection}
+        ${area._liveTransactions && area._liveTransactions.length > 0 ? `
+          <div class="mt-2 flex flex-wrap gap-1 items-center">
+            <span class="text-xs text-gray-400">凡例:</span>
+            <span class="inline-flex items-center gap-1 text-xs"><span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;"></span>~500万</span>
+            <span class="inline-flex items-center gap-1 text-xs"><span style="width:8px;height:8px;border-radius:50%;background:#3b82f6;display:inline-block;"></span>~1500万</span>
+            <span class="inline-flex items-center gap-1 text-xs"><span style="width:8px;height:8px;border-radius:50%;background:#f59e0b;display:inline-block;"></span>~3000万</span>
+            <span class="inline-flex items-center gap-1 text-xs"><span style="width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;"></span>~5000万</span>
+            <span class="inline-flex items-center gap-1 text-xs"><span style="width:8px;height:8px;border-radius:50%;background:#7c3aed;display:inline-block;"></span>5000万~</span>
+          </div>
+        ` : ''}
       </div>
 
       <!-- Action buttons -->
@@ -993,6 +1153,8 @@ function updateMapSidebar(area, ranked) {
         const c = COLORS[AREAS.findIndex(x => x.id === a.id) % COLORS.length];
         if (mapMarkers[a.id]) mapMarkers[a.id].setIcon(createMapIcon(c, i + 1, a.scores.total, false));
       });
+      // Show all transaction pins again
+      showAllTransactionPins(ranked2);
       // Reset sidebar
       sidebar.innerHTML = `
         <div class="flex flex-col items-center justify-center h-full text-center p-8">
@@ -1010,31 +1172,32 @@ function renderTransactionList(transactions) {
   const validTx = transactions.filter(t => t.TradePrice);
   if (validTx.length === 0) return '<p class="text-xs text-gray-400">価格情報なし</p>';
 
-  const displayTx = validTx.slice(0, 15);
+  // Sort by price descending
+  validTx.sort((a, b) => (b.TradePrice || 0) - (a.TradePrice || 0));
+
   return `
-    <div style="max-height: 240px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px;">
+    <div style="max-height: 300px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px;">
       <table class="tx-table">
         <thead>
           <tr>
             <th>価格</th>
             <th>面積</th>
-            <th>種別</th>
+            <th>地区</th>
             <th>最寄駅</th>
           </tr>
         </thead>
         <tbody>
-          ${displayTx.map(t => `
+          ${validTx.map(t => `
             <tr>
-              <td class="font-medium text-gray-900">${t.TradePrice >= 10000 ? (t.TradePrice/10000).toFixed(0) + '万' : t.TradePrice.toLocaleString() + '円'}</td>
+              <td class="font-medium" style="color:${priceColor(t.TradePrice)}">${t.TradePrice >= 10000 ? (t.TradePrice/10000).toFixed(0) + '万' : t.TradePrice.toLocaleString() + '円'}</td>
               <td>${t.Area ? t.Area + 'm²' : '-'}</td>
-              <td class="text-gray-500">${t.Type || t.Use || '-'}</td>
-              <td class="text-gray-500" style="max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t.NearestStation || '-'}</td>
+              <td class="text-gray-500" style="max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t.District || '-'}</td>
+              <td class="text-gray-500" style="max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t.NearestStation || '-'}</td>
             </tr>
           `).join('')}
         </tbody>
       </table>
     </div>
-    ${validTx.length > 15 ? `<p class="text-xs text-gray-400 mt-1 text-right">他 ${validTx.length - 15}件</p>` : ''}
   `;
 }
 
