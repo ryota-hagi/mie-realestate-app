@@ -335,6 +335,8 @@ let schoolDistrictLayer = null; // GeoJSON layer for school district polygons
 let schoolMarkerLayer = null; // LayerGroup for school icon markers
 let schoolDistrictData = null; // cached GeoJSON data
 let showSchoolDistricts = false; // toggle state
+let districtAreaLayer = null; // LayerGroup for district area circles
+let showDistrictAreas = false; // toggle state
 
 // ============================================================
 // Score Calculation
@@ -950,9 +952,14 @@ function renderMap(ranked) {
     <div class="space-y-4 fade-in">
       <div class="flex items-center justify-between">
         <h2 class="text-lg font-bold text-gray-800">🗺️ エリアマップ</h2>
-        <button id="btn-school-toggle" class="school-toggle ${showSchoolDistricts ? 'active' : ''}" onclick="toggleSchoolDistricts()">
-          <span>${showSchoolDistricts ? '🏫 学区 ON' : '🏫 学区'}</span>
-        </button>
+        <div class="flex gap-2">
+          <button id="btn-district-area-toggle" class="school-toggle ${showDistrictAreas ? 'active' : ''}" onclick="toggleDistrictAreas()">
+            <span>${showDistrictAreas ? '📊 エリア ON' : '📊 エリア'}</span>
+          </button>
+          <button id="btn-school-toggle" class="school-toggle ${showSchoolDistricts ? 'active' : ''}" onclick="toggleSchoolDistricts()">
+            <span>${showSchoolDistricts ? '🏫 学区 ON' : '🏫 学区'}</span>
+          </button>
+        </div>
       </div>
       <div class="card overflow-hidden">
         <div class="map-layout" style="position:relative;">
@@ -987,6 +994,125 @@ const SCHOOL_DISTRICT_COLORS = [
   '#14b8a6','#6366f1','#84cc16','#e11d48','#0ea5e9','#a855f7','#10b981','#f43f5e'
 ];
 
+// ============================================================
+// District Area Layer (toggleable, like school districts)
+// ============================================================
+const DISTRICT_AREA_COLORS = [
+  '#3b82f6','#ef4444','#22c55e','#f59e0b','#8b5cf6','#ec4899','#06b6d4','#f97316',
+  '#14b8a6','#6366f1','#84cc16','#e11d48','#0ea5e9','#a855f7','#10b981','#f43f5e'
+];
+
+function toggleDistrictAreas() {
+  showDistrictAreas = !showDistrictAreas;
+  const btn = document.getElementById('btn-district-area-toggle');
+  if (btn) {
+    btn.classList.toggle('active', showDistrictAreas);
+    btn.querySelector('span').textContent = showDistrictAreas ? '📊 エリア ON' : '📊 エリア';
+  }
+  if (showDistrictAreas) {
+    renderDistrictAreas();
+  } else {
+    if (districtAreaLayer && mapInstance) {
+      mapInstance.removeLayer(districtAreaLayer);
+      districtAreaLayer = null;
+    }
+    // Clear district sidebar if showing
+    state.mapSelectedDistrict = null;
+  }
+}
+
+function renderDistrictAreas() {
+  if (!mapInstance) return;
+  if (districtAreaLayer) { mapInstance.removeLayer(districtAreaLayer); }
+  districtAreaLayer = L.layerGroup();
+
+  // Collect all districts with coordinates from all areas that have transactions
+  const districtEntries = [];
+  AREAS.forEach(area => {
+    if (!area._liveTransactions) return;
+    const districtMap = {};
+    area._liveTransactions.forEach(tx => {
+      if (!tx.District) return;
+      if (!districtMap[tx.District]) districtMap[tx.District] = 0;
+      districtMap[tx.District]++;
+    });
+    Object.entries(districtMap).forEach(([districtName, count]) => {
+      const coords = findDistrictCoords(districtName, area.name);
+      if (coords) {
+        districtEntries.push({ districtName, cityName: area.name, cityId: area.id, coords, count, area });
+      }
+    });
+  });
+
+  let colorIdx = 0;
+  districtEntries.forEach(entry => {
+    const color = DISTRICT_AREA_COLORS[colorIdx++ % DISTRICT_AREA_COLORS.length];
+    const radius = Math.max(200, Math.min(600, entry.count * 80));
+
+    const circle = L.circle([entry.coords[0], entry.coords[1]], {
+      radius: radius,
+      color: color,
+      weight: 2,
+      opacity: 0.8,
+      fillColor: color,
+      fillOpacity: 0.15,
+      dashArray: '4 3'
+    });
+
+    // Tooltip with district name
+    circle.bindTooltip(`${entry.districtName} (${entry.count}件)`, {
+      permanent: false, direction: 'top', className: 'map-tooltip'
+    });
+
+    // Click → show district info in sidebar
+    circle.on('click', () => {
+      state.mapSelectedDistrict = { cityId: entry.cityId, districtName: entry.districtName };
+      state.mapSelectedAreaId = entry.cityId;
+      const ranked = getRankedAreas();
+      updateDistrictSidebar(entry.area, entry.districtName, ranked);
+      // Highlight this district circle
+      renderDistrictAreas();
+    });
+
+    // Highlight selected district
+    if (state.mapSelectedDistrict &&
+        state.mapSelectedDistrict.cityId === entry.cityId &&
+        state.mapSelectedDistrict.districtName === entry.districtName) {
+      circle.setStyle({ fillOpacity: 0.35, weight: 3, opacity: 1, dashArray: null });
+    }
+
+    circle.on('mouseover', function() { this.setStyle({ fillOpacity: 0.3, weight: 3 }); });
+    circle.on('mouseout', function() {
+      const isSelected = state.mapSelectedDistrict &&
+        state.mapSelectedDistrict.cityId === entry.cityId &&
+        state.mapSelectedDistrict.districtName === entry.districtName;
+      this.setStyle({
+        fillOpacity: isSelected ? 0.35 : 0.15,
+        weight: isSelected ? 3 : 2
+      });
+    });
+
+    districtAreaLayer.addLayer(circle);
+
+    // Add label marker
+    const label = L.marker([entry.coords[0], entry.coords[1]], {
+      icon: L.divIcon({
+        html: `<div style="font-size:10px;font-weight:600;color:${color};text-shadow:1px 1px 2px white,-1px -1px 2px white,1px -1px 2px white,-1px 1px 2px white;white-space:nowrap;text-align:center;pointer-events:none;">${entry.districtName}</div>`,
+        className: 'school-icon-marker',
+        iconSize: [80, 16],
+        iconAnchor: [40, 8]
+      }),
+      interactive: false
+    });
+    districtAreaLayer.addLayer(label);
+  });
+
+  districtAreaLayer.addTo(mapInstance);
+}
+
+// ============================================================
+// School District Layer
+// ============================================================
 async function loadSchoolDistrictData() {
   if (schoolDistrictData) return schoolDistrictData;
   try {
@@ -1149,9 +1275,12 @@ function initializeMap(ranked) {
   // Show all transaction pins at overview
   showAllTransactionPins(ranked);
 
-  // Restore school district layer if enabled
+  // Restore layers if enabled
   if (showSchoolDistricts) {
     renderSchoolDistricts();
+  }
+  if (showDistrictAreas) {
+    renderDistrictAreas();
   }
 
   // If area already selected, zoom to it and auto-fetch full data
@@ -1629,36 +1758,20 @@ function showTransactionPins(area) {
 
   if (!area._liveTransactions) return;
 
-  const selectedDistrict = state.mapSelectedDistrict ? state.mapSelectedDistrict.districtName : null;
-
   area._liveTransactions.forEach((tx, i) => {
     if (!tx.TradePrice) return;
     const pos = estimateTxPosition(area, tx, i);
-    const isHighlighted = selectedDistrict && tx.District === selectedDistrict;
-    const isDimmed = selectedDistrict && tx.District !== selectedDistrict;
     const cm = L.circleMarker([pos.lat, pos.lng], {
-      radius: isHighlighted ? 9 : 7,
+      radius: 7,
       fillColor: priceColor(tx.TradePrice),
-      color: isHighlighted ? '#1e40af' : '#fff',
-      weight: isHighlighted ? 2.5 : 1.5,
-      opacity: isDimmed ? 0.4 : 0.9,
-      fillOpacity: isDimmed ? 0.25 : 0.7
+      color: '#fff',
+      weight: 1.5,
+      opacity: 0.9,
+      fillOpacity: 0.7
     });
     cm.bindPopup(buildTxPopup(tx, area.name), { maxWidth: 240 });
-
-    // Click pin → show district sidebar
-    cm.on('click', () => {
-      if (tx.District) {
-        state.mapSelectedDistrict = { cityId: area.id, districtName: tx.District };
-        const ranked = getRankedAreas();
-        updateDistrictSidebar(area, tx.District, ranked);
-        // Re-render pins to highlight this district
-        showTransactionPins(area);
-      }
-    });
-
     txMarkerLayer.addLayer(cm);
-    txMarkersByIdx[i] = { marker: cm, pos, district: tx.District };
+    txMarkersByIdx[i] = { marker: cm, pos };
   });
 }
 
