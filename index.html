@@ -516,13 +516,46 @@ async function fetchAreaFullData(areaId) {
 function extractTransactionsFromMCPResponse(data) {
   let content = data;
   if (content && content.content) content = content.content;
-  if (!Array.isArray(content)) return [];
+  if (!Array.isArray(content)) {
+    // Try alternative structures
+    if (content && content.data && Array.isArray(content.data)) {
+      console.log('[TX] Direct data array found:', content.data.length, 'records');
+      return content.data;
+    }
+    if (content && typeof content === 'string') {
+      try {
+        const p = JSON.parse(content);
+        if (p.data && Array.isArray(p.data)) {
+          console.log('[TX] Parsed string data:', p.data.length, 'records');
+          return p.data;
+        }
+      } catch {}
+    }
+    console.warn('[TX] Content is not array:', typeof content, content ? Object.keys(content) : 'null');
+    return [];
+  }
   const textContent = content.find(c => c.type === 'text');
-  if (!textContent) return [];
+  if (!textContent) {
+    console.warn('[TX] No text content found in array of', content.length, 'elements');
+    return [];
+  }
   try {
     const parsed = JSON.parse(textContent.text);
-    if (parsed.data && Array.isArray(parsed.data)) return parsed.data;
-  } catch {}
+    if (parsed.data && Array.isArray(parsed.data)) {
+      console.log('[TX] Extracted', parsed.data.length, 'records from text content');
+      return parsed.data;
+    }
+    // Try other keys
+    for (const key of Object.keys(parsed)) {
+      if (Array.isArray(parsed[key]) && parsed[key].length > 0) {
+        console.log('[TX] Found array in key', key, ':', parsed[key].length, 'records');
+        return parsed[key];
+      }
+    }
+    console.warn('[TX] No data array found. Keys:', Object.keys(parsed));
+  } catch(e) {
+    console.warn('[TX] JSON parse error:', e.message, 'text:', textContent.text?.substring(0, 200));
+  }
   return [];
 }
 
@@ -534,11 +567,13 @@ function updateAreasWithLiveData(priceResults) {
     // Merge transactions from all quarters
     const allRecords = [];
     const sources = result.quarters || (result.data ? [result.data] : []);
+    console.log(`[DATA] ${area.name}: ${sources.length} sources to process`);
     for (const src of sources) {
       if (!src) continue;
       const records = extractTransactionsFromMCPResponse(src);
       allRecords.push(...records);
     }
+    console.log(`[DATA] ${area.name}: ${allRecords.length} total records from all sources`);
 
     if (allRecords.length === 0) continue;
 
@@ -561,6 +596,11 @@ function updateAreasWithLiveData(priceResults) {
       return true;
     });
 
+    console.log(`[DATA] ${area.name}: ${uniqueRecords.length} unique records after dedup (removed ${allRecords.length - uniqueRecords.length})`);
+    if (uniqueRecords.length > 0) {
+      console.log(`[DATA] ${area.name}: Sample record keys:`, Object.keys(uniqueRecords[0]));
+    }
+
     // Store full transaction records for map display
     area._liveTransactions = uniqueRecords.map(d => ({
       TradePrice: (d.TradePrice != null && d.TradePrice !== '') ? parseInt(d.TradePrice) : null,
@@ -576,6 +616,7 @@ function updateAreasWithLiveData(priceResults) {
       CityPlanning: d.CityPlanning || '',
       Period: d.Period || '',
     }));
+    console.log(`[DATA] ${area.name}: Final _liveTransactions count = ${area._liveTransactions.length}`);
 
     // Calculate average trade price from live data
     const prices = uniqueRecords.filter(d => d.TradePrice != null && d.TradePrice !== '').map(d => parseInt(d.TradePrice)).filter(p => !isNaN(p));
@@ -1722,15 +1763,17 @@ async function showAllTransactionPins(ranked) {
     }
   }
 
+  let totalPins = 0;
   ranked.forEach(area => {
     if (!area._liveTransactions) return;
     const color = COLORS[AREAS.findIndex(a => a.id === area.id) % COLORS.length];
     area._liveTransactions.forEach((tx, i) => {
-      if (tx.TradePrice == null || isNaN(tx.TradePrice)) return;
       const pos = estimateTxPosition(area, tx, i);
+      const hasPrice = tx.TradePrice != null && !isNaN(tx.TradePrice);
+      totalPins++;
       const cm = L.circleMarker([pos.lat, pos.lng], {
         radius: 5,
-        fillColor: priceColor(tx.TradePrice),
+        fillColor: hasPrice ? priceColor(tx.TradePrice) : '#9ca3af',
         color: '#fff',
         weight: 1,
         opacity: 0.8,
@@ -1740,6 +1783,7 @@ async function showAllTransactionPins(ranked) {
       txMarkerLayer.addLayer(cm);
     });
   });
+  console.log(`[PIN] showAllTransactionPins: ${totalPins} total pins created`);
 }
 
 // Map loading overlay controls
@@ -1772,21 +1816,24 @@ function showTransactionPins(area) {
 
   if (!area._liveTransactions) return;
 
+  let pinCount = 0;
   area._liveTransactions.forEach((tx, i) => {
-    if (tx.TradePrice == null || isNaN(tx.TradePrice)) return;
     const pos = estimateTxPosition(area, tx, i);
+    const hasPrice = tx.TradePrice != null && !isNaN(tx.TradePrice);
     const cm = L.circleMarker([pos.lat, pos.lng], {
       radius: 7,
-      fillColor: priceColor(tx.TradePrice),
+      fillColor: hasPrice ? priceColor(tx.TradePrice) : '#9ca3af',
       color: '#fff',
       weight: 1.5,
       opacity: 0.9,
-      fillOpacity: 0.7
+      fillOpacity: hasPrice ? 0.7 : 0.4
     });
     cm.bindPopup(buildTxPopup(tx, area.name), { maxWidth: 240 });
     txMarkerLayer.addLayer(cm);
     txMarkersByIdx[i] = { marker: cm, pos };
+    pinCount++;
   });
+  console.log(`[PIN] showTransactionPins: ${area.name} — ${pinCount} pins created from ${area._liveTransactions.length} transactions`);
 }
 
 // Navigate map to a specific transaction pin and open popup
@@ -1802,9 +1849,10 @@ function flyToTransaction(idx) {
 }
 
 function buildTxPopup(tx, cityName) {
-  const priceStr = tx.TradePrice >= 10000
-    ? `${(tx.TradePrice/10000).toFixed(0)}万円`
-    : `${tx.TradePrice.toLocaleString()}円`;
+  const hasPrice = tx.TradePrice != null && !isNaN(tx.TradePrice);
+  const priceStr = hasPrice
+    ? (tx.TradePrice >= 10000 ? `${(tx.TradePrice/10000).toFixed(0)}万円` : `${tx.TradePrice.toLocaleString()}円`)
+    : '価格不明';
   return `
     <div style="font-family:'Noto Sans JP',sans-serif;font-size:12px;line-height:1.6;">
       <div style="font-weight:700;font-size:14px;color:#1e40af;margin-bottom:4px;">${priceStr}</div>
@@ -2155,11 +2203,16 @@ function renderTransactionList(transactions) {
     ...t,
     _origIdx: (t._areaIdx !== undefined) ? t._areaIdx : i
   }));
-  const validTx = indexed.filter(t => t.TradePrice != null && !isNaN(t.TradePrice));
-  if (validTx.length === 0) return '<p class="text-xs text-gray-400">価格情報なし</p>';
+  // Show all transactions (including those without price)
+  const validTx = [...indexed];
+  if (validTx.length === 0) return '<p class="text-xs text-gray-400">取引データなし</p>';
 
-  // Sort by price descending
-  validTx.sort((a, b) => (b.TradePrice || 0) - (a.TradePrice || 0));
+  // Sort by price descending (null prices at end)
+  validTx.sort((a, b) => {
+    const pa = (a.TradePrice != null && !isNaN(a.TradePrice)) ? a.TradePrice : -1;
+    const pb = (b.TradePrice != null && !isNaN(b.TradePrice)) ? b.TradePrice : -1;
+    return pb - pa;
+  });
 
   return `
     <div style="max-height: 300px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px;">
@@ -2173,14 +2226,17 @@ function renderTransactionList(transactions) {
           </tr>
         </thead>
         <tbody>
-          ${validTx.map(t => `
+          ${validTx.map(t => {
+            const hasP = t.TradePrice != null && !isNaN(t.TradePrice);
+            const pStr = hasP ? (t.TradePrice >= 10000 ? (t.TradePrice/10000).toFixed(0) + '万' : t.TradePrice.toLocaleString() + '円') : '-';
+            return `
             <tr data-tx-idx="${t._origIdx}" title="クリックで地図上のピンへ移動">
-              <td class="font-medium" style="color:${priceColor(t.TradePrice)}">${t.TradePrice >= 10000 ? (t.TradePrice/10000).toFixed(0) + '万' : t.TradePrice.toLocaleString() + '円'}</td>
+              <td class="font-medium" style="color:${hasP ? priceColor(t.TradePrice) : '#9ca3af'}">${pStr}</td>
               <td>${t.Area ? t.Area + 'm²' : '-'}</td>
               <td class="text-gray-500" style="max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t.District || '-'}</td>
               <td class="text-gray-500" style="max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t.NearestStation || '-'}</td>
-            </tr>
-          `).join('')}
+            </tr>`;
+          }).join('')}
         </tbody>
       </table>
     </div>
