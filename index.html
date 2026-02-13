@@ -81,10 +81,33 @@
     height: 100%; background: #3b82f6; border-radius: 2px;
     transition: width 0.3s ease;
   }
+  /* Fullscreen map */
+  .map-fullscreen {
+    position: fixed !important; top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 9999; border-radius: 0 !important; margin: 0;
+  }
+  .map-fullscreen #map-container { border-radius: 0; height: 100vh; }
+  .map-fullscreen #map-sidebar { border-radius: 0; height: 100vh; }
+  .map-fullscreen-controls {
+    position: fixed; top: 12px; left: 12px; z-index: 10001;
+    background: rgba(255,255,255,0.92); backdrop-filter: blur(8px);
+    padding: 8px 12px; border-radius: 10px; display: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    gap: 8px; align-items: center;
+  }
+  .map-fullscreen-controls.visible { display: flex; }
+  .map-fullscreen-btn {
+    display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px;
+    border-radius: 6px; font-size: 12px; cursor: pointer; user-select: none;
+    transition: all 0.2s; border: 1px solid #d1d5db; background: white; color: #374151;
+  }
+  .map-fullscreen-btn:hover { background: #f3f4f6; }
+  .map-fullscreen-btn.active { background: #dbeafe; border-color: #3b82f6; color: #1e40af; }
   @media (max-width: 768px) {
     .map-layout { flex-direction: column; height: auto; }
     #map-container { height: 400px; border-radius: 12px 12px 0 0; }
     #map-sidebar { width: 100%; border-left: none; border-top: 1px solid #e5e7eb; border-radius: 0 0 12px 12px; max-height: 350px; }
+    .map-fullscreen #map-sidebar { height: auto; max-height: 40vh; }
   }
 </style>
 </head>
@@ -1070,7 +1093,23 @@ function renderMap(ranked) {
           <button id="btn-school-toggle" class="school-toggle ${showSchoolDistricts ? 'active' : ''}" onclick="toggleSchoolDistricts()">
             <span>${showSchoolDistricts ? '🏫 学区 ON' : '🏫 学区'}</span>
           </button>
+          <button id="btn-fullscreen-toggle" class="map-fullscreen-btn" onclick="toggleMapFullscreen()">
+            <span id="fullscreen-icon">⛶</span> <span id="fullscreen-label">拡大</span>
+          </button>
         </div>
+      </div>
+      <!-- Fullscreen floating controls -->
+      <div id="map-fullscreen-controls" class="map-fullscreen-controls">
+        <span style="font-weight:600;font-size:13px;color:#1e40af;">🗺️ エリアマップ</span>
+        <button class="school-toggle ${showDistrictAreas ? 'active' : ''}" onclick="toggleDistrictAreas()">
+          <span>${showDistrictAreas ? '📊 エリア ON' : '📊 エリア'}</span>
+        </button>
+        <button class="school-toggle ${showSchoolDistricts ? 'active' : ''}" onclick="toggleSchoolDistricts()">
+          <span>${showSchoolDistricts ? '🏫 学区 ON' : '🏫 学区'}</span>
+        </button>
+        <button class="map-fullscreen-btn active" onclick="toggleMapFullscreen()">
+          <span>✕</span> <span>閉じる</span>
+        </button>
       </div>
       <div class="card overflow-hidden">
         <div class="map-layout" style="position:relative;">
@@ -1096,6 +1135,58 @@ function renderMap(ranked) {
     </div>
   `;
 }
+
+// ============================================================
+// Map Fullscreen Toggle
+// ============================================================
+let _mapFullscreen = false;
+
+function toggleMapFullscreen() {
+  _mapFullscreen = !_mapFullscreen;
+  const layout = document.querySelector('.map-layout');
+  const btn = document.getElementById('btn-fullscreen-toggle');
+  const icon = document.getElementById('fullscreen-icon');
+  const label = document.getElementById('fullscreen-label');
+  const floatingCtrl = document.getElementById('map-fullscreen-controls');
+  if (!layout) return;
+
+  if (_mapFullscreen) {
+    layout.classList.add('map-fullscreen');
+    if (btn) btn.classList.add('active');
+    if (icon) icon.textContent = '✕';
+    if (label) label.textContent = '閉じる';
+    // カードの角丸を無効化
+    const card = layout.closest('.card');
+    if (card) card.style.borderRadius = '0';
+    // フローティングコントロール表示
+    if (floatingCtrl) floatingCtrl.classList.add('visible');
+    // スクロール無効化
+    document.body.style.overflow = 'hidden';
+  } else {
+    layout.classList.remove('map-fullscreen');
+    if (btn) btn.classList.remove('active');
+    if (icon) icon.textContent = '⛶';
+    if (label) label.textContent = '拡大';
+    const card = layout.closest('.card');
+    if (card) card.style.borderRadius = '';
+    // フローティングコントロール非表示
+    if (floatingCtrl) floatingCtrl.classList.remove('visible');
+    // スクロール復活
+    document.body.style.overflow = '';
+  }
+
+  // Leaflet地図サイズ再計算
+  if (mapInstance) {
+    setTimeout(() => { mapInstance.invalidateSize(); }, 200);
+  }
+}
+
+// ESCキーで全画面解除
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && _mapFullscreen) {
+    toggleMapFullscreen();
+  }
+});
 
 // ============================================================
 // School District Layer
