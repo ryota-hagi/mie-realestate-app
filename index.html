@@ -439,7 +439,7 @@ let _currentFetchAreaId = null;
 let _fetchPriorityAreaId = null;  // ユーザー選択による優先取得エリア
 let _autoFetchRunning = false;    // 全エリア自動取得の実行中フラグ
 
-async function fetchAreaFullData(areaId) {
+async function fetchAreaFullData(areaId, options = {}) {
   if (!mcpReinfo || !mcpReinfo.connected) return;
   if (AREA_FULL_LOADED.has(areaId)) return; // already loaded
   if (_currentFetchAreaId === areaId) return; // already fetching
@@ -449,8 +449,10 @@ async function fetchAreaFullData(areaId) {
 
   _currentFetchAreaId = areaId;
 
-  // Show map loading overlay
-  showMapLoading(area.name, 0);
+  // 選択中エリアのみオーバーレイ表示（バックグラウンド取得時は非表示）
+  const isSelected = state.mapSelectedAreaId === areaId;
+  const showOverlay = options.showOverlay !== undefined ? options.showOverlay : isSelected;
+  if (showOverlay) showMapLoading(area.name, 0);
 
   const yearQuarters = [
     { year: '2024', quarter: '4' }, { year: '2024', quarter: '3' },
@@ -473,7 +475,7 @@ async function fetchAreaFullData(areaId) {
     try {
       done++;
       const pct = Math.round(done / total * 100);
-      updateMapLoading(`${area.name} ${yq.year}年Q${yq.quarter}`, pct);
+      if (showOverlay) updateMapLoading(`${area.name} ${yq.year}年Q${yq.quarter}`, pct);
       updateStatusText(`${area.name} 詳細取得中... (${done}/${total})`);
       const priceData = await mcpReinfo.callTool('reinfolib-real-estate-price', {
         year: yq.year, quarter: yq.quarter, area: '24', city: area.cityCode
@@ -490,8 +492,8 @@ async function fetchAreaFullData(areaId) {
   AREA_FULL_LOADED.add(areaId);
   _currentFetchAreaId = null;
 
-  // Hide map loading overlay
-  hideMapLoading();
+  // オーバーレイ非表示
+  if (showOverlay) hideMapLoading();
 
   const txCount = area._liveTransactions ? area._liveTransactions.length : 0;
   updateStatusText(`${area.name}: 詳細データ取得完了（${txCount}件）`);
@@ -506,7 +508,7 @@ async function fetchAreaFullData(areaId) {
 
     // Geocode districts THEN show pins at correct positions
     if (txMarkerLayer) {
-      await geocodeAreaDistricts(area);
+      await geocodeAreaDistricts(area, { showOverlay });
       if (state.mapSelectedAreaId === areaId) {
         showTransactionPins(area);
       }
@@ -1719,7 +1721,7 @@ function aggregateDistrictMetrics(area, districtName) {
 }
 
 // Geocode all districts for a single area BEFORE showing pins
-async function geocodeAreaDistricts(area) {
+async function geocodeAreaDistricts(area, options = {}) {
   if (!area._liveTransactions) return;
   const uncached = [];
   for (const tx of area._liveTransactions) {
@@ -1731,18 +1733,19 @@ async function geocodeAreaDistricts(area) {
   }
   if (uncached.length === 0) return;
 
+  const showOverlay = options.showOverlay !== undefined ? options.showOverlay : true;
   const total = uncached.length;
   let done = 0;
-  showMapLoading(`${area.name} 地区情報取得中...`, 0);
+  if (showOverlay) showMapLoading(`${area.name} 地区情報取得中...`, 0);
   for (const { district, cityName } of uncached) {
     done++;
-    updateMapLoading(`${area.name} 地区情報取得中... (${done}/${total})`, (done / total) * 100);
+    if (showOverlay) updateMapLoading(`${area.name} 地区情報取得中... (${done}/${total})`, (done / total) * 100);
     await geocodeDistrict(district, cityName);
     if (done % 5 === 0) saveDistrictCache();
     if (done < total) await new Promise(r => setTimeout(r, 200));
   }
   saveDistrictCache();
-  hideMapLoading();
+  if (showOverlay) hideMapLoading();
 }
 
 function hashStr(s) {
@@ -1822,7 +1825,7 @@ async function showAllTransactionPins(ranked) {
   // Geocode districts for all areas with transactions
   for (const area of ranked) {
     if (area._liveTransactions && area._liveTransactions.length > 0) {
-      await geocodeAreaDistricts(area);
+      await geocodeAreaDistricts(area, { showOverlay: false });
     }
   }
 
