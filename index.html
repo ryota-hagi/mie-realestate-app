@@ -379,8 +379,13 @@ async function fetchLiveData() {
 
     // Count total transactions
     AREAS.forEach(a => { if (a._liveTransactions) totalTx += a._liveTransactions.length; });
-    state.mcpMessage = `ライブデータ取得完了 — ${priceResults.length}エリア・計${totalTx}件の取引データを反映`;
+    state.mcpMessage = `取引データ取得完了（計${totalTx}件） — 地区の位置情報を取得中...`;
+    render();
 
+    // Geocode districts for accurate map pin placement
+    await geocodeAllDistricts();
+
+    state.mcpMessage = `ライブデータ取得完了 — ${priceResults.length}エリア・計${totalTx}件の取引データを反映`;
     render();
   } catch(e) {
     state.mcpMessage = `データ取得エラー: ${e.message}（キャッシュデータを使用中）`;
@@ -908,7 +913,148 @@ function initializeMap(ranked) {
   }
 }
 
-// Hash a string to a number (deterministic)
+// ============================================================
+// Station Coordinate Database (Northern Mie Prefecture)
+// ============================================================
+const STATION_COORDS = {
+  // 四日市市
+  '近鉄四日市':[34.9665,136.6142],'四日市':[34.9667,136.6186],'富田':[34.989,136.6266],
+  '富洲原':[34.997,136.631],'阿倉川':[34.976,136.6175],'川原町':[34.972,136.6153],
+  '新正':[34.962,136.6154],'赤堀':[34.958,136.6156],'日永':[34.944,136.6088],
+  '南日永':[34.952,136.612],'泊':[34.938,136.611],'追分':[34.934,136.605],
+  '内部':[34.928,136.5925],'小古曽':[34.936,136.599],'河原田':[34.912,136.5814],
+  '塩浜':[34.938,136.6217],'海山道':[34.956,136.6238],'霞ヶ浦':[34.957,136.6262],
+  '大矢知':[34.997,136.628],'平津':[34.996,136.618],'暁学園前':[34.993,136.608],
+  '山城':[34.981,136.5936],'保々':[34.991,136.582],'北楠':[34.918,136.61],
+  '楠':[34.912,136.615],'南四日市':[34.947,136.62],'中川原':[34.961,136.607],
+  '伊勢松本':[34.969,136.601],'西日野':[34.95,136.597],'近鉄富田':[34.988,136.622],
+  // 桑名市
+  '桑名':[35.0614,136.6918],'播磨':[35.046,136.677],'益生':[35.066,136.6785],
+  '馬道':[35.06,136.686],'西桑名':[35.062,136.686],'在良':[35.073,136.676],
+  '星川':[35.081,136.671],'七和':[35.087,136.659],'穴太':[35.091,136.65],
+  '多度':[35.117,136.629],'長島':[35.076,136.715],'蓮花寺':[35.078,136.665],
+  '下深谷':[35.039,136.669],'伊勢朝日':[35.032,136.669],
+  // 鈴鹿市
+  '白子':[34.843,136.611],'鈴鹿':[34.871,136.543],'鈴鹿市':[34.881,136.581],
+  '三日市':[34.874,136.577],'平田町':[34.876,136.559],'加佐登':[34.886,136.523],
+  '玉垣':[34.855,136.601],'柳':[34.848,136.599],'磯山':[34.836,136.615],
+  '千代崎':[34.831,136.617],'箕田':[34.863,136.593],'鼓ヶ浦':[34.838,136.613],
+  '徳田':[34.884,136.559],'伊勢若松':[34.856,136.608],'千里':[34.887,136.506],
+  '中瀬古':[34.866,136.571],
+  // いなべ市
+  '三里':[35.093,136.554],'北勢中央公園口':[35.087,136.548],'麻生田':[35.099,136.548],
+  '阿下喜':[35.126,136.549],'楚原':[35.116,136.549],'大泉':[35.108,136.554],
+  '梅戸井':[35.084,136.551],
+  // 亀山市
+  '亀山':[34.855,136.449],'関':[34.855,136.397],'加太':[34.85,136.355],
+  '井田川':[34.874,136.489],
+  // 菰野町
+  '菰野':[35.017,136.516],'中菰野':[35.024,136.509],'大羽根園':[35.029,136.502],
+  '湯の山温泉':[35.036,136.486],'桜':[35.009,136.528],
+  // 東員町
+  '東員':[35.06,136.595],'大長':[35.066,136.589],'北大社':[35.073,136.592],
+};
+
+function findStationCoords(stationName) {
+  if (!stationName) return null;
+  if (STATION_COORDS[stationName]) return STATION_COORDS[stationName];
+  const cleaned = stationName.replace(/駅$/, '').replace(/\(.*\)/, '').trim();
+  if (STATION_COORDS[cleaned]) return STATION_COORDS[cleaned];
+  for (const [key, coords] of Object.entries(STATION_COORDS)) {
+    if (cleaned.includes(key) || key.includes(cleaned)) return coords;
+  }
+  return null;
+}
+
+// ============================================================
+// District Geocoding via Nominatim (OpenStreetMap)
+// ============================================================
+const DISTRICT_GEOCODE_CACHE = new Map();
+
+async function geocodeSingleDistrict(district, cityName) {
+  const cacheKey = `${cityName}-${district}`;
+  if (DISTRICT_GEOCODE_CACHE.has(cacheKey)) return DISTRICT_GEOCODE_CACHE.get(cacheKey);
+
+  // Try progressively broader queries
+  const queries = [
+    `${district}, ${cityName}, 三重県`,
+    `${district}, ${cityName}`,
+    `${district}, 三重県`
+  ];
+
+  for (const q of queries) {
+    try {
+      const url = `https://nominatim.openstreetmap.org/search?` +
+        `q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=jp&accept-language=ja`;
+      const resp = await fetch(url, {
+        headers: { 'User-Agent': 'MieRealEstateApp/1.0 (educational project)' }
+      });
+      if (!resp.ok) continue;
+      const results = await resp.json();
+      if (results.length > 0) {
+        const lat = parseFloat(results[0].lat);
+        const lng = parseFloat(results[0].lon);
+        // Verify result is within Mie prefecture bounds (roughly)
+        if (lat >= 34.2 && lat <= 35.5 && lng >= 135.8 && lng <= 137.0) {
+          const coords = [lat, lng];
+          DISTRICT_GEOCODE_CACHE.set(cacheKey, coords);
+          return coords;
+        }
+      }
+    } catch(e) {
+      console.warn(`Geocode failed for ${q}:`, e);
+    }
+  }
+
+  DISTRICT_GEOCODE_CACHE.set(cacheKey, null);
+  return null;
+}
+
+async function geocodeAllDistricts() {
+  // Collect unique district+city pairs
+  const pairs = new Map(); // key: "cityName-district" → { district, cityName }
+  for (const area of AREAS) {
+    if (!area._liveTransactions) continue;
+    for (const tx of area._liveTransactions) {
+      if (!tx.District) continue;
+      const key = `${area.name}-${tx.District}`;
+      if (!pairs.has(key)) {
+        pairs.set(key, { district: tx.District, cityName: area.name });
+      }
+    }
+  }
+
+  if (pairs.size === 0) return;
+
+  const total = pairs.size;
+  let done = 0;
+  const entries = Array.from(pairs.values());
+
+  // Process in batches with rate limiting (Nominatim: max 1 req/sec)
+  for (let i = 0; i < entries.length; i++) {
+    const { district, cityName } = entries[i];
+    done++;
+    state.mcpMessage = `地区の位置情報を取得中... (${done}/${total}) ${cityName} ${district}`;
+    render();
+
+    await geocodeSingleDistrict(district, cityName);
+
+    // Rate limit: wait 1.1 seconds between requests (Nominatim policy)
+    if (i < entries.length - 1) {
+      await new Promise(r => setTimeout(r, 1100));
+    }
+  }
+
+  const found = Array.from(DISTRICT_GEOCODE_CACHE.values()).filter(v => v !== null).length;
+  console.log(`Geocoding complete: ${found}/${total} districts resolved`);
+}
+
+function findDistrictCoords(district, cityName) {
+  if (!district) return null;
+  const key = `${cityName}-${district}`;
+  return DISTRICT_GEOCODE_CACHE.get(key) || null;
+}
+
 function hashStr(s) {
   let h = 0;
   for (let i = 0; i < s.length; i++) {
@@ -917,23 +1063,44 @@ function hashStr(s) {
   return Math.abs(h);
 }
 
-// Estimate lat/lng offset from city center based on district name
 function estimateTxPosition(area, tx, idx) {
+  // Priority 1: Station coordinates
+  const stationCoords = findStationCoords(tx.NearestStation);
+  if (stationCoords) {
+    const jitterAngle = (idx * 137.508) * (Math.PI / 180);
+    const jitter = 0.0006 + (idx % 5) * 0.0003;
+    return {
+      lat: stationCoords[0] + Math.cos(jitterAngle) * jitter,
+      lng: stationCoords[1] + Math.sin(jitterAngle) * jitter
+    };
+  }
+
+  // Priority 2: District geocoded coordinates
+  const districtCoords = findDistrictCoords(tx.District, area.name);
+  if (districtCoords) {
+    const jitterAngle = (idx * 137.508) * (Math.PI / 180);
+    const jitter = 0.001 + (idx % 7) * 0.0004; // slightly wider jitter for district level
+    return {
+      lat: districtCoords[0] + Math.cos(jitterAngle) * jitter,
+      lng: districtCoords[1] + Math.sin(jitterAngle) * jitter
+    };
+  }
+
+  // Priority 3: Fallback - bias inland from city center
   const districtKey = tx.District || tx.NearestStation || `tx-${idx}`;
   const hash = hashStr(districtKey + area.id);
-  const hash2 = hashStr(districtKey + area.id + 'salt');
+  const baseAngle = 150 + (hash % 200); // 150-350deg: bias west/north
+  const angle = baseAngle * (Math.PI / 180);
+  const spread = 0.004 + (hash % 40) / 40 * 0.012;
+  const baseLat = area.lat + Math.cos(angle) * spread;
+  const baseLng = area.lng + Math.sin(angle) * spread;
 
-  // Spread: 0.01 ~ 0.04 degrees (~1-4km) from city center
-  const angle = (hash % 360) * (Math.PI / 180);
-  const spread = 0.008 + (hash2 % 100) / 100 * 0.032;
-
-  // Add small per-item jitter so same-district items don't overlap
-  const jitterAngle = (idx * 137.508) * (Math.PI / 180); // golden angle
-  const jitter = 0.001 + (idx % 7) * 0.001;
+  const jitterAngle = (idx * 137.508) * (Math.PI / 180);
+  const jitter = 0.0006 + (idx % 5) * 0.0003;
 
   return {
-    lat: area.lat + Math.cos(angle) * spread + Math.cos(jitterAngle) * jitter,
-    lng: area.lng + Math.sin(angle) * spread + Math.sin(jitterAngle) * jitter
+    lat: baseLat + Math.cos(jitterAngle) * jitter,
+    lng: baseLng + Math.sin(jitterAngle) * jitter
   };
 }
 
