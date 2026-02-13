@@ -355,25 +355,36 @@ async function fetchLiveData() {
     // Get city list for Mie (area code 24)
     const cityResult = await mcpReinfo.callTool('reinfolib-city-list', { area: '24' });
 
-    // Fetch multiple years to get more transaction data
-    const years = ['2024','2023','2022'];
+    // Fetch multiple years × quarters to maximize transaction data
+    const yearQuarters = [
+      { year: '2024', quarter: '4' }, { year: '2024', quarter: '3' },
+      { year: '2024', quarter: '2' }, { year: '2024', quarter: '1' },
+      { year: '2023', quarter: '4' }, { year: '2023', quarter: '3' },
+      { year: '2023', quarter: '2' }, { year: '2023', quarter: '1' },
+      { year: '2022', quarter: '4' }, { year: '2022', quarter: '3' },
+      { year: '2022', quarter: '2' }, { year: '2022', quarter: '1' },
+      { year: '2021', quarter: '4' }, { year: '2021', quarter: '3' },
+      { year: '2021', quarter: '2' }, { year: '2021', quarter: '1' },
+      { year: '2020', quarter: '4' }, { year: '2020', quarter: '3' },
+      { year: '2020', quarter: '2' }, { year: '2020', quarter: '1' },
+    ];
     const priceResults = [];
     let totalTx = 0;
 
     for (const area of AREAS) {
       const allData = [];
-      for (const yr of years) {
+      for (const yq of yearQuarters) {
         try {
-          updateStatusText(`${area.name} のデータ取得中（${yr}年）...`);
+          updateStatusText(`${area.name} ${yq.year}年Q${yq.quarter} 取得中...`);
           const priceData = await mcpReinfo.callTool('reinfolib-real-estate-price', {
-            year: yr, area: '24', city: area.cityCode
+            year: yq.year, quarter: yq.quarter, area: '24', city: area.cityCode
           });
           allData.push(priceData);
         } catch(e) {
-          console.warn(`Price fetch failed for ${area.name} ${yr}:`, e);
+          console.warn(`Price fetch failed for ${area.name} ${yq.year}Q${yq.quarter}:`, e);
         }
       }
-      // Merge all year results
+      // Merge all quarter results
       priceResults.push({ cityCode: area.cityCode, quarters: allData });
     }
 
