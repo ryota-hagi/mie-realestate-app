@@ -1913,18 +1913,19 @@ async function showAllTransactionPins(ranked) {
   if (!txMarkerLayer) return;
   txMarkerLayer.clearLayers();
 
-  // Geocode districts for all areas with transactions
-  for (const area of ranked) {
+  // Geocode districts for all areas with transactions (AREAS本体を参照)
+  for (const area of AREAS) {
     if (area._liveTransactions && area._liveTransactions.length > 0) {
       await geocodeAreaDistricts(area, { showOverlay: false });
     }
   }
 
   let totalPins = 0;
-  ranked.forEach(area => {
-    if (!area._liveTransactions) return;
-    const color = COLORS[AREAS.findIndex(a => a.id === area.id) % COLORS.length];
-    area._liveTransactions.forEach((tx, i) => {
+  AREAS.forEach(area => {
+    const transactions = area._liveTransactions;
+    if (!transactions) return;
+    const color = COLORS[AREAS.indexOf(area) % COLORS.length];
+    transactions.forEach((tx, i) => {
       const pos = estimateTxPosition(area, tx, i);
       const hasPrice = tx.TradePrice != null && !isNaN(tx.TradePrice);
       totalPins++;
@@ -1971,10 +1972,13 @@ function showTransactionPins(area) {
   txMarkerLayer.clearLayers();
   txMarkersByIdx = {};
 
-  if (!area._liveTransactions) return;
+  // 常にAREAS本体から最新の_liveTransactionsを取得（rankedコピーは古い場合がある）
+  const canonical = AREAS.find(a => a.id === area.id) || area;
+  const transactions = canonical._liveTransactions;
+  if (!transactions) return;
 
   let pinCount = 0;
-  area._liveTransactions.forEach((tx, i) => {
+  transactions.forEach((tx, i) => {
     const pos = estimateTxPosition(area, tx, i);
     const hasPrice = tx.TradePrice != null && !isNaN(tx.TradePrice);
     const cm = L.circleMarker([pos.lat, pos.lng], {
@@ -1990,7 +1994,7 @@ function showTransactionPins(area) {
     txMarkersByIdx[i] = { marker: cm, pos };
     pinCount++;
   });
-  console.log(`[PIN] showTransactionPins: ${area.name} — ${pinCount} pins created from ${area._liveTransactions.length} transactions`);
+  console.log(`[PIN] showTransactionPins: ${area.name} — ${pinCount} pins created from ${transactions.length} transactions`);
 }
 
 // Navigate map to a specific transaction pin and open popup
@@ -2050,6 +2054,8 @@ function updateMapSidebar(area, ranked) {
 
   // ranked配列からscores付きオブジェクトを取得（AREAS直参照はscoresが無い）
   const rankedArea = ranked.find(a => a.id === area.id) || area;
+  // AREAS本体から最新の_liveTransactionsを取得（rankedコピーは古い場合がある）
+  const canonical = AREAS.find(a => a.id === area.id) || area;
   area = rankedArea;
 
   const rank = ranked.findIndex(a => a.id === area.id) + 1;
@@ -2058,7 +2064,7 @@ function updateMapSidebar(area, ranked) {
 
   const isFullLoaded = AREA_FULL_LOADED.has(area.id);
   const isFetching = _currentFetchAreaId === area.id;
-  const txCount = area._liveTransactions ? area._liveTransactions.length : 0;
+  const txCount = canonical._liveTransactions ? canonical._liveTransactions.length : 0;
 
   const loadingBadge = isFetching
     ? '<span class="inline-flex items-center gap-1 text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full mb-2"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>詳細データ取得中...</span>'
@@ -2067,7 +2073,7 @@ function updateMapSidebar(area, ranked) {
       : `<span class="text-xs text-gray-400 mb-2">概要データのみ（${txCount}件）</span>`;
 
   const txSection = txCount > 0
-    ? renderTransactionList(area._liveTransactions)
+    ? renderTransactionList(canonical._liveTransactions)
     : (state.mcpStatus === 'connected'
       ? '<p class="text-xs text-gray-400 mt-2">取引データなし</p>'
       : '<p class="text-xs text-gray-400 mt-2">MCPに接続すると取引データが表示されます</p>');
