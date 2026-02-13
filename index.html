@@ -2048,6 +2048,10 @@ function updateMapSidebar(area, ranked) {
   const sidebar = document.getElementById('map-sidebar');
   if (!sidebar) return;
 
+  // ranked配列からscores付きオブジェクトを取得（AREAS直参照はscoresが無い）
+  const rankedArea = ranked.find(a => a.id === area.id) || area;
+  area = rankedArea;
+
   const rank = ranked.findIndex(a => a.id === area.id) + 1;
   const medals = ['🥇','🥈','🥉'];
   const medalStr = rank <= 3 ? medals[rank-1] : `${rank}位`;
