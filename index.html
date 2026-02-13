@@ -374,8 +374,9 @@ async function connectMCP() {
     state.mcpMessage = `接続完了 — ${tools.length}個のツールが利用可能`;
     render();
 
-    // Fetch live data
+    // Phase 1: 概要取得 → Phase 2: 全エリア詳細を自動取得
     await fetchLiveData();
+    fetchAllAreasData();  // バックグラウンドで全エリア取得開始（awaitしない）
   } catch(e) {
     state.mcpStatus = 'error';
     state.mcpMessage = `接続失敗: ${e.message}（キャッシュデータを使用中）`;
@@ -421,7 +422,7 @@ async function fetchLiveData() {
 
     let totalTx = 0;
     AREAS.forEach(a => { if (a._liveTransactions) totalTx += a._liveTransactions.length; });
-    state.mcpMessage = `概要データ取得完了（計${totalTx}件） — エリアをクリックすると詳細データを取得します`;
+    state.mcpMessage = `概要データ取得完了（計${totalTx}件） — 詳細データを自動取得中...`;
 
     render();
   } catch(e) {
@@ -435,6 +436,8 @@ async function fetchLiveData() {
 // ------------------------------------------------------------
 const AREA_FULL_LOADED = new Set();
 let _currentFetchAreaId = null;
+let _fetchPriorityAreaId = null;  // ユーザー選択による優先取得エリア
+let _autoFetchRunning = false;    // 全エリア自動取得の実行中フラグ
 
 async function fetchAreaFullData(areaId) {
   if (!mcpReinfo || !mcpReinfo.connected) return;
@@ -512,6 +515,59 @@ async function fetchAreaFullData(areaId) {
 
   // Background geocode remaining areas' districts
   geocodeDistrictsBackground().catch(e => console.warn('Geocoding error:', e));
+}
+
+// ------------------------------------------------------------
+// Auto-fetch: 全エリアのPhase2データを順次取得（優先エリア対応）
+// ------------------------------------------------------------
+async function fetchAllAreasData() {
+  if (_autoFetchRunning) return;
+  if (!mcpReinfo || !mcpReinfo.connected) return;
+
+  _autoFetchRunning = true;
+  const areaIds = AREAS.map(a => a.id);
+  let completedCount = AREA_FULL_LOADED.size;
+
+  while (true) {
+    // 次に取得するエリアを決定
+    let nextId = null;
+
+    // 1. 優先エリアがあればそれを先に
+    if (_fetchPriorityAreaId && !AREA_FULL_LOADED.has(_fetchPriorityAreaId)) {
+      nextId = _fetchPriorityAreaId;
+      _fetchPriorityAreaId = null;
+    }
+
+    // 2. なければ未取得のエリアを順に
+    if (!nextId) {
+      nextId = areaIds.find(id => !AREA_FULL_LOADED.has(id));
+    }
+
+    // 全エリア取得済みなら終了
+    if (!nextId) break;
+
+    const remaining = AREAS.length - AREA_FULL_LOADED.size;
+    const areaName = AREAS.find(a => a.id === nextId)?.name || nextId;
+    updateStatusText(`${areaName} 詳細取得中... （残り${remaining}エリア）`);
+
+    await fetchAreaFullData(nextId);
+
+    completedCount = AREA_FULL_LOADED.size;
+  }
+
+  _autoFetchRunning = false;
+
+  // 全完了メッセージ
+  let totalTx = 0;
+  AREAS.forEach(a => { if (a._liveTransactions) totalTx += a._liveTransactions.length; });
+  state.mcpMessage = `全エリアデータ取得完了（計${totalTx.toLocaleString()}件）`;
+  updateStatusText(`全エリアデータ取得完了（計${totalTx.toLocaleString()}件）`);
+
+  // マップ表示中なら全ピン更新
+  if (state.view === 'map' && txMarkerLayer && !state.mapSelectedAreaId) {
+    const ranked = getRankedAreas();
+    showAllTransactionPins(ranked);
+  }
 }
 
 function extractTransactionsFromMCPResponse(data) {
@@ -1316,9 +1372,12 @@ function initializeMap(ranked) {
       showTransactionPins(area);
       mapInstance.flyTo([area.lat, area.lng], 13, { duration: 0.8 });
 
-      // Auto-fetch full data for this area if not yet loaded
-      if (!AREA_FULL_LOADED.has(area.id) && mcpReinfo && mcpReinfo.connected) {
-        fetchAreaFullData(area.id);
+      // 未取得エリアなら優先指定（自動取得中→次に処理、停止中→直接取得）
+      if (!AREA_FULL_LOADED.has(area.id)) {
+        _fetchPriorityAreaId = area.id;
+        if (!_autoFetchRunning && mcpReinfo && mcpReinfo.connected) {
+          fetchAreaFullData(area.id);
+        }
       }
     });
 
@@ -1342,8 +1401,11 @@ function initializeMap(ranked) {
     if (sel) {
       showTransactionPins(sel);
       mapInstance.setView([sel.lat, sel.lng], 13);
-      if (!AREA_FULL_LOADED.has(sel.id) && mcpReinfo && mcpReinfo.connected) {
-        fetchAreaFullData(sel.id);
+      if (!AREA_FULL_LOADED.has(sel.id)) {
+        _fetchPriorityAreaId = sel.id;
+        if (!_autoFetchRunning && mcpReinfo && mcpReinfo.connected) {
+          fetchAreaFullData(sel.id);
+        }
       }
     }
   }
@@ -2481,6 +2543,8 @@ function bindEvents(ranked) {
 // ============================================================
 loadDistrictCache();
 render();
+// ページロード時にMCP自動接続→データ取得開始
+connectMCP();
 </script>
 </body>
 </html>
