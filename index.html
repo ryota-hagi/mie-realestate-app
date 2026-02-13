@@ -323,7 +323,8 @@ const state = {
   mcpMessage: '',
   mcpLiveData: null,
   weights: { price: 25, access: 20, growth: 15, living: 15, family: 15, nature: 10 },
-  charts: {}
+  charts: {},
+  mapSelectedDistrict: null  // { cityId, districtName } or null
 };
 
 // Map globals (persistent across renders)
@@ -1125,6 +1126,7 @@ function initializeMap(ranked) {
 
     marker.on('click', async () => {
       state.mapSelectedAreaId = area.id;
+      state.mapSelectedDistrict = null; // Reset district selection
       ranked.forEach((a, i) => {
         const c = COLORS[AREAS.findIndex(x => x.id === a.id) % COLORS.length];
         mapMarkers[a.id].setIcon(createMapIcon(c, i + 1, a.scores.total, a.id === area.id));
@@ -1205,6 +1207,32 @@ const STATION_COORDS = {
   '湯の山温泉':[35.036,136.486],'桜':[35.009,136.528],
   // 東員町
   '東員':[35.06,136.595],'大長':[35.066,136.589],'北大社':[35.073,136.592],
+};
+
+// Station → Nagoya commute time (minutes, approximate)
+const STATION_TO_NAGOYA_MIN = {
+  // 四日市市
+  '近鉄四日市':35,'四日市':50,'富田':38,'富洲原':40,'阿倉川':37,'川原町':36,
+  '新正':36,'赤堀':37,'日永':40,'南日永':39,'泊':42,'追分':43,
+  '内部':45,'小古曽':44,'河原田':48,'塩浜':42,'海山道':38,'霞ヶ浦':37,
+  '大矢知':40,'平津':42,'暁学園前':44,'山城':46,'保々':48,'北楠':48,
+  '楠':50,'南四日市':40,'中川原':38,'伊勢松本':40,'西日野':42,'近鉄富田':37,
+  // 桑名市
+  '桑名':25,'播磨':30,'益生':27,'馬道':26,'西桑名':26,'在良':28,
+  '星川':30,'七和':32,'穴太':34,'多度':40,'長島':22,'蓮花寺':31,
+  '下深谷':32,'伊勢朝日':33,
+  // 鈴鹿市
+  '白子':55,'鈴鹿':65,'鈴鹿市':60,'三日市':62,'平田町':63,'加佐登':68,
+  '玉垣':57,'柳':58,'磯山':56,'千代崎':54,'箕田':59,'鼓ヶ浦':55,
+  '徳田':63,'伊勢若松':56,'千里':70,'中瀬古':61,
+  // いなべ市
+  '三里':52,'北勢中央公園口':53,'麻生田':54,'阿下喜':58,'楚原':56,'大泉':54,'梅戸井':51,
+  // 亀山市
+  '亀山':70,'関':80,'加太':90,'井田川':65,
+  // 菰野町
+  '菰野':50,'中菰野':52,'大羽根園':54,'湯の山温泉':58,'桜':48,
+  // 東員町
+  '東員':38,'大長':40,'北大社':42,
 };
 
 function findStationCoords(stationName) {
@@ -1355,6 +1383,92 @@ function findDistrictCoords(district, cityName) {
   if (!district || !cityName) return null;
   const key = `${cityName}-${district}`;
   return DISTRICT_CACHE.get(key) || null;
+}
+
+// Aggregate metrics for a single district within an area
+function aggregateDistrictMetrics(area, districtName) {
+  if (!area._liveTransactions || !districtName) return null;
+  const txs = area._liveTransactions.filter(t => t.District === districtName);
+  if (txs.length === 0) return null;
+
+  // Prices
+  const prices = txs.filter(t => t.TradePrice).map(t => t.TradePrice);
+  const avgPrice = prices.length > 0 ? prices.reduce((a, b) => a + b, 0) / prices.length : null;
+  const minPrice = prices.length > 0 ? Math.min(...prices) : null;
+  const maxPrice = prices.length > 0 ? Math.max(...prices) : null;
+
+  // Price per m²
+  const pricePerM2 = txs
+    .filter(t => t.TradePrice && t.Area && t.Area > 0)
+    .map(t => t.TradePrice / t.Area);
+  const avgPricePerM2 = pricePerM2.length > 0 ? pricePerM2.reduce((a, b) => a + b, 0) / pricePerM2.length : null;
+
+  // Most frequent station
+  const stationCounts = {};
+  txs.forEach(t => {
+    if (t.NearestStation) {
+      const s = t.NearestStation.replace(/\(.*\)/, '').trim();
+      stationCounts[s] = (stationCounts[s] || 0) + 1;
+    }
+  });
+  const topStation = Object.entries(stationCounts).sort((a, b) => b[1] - a[1])[0];
+  const nearestStation = topStation ? topStation[0] : null;
+
+  // Nagoya commute time
+  let nagoyaMin = null;
+  if (nearestStation) {
+    const cleaned = nearestStation.replace(/駅$/, '').trim();
+    nagoyaMin = STATION_TO_NAGOYA_MIN[cleaned] || STATION_TO_NAGOYA_MIN[nearestStation] || null;
+    if (!nagoyaMin) {
+      for (const [key, min] of Object.entries(STATION_TO_NAGOYA_MIN)) {
+        if (cleaned.includes(key) || key.includes(cleaned)) { nagoyaMin = min; break; }
+      }
+    }
+  }
+  if (!nagoyaMin) nagoyaMin = area.accessToNagoya; // fallback to city level
+
+  // Distance to station (average)
+  const distances = txs.filter(t => t.DistanceToStation).map(t => {
+    const m = String(t.DistanceToStation).match(/(\d+)/);
+    return m ? parseInt(m[1]) : null;
+  }).filter(Boolean);
+  const avgDistance = distances.length > 0 ? Math.round(distances.reduce((a, b) => a + b, 0) / distances.length) : null;
+
+  // Property type distribution
+  const typeCounts = {};
+  txs.forEach(t => {
+    const type = t.Type || t.Use || 'その他';
+    typeCounts[type] = (typeCounts[type] || 0) + 1;
+  });
+  const typeDistribution = Object.entries(typeCounts)
+    .map(([name, count]) => ({ name, count, pct: Math.round(count / txs.length * 100) }))
+    .sort((a, b) => b.count - a.count);
+
+  // Average building age
+  const currentYear = new Date().getFullYear();
+  const ages = txs.filter(t => t.BuildingYear).map(t => {
+    const yr = String(t.BuildingYear);
+    // Handle "令和X年", "平成X年", "昭和X年" or just year number
+    let builtYear = parseInt(yr);
+    if (yr.includes('令和')) { const n = parseInt(yr.replace(/[^0-9]/g, '')); builtYear = 2018 + n; }
+    else if (yr.includes('平成')) { const n = parseInt(yr.replace(/[^0-9]/g, '')); builtYear = 1988 + n; }
+    else if (yr.includes('昭和')) { const n = parseInt(yr.replace(/[^0-9]/g, '')); builtYear = 1925 + n; }
+    if (builtYear > 1900 && builtYear <= currentYear) return currentYear - builtYear;
+    return null;
+  }).filter(Boolean);
+  const avgBuildingAge = ages.length > 0 ? Math.round(ages.reduce((a, b) => a + b, 0) / ages.length) : null;
+
+  // District coordinates
+  const coords = findDistrictCoords(districtName, area.name);
+
+  return {
+    districtName, cityName: area.name, cityId: area.id,
+    count: txs.length, transactions: txs,
+    avgPrice, minPrice, maxPrice,
+    avgPricePerM2,
+    nearestStation, nagoyaMin, avgDistance,
+    typeDistribution, avgBuildingAge, coords
+  };
 }
 
 // Geocode all districts for a single area BEFORE showing pins
@@ -1515,20 +1629,36 @@ function showTransactionPins(area) {
 
   if (!area._liveTransactions) return;
 
+  const selectedDistrict = state.mapSelectedDistrict ? state.mapSelectedDistrict.districtName : null;
+
   area._liveTransactions.forEach((tx, i) => {
     if (!tx.TradePrice) return;
     const pos = estimateTxPosition(area, tx, i);
+    const isHighlighted = selectedDistrict && tx.District === selectedDistrict;
+    const isDimmed = selectedDistrict && tx.District !== selectedDistrict;
     const cm = L.circleMarker([pos.lat, pos.lng], {
-      radius: 7,
+      radius: isHighlighted ? 9 : 7,
       fillColor: priceColor(tx.TradePrice),
-      color: '#fff',
-      weight: 1.5,
-      opacity: 0.9,
-      fillOpacity: 0.7
+      color: isHighlighted ? '#1e40af' : '#fff',
+      weight: isHighlighted ? 2.5 : 1.5,
+      opacity: isDimmed ? 0.4 : 0.9,
+      fillOpacity: isDimmed ? 0.25 : 0.7
     });
     cm.bindPopup(buildTxPopup(tx, area.name), { maxWidth: 240 });
+
+    // Click pin → show district sidebar
+    cm.on('click', () => {
+      if (tx.District) {
+        state.mapSelectedDistrict = { cityId: area.id, districtName: tx.District };
+        const ranked = getRankedAreas();
+        updateDistrictSidebar(area, tx.District, ranked);
+        // Re-render pins to highlight this district
+        showTransactionPins(area);
+      }
+    });
+
     txMarkerLayer.addLayer(cm);
-    txMarkersByIdx[i] = { marker: cm, pos };
+    txMarkersByIdx[i] = { marker: cm, pos, district: tx.District };
   });
 }
 
@@ -1733,6 +1863,157 @@ function updateMapSidebar(area, ranked) {
       sidebar.querySelectorAll('tr.tx-active').forEach(r => r.classList.remove('tx-active'));
       row.classList.add('tx-active');
       // Fly to pin
+      flyToTransaction(idx);
+    });
+  });
+}
+
+function updateDistrictSidebar(area, districtName, ranked) {
+  const sidebar = document.getElementById('map-sidebar');
+  if (!sidebar) return;
+
+  const metrics = aggregateDistrictMetrics(area, districtName);
+  if (!metrics) {
+    sidebar.innerHTML = `<div class="p-4 text-sm text-gray-500">地区データなし</div>`;
+    return;
+  }
+
+  const avgPriceStr = metrics.avgPrice ? `${(metrics.avgPrice / 10000).toFixed(0)}万円` : '-';
+  const priceRange = (metrics.minPrice && metrics.maxPrice)
+    ? `${(metrics.minPrice / 10000).toFixed(0)}〜${(metrics.maxPrice / 10000).toFixed(0)}万円`
+    : '-';
+  const m2PriceStr = metrics.avgPricePerM2 ? `${(metrics.avgPricePerM2 / 10000).toFixed(1)}万/m²` : '-';
+  const stationStr = metrics.nearestStation || '-';
+  const nagoyaStr = metrics.nagoyaMin ? `約${metrics.nagoyaMin}分` : `約${area.accessToNagoya}分`;
+  const distStr = metrics.avgDistance ? `徒歩${metrics.avgDistance}分` : '-';
+  const ageStr = metrics.avgBuildingAge !== null ? `築${metrics.avgBuildingAge}年` : '-';
+
+  // Type distribution bar
+  const typeColors = { '宅地(土地)': '#22c55e', '宅地(土地と建物)': '#3b82f6', '中古マンション等': '#f59e0b', '農地': '#84cc16', '林地': '#14b8a6' };
+  const typeBar = metrics.typeDistribution.map(t => {
+    const color = typeColors[t.name] || '#9ca3af';
+    return `<div style="width:${t.pct}%;background:${color};height:100%;display:inline-block;" title="${t.name} ${t.pct}%"></div>`;
+  }).join('');
+  const typeLegend = metrics.typeDistribution.slice(0, 4).map(t => {
+    const color = typeColors[t.name] || '#9ca3af';
+    return `<span class="inline-flex items-center gap-1 text-xs"><span style="width:6px;height:6px;border-radius:50%;background:${color};display:inline-block;"></span>${t.name.replace('宅地(','').replace(')','').replace('中古マンション等','マンション')} ${t.pct}%</span>`;
+  }).join(' ');
+
+  // Transaction list filtered to this district
+  const districtTxs = metrics.transactions;
+  const txSection = renderTransactionList(districtTxs);
+
+  sidebar.innerHTML = `
+    <div class="sidebar-header">
+      <button id="btn-back-to-city" class="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 mb-2 cursor-pointer" style="background:none;border:none;padding:0;">
+        ← ${area.name}に戻る
+      </button>
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-bold text-gray-900">📍 ${districtName}</h3>
+        <span class="text-sm font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">${metrics.count}件</span>
+      </div>
+    </div>
+    <div class="sidebar-body space-y-4">
+      <!-- Key metrics -->
+      <div class="grid grid-cols-2 gap-2">
+        <div class="bg-blue-50 rounded-lg p-2 text-center">
+          <div class="text-xs text-gray-500">平均取引価格</div>
+          <div class="text-sm font-bold text-blue-700">${avgPriceStr}</div>
+        </div>
+        <div class="bg-indigo-50 rounded-lg p-2 text-center">
+          <div class="text-xs text-gray-500">㎡単価</div>
+          <div class="text-sm font-bold text-indigo-700">${m2PriceStr}</div>
+        </div>
+        <div class="bg-green-50 rounded-lg p-2 text-center">
+          <div class="text-xs text-gray-500">最寄駅</div>
+          <div class="text-sm font-bold text-green-700" style="font-size:11px;">${stationStr}</div>
+        </div>
+        <div class="bg-emerald-50 rounded-lg p-2 text-center">
+          <div class="text-xs text-gray-500">名古屋まで</div>
+          <div class="text-sm font-bold text-emerald-700">${nagoyaStr}</div>
+        </div>
+        <div class="bg-amber-50 rounded-lg p-2 text-center">
+          <div class="text-xs text-gray-500">駅距離</div>
+          <div class="text-sm font-bold text-amber-700">${distStr}</div>
+        </div>
+        <div class="bg-purple-50 rounded-lg p-2 text-center">
+          <div class="text-xs text-gray-500">平均築年数</div>
+          <div class="text-sm font-bold text-purple-700">${ageStr}</div>
+        </div>
+      </div>
+
+      <!-- Price range -->
+      <div class="bg-gray-50 rounded-lg p-2">
+        <div class="text-xs text-gray-500 mb-1">価格帯</div>
+        <div class="text-sm font-medium text-gray-700">${priceRange}</div>
+      </div>
+
+      <!-- Type distribution -->
+      ${metrics.typeDistribution.length > 0 ? `
+        <div>
+          <div class="text-xs text-gray-500 mb-1">用途分布</div>
+          <div style="height:8px;border-radius:4px;overflow:hidden;background:#e5e7eb;display:flex;">${typeBar}</div>
+          <div class="mt-1 flex flex-wrap gap-2">${typeLegend}</div>
+        </div>
+      ` : ''}
+
+      <!-- Transaction data -->
+      <div>
+        <div class="text-xs font-bold text-gray-700 mb-2">📊 取引データ（${districtName}）</div>
+        ${txSection || '<p class="text-xs text-gray-400">取引データなし</p>'}
+      </div>
+
+      <!-- Action buttons -->
+      <div class="flex gap-2">
+        <button id="btn-district-back" class="flex-1 px-3 py-2 bg-gray-100 text-gray-600 rounded-lg text-xs font-medium hover:bg-gray-200 transition-colors text-center">
+          ↩ ${area.name}へ戻る
+        </button>
+        <button data-map-zoom-out class="px-3 py-2 bg-gray-100 text-gray-600 rounded-lg text-xs font-medium hover:bg-gray-200 transition-colors">
+          🗺️ 全体表示
+        </button>
+      </div>
+    </div>
+  `;
+
+  // Bind back button
+  const backBtn = sidebar.querySelector('#btn-back-to-city');
+  const backBtn2 = sidebar.querySelector('#btn-district-back');
+  const goBack = () => {
+    state.mapSelectedDistrict = null;
+    updateMapSidebar(area, ranked);
+    showTransactionPins(area);
+  };
+  if (backBtn) backBtn.addEventListener('click', goBack);
+  if (backBtn2) backBtn2.addEventListener('click', goBack);
+
+  // Bind zoom out
+  const zoomOutBtn = sidebar.querySelector('[data-map-zoom-out]');
+  if (zoomOutBtn) {
+    zoomOutBtn.addEventListener('click', () => {
+      state.mapSelectedAreaId = null;
+      state.mapSelectedDistrict = null;
+      if (mapInstance) mapInstance.flyTo([34.98, 136.56], 10, { duration: 0.8 });
+      const ranked2 = getRankedAreas();
+      ranked2.forEach((a, i) => {
+        const c = COLORS[AREAS.findIndex(x => x.id === a.id) % COLORS.length];
+        if (mapMarkers[a.id]) mapMarkers[a.id].setIcon(createMapIcon(c, i + 1, a.scores.total, false));
+      });
+      showAllTransactionPins(ranked2);
+      sidebar.innerHTML = `
+        <div class="flex flex-col items-center justify-center h-full text-center p-8">
+          <div class="text-4xl mb-3">📍</div>
+          <p class="text-sm font-medium text-gray-700 mb-1">エリアを選択してください</p>
+          <p class="text-xs text-gray-400">マップ上のマーカーをクリックすると<br>土地情報・取引データが表示されます</p>
+        </div>`;
+    });
+  }
+
+  // Bind transaction row clicks
+  sidebar.querySelectorAll('tr[data-tx-idx]').forEach(row => {
+    row.addEventListener('click', () => {
+      const idx = parseInt(row.dataset.txIdx);
+      sidebar.querySelectorAll('tr.tx-active').forEach(r => r.classList.remove('tx-active'));
+      row.classList.add('tx-active');
       flyToTransaction(idx);
     });
   });
