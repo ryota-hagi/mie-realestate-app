@@ -339,12 +339,18 @@ async function connectMCP() {
   }
 }
 
+// Lightweight status text update (no full re-render)
+function updateStatusText(msg) {
+  state.mcpMessage = msg;
+  const el = document.getElementById('mcp-status-text');
+  if (el) el.textContent = msg;
+}
+
 async function fetchLiveData() {
   if (!mcpReinfo || !mcpReinfo.connected) return;
 
   try {
-    state.mcpMessage = 'リアルタイムデータを取得中...';
-    render();
+    updateStatusText('リアルタイムデータを取得中...');
 
     // Get city list for Mie (area code 24)
     const cityResult = await mcpReinfo.callTool('reinfolib-city-list', { area: '24' });
@@ -358,8 +364,7 @@ async function fetchLiveData() {
       const allData = [];
       for (const yr of years) {
         try {
-          state.mcpMessage = `${area.name} のデータ取得中（${yr}年）...`;
-          render();
+          updateStatusText(`${area.name} のデータ取得中（${yr}年）...`);
           const priceData = await mcpReinfo.callTool('reinfolib-real-estate-price', {
             year: yr, area: '24', city: area.cityCode
           });
@@ -379,13 +384,9 @@ async function fetchLiveData() {
 
     // Count total transactions
     AREAS.forEach(a => { if (a._liveTransactions) totalTx += a._liveTransactions.length; });
-    state.mcpMessage = `取引データ取得完了（計${totalTx}件） — 地区の位置情報を取得中...`;
-    render();
-
-    // Geocode districts for accurate map pin placement
-    await geocodeAllDistricts();
-
     state.mcpMessage = `ライブデータ取得完了 — ${priceResults.length}エリア・計${totalTx}件の取引データを反映`;
+
+    // One final render to refresh all views with live data
     render();
   } catch(e) {
     state.mcpMessage = `データ取得エラー: ${e.message}（キャッシュデータを使用中）`;
@@ -538,7 +539,7 @@ function renderMCPStatus() {
           <span class="pulse-dot ${s.dot}"></span>
           MCP: ${statusLabel}
         </div>
-        <span class="text-sm text-gray-500">${state.mcpMessage || 'MCPサーバー未接続 — キャッシュデータを使用中'}</span>
+        <span id="mcp-status-text" class="text-sm text-gray-500">${state.mcpMessage || 'MCPサーバー未接続 — キャッシュデータを使用中'}</span>
       </div>
       <div class="flex gap-2">
         ${state.mcpStatus !== 'connected' ? `
@@ -967,92 +968,75 @@ function findStationCoords(stationName) {
 }
 
 // ============================================================
-// District Geocoding via Nominatim (OpenStreetMap)
+// District Coordinate Database (Major areas not near stations)
 // ============================================================
-const DISTRICT_GEOCODE_CACHE = new Map();
-
-async function geocodeSingleDistrict(district, cityName) {
-  const cacheKey = `${cityName}-${district}`;
-  if (DISTRICT_GEOCODE_CACHE.has(cacheKey)) return DISTRICT_GEOCODE_CACHE.get(cacheKey);
-
-  // Try progressively broader queries
-  const queries = [
-    `${district}, ${cityName}, 三重県`,
-    `${district}, ${cityName}`,
-    `${district}, 三重県`
-  ];
-
-  for (const q of queries) {
-    try {
-      const url = `https://nominatim.openstreetmap.org/search?` +
-        `q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=jp&accept-language=ja`;
-      const resp = await fetch(url, {
-        headers: { 'User-Agent': 'MieRealEstateApp/1.0 (educational project)' }
-      });
-      if (!resp.ok) continue;
-      const results = await resp.json();
-      if (results.length > 0) {
-        const lat = parseFloat(results[0].lat);
-        const lng = parseFloat(results[0].lon);
-        // Verify result is within Mie prefecture bounds (roughly)
-        if (lat >= 34.2 && lat <= 35.5 && lng >= 135.8 && lng <= 137.0) {
-          const coords = [lat, lng];
-          DISTRICT_GEOCODE_CACHE.set(cacheKey, coords);
-          return coords;
-        }
-      }
-    } catch(e) {
-      console.warn(`Geocode failed for ${q}:`, e);
-    }
-  }
-
-  DISTRICT_GEOCODE_CACHE.set(cacheKey, null);
-  return null;
-}
-
-async function geocodeAllDistricts() {
-  // Collect unique district+city pairs
-  const pairs = new Map(); // key: "cityName-district" → { district, cityName }
-  for (const area of AREAS) {
-    if (!area._liveTransactions) continue;
-    for (const tx of area._liveTransactions) {
-      if (!tx.District) continue;
-      const key = `${area.name}-${tx.District}`;
-      if (!pairs.has(key)) {
-        pairs.set(key, { district: tx.District, cityName: area.name });
-      }
-    }
-  }
-
-  if (pairs.size === 0) return;
-
-  const total = pairs.size;
-  let done = 0;
-  const entries = Array.from(pairs.values());
-
-  // Process in batches with rate limiting (Nominatim: max 1 req/sec)
-  for (let i = 0; i < entries.length; i++) {
-    const { district, cityName } = entries[i];
-    done++;
-    state.mcpMessage = `地区の位置情報を取得中... (${done}/${total}) ${cityName} ${district}`;
-    render();
-
-    await geocodeSingleDistrict(district, cityName);
-
-    // Rate limit: wait 1.1 seconds between requests (Nominatim policy)
-    if (i < entries.length - 1) {
-      await new Promise(r => setTimeout(r, 1100));
-    }
-  }
-
-  const found = Array.from(DISTRICT_GEOCODE_CACHE.values()).filter(v => v !== null).length;
-  console.log(`Geocoding complete: ${found}/${total} districts resolved`);
-}
+const DISTRICT_COORDS = {
+  // 四日市市
+  '四日市市-中央町':[34.967,136.619],'四日市市-諏訪町':[34.966,136.617],
+  '四日市市-安島':[34.965,136.622],'四日市市-鵜の森':[34.964,136.616],
+  '四日市市-西浦':[34.950,136.610],'四日市市-堀木':[34.970,136.620],
+  '四日市市-浜田':[34.960,136.625],'四日市市-城西町':[34.963,136.612],
+  '四日市市-羽津':[34.980,136.625],'四日市市-別名':[34.979,136.618],
+  '四日市市-生桑':[34.974,136.608],'四日市市-松寺':[34.987,136.625],
+  '四日市市-富田一色町':[34.993,136.633],'四日市市-東富田町':[34.991,136.629],
+  '四日市市-西富田町':[34.988,136.618],'四日市市-大矢知町':[34.997,136.625],
+  '四日市市-下野':[34.955,136.608],'四日市市-小杉':[34.953,136.614],
+  '四日市市-高花平':[34.942,136.598],'四日市市-笹川':[34.936,136.596],
+  '四日市市-水沢':[34.959,136.570],'四日市市-桜':[34.978,136.590],
+  '四日市市-西坂部町':[34.970,136.593],'四日市市-智積町':[34.969,136.583],
+  '四日市市-三重':[34.960,136.615],'四日市市-鳥居町':[34.968,136.618],
+  '四日市市-ときわ':[34.948,136.610],'四日市市-波木町':[34.955,136.590],
+  '四日市市-室山町':[34.958,136.600],'四日市市-大池町':[34.968,136.616],
+  '四日市市-西阿倉川':[34.976,136.610],'四日市市-北浜町':[34.993,136.635],
+  '四日市市-茂福':[34.993,136.618],'四日市市-午起':[34.998,136.637],
+  '四日市市-垂坂':[34.978,136.613],'四日市市-山手町':[34.964,136.607],
+  // 桑名市
+  '桑名市-東方':[35.058,136.695],'桑名市-西方':[35.060,136.680],
+  '桑名市-江場':[35.063,136.688],'桑名市-京町':[35.064,136.692],
+  '桑名市-新西方':[35.058,136.678],'桑名市-蛎塚':[35.052,136.680],
+  '桑名市-大山田':[35.073,136.660],'桑名市-陽だまりの丘':[35.075,136.658],
+  '桑名市-藤が丘':[35.070,136.665],'桑名市-大福':[35.048,136.690],
+  '桑名市-安永':[35.055,136.700],'桑名市-新矢田':[35.053,136.685],
+  '桑名市-太一丸':[35.068,136.696],'桑名市-三ツ矢橋':[35.056,136.690],
+  // 鈴鹿市
+  '鈴鹿市-神戸':[34.880,136.583],'鈴鹿市-若松':[34.862,136.610],
+  '鈴鹿市-国府':[34.875,136.590],'鈴鹿市-算所':[34.878,136.586],
+  '鈴鹿市-西条':[34.882,136.575],'鈴鹿市-庄野':[34.889,136.533],
+  '鈴鹿市-石薬師':[34.899,136.514],'鈴鹿市-一ノ宮町':[34.872,136.596],
+  '鈴鹿市-寺家':[34.870,136.600],'鈴鹿市-住吉':[34.865,136.602],
+  '鈴鹿市-旭が丘':[34.860,136.590],'鈴鹿市-江島':[34.850,136.615],
+  '鈴鹿市-稲生':[34.852,136.595],'鈴鹿市-長太':[34.867,136.615],
+  // いなべ市
+  'いなべ市-大安':[35.098,136.560],'いなべ市-藤原':[35.142,136.520],
+  'いなべ市-北勢':[35.087,136.548],'いなべ市-員弁':[35.108,136.549],
+  // 亀山市
+  '亀山市-野村':[34.859,136.455],'亀山市-本町':[34.853,136.447],
+  '亀山市-東御幸町':[34.857,136.453],'亀山市-西町':[34.852,136.443],
+  '亀山市-関町':[34.855,136.397],'亀山市-能褒野':[34.869,136.470],
+  // 菰野町
+  '菰野町-永井':[35.010,136.540],'菰野町-千草':[35.025,136.500],
+  '菰野町-潤田':[35.012,136.530],'菰野町-竹成':[35.035,136.510],
+  // 東員町
+  '東員町-六把野':[35.058,136.600],'東員町-笹尾':[35.055,136.593],
+  '東員町-山田':[35.052,136.590],'東員町-穴太':[35.067,136.595],
+};
 
 function findDistrictCoords(district, cityName) {
-  if (!district) return null;
+  if (!district || !cityName) return null;
+  // Direct lookup
   const key = `${cityName}-${district}`;
-  return DISTRICT_GEOCODE_CACHE.get(key) || null;
+  if (DISTRICT_COORDS[key]) return DISTRICT_COORDS[key];
+  // Try without common suffixes (町, 丁目, etc.)
+  const cleaned = district.replace(/(町|丁目|番地|地区|新町|本町)$/, '');
+  const key2 = `${cityName}-${cleaned}`;
+  if (DISTRICT_COORDS[key2]) return DISTRICT_COORDS[key2];
+  // Partial match against district database
+  for (const [k, coords] of Object.entries(DISTRICT_COORDS)) {
+    if (!k.startsWith(cityName + '-')) continue;
+    const dName = k.split('-')[1];
+    if (district.includes(dName) || dName.includes(district)) return coords;
+  }
+  return null;
 }
 
 function hashStr(s) {
@@ -1064,39 +1048,50 @@ function hashStr(s) {
 }
 
 function estimateTxPosition(area, tx, idx) {
-  // Priority 1: Station coordinates
+  // Priority 1: Station coordinates (from NearestStation field)
   const stationCoords = findStationCoords(tx.NearestStation);
   if (stationCoords) {
     const jitterAngle = (idx * 137.508) * (Math.PI / 180);
-    const jitter = 0.0006 + (idx % 5) * 0.0003;
+    const jitter = 0.0008 + (idx % 5) * 0.0004;
     return {
       lat: stationCoords[0] + Math.cos(jitterAngle) * jitter,
       lng: stationCoords[1] + Math.sin(jitterAngle) * jitter
     };
   }
 
-  // Priority 2: District geocoded coordinates
+  // Priority 2: District name → static district DB
   const districtCoords = findDistrictCoords(tx.District, area.name);
   if (districtCoords) {
     const jitterAngle = (idx * 137.508) * (Math.PI / 180);
-    const jitter = 0.001 + (idx % 7) * 0.0004; // slightly wider jitter for district level
+    const jitter = 0.001 + (idx % 7) * 0.0005;
     return {
       lat: districtCoords[0] + Math.cos(jitterAngle) * jitter,
       lng: districtCoords[1] + Math.sin(jitterAngle) * jitter
     };
   }
 
-  // Priority 3: Fallback - bias inland from city center
+  // Priority 3: District name → fuzzy match against station names
+  const stationFromDistrict = findStationCoords(tx.District);
+  if (stationFromDistrict) {
+    const jitterAngle = (idx * 137.508) * (Math.PI / 180);
+    const jitter = 0.0015 + (idx % 7) * 0.0005;
+    return {
+      lat: stationFromDistrict[0] + Math.cos(jitterAngle) * jitter,
+      lng: stationFromDistrict[1] + Math.sin(jitterAngle) * jitter
+    };
+  }
+
+  // Priority 4: Fallback - bias inland from city center
   const districtKey = tx.District || tx.NearestStation || `tx-${idx}`;
   const hash = hashStr(districtKey + area.id);
-  const baseAngle = 150 + (hash % 200); // 150-350deg: bias west/north
+  const baseAngle = 150 + (hash % 200);
   const angle = baseAngle * (Math.PI / 180);
   const spread = 0.004 + (hash % 40) / 40 * 0.012;
   const baseLat = area.lat + Math.cos(angle) * spread;
   const baseLng = area.lng + Math.sin(angle) * spread;
 
   const jitterAngle = (idx * 137.508) * (Math.PI / 180);
-  const jitter = 0.0006 + (idx % 5) * 0.0003;
+  const jitter = 0.0008 + (idx % 5) * 0.0004;
 
   return {
     lat: baseLat + Math.cos(jitterAngle) * jitter,
