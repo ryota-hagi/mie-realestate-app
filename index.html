@@ -1337,18 +1337,7 @@ function hashStr(s) {
 }
 
 function estimateTxPosition(area, tx, idx) {
-  // Priority 1: District geocoded coords (most accurate for this data)
-  const districtCoords = findDistrictCoords(tx.District, area.name);
-  if (districtCoords) {
-    const jitterAngle = (idx * 137.508) * (Math.PI / 180);
-    const jitter = 0.001 + (idx % 7) * 0.0005;
-    return {
-      lat: districtCoords[0] + Math.cos(jitterAngle) * jitter,
-      lng: districtCoords[1] + Math.sin(jitterAngle) * jitter
-    };
-  }
-
-  // Priority 2: Station coordinates (from NearestStation field)
+  // Priority 1: Station coordinates (from NearestStation field)
   const stationCoords = findStationCoords(tx.NearestStation);
   if (stationCoords) {
     const jitterAngle = (idx * 137.508) * (Math.PI / 180);
@@ -1359,32 +1348,31 @@ function estimateTxPosition(area, tx, idx) {
     };
   }
 
-  // Priority 3: District name → fuzzy match against station names
+  // Priority 2: District name → fuzzy match against station names
   const stationFromDistrict = findStationCoords(tx.District);
   if (stationFromDistrict) {
     const jitterAngle = (idx * 137.508) * (Math.PI / 180);
-    const jitter = 0.0015 + (idx % 7) * 0.0005;
+    const jitter = 0.001 + (idx % 7) * 0.0005;
     return {
       lat: stationFromDistrict[0] + Math.cos(jitterAngle) * jitter,
       lng: stationFromDistrict[1] + Math.sin(jitterAngle) * jitter
     };
   }
 
-  // Priority 4: Fallback - bias inland from city center
+  // Fallback: hash-based spread from city center
   const districtKey = tx.District || tx.NearestStation || `tx-${idx}`;
   const hash = hashStr(districtKey + area.id);
-  const baseAngle = 150 + (hash % 200);
-  const angle = baseAngle * (Math.PI / 180);
-  const spread = 0.004 + (hash % 40) / 40 * 0.012;
-  const baseLat = area.lat + Math.cos(angle) * spread;
-  const baseLng = area.lng + Math.sin(angle) * spread;
+  const hash2 = hashStr(districtKey + area.id + 'salt');
+
+  const angle = (hash % 360) * (Math.PI / 180);
+  const spread = 0.008 + (hash2 % 100) / 100 * 0.032;
 
   const jitterAngle = (idx * 137.508) * (Math.PI / 180);
-  const jitter = 0.0008 + (idx % 5) * 0.0004;
+  const jitter = 0.001 + (idx % 7) * 0.001;
 
   return {
-    lat: baseLat + Math.cos(jitterAngle) * jitter,
-    lng: baseLng + Math.sin(jitterAngle) * jitter
+    lat: area.lat + Math.cos(angle) * spread + Math.cos(jitterAngle) * jitter,
+    lng: area.lng + Math.sin(angle) * spread + Math.sin(jitterAngle) * jitter
   };
 }
 
