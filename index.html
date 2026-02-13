@@ -490,8 +490,9 @@ async function fetchAreaFullData(areaId) {
   const txCount = area._liveTransactions ? area._liveTransactions.length : 0;
   updateStatusText(`${area.name}: 詳細データ取得完了（${txCount}件）`);
 
-  // Refresh map pins for this area
+  // Geocode districts for this area FIRST, then show pins
   if (state.view === 'map' && txMarkerLayer) {
+    await geocodeAreaDistricts(area);
     if (state.mapSelectedAreaId === areaId) {
       showTransactionPins(area);
     }
@@ -502,7 +503,7 @@ async function fetchAreaFullData(areaId) {
     }
   }
 
-  // Background geocode new districts
+  // Background geocode remaining areas' districts
   geocodeDistrictsBackground().catch(e => console.warn('Geocoding error:', e));
 }
 
@@ -1119,13 +1120,15 @@ function initializeMap(ranked) {
       direction: 'top', offset: [0, -20], className: 'map-tooltip'
     });
 
-    marker.on('click', () => {
+    marker.on('click', async () => {
       state.mapSelectedAreaId = area.id;
       ranked.forEach((a, i) => {
         const c = COLORS[AREAS.findIndex(x => x.id === a.id) % COLORS.length];
         mapMarkers[a.id].setIcon(createMapIcon(c, i + 1, a.scores.total, a.id === area.id));
       });
       updateMapSidebar(area, ranked);
+      // Geocode districts before showing pins
+      await geocodeAreaDistricts(area);
       showTransactionPins(area);
       mapInstance.flyTo([area.lat, area.lng], 13, { duration: 0.8 });
 
@@ -1351,6 +1354,33 @@ function findDistrictCoords(district, cityName) {
   return DISTRICT_CACHE.get(key) || null;
 }
 
+// Geocode all districts for a single area BEFORE showing pins
+async function geocodeAreaDistricts(area) {
+  if (!area._liveTransactions) return;
+  const uncached = [];
+  for (const tx of area._liveTransactions) {
+    if (!tx.District) continue;
+    const key = `${area.name}-${tx.District}`;
+    if (!DISTRICT_CACHE.has(key) && !uncached.find(u => u.key === key)) {
+      uncached.push({ key, district: tx.District, cityName: area.name });
+    }
+  }
+  if (uncached.length === 0) return;
+
+  const total = uncached.length;
+  let done = 0;
+  showMapLoading(`${area.name} 地区情報取得中...`, 0);
+  for (const { district, cityName } of uncached) {
+    done++;
+    updateMapLoading(`${area.name} 地区情報取得中... (${done}/${total})`, (done / total) * 100);
+    await geocodeDistrict(district, cityName);
+    if (done % 5 === 0) saveDistrictCache();
+    if (done < total) await new Promise(r => setTimeout(r, 200));
+  }
+  saveDistrictCache();
+  hideMapLoading();
+}
+
 function hashStr(s) {
   let h = 0;
   for (let i = 0; i < s.length; i++) {
@@ -1421,9 +1451,16 @@ function priceColor(price) {
   return '#7c3aed';                          // purple: >5000万
 }
 
-function showAllTransactionPins(ranked) {
+async function showAllTransactionPins(ranked) {
   if (!txMarkerLayer) return;
   txMarkerLayer.clearLayers();
+
+  // Geocode districts for all areas with transactions
+  for (const area of ranked) {
+    if (area._liveTransactions && area._liveTransactions.length > 0) {
+      await geocodeAreaDistricts(area);
+    }
+  }
 
   ranked.forEach(area => {
     if (!area._liveTransactions) return;
