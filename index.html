@@ -493,19 +493,20 @@ async function fetchAreaFullData(areaId) {
   const txCount = area._liveTransactions ? area._liveTransactions.length : 0;
   updateStatusText(`${area.name}: 詳細データ取得完了（${txCount}件）`);
 
-  // Update sidebar immediately with fetched data
+  // Update sidebar and pins with fetched data
   if (state.view === 'map') {
     const ranked = getRankedAreas();
-    if (state.mapSelectedAreaId === areaId) {
-      updateMapSidebar(area, ranked);
+    const rankedArea = ranked.find(a => a.id === areaId);
+    if (state.mapSelectedAreaId === areaId && rankedArea) {
+      updateMapSidebar(rankedArea, ranked);
     }
-  }
 
-  // Geocode districts THEN show pins at correct positions
-  if (state.view === 'map' && txMarkerLayer) {
-    await geocodeAreaDistricts(area);
-    if (state.mapSelectedAreaId === areaId) {
-      showTransactionPins(area);
+    // Geocode districts THEN show pins at correct positions
+    if (txMarkerLayer) {
+      await geocodeAreaDistricts(area);
+      if (state.mapSelectedAreaId === areaId) {
+        showTransactionPins(area);
+      }
     }
   }
 
