@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://research.chuumon-soudan.com/sitemap.xml
