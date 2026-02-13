@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>学校住所ジオコーダー</title>
+<style>
+body { font-family: sans-serif; max-width: 900px; margin: 20px auto; padding: 0 20px; }
+h1 { color: #333; }
+table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left; font-size: 13px; }
+th { background: #f0f0f0; }
+.status-ok { color: green; font-weight: bold; }
+.status-err { color: red; }
+.status-wait { color: gray; }
+button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 10px 5px; }
+#result-json { width: 100%; height: 200px; font-family: monospace; font-size: 12px; margin-top: 10px; }
+.info { background: #fffbe6; border: 1px solid #e6d54e; padding: 10px; border-radius: 5px; margin: 10px 0; }
+</style>
+</head>
+<body>
+<h1>🏫 学校住所 → 座標変換ツール</h1>
+<div class="info">
+  <strong>使い方:</strong> 「ジオコーディング開始」ボタンを押すと、各学校の住所からGSI（国土地理院）APIで座標を取得します。
+  完了後、結果をコピーして使えます。
+</div>
+
+<button onclick="startGeocoding()">ジオコーディング開始</button>
+<button onclick="copyResult()">結果をコピー</button>
+<span id="progress"></span>
+
+<table>
+<thead>
+  <tr><th>#</th><th>学校名</th><th>住所</th><th>緯度</th><th>経度</th><th>状態</th></tr>
+</thead>
+<tbody id="school-table">
+</tbody>
+</table>
+
+<h3>Python辞書形式（コピー用）</h3>
+<textarea id="result-json" readonly></textarea>
+
+<script>
+const schools = [
+  { name: "若松小学校", address: "三重県鈴鹿市若松中1丁目4-1" },
+  { name: "一ノ宮小学校", address: "三重県鈴鹿市一ノ宮町557" },
+  { name: "箕田小学校", address: "三重県鈴鹿市箕田町1268" },
+  { name: "加佐登小学校", address: "三重県鈴鹿市高塚町1069" },
+  { name: "庄内小学校", address: "三重県鈴鹿市東庄内町2458-1" },
+  { name: "郡山小学校", address: "三重県鈴鹿市郡山町710-6" },
+  { name: "天名小学校", address: "三重県鈴鹿市御薗町2500" },
+  { name: "井田川小学校", address: "三重県鈴鹿市和泉町814" },
+  { name: "久間田小学校", address: "三重県鈴鹿市地子町523" },
+  { name: "桑名小学校", address: "三重県桑名市吉之丸8" },
+  { name: "修徳小学校", address: "三重県桑名市萱町48" },
+  { name: "日進小学校", address: "三重県桑名市太夫196" },
+  { name: "深谷小学校", address: "三重県桑名市東方芝山2550" },
+  { name: "城南小学校", address: "三重県桑名市南魚町86" },
+  { name: "多度青葉小学校", address: "三重県桑名市多度町多度1-6" },
+  { name: "多度中小学校", address: "三重県桑名市多度町古野660" },
+  { name: "多度東小学校", address: "三重県桑名市多度町下野代2468" },
+  { name: "藤が丘小学校", address: "三重県桑名市藤が丘4-22" },
+];
+
+// テーブル初期化
+const tbody = document.getElementById('school-table');
+schools.forEach((s, i) => {
+  const tr = document.createElement('tr');
+  tr.id = `row-${i}`;
+  tr.innerHTML = `<td>${i+1}</td><td>${s.name}</td><td>${s.address}</td><td id="lat-${i}">-</td><td id="lng-${i}">-</td><td id="st-${i}" class="status-wait">待機中</td>`;
+  tbody.appendChild(tr);
+});
+
+async function geocodeGSI(address) {
+  const url = `https://msearch.gsi.go.jp/address-search/AddressSearch?q=${encodeURIComponent(address)}`;
+  const resp = await fetch(url);
+  const data = await resp.json();
+  if (data && data.length > 0) {
+    const coords = data[0].geometry.coordinates; // [lng, lat]
+    return { lat: coords[1], lng: coords[0], title: data[0].properties.title };
+  }
+  return null;
+}
+
+async function geocodeNominatim(address) {
+  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`;
+  const resp = await fetch(url, { headers: { 'User-Agent': 'MieSchoolGeocoder/1.0' }});
+  const data = await resp.json();
+  if (data && data.length > 0) {
+    return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+  }
+  return null;
+}
+
+async function startGeocoding() {
+  const results = {};
+  const progress = document.getElementById('progress');
+
+  for (let i = 0; i < schools.length; i++) {
+    const s = schools[i];
+    document.getElementById(`st-${i}`).textContent = '検索中...';
+    document.getElementById(`st-${i}`).className = 'status-wait';
+    progress.textContent = `${i+1}/${schools.length} 処理中...`;
+
+    let result = null;
+    try {
+      // まずGSI APIを試す
+      result = await geocodeGSI(s.address);
+      if (!result) {
+        // GSIで見つからなければNominatimを試す
+        result = await geocodeNominatim(s.address);
+      }
+    } catch(e) {
+      console.error(`Error geocoding ${s.name}:`, e);
+    }
+
+    if (result) {
+      document.getElementById(`lat-${i}`).textContent = result.lat.toFixed(8);
+      document.getElementById(`lng-${i}`).textContent = result.lng.toFixed(8);
+      document.getElementById(`st-${i}`).textContent = '✓ 成功';
+      document.getElementById(`st-${i}`).className = 'status-ok';
+      results[s.name] = [result.lat, result.lng];
+    } else {
+      document.getElementById(`st-${i}`).textContent = '✗ 失敗';
+      document.getElementById(`st-${i}`).className = 'status-err';
+    }
+
+    // レート制限を避ける（1秒待機）
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  // Python辞書形式で出力
+  let pyDict = "verified_coords = {\n";
+  for (const [name, [lat, lng]] of Object.entries(results)) {
+    pyDict += `    "${name}": (${lat}, ${lng}),\n`;
+  }
+  pyDict += "}";
+  document.getElementById('result-json').value = pyDict;
+  progress.textContent = `完了！ ${Object.keys(results).length}/${schools.length} 校の座標を取得`;
+}
+
+function copyResult() {
+  const ta = document.getElementById('result-json');
+  ta.select();
+  document.execCommand('copy');
+  alert('コピーしました！');
+}
+</script>
+</body>
+</html>
