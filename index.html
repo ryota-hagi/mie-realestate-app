@@ -523,7 +523,7 @@ const state = {
   soView: null, // null | 'saved' | 'compare'
   soComparison: null, // current comparison result
   soModalOpen: false,
-  soModalType: null, // 'search' | 'import'
+  soModalType: null, // 'import'
   soSearchAreaId: null,
 };
 
@@ -1305,25 +1305,6 @@ function renderDetail(area, ranked) {
         </div>
       </div>
 
-      <!-- 物件検索/URL取り込みセクション -->
-      <div class="card p-6 space-y-4">
-        <h3 class="text-base font-bold text-gray-800">🤖 ${area.name}で物件を探す</h3>
-        <div class="flex flex-wrap gap-3">
-          <button onclick="openSearchModal('${area.id}')" class="px-5 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm">
-            🤖 AIで物件を検索
-          </button>
-          <span class="text-xs text-gray-400 self-center">希望条件を自由に入力 → AIが検索</span>
-        </div>
-        <div class="border-t border-gray-200 pt-4">
-          <p class="text-sm text-gray-600 mb-2">物件情報をAIで取り込み（物件サイトの情報をコピペ）</p>
-          <div class="flex gap-2">
-            <input id="url-import-detail" type="url" placeholder="物件URL（任意）" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" />
-            <button onclick="openImportModal('${area.id}')" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
-              🤖 AI取り込み
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   `;
 }
@@ -2701,14 +2682,23 @@ function renderPropertyView() {
         </div>` : ''}
       </div>
 
+      <!-- 物件取り込みセクション（常に表示） -->
+      <div class="card p-5 space-y-3 border-green-200 bg-green-50/30">
+        <h3 class="text-sm font-bold text-gray-700">🤖 物件情報をAIで取り込み</h3>
+        <p class="text-xs text-gray-500">不動産サイト（SUUMO・アットホーム等）の物件ページURLを貼るか、物件情報テキストを貼り付けてください</p>
+        <div class="flex gap-2">
+          <input id="url-import-property" type="url" placeholder="物件URLを貼り付け（https://suumo.jp/...）" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+          <button onclick="openImportModal()" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors whitespace-nowrap">
+            🤖 AI取り込み
+          </button>
+        </div>
+      </div>
+
       ${savedCount === 0 ? `
         <div class="card p-8 text-center">
           <div class="text-4xl mb-3">🏠</div>
           <p class="text-gray-600 font-medium mb-2">まだ物件が保存されていません</p>
-          <p class="text-sm text-gray-400 mb-4">エリア詳細ページの「物件を探す」から<br>物件URLを取り込んで保存・比較できます</p>
-          <button onclick="state.view='detail'; render();" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-            エリア詳細を見る →
-          </button>
+          <p class="text-sm text-gray-400">上のフォームから物件URLやテキストを取り込んで<br>保存・比較できます</p>
         </div>
       ` : `
         <div class="grid grid-cols-1 gap-3">
@@ -2908,127 +2898,10 @@ function renderFixedBar() {
 function renderSOModal() {
   if (!state.soModalOpen) return '';
 
-  if (state.soModalType === 'search') {
-    return renderSearchModal();
-  }
   if (state.soModalType === 'import') {
     return renderImportModal();
   }
   return '';
-}
-
-function renderSearchModal() {
-  const areaId = state.soSearchAreaId;
-  const area = AREAS.find(a => a.id === areaId);
-  const areaName = area ? area.name : '';
-  const result = state._aiSearchResult;
-
-  return `
-    <div class="so-modal-overlay" onclick="closeSOModal(event)">
-      <div class="so-modal" onclick="event.stopPropagation()" style="max-width:640px;">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-lg font-bold text-gray-800">🤖 ${areaName} の物件をAI検索</h3>
-          <button onclick="state.soModalOpen=false; state._aiSearchResult=null; render();" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
-        </div>
-
-        <div class="space-y-4">
-          <div>
-            <label class="text-sm font-medium text-gray-700">どんな土地を探していますか？</label>
-            <textarea id="ai-search-query" rows="2" placeholder="例: 2000万以下で50坪くらいの土地。駅から近いほうがいい。" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg text-sm" style="resize:vertical;">${state._aiSearchQuery || ''}</textarea>
-            <div class="flex flex-wrap gap-2 mt-2">
-              <button onclick="document.getElementById('ai-search-query').value='2000万以下、40坪以上'" class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">💡 2000万/40坪</button>
-              <button onclick="document.getElementById('ai-search-query').value='広い土地（60坪以上）、予算3000万まで'" class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">💡 広め/3000万</button>
-              <button onclick="document.getElementById('ai-search-query').value='駅徒歩15分以内、50坪前後、閑静な住宅街'" class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">💡 駅近/住宅街</button>
-            </div>
-          </div>
-
-          <button id="btn-ai-search" onclick="handleAISearch()" class="w-full px-4 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-            🔍 AIがWeb検索して物件を探す
-          </button>
-
-          ${result ? `
-            <div class="space-y-4">
-              <p class="text-sm font-bold text-gray-800">📋 検索結果（${result.properties?.length || 0}件）</p>
-
-              ${result.sections && result.sections.length > 0 ? result.sections.map((section, si) => `
-                <div class="border border-gray-200 rounded-lg overflow-hidden">
-                  <!-- サイトヘッダー + grounding URL -->
-                  <div class="bg-gradient-to-r ${section.siteKey === 'suumo' ? 'from-green-600 to-green-700' : section.siteKey === 'athome' ? 'from-red-500 to-red-600' : section.siteKey === 'homes' ? 'from-orange-500 to-orange-600' : 'from-gray-500 to-gray-600'} px-3 py-2">
-                    <div class="flex items-center justify-between">
-                      <span class="text-white font-bold text-sm">${section.siteName}（${section.properties.length}件）</span>
-                    </div>
-                    ${section.groundingUrls && section.groundingUrls.length > 0 ? `
-                      <div class="mt-1 space-y-0.5">
-                        ${section.groundingUrls.map(u => `<a href="${u.url}" target="_blank" rel="noopener" class="block text-xs text-white/90 hover:text-white hover:underline truncate">🔗 ${u.title || u.url}</a>`).join('')}
-                      </div>
-                    ` : `<div class="mt-1"><span class="text-xs text-white/60">（参照元URL取得なし）</span></div>`}
-                  </div>
-
-                  <!-- 物件リスト -->
-                  <div class="divide-y divide-gray-100">
-                    ${section.properties.map((p, pi) => {
-                      const globalIdx = result.sections.slice(0, si).reduce((sum, s) => sum + s.properties.length, 0) + pi;
-                      return `
-                      <div class="p-3 bg-white space-y-1.5">
-                        <div class="flex items-start justify-between">
-                          <div class="flex-1 min-w-0">
-                            <div class="text-sm font-medium text-gray-800">${p.title || p.address || '物件' + (pi+1)}</div>
-                            ${p.address ? `<div class="text-xs text-gray-500">📍 ${p.address}</div>` : ''}
-                          </div>
-                          <button onclick="handleSaveSearchResult(${globalIdx})" class="ml-2 px-3 py-1 bg-green-600 text-white text-xs rounded-lg hover:bg-green-700 transition-colors flex-shrink-0">
-                            💾 保存
-                          </button>
-                        </div>
-                        <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-                          ${p.price ? `<span class="font-bold text-blue-700">${Number(p.price).toLocaleString()}万円</span>` : ''}
-                          ${p.land_area ? `<span class="text-gray-600">${(p.land_area/3.305785).toFixed(1)}坪（${p.land_area}㎡）</span>` : ''}
-                          ${p.station_distance ? `<span class="text-gray-500">🚃 ${p.station_distance}</span>` : ''}
-                        </div>
-                        ${p.zoning || p.road_access ? `
-                          <div class="flex flex-wrap gap-2 text-xs">
-                            ${p.zoning ? `<span class="bg-gray-100 px-2 py-0.5 rounded">${p.zoning}</span>` : ''}
-                            ${p.road_access ? `<span class="bg-gray-100 px-2 py-0.5 rounded">${p.road_access}</span>` : ''}
-                          </div>
-                        ` : ''}
-                        ${p.memo ? `<div class="text-xs text-amber-700">💡 ${p.memo}</div>` : ''}
-                      </div>`;
-                    }).join('')}
-                  </div>
-                </div>
-              `).join('') : `
-                ${result.properties && result.properties.length > 0 ? result.properties.map((p, i) => `
-                  <div class="border border-gray-200 rounded-lg p-3 bg-white space-y-2">
-                    <div class="text-sm font-medium text-gray-800">${p.title || p.address || '物件' + (i+1)}</div>
-                    ${p.address ? `<div class="text-xs text-gray-500">📍 ${p.address}</div>` : ''}
-                    <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-                      ${p.price ? `<span class="font-bold text-blue-700">${Number(p.price).toLocaleString()}万円</span>` : ''}
-                      ${p.land_area ? `<span class="text-gray-600">${(p.land_area/3.305785).toFixed(1)}坪（${p.land_area}㎡）</span>` : ''}
-                    </div>
-                    <button onclick="handleSaveSearchResult(${i})" class="px-3 py-1 bg-green-600 text-white text-xs rounded-lg hover:bg-green-700">💾 保存</button>
-                  </div>
-                `).join('') : `
-                  <div class="text-sm text-gray-500 bg-gray-50 rounded-lg p-4">
-                    <p class="text-center">条件に合う物件が見つかりませんでした。</p>
-                    <p class="text-xs mt-1 text-center">条件を変えて再検索してみてください。</p>
-                    ${result.rawText ? `<details class="mt-2"><summary class="text-xs text-gray-400 cursor-pointer">AI応答を確認</summary><pre class="text-xs text-gray-400 whitespace-pre-wrap mt-1 max-h-40 overflow-auto">${result.rawText.replace(/</g,'&lt;')}</pre></details>` : ''}
-                  </div>
-                `}
-              `}
-            </div>
-          ` : ''}
-        </div>
-        <p class="text-xs text-gray-400 mt-4 text-center">
-          ※ AIがGoogle検索で不動産サイトから物件を探します。情報の正確性は物件ページでご確認ください。
-        </p>
-        ${result && result._debug ? `
-          <details class="mt-2">
-            <summary class="text-xs text-gray-400 cursor-pointer text-center">🔧 デバッグ情報</summary>
-            <pre class="text-xs text-gray-400 whitespace-pre-wrap mt-1 max-h-60 overflow-auto bg-gray-50 p-2 rounded">${JSON.stringify(result._debug, null, 2).replace(/</g,'&lt;')}</pre>
-          </details>
-        ` : ''}
-      </div>
-    </div>
-  `;
 }
 
 function renderImportModal() {
@@ -3111,20 +2984,11 @@ function renderImportModal() {
 // ============================================================
 // Second Opinion: Event Handlers
 // ============================================================
-function openSearchModal(areaId) {
-  state.soSearchAreaId = areaId;
-  state._aiSearchResult = null;
-  state._aiSearchQuery = '';
-  state.soModalOpen = true;
-  state.soModalType = 'search';
-  render();
-}
-
 function openImportModal(areaId) {
-  const urlInput = document.getElementById('url-import-detail');
+  const urlInput = document.getElementById('url-import-property') || document.getElementById('url-import-detail');
   state._importUrl = urlInput ? urlInput.value.trim() : '';
   state._aiParsedProperty = null;
-  state.soSearchAreaId = areaId;
+  state.soSearchAreaId = areaId || state.selectedArea || null;
   state.soModalOpen = true;
   state.soModalType = 'import';
   render();
@@ -3133,43 +2997,8 @@ function openImportModal(areaId) {
 function closeSOModal(event) {
   if (event.target === event.currentTarget) {
     state.soModalOpen = false;
-    state._aiSearchResult = null;
     state._aiParsedProperty = null;
     render();
-  }
-}
-
-// AI検索: 自然言語 → SUUMO URL生成
-async function handleAISearch() {
-  const queryEl = document.getElementById('ai-search-query');
-  const query = queryEl ? queryEl.value.trim() : '';
-  if (!query) { alert('検索条件を入力してください'); return; }
-
-  const btn = document.getElementById('btn-ai-search');
-  if (btn) { btn.textContent = '🔍 AIが検索中...（20〜30秒）'; btn.disabled = true; }
-
-  try {
-    const headers = { 'Content-Type': 'application/json', 'apikey': CONFIG.SUPABASE_ANON_KEY };
-    const session = await supabaseClient.auth.getSession();
-    const token = session?.data?.session?.access_token;
-    if (token) headers['Authorization'] = `Bearer ${token}`;
-    else headers['Authorization'] = `Bearer ${CONFIG.SUPABASE_ANON_KEY}`;
-    const res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/ai-assist`, {
-      method: 'POST', headers,
-      body: JSON.stringify({ action: 'search', query, areaId: state.soSearchAreaId })
-    });
-    if (!res.ok) { const errText = await res.text(); throw new Error(`HTTP ${res.status}: ${errText}`); }
-    const result = await res.json();
-    console.log('AI Search result:', JSON.stringify(result._debug || {}, null, 2));
-    console.log('Sections:', result.sections?.map(s => ({ key: s.siteKey, name: s.siteName, urls: s.groundingUrls?.length, props: s.properties?.length })));
-    if (result.error) throw new Error(result.error);
-    state._aiSearchResult = result;
-    state._aiSearchQuery = query;
-    render();
-  } catch(e) {
-    console.error('AI Search error:', e);
-    alert('AI検索に失敗しました: ' + e.message);
-    if (btn) { btn.textContent = '🔍 AIがWeb検索して物件を探す'; btn.disabled = false; }
   }
 }
 
@@ -3276,43 +3105,6 @@ async function handleSaveParsed() {
     state._importUrl = '';
     state._aiParsedProperty = null;
     render();
-  }
-}
-
-// 検索結果から物件を保存
-async function handleSaveSearchResult(index) {
-  const result = state._aiSearchResult;
-  if (!result || !result.properties || !result.properties[index]) return;
-  const p = result.properties[index];
-
-  if (!p.price || !p.land_area) {
-    alert('この物件は価格または面積が不明のため保存できません');
-    return;
-  }
-
-  const prop = {
-    area_id: state.soSearchAreaId || null,
-    url: p.url || null,
-    source: p.source || null,
-    price: p.price * 10000, // 万円 → 円
-    land_area: p.land_area,
-    address: p.address || null,
-    station_distance: p.station_distance || null,
-    zoning: p.zoning || null,
-    building_coverage: p.building_coverage || null,
-    floor_area_ratio: p.floor_area_ratio || null,
-    road_access: p.road_access || null,
-    elevation: p.elevation || null,
-    infrastructure: p.infrastructure || null,
-    hazard: p.hazard || null,
-    memo: p.memo || null,
-  };
-
-  const saved = await saveProperty(prop);
-  if (saved) {
-    // ボタンを「保存済み」に変更
-    const btns = document.querySelectorAll(`[onclick="handleSaveSearchResult(${index})"]`);
-    btns.forEach(btn => { btn.textContent = '✅ 保存済み'; btn.disabled = true; btn.style.opacity = '0.6'; });
   }
 }
 
