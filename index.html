@@ -941,7 +941,7 @@ function render() {
   app.innerHTML = `
     ${renderHeader()}
     <div class="max-w-6xl mx-auto px-4 py-6">
-      ${renderWeights()}
+      ${state.view === 'property' ? '' : renderWeights()}
       ${state.view === 'ranking' ? renderRanking(ranked) : ''}
       ${state.view === 'compare' ? renderCompare(ranked) : ''}
       ${state.view === 'detail' ? renderDetail(selected, ranked) : ''}
@@ -2675,6 +2675,31 @@ function renderPropertyView() {
 
   return `
     <div class="space-y-4 fade-in">
+      <!-- サイト説明セクション -->
+      <div class="card p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+        <h2 class="text-lg font-bold text-gray-800 mb-3">📊 物件比較ツールとは？</h2>
+        <p class="text-sm text-gray-700 leading-relaxed mb-4">
+          気になる物件の情報をAIが自動で整理・構造化。複数の物件を並べて比較し、最適な土地選びをサポートします。
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="bg-white/80 rounded-lg p-3 border border-blue-100">
+            <div class="text-lg mb-1">🤖</div>
+            <div class="text-sm font-medium text-gray-800 mb-1">AI自動整理</div>
+            <div class="text-xs text-gray-500">物件URLやテキストを貼るだけで、AIが価格・面積・立地など重要項目を自動で抽出・整理します</div>
+          </div>
+          <div class="bg-white/80 rounded-lg p-3 border border-blue-100">
+            <div class="text-lg mb-1">📋</div>
+            <div class="text-sm font-medium text-gray-800 mb-1">一覧で比較</div>
+            <div class="text-xs text-gray-500">SUUMO・アットホーム等の複数サイトの物件を統一フォーマットで一覧比較。見落としを防ぎます</div>
+          </div>
+          <div class="bg-white/80 rounded-lg p-3 border border-blue-100">
+            <div class="text-lg mb-1">💡</div>
+            <div class="text-sm font-medium text-gray-800 mb-1">AIが注意点を指摘</div>
+            <div class="text-xs text-gray-500">比較表をAIが分析し、各物件の注意点やおすすめポイントをコメント。判断材料が増えます</div>
+          </div>
+        </div>
+      </div>
+
       <div class="flex items-center justify-between">
         <h2 class="text-lg font-bold text-gray-800">🏠 保存した物件${savedCount > 0 ? `（${savedCount}件）` : ''}</h2>
         ${savedCount > 0 ? `<div class="flex gap-2">
