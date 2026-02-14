@@ -2973,7 +2973,7 @@ function renderSearchModal() {
                     </div>
                   ` : ''}
                   ${p.memo ? `<div class="text-xs text-amber-700">💡 ${p.memo}</div>` : ''}
-                  ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener" class="text-xs text-blue-500 hover:underline">🔗 物件ページを見る（${p.source || new URL(p.url).hostname.replace('www.','')}）</a>` : `<span class="text-xs text-gray-400">※ URLが取得できませんでした</span>`}
+                  ${p.source ? `<div class="text-xs text-gray-400">📰 情報元: ${p.source}</div>` : ''}
                 </div>
               `).join('') : `
                 <div class="text-sm text-gray-500 bg-gray-50 rounded-lg p-4">
@@ -2983,12 +2983,29 @@ function renderSearchModal() {
                 </div>
               `}
 
-              ${result.sources && result.sources.length > 0 ? `
-                <div class="text-xs text-gray-400 border-t border-gray-100 pt-2">
-                  <span class="font-medium">情報元:</span>
-                  ${result.sources.slice(0, 5).map(s => `<a href="${s.url}" target="_blank" rel="noopener" class="text-blue-400 hover:underline ml-1">${s.title || 'リンク'}</a>`).join(' ・')}
-                </div>
-              ` : ''}
+              ${(() => {
+                const reUrls = result.realEstateUrls || [];
+                const otherSources = (result.sources || []).filter(s => !reUrls.find(r => r.url === s.url));
+                return (reUrls.length > 0 || otherSources.length > 0) ? `
+                  <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 space-y-2">
+                    ${reUrls.length > 0 ? `
+                      <p class="text-xs font-bold text-blue-800">🔗 検索で見つかった不動産サイトのページ:</p>
+                      <div class="space-y-1">
+                        ${reUrls.map(s => {
+                          let siteName = 'リンク';
+                          try { siteName = new URL(s.url).hostname.replace('www.',''); } catch(e) {}
+                          return `<a href="${s.url}" target="_blank" rel="noopener" class="block text-xs text-blue-600 hover:underline truncate">🔗 ${s.title || siteName}</a>`;
+                        }).join('')}
+                      </div>
+                    ` : ''}
+                    ${otherSources.length > 0 ? `
+                      <p class="text-xs text-gray-500 mt-1">その他の参考情報:
+                        ${otherSources.slice(0, 3).map(s => `<a href="${s.url}" target="_blank" rel="noopener" class="text-blue-400 hover:underline ml-1">${s.title || 'リンク'}</a>`).join(' ・')}
+                      </p>
+                    ` : ''}
+                  </div>
+                ` : '';
+              })()}
             </div>
           ` : ''}
         </div>
