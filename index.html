@@ -2973,7 +2973,10 @@ function renderSearchModal() {
                     </div>
                   ` : ''}
                   ${p.memo ? `<div class="text-xs text-amber-700">💡 ${p.memo}</div>` : ''}
-                  ${p.source ? `<div class="text-xs text-gray-400">📰 情報元: ${p.source}</div>` : ''}
+                  <div class="flex items-center gap-2 text-xs">
+                    ${p.source ? `<span class="text-gray-400">📰 ${p.source}</span>` : ''}
+                    ${p.source_url ? `<a href="${p.source_url}" target="_blank" rel="noopener" class="text-blue-600 hover:underline font-medium">🔗 物件ページを見る</a>` : ''}
+                  </div>
                 </div>
               `).join('') : `
                 <div class="text-sm text-gray-500 bg-gray-50 rounded-lg p-4">
@@ -2985,11 +2988,17 @@ function renderSearchModal() {
 
               ${(() => {
                 const reUrls = result.realEstateUrls || [];
-                const otherSources = (result.sources || []).filter(s => !reUrls.find(r => r.url === s.url));
-                return (reUrls.length > 0 || otherSources.length > 0) ? `
+                const allSources = result.sources || [];
+                const otherSources = allSources.filter(s => !reUrls.find(r => r.url === s.url));
+                const debug = result.debugInfo || {};
+
+                // 物件のsource_urlがあるものを集計
+                const propertyUrls = (result.properties || []).filter(p => p.source_url).map(p => p.source_url);
+
+                return `
                   <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 space-y-2">
                     ${reUrls.length > 0 ? `
-                      <p class="text-xs font-bold text-blue-800">🔗 検索で見つかった不動産サイトのページ:</p>
+                      <p class="text-xs font-bold text-blue-800">🔗 不動産サイトのページ:</p>
                       <div class="space-y-1">
                         ${reUrls.map(s => {
                           let siteName = 'リンク';
@@ -2999,12 +3008,24 @@ function renderSearchModal() {
                       </div>
                     ` : ''}
                     ${otherSources.length > 0 ? `
-                      <p class="text-xs text-gray-500 mt-1">その他の参考情報:
-                        ${otherSources.slice(0, 3).map(s => `<a href="${s.url}" target="_blank" rel="noopener" class="text-blue-400 hover:underline ml-1">${s.title || 'リンク'}</a>`).join(' ・')}
-                      </p>
+                      <p class="text-xs font-bold text-gray-600 ${reUrls.length > 0 ? 'mt-2' : ''}">📎 参考情報:</p>
+                      <div class="space-y-1">
+                        ${otherSources.slice(0, 5).map(s => {
+                          let siteName = 'リンク';
+                          try { siteName = new URL(s.url).hostname.replace('www.',''); } catch(e) {}
+                          return `<a href="${s.url}" target="_blank" rel="noopener" class="block text-xs text-blue-500 hover:underline truncate">📎 ${s.title || siteName}</a>`;
+                        }).join('')}
+                      </div>
                     ` : ''}
+                    ${allSources.length === 0 && propertyUrls.length === 0 ? `
+                      <p class="text-xs text-gray-500">🔍 検索で参照されたURLはありません。条件を変えて再検索してみてください。</p>
+                    ` : ''}
+                    <details class="mt-1">
+                      <summary class="text-xs text-gray-400 cursor-pointer">デバッグ情報</summary>
+                      <pre class="text-xs text-gray-400 whitespace-pre-wrap mt-1">grounding chunks: ${debug.groundingChunksCount || 0}, sources: ${debug.allSourcesCount || 0}, RE URLs: ${debug.realEstateUrlsCount || 0}, queries: ${JSON.stringify(debug.webSearchQueries || [])}</pre>
+                    </details>
                   </div>
-                ` : '';
+                `;
               })()}
             </div>
           ` : ''}
