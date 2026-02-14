@@ -225,13 +225,50 @@ async function saveProperty(prop) {
     const { data, error } = await supabaseClient.from('saved_properties').insert(row).select().single();
     if (error) { alert('保存に失敗しました: ' + error.message); console.error('Save failed:', error); return null; }
     state.savedProperties.unshift(data);
+    backupToLocalStorage();
     return data;
   } catch(e) { alert('保存エラー: ' + e.message); return null; }
+}
+
+async function updateProperty(id, updates) {
+  const prop = state.savedProperties.find(p => p.id === id);
+  if (!prop) return;
+  Object.assign(prop, updates);
+  backupToLocalStorage();
+  try {
+    await supabaseClient.from('saved_properties').update(updates).eq('id', id);
+  } catch(e) { console.warn('Supabase update failed, saved to localStorage:', e.message); }
 }
 
 async function deleteProperty(id) {
   const { error } = await supabaseClient.from('saved_properties').delete().eq('id', id);
   if (!error) state.savedProperties = state.savedProperties.filter(p => p.id !== id);
+  backupToLocalStorage();
+}
+
+// localStorage バックアップ
+const LS_PROPS_KEY = 'mie_saved_properties';
+const LS_COMP_KEY = 'mie_comparison';
+
+function backupToLocalStorage() {
+  try {
+    localStorage.setItem(LS_PROPS_KEY, JSON.stringify(state.savedProperties));
+    if (state.soComparison) localStorage.setItem(LS_COMP_KEY, JSON.stringify(state.soComparison));
+  } catch(e) {}
+}
+
+function restoreFromLocalStorage() {
+  try {
+    const props = localStorage.getItem(LS_PROPS_KEY);
+    if (props) {
+      const parsed = JSON.parse(props);
+      if (Array.isArray(parsed) && parsed.length > 0 && state.savedProperties.length === 0) {
+        state.savedProperties = parsed;
+      }
+    }
+    const comp = localStorage.getItem(LS_COMP_KEY);
+    if (comp) state.soComparison = JSON.parse(comp);
+  } catch(e) {}
 }
 
 async function toggleComparison(id) {
@@ -2747,7 +2784,7 @@ function renderPropertyView() {
                       <span class="text-gray-500">${areaStr}</span>
                     </div>
                     ${prop.station_distance ? `<div class="text-xs text-gray-400 mt-1">🚃 ${prop.station_distance}</div>` : ''}
-                    ${prop.memo ? `<div class="text-xs text-gray-500 mt-1 bg-gray-50 rounded px-2 py-1">📝 ${prop.memo}</div>` : ''}
+                    ${prop.user_memo ? `<div class="text-xs text-gray-500 mt-1 bg-green-50 rounded px-2 py-1">📝 ${prop.user_memo}</div>` : (prop.memo ? `<div class="text-xs text-gray-500 mt-1 bg-gray-50 rounded px-2 py-1">💡 ${prop.memo}</div>` : '')}
                     ${prop.url ? `<a href="${prop.url}" target="_blank" rel="noopener" class="text-xs text-blue-500 mt-1 inline-block hover:underline">🔗 物件ページ</a>` : ''}
                   </div>
                   <div class="flex flex-col gap-1 ml-3">
@@ -2790,24 +2827,35 @@ function renderComparisonTable() {
   if (props.length === 0) return '';
 
   const labels = ['A','B','C','D','E'];
+
+  // editable=true のセルはクリックで編集可能（テキスト型）
+  // editable='number' は万円単位の数値入力
   const rows = [
-    { label: '価格', key: 'price', fmt: v => v ? `${(v/10000).toLocaleString()}万円` : '—' },
-    { label: '土地面積', key: 'land_area', fmt: v => v ? `${(v/3.305785).toFixed(1)}坪（${v}㎡）` : '—' },
+    { label: '価格', key: 'price', fmt: v => v ? `${(v/10000).toLocaleString()}万円` : '—', editable: 'price' },
+    { label: '土地面積', key: 'land_area', fmt: v => v ? `${(v/3.305785).toFixed(1)}坪（${v}㎡）` : '—', editable: 'area' },
     { label: '坪単価', key: '_tsubo', fmt: (v, p) => p.price && p.land_area ? `${(p.price / (p.land_area / 3.305785) / 10000).toFixed(1)}万円/坪` : '—' },
-    { label: '所在地', key: 'address', fmt: v => v || '—' },
-    { label: '駅距離', key: 'station_distance', fmt: v => v || '—' },
-    { label: '間取り', key: 'floor_plan', fmt: v => v || '—' },
-    { label: '築年', key: 'building_year', fmt: v => v || '—' },
+    { label: '所在地', key: 'address', fmt: v => v || '—', editable: true },
+    { label: '駅距離', key: 'station_distance', fmt: v => v || '—', editable: true },
+    { label: '間取り', key: 'floor_plan', fmt: v => v || '—', editable: true },
+    { label: '築年', key: 'building_year', fmt: v => v || '—', editable: true },
   ];
   const checkRows = [
-    { label: '用途地域', key: 'zoning' },
-    { label: '建ぺい率', key: 'building_coverage' },
-    { label: '容積率', key: 'floor_area_ratio' },
-    { label: '接道', key: 'road_access' },
-    { label: '高低差/造成', key: 'elevation' },
-    { label: 'インフラ', key: 'infrastructure' },
-    { label: 'ハザード', key: 'hazard' },
+    { label: '用途地域', key: 'zoning', editable: true },
+    { label: '建ぺい率', key: 'building_coverage', editable: true },
+    { label: '容積率', key: 'floor_area_ratio', editable: true },
+    { label: '接道', key: 'road_access', editable: true },
+    { label: '高低差/造成', key: 'elevation', editable: true },
+    { label: 'インフラ', key: 'infrastructure', editable: true },
+    { label: 'ハザード', key: 'hazard', editable: true },
   ];
+
+  function editableCell(prop, key, displayVal, editType) {
+    const propId = prop.id;
+    const escaped = (typeof displayVal === 'string' ? displayVal : String(displayVal || '')).replace(/"/g, '&quot;');
+    const editHint = editType ? ' title="クリックして編集" style="cursor:pointer;border-bottom:1px dashed #cbd5e1;"' : '';
+    if (!editType) return `<td class="p-3 text-sm text-gray-800">${displayVal}</td>`;
+    return `<td class="p-3 text-sm text-gray-800 hover:bg-blue-50 transition-colors" onclick="startCellEdit(this, '${propId}', '${key}', '${editType}')"${editHint}>${displayVal}<span class="text-gray-300 text-xs ml-1">✏️</span></td>`;
+  }
 
   let questions = [];
   try { questions = typeof comp.questions === 'string' ? JSON.parse(comp.questions) : (comp.questions || []); } catch(e) { questions = []; }
@@ -2818,6 +2866,7 @@ function renderComparisonTable() {
       <div class="flex items-center gap-3">
         <button onclick="state.soView='saved'; state.soComparison=null; render();" class="text-sm text-blue-600 hover:underline">← 保存リストに戻る</button>
         <h2 class="text-lg font-bold text-gray-800">📊 比較表</h2>
+        <span class="text-xs text-gray-400">（セルをクリックして編集可能）</span>
       </div>
 
       ${comp.summary ? `
@@ -2833,8 +2882,9 @@ function renderComparisonTable() {
             <tr>
               <th class="text-left p-3 bg-gray-50 text-xs text-gray-500 font-medium" style="min-width:80px;"></th>
               ${props.map((p,i) => `
-                <th class="p-3 bg-gray-50 text-sm font-bold text-gray-800" style="min-width:120px;">
+                <th class="p-3 bg-gray-50 text-sm font-bold text-gray-800" style="min-width:140px;">
                   物件${labels[i]}<br><span class="text-xs font-normal text-gray-400">${AREAS.find(a=>a.id===p.area_id)?.name || ''}</span>
+                  ${p.url ? `<br><a href="${p.url}" target="_blank" rel="noopener" class="text-xs text-blue-500 font-normal hover:underline">🔗 物件ページ</a>` : ''}
                 </th>
               `).join('')}
             </tr>
@@ -2843,7 +2893,7 @@ function renderComparisonTable() {
             ${rows.map(r => `
               <tr>
                 <td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">${r.label}</td>
-                ${props.map(p => `<td class="p-3 text-sm text-gray-800">${r.fmt(p[r.key], p)}</td>`).join('')}
+                ${props.map(p => editableCell(p, r.key, r.fmt(p[r.key], p), r.editable)).join('')}
               </tr>
             `).join('')}
             <tr><td colspan="${props.length+1}" class="p-2 bg-amber-50"><span class="text-xs font-bold text-amber-700">⚠️ 重要確認項目（不動産屋に確認）</span></td></tr>
@@ -2852,10 +2902,22 @@ function renderComparisonTable() {
                 <td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">${r.label}</td>
                 ${props.map(p => {
                   const val = p[r.key];
-                  return `<td class="p-3 text-sm ${val ? 'text-gray-800' : 'text-amber-600'}">${val || '🟡 不明'}</td>`;
+                  const display = val ? val : '🟡 不明';
+                  const cls = val ? 'text-gray-800' : 'text-amber-600';
+                  return `<td class="p-3 text-sm ${cls} hover:bg-blue-50 transition-colors" onclick="startCellEdit(this, '${p.id}', '${r.key}', true)" title="クリックして編集" style="cursor:pointer;border-bottom:1px dashed #cbd5e1;">${display}<span class="text-gray-300 text-xs ml-1">✏️</span></td>`;
                 }).join('')}
               </tr>
             `).join('')}
+            <!-- メモ行 -->
+            <tr><td colspan="${props.length+1}" class="p-2 bg-green-50"><span class="text-xs font-bold text-green-700">📝 メモ（自由入力）</span></td></tr>
+            <tr>
+              <td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">メモ</td>
+              ${props.map(p => `
+                <td class="p-2">
+                  <textarea class="w-full px-2 py-1 border border-gray-200 rounded text-sm text-gray-700 focus:border-blue-400 focus:ring-1 focus:ring-blue-200 outline-none" rows="3" placeholder="自由にメモを入力..." onblur="handleMemoEdit('${p.id}', this.value)" style="resize:vertical;">${p.user_memo || p.memo || ''}</textarea>
+                </td>
+              `).join('')}
+            </tr>
           </tbody>
         </table>
       </div>
@@ -2887,6 +2949,77 @@ function copyQuestions() {
   });
   if (texts.length === 0) return;
   navigator.clipboard.writeText(texts.join('\n')).then(() => alert('質問をクリップボードにコピーしました'));
+}
+
+// セル編集: クリック → inline input
+function startCellEdit(td, propId, key, editType) {
+  if (td.querySelector('input,textarea')) return; // 既に編集中
+  const prop = state.savedProperties.find(p => p.id === propId);
+  if (!prop) return;
+
+  const currentVal = prop[key];
+  td.innerHTML = '';
+
+  if (editType === 'price') {
+    // 万円 → 円で保存されているので万円で表示・入力
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.className = 'w-full px-2 py-1 border border-blue-300 rounded text-sm focus:ring-2 focus:ring-blue-200 outline-none';
+    input.value = currentVal ? currentVal / 10000 : '';
+    input.placeholder = '万円';
+    input.focus();
+    input.onblur = () => finishCellEdit(propId, key, input.value ? Number(input.value) * 10000 : null);
+    input.onkeydown = (e) => { if (e.key === 'Enter') input.blur(); if (e.key === 'Escape') { render(); } };
+    td.appendChild(input);
+    setTimeout(() => input.focus(), 0);
+  } else if (editType === 'area') {
+    // ㎡で保存
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.step = '0.1';
+    input.className = 'w-full px-2 py-1 border border-blue-300 rounded text-sm focus:ring-2 focus:ring-blue-200 outline-none';
+    input.value = currentVal || '';
+    input.placeholder = '㎡';
+    input.onblur = () => finishCellEdit(propId, key, input.value ? Number(input.value) : null);
+    input.onkeydown = (e) => { if (e.key === 'Enter') input.blur(); if (e.key === 'Escape') { render(); } };
+    td.appendChild(input);
+    setTimeout(() => input.focus(), 0);
+  } else {
+    // テキスト入力
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'w-full px-2 py-1 border border-blue-300 rounded text-sm focus:ring-2 focus:ring-blue-200 outline-none';
+    input.value = currentVal || '';
+    input.onblur = () => finishCellEdit(propId, key, input.value.trim() || null);
+    input.onkeydown = (e) => { if (e.key === 'Enter') input.blur(); if (e.key === 'Escape') { render(); } };
+    td.appendChild(input);
+    setTimeout(() => input.focus(), 0);
+  }
+}
+
+async function finishCellEdit(propId, key, newVal) {
+  const prop = state.savedProperties.find(p => p.id === propId);
+  if (!prop) return;
+  if (prop[key] === newVal) { render(); return; }
+  // comparison内のpropsも同期
+  if (state.soComparison?.properties) {
+    const cp = state.soComparison.properties.find(p => p.id === propId);
+    if (cp) cp[key] = newVal;
+  }
+  await updateProperty(propId, { [key]: newVal });
+  render();
+}
+
+async function handleMemoEdit(propId, value) {
+  const trimmed = value.trim();
+  const prop = state.savedProperties.find(p => p.id === propId);
+  if (!prop) return;
+  if ((prop.user_memo || '') === trimmed) return;
+  if (state.soComparison?.properties) {
+    const cp = state.soComparison.properties.find(p => p.id === propId);
+    if (cp) cp.user_memo = trimmed;
+  }
+  await updateProperty(propId, { user_memo: trimmed });
 }
 
 // ============================================================
@@ -3152,6 +3285,7 @@ async function handleGenerateComparison() {
     state.soComparison = result;
     state.soView = 'compare';
     state.view = 'property';
+    backupToLocalStorage();
   }
   render();
 }
@@ -3376,12 +3510,15 @@ function bindEvents(ranked) {
 // Initialize
 // ============================================================
 loadDistrictCache();
+// localStorageから復元（オフライン対応）
+restoreFromLocalStorage();
 render();
 // ページロード時: まず静的JSONを読み込み、なければMCP接続を案内
 loadStaticData();
 // Supabase匿名認証を初期化（バックグラウンド）
 ensureAuth().then(() => {
   loadSavedProperties().then(() => {
+    backupToLocalStorage();
     if (state.savedProperties.length > 0) render();
   });
 }).catch(e => console.warn('Auth init skipped:', e.message));
