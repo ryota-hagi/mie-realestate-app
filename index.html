@@ -169,6 +169,11 @@
   .so-radio-group label:hover { border-color: #3b82f6; background: #eff6ff; }
   .so-radio-group input:checked + span { color: #1d4ed8; }
   .so-radio-group label:has(input:checked) { border-color: #3b82f6; background: #dbeafe; }
+  @media (max-width: 768px) {
+    .comp-layout-sidebar { flex-direction: column !important; }
+    .comp-layout-sidebar > div:first-child { width: 100% !important; }
+    .comp-layout-sidebar > div:first-child .sticky { position: relative !important; top: 0 !important; }
+  }
 </style>
 </head>
 <body>
@@ -246,15 +251,94 @@ async function deleteProperty(id) {
   backupToLocalStorage();
 }
 
+// ============================================================
+// Comparisons CRUD
+// ============================================================
+async function loadSavedComparisons() {
+  try {
+    const user = await ensureAuth();
+    if (!user) return;
+    const { data, error } = await supabaseClient.from('comparisons')
+      .select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+    if (!error && data) {
+      state.savedComparisons = data.map(c => ({
+        id: c.id,
+        name: c.name || '比較表',
+        created_at: c.created_at,
+        summary: c.ai_summary,
+        questions: c.ai_questions,
+        property_ids: c.property_ids,
+        properties: null, // lazy load
+      }));
+      backupComparisonsToLS();
+    }
+  } catch(e) { console.warn('Load comparisons failed:', e.message); }
+}
+
+async function renameComparison(compId, newName) {
+  const comp = state.savedComparisons.find(c => c.id === compId);
+  if (!comp) return;
+  comp.name = newName;
+  if (state.soComparison && state.soComparison.id === compId) state.soComparison.name = newName;
+  backupComparisonsToLS();
+  try {
+    await supabaseClient.from('comparisons').update({ name: newName }).eq('id', compId);
+  } catch(e) { console.warn('Rename failed:', e.message); }
+}
+
+async function deleteComparison(compId) {
+  state.savedComparisons = state.savedComparisons.filter(c => c.id !== compId);
+  if (state.soComparison?.id === compId) { state.soComparison = null; state.soView = null; }
+  backupComparisonsToLS();
+  try {
+    await supabaseClient.from('comparisons').delete().eq('id', compId);
+  } catch(e) { console.warn('Delete comparison failed:', e.message); }
+}
+
+async function loadComparisonDetail(compId) {
+  const comp = state.savedComparisons.find(c => c.id === compId);
+  if (!comp) return;
+  // property_idsから物件データを取得
+  const propIds = comp.property_ids || [];
+  let props = state.savedProperties.filter(p => propIds.includes(p.id));
+  // Supabaseからも取得を試みる（削除済み物件対応）
+  if (props.length < propIds.length) {
+    try {
+      const { data } = await supabaseClient.from('saved_properties').select('*').in('id', propIds);
+      if (data) props = data;
+    } catch(e) {}
+  }
+  let questions = [];
+  try { questions = typeof comp.questions === 'string' ? JSON.parse(comp.questions) : (comp.questions || []); } catch(e) {}
+
+  state.soComparison = {
+    id: comp.id,
+    name: comp.name,
+    summary: comp.summary,
+    questions,
+    properties: props,
+    property_ids: propIds,
+  };
+  state.soView = 'compare';
+  state.view = 'property';
+  backupToLocalStorage();
+  render();
+}
+
 // localStorage バックアップ
 const LS_PROPS_KEY = 'mie_saved_properties';
 const LS_COMP_KEY = 'mie_comparison';
+const LS_COMPS_KEY = 'mie_saved_comparisons';
 
 function backupToLocalStorage() {
   try {
     localStorage.setItem(LS_PROPS_KEY, JSON.stringify(state.savedProperties));
     if (state.soComparison) localStorage.setItem(LS_COMP_KEY, JSON.stringify(state.soComparison));
   } catch(e) {}
+}
+
+function backupComparisonsToLS() {
+  try { localStorage.setItem(LS_COMPS_KEY, JSON.stringify(state.savedComparisons)); } catch(e) {}
 }
 
 function restoreFromLocalStorage() {
@@ -268,6 +352,11 @@ function restoreFromLocalStorage() {
     }
     const comp = localStorage.getItem(LS_COMP_KEY);
     if (comp) state.soComparison = JSON.parse(comp);
+    const comps = localStorage.getItem(LS_COMPS_KEY);
+    if (comps) {
+      const parsed = JSON.parse(comps);
+      if (Array.isArray(parsed) && state.savedComparisons.length === 0) state.savedComparisons = parsed;
+    }
   } catch(e) {}
 }
 
@@ -298,10 +387,20 @@ async function generateComparison() {
     });
     const result = await res.json();
     // Save comparison
+    const compName = '比較表 ' + new Date().toLocaleDateString('ja-JP', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
     const { data } = await supabaseClient.from('comparisons').insert({
-      user_id: user.id, property_ids: props.map(p => p.id), ai_summary: result.summary, ai_questions: JSON.stringify(result.questions)
+      user_id: user.id, name: compName, property_ids: props.map(p => p.id), ai_summary: result.summary, ai_questions: JSON.stringify(result.questions)
     }).select().single();
-    return { ...result, id: data?.id, properties: props };
+    // savedComparisonsに追加
+    if (data) {
+      state.savedComparisons.unshift({
+        id: data.id, name: compName, created_at: data.created_at,
+        summary: result.summary, questions: JSON.stringify(result.questions),
+        property_ids: props.map(p => p.id), properties: props,
+      });
+      backupComparisonsToLS();
+    }
+    return { ...result, id: data?.id, name: compName, properties: props };
   } catch(e) { console.error('Comparison failed:', e); return null; }
 }
 
@@ -557,6 +656,7 @@ const state = {
   mapSelectedDistrict: null,  // { cityId, districtName } or null
   // Second Opinion
   savedProperties: [],
+  savedComparisons: [], // { id, name, created_at, summary, questions, property_ids, properties }
   soView: null, // null | 'saved' | 'compare'
   soComparison: null, // current comparison result
   soModalOpen: false,
@@ -2705,9 +2805,9 @@ function renderPropertyView() {
   const savedCount = state.savedProperties.length;
   const compProps = state.savedProperties.filter(p => p.in_comparison);
 
-  // Sub-view: comparison table
+  // Sub-view: comparison table with sidebar
   if (state.soView === 'compare' && state.soComparison) {
-    return renderComparisonTable();
+    return renderComparisonWithSidebar();
   }
 
   return `
@@ -2820,6 +2920,47 @@ function renderPropertyView() {
 // ============================================================
 // Second Opinion: Comparison Table
 // ============================================================
+function renderComparisonWithSidebar() {
+  const comps = state.savedComparisons;
+  const currentId = state.soComparison?.id;
+
+  return `
+    <div class="flex gap-4 fade-in comp-layout-sidebar" style="min-height:60vh;">
+      <!-- サイドバー: 過去の比較表一覧 -->
+      <div class="flex-shrink-0" style="width:220px;">
+        <div class="card p-3 sticky" style="top:1rem;">
+          <h3 class="text-xs font-bold text-gray-500 uppercase mb-3">📂 比較表一覧</h3>
+          <button onclick="state.soView=null; state.soComparison=null; render();" class="w-full mb-3 px-3 py-2 text-xs bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors text-left">
+            ← 物件リストに戻る
+          </button>
+          <div class="space-y-1 max-h-96 overflow-y-auto">
+            ${comps.length === 0 ? `<p class="text-xs text-gray-400 py-2">まだ比較表がありません</p>` : ''}
+            ${comps.map(c => {
+              const isActive = c.id === currentId;
+              const dateStr = c.created_at ? new Date(c.created_at).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' }) : '';
+              return `
+                <div class="group rounded-lg p-2 cursor-pointer transition-colors ${isActive ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50 border border-transparent'}" onclick="loadComparisonDetail('${c.id}')">
+                  <div class="flex items-start justify-between gap-1">
+                    <div class="flex-1 min-w-0">
+                      <div class="text-xs font-medium ${isActive ? 'text-blue-700' : 'text-gray-700'} truncate">${c.name || '比較表'}</div>
+                      <div class="text-xs text-gray-400">${dateStr} · ${(c.property_ids||[]).length}件</div>
+                    </div>
+                    <button onclick="event.stopPropagation(); handleDeleteComparison('${c.id}')" class="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 text-xs transition-opacity" title="削除">✕</button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+      <!-- メイン: 比較表 -->
+      <div class="flex-1 min-w-0">
+        ${renderComparisonTable()}
+      </div>
+    </div>
+  `;
+}
+
 function renderComparisonTable() {
   const comp = state.soComparison;
   if (!comp) return '';
@@ -2863,9 +3004,9 @@ function renderComparisonTable() {
 
   return `
     <div class="space-y-4 fade-in">
-      <div class="flex items-center gap-3">
-        <button onclick="state.soView='saved'; state.soComparison=null; render();" class="text-sm text-blue-600 hover:underline">← 保存リストに戻る</button>
-        <h2 class="text-lg font-bold text-gray-800">📊 比較表</h2>
+      <div class="flex items-center gap-3 flex-wrap">
+        <h2 class="text-lg font-bold text-gray-800">📊</h2>
+        <span id="comp-name-display" class="text-lg font-bold text-gray-800 cursor-pointer hover:text-blue-600 border-b border-dashed border-gray-300" onclick="startCompNameEdit()" title="クリックして名前を変更">${comp.name || '比較表'}</span>
         <span class="text-xs text-gray-400">（セルをクリックして編集可能）</span>
       </div>
 
@@ -2949,6 +3090,36 @@ function copyQuestions() {
   });
   if (texts.length === 0) return;
   navigator.clipboard.writeText(texts.join('\n')).then(() => alert('質問をクリップボードにコピーしました'));
+}
+
+// 比較表の名前編集
+function startCompNameEdit() {
+  const el = document.getElementById('comp-name-display');
+  if (!el || !state.soComparison) return;
+  const current = state.soComparison.name || '比較表';
+  el.outerHTML = `<input id="comp-name-input" type="text" value="${current.replace(/"/g, '&quot;')}" class="text-lg font-bold text-gray-800 border border-blue-300 rounded px-2 py-0.5 focus:ring-2 focus:ring-blue-200 outline-none" style="max-width:250px;" />`;
+  const input = document.getElementById('comp-name-input');
+  if (input) {
+    input.focus();
+    input.select();
+    input.onblur = () => finishCompNameEdit(input.value);
+    input.onkeydown = (e) => { if (e.key === 'Enter') input.blur(); if (e.key === 'Escape') render(); };
+  }
+}
+
+async function finishCompNameEdit(newName) {
+  const trimmed = (newName || '').trim() || '比較表';
+  if (state.soComparison) {
+    state.soComparison.name = trimmed;
+    if (state.soComparison.id) await renameComparison(state.soComparison.id, trimmed);
+  }
+  render();
+}
+
+async function handleDeleteComparison(compId) {
+  if (!confirm('この比較表を削除しますか？')) return;
+  await deleteComparison(compId);
+  render();
 }
 
 // セル編集: クリック → inline input
@@ -3521,6 +3692,7 @@ ensureAuth().then(() => {
     backupToLocalStorage();
     if (state.savedProperties.length > 0) render();
   });
+  loadSavedComparisons().then(() => render());
 }).catch(e => console.warn('Auth init skipped:', e.message));
 </script>
 </body>
