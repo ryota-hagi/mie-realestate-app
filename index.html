@@ -2974,6 +2974,17 @@ function renderSearchModal() {
                   ` : ''}
                   ${p.memo ? `<div class="text-xs text-amber-700">💡 ${p.memo}</div>` : ''}
                   ${p.source ? `<div class="text-xs text-gray-400">📰 情報元: ${p.source}</div>` : ''}
+                  ${p._groundingUrls && p._groundingUrls.length > 0 ? `
+                    <div class="bg-blue-50 rounded p-2 space-y-1">
+                      ${p._groundingUrls.map(u => {
+                        let host = '';
+                        try { host = new URL(u.url).hostname.replace('www.',''); } catch(e) {}
+                        return `<a href="${u.url}" target="_blank" rel="noopener" class="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 hover:underline">
+                          <span>🔗</span><span class="truncate">${u.title || host}</span>
+                        </a>`;
+                      }).join('')}
+                    </div>
+                  ` : ''}
                 </div>
               `).join('') : `
                 <div class="text-sm text-gray-500 bg-gray-50 rounded-lg p-4">
@@ -2983,32 +2994,6 @@ function renderSearchModal() {
                 </div>
               `}
 
-              ${(() => {
-                const allSources = result.sources || [];
-                return allSources.length > 0 ? `
-                  <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 space-y-2">
-                    <p class="text-xs font-bold text-blue-800">🔗 AIが参照した実在ページ（${allSources.length}件）:</p>
-                    <div class="space-y-1.5">
-                      ${allSources.map(s => {
-                        let siteName = '';
-                        try { siteName = new URL(s.url).hostname.replace('www.',''); } catch(e) {}
-                        return `<a href="${s.url}" target="_blank" rel="noopener" class="flex items-start gap-1.5 text-xs text-blue-700 hover:text-blue-900 hover:underline group">
-                          <span class="flex-shrink-0">🔗</span>
-                          <span class="flex-1 min-w-0">
-                            <span class="font-medium block truncate">${s.title || siteName}</span>
-                            <span class="text-blue-400 group-hover:text-blue-600 block truncate text-[10px]">${s.url}</span>
-                          </span>
-                        </a>`;
-                      }).join('')}
-                    </div>
-                    <p class="text-[10px] text-blue-400 mt-1">※ 上記はGoogle検索で実際にアクセスされたページです。物件詳細はこちらからご確認ください。</p>
-                  </div>
-                ` : `
-                  <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                    <p class="text-xs text-gray-400">参照元URLがありません。条件を変えて再検索してみてください。</p>
-                  </div>
-                `;
-              })()}
             </div>
           ` : ''}
         </div>
