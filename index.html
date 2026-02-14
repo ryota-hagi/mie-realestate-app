@@ -251,9 +251,12 @@ async function generateComparison() {
   AREAS.forEach(a => { areas[a.id] = { name: a.name, pricePerTsubo: a.pricePerTsubo }; });
   try {
     const user = await ensureAuth();
+    const headers = { 'Content-Type': 'application/json', 'apikey': CONFIG.SUPABASE_ANON_KEY };
+    const session = await supabaseClient.auth.getSession();
+    const token = session?.data?.session?.access_token;
+    headers['Authorization'] = token ? `Bearer ${token}` : `Bearer ${CONFIG.SUPABASE_ANON_KEY}`;
     const res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/ai-compare`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(await supabaseClient.auth.getSession()).data.session?.access_token}`, 'apikey': CONFIG.SUPABASE_ANON_KEY },
+      method: 'POST', headers,
       body: JSON.stringify({ properties: props, areas })
     });
     const result = await res.json();
@@ -3091,19 +3094,23 @@ async function handleAISearch() {
   if (btn) { btn.textContent = '🔍 AIがWeb検索中...（10〜20秒）'; btn.disabled = true; }
 
   try {
+    const headers = { 'Content-Type': 'application/json', 'apikey': CONFIG.SUPABASE_ANON_KEY };
     const session = await supabaseClient.auth.getSession();
-    const token = session.data.session?.access_token;
+    const token = session?.data?.session?.access_token;
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    else headers['Authorization'] = `Bearer ${CONFIG.SUPABASE_ANON_KEY}`;
     const res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/ai-assist`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, 'apikey': CONFIG.SUPABASE_ANON_KEY },
+      method: 'POST', headers,
       body: JSON.stringify({ action: 'search', query, areaId: state.soSearchAreaId })
     });
+    if (!res.ok) { const errText = await res.text(); throw new Error(`HTTP ${res.status}: ${errText}`); }
     const result = await res.json();
     if (result.error) throw new Error(result.error);
     state._aiSearchResult = result;
     state._aiSearchQuery = query;
     render();
   } catch(e) {
+    console.error('AI Search error:', e);
     alert('AI検索に失敗しました: ' + e.message);
     if (btn) { btn.textContent = '🔍 AIがWeb検索して物件を探す'; btn.disabled = false; }
   }
@@ -3121,19 +3128,23 @@ async function handleAIParse() {
   if (btn) { btn.textContent = '🤖 AIが解析中...'; btn.disabled = true; }
 
   try {
+    const headers = { 'Content-Type': 'application/json', 'apikey': CONFIG.SUPABASE_ANON_KEY };
     const session = await supabaseClient.auth.getSession();
-    const token = session.data.session?.access_token;
+    const token = session?.data?.session?.access_token;
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    else headers['Authorization'] = `Bearer ${CONFIG.SUPABASE_ANON_KEY}`;
     const res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/ai-assist`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, 'apikey': CONFIG.SUPABASE_ANON_KEY },
+      method: 'POST', headers,
       body: JSON.stringify({ action: 'parse', text, url, areaId: state.soSearchAreaId })
     });
+    if (!res.ok) { const errText = await res.text(); throw new Error(`HTTP ${res.status}: ${errText}`); }
     const result = await res.json();
     if (result.error) throw new Error(result.error);
     state._aiParsedProperty = result;
     state._importUrl = url;
     render();
   } catch(e) {
+    console.error('AI Parse error:', e);
     alert('AI解析に失敗しました: ' + e.message);
     if (btn) { btn.textContent = '🤖 AIで情報を整理して保存'; btn.disabled = false; }
   }
