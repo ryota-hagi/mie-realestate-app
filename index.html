@@ -175,6 +175,9 @@
     .comp-layout-sidebar > div:first-child .sticky { position: relative !important; top: 0 !important; }
     .mobile-title-text { font-size: 1.1rem; }
     .mobile-subtitle-text { font-size: 0.75rem; }
+    #mobile-menu-fab, #mobile-drawer-overlay, #mobile-drawer-panel { display: block !important; }
+    #mobile-menu-fab { display: flex !important; }
+    #pc-nav-bar { display: none !important; }
   }
 </style>
 </head>
@@ -1139,47 +1142,57 @@ function renderHeader() {
         </div>
       </div>
     </header>
-    <!-- タブバー（PC: 通常表示 / モバイル: 現在タブ + ハンバーガー） -->
-    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-200 shadow-sm">
+    <!-- タブバー（PCのみ表示） -->
+    <nav id="pc-nav-bar" class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-200 shadow-sm">
       <div class="max-w-6xl mx-auto px-4 py-2">
-        <!-- PC用タブ -->
-        <div class="hidden sm:flex gap-2">
+        <div class="flex gap-2">
           ${tabs.map(t => `
             <button data-tab="${t.id}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all ${state.view === t.id ? 'tab-active' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">
               ${t.label}
             </button>
           `).join('')}
         </div>
-        <!-- モバイル用: 現在タブ + メニューボタン -->
-        <div class="flex sm:hidden items-center justify-between">
-          <span class="text-sm font-bold text-gray-800">${currentTab.label}</span>
-          <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 text-sm font-medium hover:bg-gray-200 transition-colors">
-            ☰ メニュー
-          </button>
-        </div>
-      </div>
-      <!-- モバイルメニュー展開 -->
-      <div id="mobile-menu-panel" class="sm:hidden overflow-hidden transition-all duration-300" style="max-height:0;">
-        <div class="px-4 pb-3 pt-1 flex flex-col gap-1.5">
-          ${tabs.map(t => `
-            <button data-tab="${t.id}" class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${state.view === t.id ? 'tab-active' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'}">
-              ${t.label}
-            </button>
-          `).join('')}
-        </div>
       </div>
     </nav>
+    <!-- モバイル: 右上固定ハンバーガーボタン -->
+    <button id="mobile-menu-fab" onclick="openMobileDrawer()" style="display:none;position:fixed;top:12px;right:12px;z-index:60;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(0,0,0,0.15);border:1px solid #e5e7eb;font-size:18px;color:#374151;cursor:pointer;" aria-label="メニューを開く">
+      ☰
+    </button>
+    <!-- モバイル: 右サイドドロワー -->
+    <div id="mobile-drawer-overlay" style="display:none;position:fixed;inset:0;z-index:70;background:rgba(0,0,0,0.4);opacity:0;transition:opacity 0.3s;" onclick="closeMobileDrawer()"></div>
+    <div id="mobile-drawer-panel" style="display:none;position:fixed;top:0;right:0;z-index:80;height:100%;width:260px;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,0.15);transform:translateX(100%);transition:transform 0.3s ease-out;">
+      <div style="padding:16px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:14px;font-weight:700;color:#1f2937;">メニュー</span>
+        <button onclick="closeMobileDrawer()" style="width:32px;height:32px;border-radius:50%;background:#f3f4f6;border:none;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:20px;cursor:pointer;">&times;</button>
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
+        ${tabs.map(t => `
+          <button data-tab="${t.id}" onclick="closeMobileDrawer()" class="${state.view === t.id ? 'tab-active' : ''}" style="width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;border:none;cursor:pointer;transition:background 0.2s;${state.view === t.id ? '' : 'background:#f9fafb;color:#4b5563;'}">
+            ${t.label}
+          </button>
+        `).join('')}
+      </div>
+    </div>
   `;
 }
 
-function toggleMobileMenu() {
-  const panel = document.getElementById('mobile-menu-panel');
-  if (!panel) return;
-  if (panel.style.maxHeight && panel.style.maxHeight !== '0px') {
-    panel.style.maxHeight = '0';
-  } else {
-    panel.style.maxHeight = panel.scrollHeight + 'px';
-  }
+function openMobileDrawer() {
+  const overlay = document.getElementById('mobile-drawer-overlay');
+  const panel = document.getElementById('mobile-drawer-panel');
+  if (!overlay || !panel) return;
+  overlay.style.opacity = '1';
+  overlay.style.pointerEvents = 'auto';
+  panel.style.transform = 'translateX(0)';
+  document.body.style.overflow = 'hidden';
+}
+function closeMobileDrawer() {
+  const overlay = document.getElementById('mobile-drawer-overlay');
+  const panel = document.getElementById('mobile-drawer-panel');
+  if (!overlay || !panel) return;
+  overlay.style.opacity = '0';
+  overlay.style.pointerEvents = 'none';
+  panel.style.transform = 'translateX(100%)';
+  document.body.style.overflow = '';
 }
 
 function renderMCPStatus() {
@@ -3685,9 +3698,8 @@ function bindEvents(ranked) {
   document.querySelectorAll('[data-tab]').forEach(btn => {
     btn.addEventListener('click', () => {
       state.view = btn.dataset.tab;
-      // モバイルメニューを閉じる
-      const mobilePanel = document.getElementById('mobile-menu-panel');
-      if (mobilePanel) mobilePanel.style.maxHeight = '0';
+      // モバイルドロワーを閉じる
+      closeMobileDrawer();
       if (state.view === 'detail' && !state.selectedAreaId) {
         state.selectedAreaId = ranked[0]?.id;
       }
