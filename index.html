@@ -2973,11 +2973,7 @@ function renderSearchModal() {
                     </div>
                   ` : ''}
                   ${p.memo ? `<div class="text-xs text-amber-700">💡 ${p.memo}</div>` : ''}
-                  <div class="flex items-center gap-2 text-xs flex-wrap">
-                    ${p.source ? `<span class="text-gray-400">📰 ${p.source}</span>` : ''}
-                    ${p.source_url ? `<a href="${p.source_url}" target="_blank" rel="noopener" class="inline-flex items-center px-2 py-0.5 bg-blue-600 text-white rounded hover:bg-blue-700 font-medium">🔗 物件ページを見る</a>` : ''}
-                    ${!p.source_url ? `<span class="text-gray-300 italic">（個別URLなし）</span>` : ''}
-                  </div>
+                  ${p.source ? `<div class="text-xs text-gray-400">📰 情報元: ${p.source}</div>` : ''}
                 </div>
               `).join('') : `
                 <div class="text-sm text-gray-500 bg-gray-50 rounded-lg p-4">
@@ -2989,20 +2985,29 @@ function renderSearchModal() {
 
               ${(() => {
                 const allSources = result.sources || [];
-                const debug = result.debugInfo || {};
-
                 return allSources.length > 0 ? `
-                  <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 space-y-2">
-                    <p class="text-xs font-bold text-gray-600">🔗 参照元サイト (${allSources.length}件):</p>
-                    <div class="space-y-1">
+                  <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 space-y-2">
+                    <p class="text-xs font-bold text-blue-800">🔗 AIが参照した実在ページ（${allSources.length}件）:</p>
+                    <div class="space-y-1.5">
                       ${allSources.map(s => {
-                        let siteName = s.url;
+                        let siteName = '';
                         try { siteName = new URL(s.url).hostname.replace('www.',''); } catch(e) {}
-                        return `<a href="${s.url}" target="_blank" rel="noopener" class="block text-xs text-blue-600 hover:underline truncate">🔗 ${s.title || siteName}</a>`;
+                        return `<a href="${s.url}" target="_blank" rel="noopener" class="flex items-start gap-1.5 text-xs text-blue-700 hover:text-blue-900 hover:underline group">
+                          <span class="flex-shrink-0">🔗</span>
+                          <span class="flex-1 min-w-0">
+                            <span class="font-medium block truncate">${s.title || siteName}</span>
+                            <span class="text-blue-400 group-hover:text-blue-600 block truncate text-[10px]">${s.url}</span>
+                          </span>
+                        </a>`;
                       }).join('')}
                     </div>
+                    <p class="text-[10px] text-blue-400 mt-1">※ 上記はGoogle検索で実際にアクセスされたページです。物件詳細はこちらからご確認ください。</p>
                   </div>
-                ` : '';
+                ` : `
+                  <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                    <p class="text-xs text-gray-400">参照元URLがありません。条件を変えて再検索してみてください。</p>
+                  </div>
+                `;
               })()}
             </div>
           ` : ''}
