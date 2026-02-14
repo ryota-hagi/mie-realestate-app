@@ -47,6 +47,7 @@
   ]
 }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -152,6 +153,22 @@
     #map-sidebar { width: 100%; border-left: none; border-top: 1px solid #e5e7eb; border-radius: 0 0 12px 12px; max-height: 350px; }
     .map-fullscreen #map-sidebar { height: auto; max-height: 40vh; }
   }
+  /* === Second Opinion Feature === */
+  .so-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+  .so-modal { background: white; border-radius: 16px; max-width: 560px; width: 90%; max-height: 85vh; overflow-y: auto; padding: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
+  .so-fixed-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-top: 1px solid #e5e7eb; padding: 12px 16px; z-index: 100; display: flex; align-items: center; justify-content: center; gap: 16px; box-shadow: 0 -2px 10px rgba(0,0,0,0.08); }
+  .so-badge-yellow { background: #fef3c7; color: #92400e; border: 1px solid #fbbf24; padding: 2px 8px; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; }
+  .so-badge-red { background: #fee2e2; color: #991b1b; border: 1px solid #f87171; padding: 2px 8px; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; }
+  .so-badge-none { background: #f0fdf4; color: #166534; border: 1px solid #86efac; padding: 2px 8px; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; }
+  .so-compare-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .so-compare-table th, .so-compare-table td { padding: 8px 12px; border: 1px solid #e5e7eb; text-align: left; }
+  .so-compare-table th { background: #f9fafb; font-weight: 600; white-space: nowrap; }
+  .so-compare-table .missing { color: #d97706; font-style: italic; }
+  .so-radio-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  .so-radio-group label { padding: 8px 16px; border: 1px solid #d1d5db; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+  .so-radio-group label:hover { border-color: #3b82f6; background: #eff6ff; }
+  .so-radio-group input:checked + span { color: #1d4ed8; }
+  .so-radio-group label:has(input:checked) { border-color: #3b82f6; background: #dbeafe; }
 </style>
 </head>
 <body>
@@ -168,7 +185,114 @@ const CONFIG = {
   // MCPサーバーURL（プロキシ経由で接続）
   MCP_REINFO: 'https://mcp.n-3.ai/mcp?tools=get-time,reinfolib-real-estate-price,reinfolib-city-list',
   MCP_ESTAT: 'https://mcp.n-3.ai/mcp?tools=e-stat-get-stats-list,e-stat-get-meta-info,e-stat-get-data-catalog',
+  // Supabase
+  SUPABASE_URL: 'https://jvfmvitknqnmuduyscnl.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2Zm12aXRrbnFubXVkdXlzY25sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4ODE5NTQsImV4cCI6MjA4NjQ1Nzk1NH0.dDsHJXxFW4R-8ts-sKfGHtE-P0Ge9mPYEtpl-30dAdg',
 };
+
+// ============================================================
+// Supabase Client + Anonymous Auth
+// ============================================================
+const supabaseClient = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+
+async function ensureAuth() {
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session) return session.user;
+    const { data, error } = await supabaseClient.auth.signInAnonymously();
+    if (error) { console.warn('Anonymous auth failed:', error.message); return null; }
+    return data.user;
+  } catch(e) { console.warn('Auth error:', e.message); return null; }
+}
+
+// ============================================================
+// Property CRUD (Supabase)
+// ============================================================
+async function loadSavedProperties() {
+  const user = await ensureAuth();
+  if (!user) return;
+  const { data, error } = await supabaseClient.from('saved_properties').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+  if (!error && data) state.savedProperties = data;
+}
+
+async function saveProperty(prop) {
+  try {
+    const user = await ensureAuth();
+    if (!user) { alert('物件の保存にはページの再読み込みが必要です'); return null; }
+    const areaData = AREAS.find(a => a.id === prop.area_id);
+    const badge = calculateBadge(prop, areaData);
+    const row = { ...prop, user_id: user.id, badge };
+    const { data, error } = await supabaseClient.from('saved_properties').insert(row).select().single();
+    if (error) { alert('保存に失敗しました: ' + error.message); console.error('Save failed:', error); return null; }
+    state.savedProperties.unshift(data);
+    return data;
+  } catch(e) { alert('保存エラー: ' + e.message); return null; }
+}
+
+async function deleteProperty(id) {
+  const { error } = await supabaseClient.from('saved_properties').delete().eq('id', id);
+  if (!error) state.savedProperties = state.savedProperties.filter(p => p.id !== id);
+}
+
+async function toggleComparison(id) {
+  const prop = state.savedProperties.find(p => p.id === id);
+  if (!prop) return;
+  const newVal = !prop.in_comparison;
+  const inCompCount = state.savedProperties.filter(p => p.in_comparison).length;
+  if (newVal && inCompCount >= 5) { alert('比較は最大5件までです'); return; }
+  const { error } = await supabaseClient.from('saved_properties').update({ in_comparison: newVal }).eq('id', id);
+  if (!error) prop.in_comparison = newVal;
+}
+
+async function generateComparison() {
+  const props = state.savedProperties.filter(p => p.in_comparison);
+  if (props.length < 2) { alert('比較するには2件以上の物件を選択してください'); return null; }
+  const areas = {};
+  AREAS.forEach(a => { areas[a.id] = { name: a.name, pricePerTsubo: a.pricePerTsubo }; });
+  try {
+    const user = await ensureAuth();
+    const res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/ai-compare`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(await supabaseClient.auth.getSession()).data.session?.access_token}`, 'apikey': CONFIG.SUPABASE_ANON_KEY },
+      body: JSON.stringify({ properties: props, areas })
+    });
+    const result = await res.json();
+    // Save comparison
+    const { data } = await supabaseClient.from('comparisons').insert({
+      user_id: user.id, property_ids: props.map(p => p.id), ai_summary: result.summary, ai_questions: JSON.stringify(result.questions)
+    }).select().single();
+    return { ...result, id: data?.id, properties: props };
+  } catch(e) { console.error('Comparison failed:', e); return null; }
+}
+
+function calculateBadge(property, areaData) {
+  let yellowReasons = [], redReasons = [];
+  if (!property.price) yellowReasons.push('価格未入力');
+  if (!property.land_area) yellowReasons.push('面積未入力');
+  if (!property.zoning) yellowReasons.push('用途地域不明');
+  if (!property.road_access) yellowReasons.push('接道情報不明');
+  if (!property.building_coverage) yellowReasons.push('建ぺい率不明');
+  if (property.price && property.land_area && areaData) {
+    const tsuboPr = property.price / (property.land_area / 3.305785);
+    const areaTsubo = areaData.pricePerTsubo;
+    if (areaTsubo && Math.abs(tsuboPr - areaTsubo) / areaTsubo > 0.25) redReasons.push('坪単価がエリア相場から乖離');
+  }
+  const missingCritical = [property.zoning, property.road_access, property.building_coverage, property.elevation, property.infrastructure].filter(v => !v).length;
+  if (missingCritical >= 3) redReasons.push('重要項目が複数不明');
+  return redReasons.length > 0 ? 'red' : yellowReasons.length > 0 ? 'yellow' : 'none';
+}
+
+// SUUMO検索URL生成
+const SUUMO_CITY_CODES = { yokkaichi:'24202', kuwana:'24205', suzuka:'24207', inabe:'24212', kameyama:'24210', komono:'24341', toin:'24343' };
+function buildSuumoUrl(areaId, opts = {}) {
+  const sc = SUUMO_CITY_CODES[areaId] || '';
+  const params = new URLSearchParams({ ar:'060', bs:'030', ta:'24', sc, kb: opts.priceMin || '1', kt: opts.priceMax || '999999', mb: opts.areaMin || '1', mt: opts.areaMax || '999999' });
+  if (opts.walkMin) params.set('ek', opts.walkMin);
+  return `https://suumo.jp/jj/bukken/ichiran/JJ012FC001/?${params}`;
+}
+function buildAthomeUrl(areaId, opts = {}) {
+  return `https://www.athome.co.jp/tochi/mie/list/?ESSION=true`;
+}
 
 // ============================================================
 // MCP Streamable HTTP Client (with proxy support)
@@ -390,7 +514,14 @@ const state = {
   mcpLiveData: null,
   weights: { price: 25, access: 20, growth: 15, living: 15, family: 15, nature: 10 },
   charts: {},
-  mapSelectedDistrict: null  // { cityId, districtName } or null
+  mapSelectedDistrict: null,  // { cityId, districtName } or null
+  // Second Opinion
+  savedProperties: [],
+  soView: null, // null | 'saved' | 'compare'
+  soComparison: null, // current comparison result
+  soModalOpen: false,
+  soModalType: null, // 'search' | 'import'
+  soSearchAreaId: null,
 };
 
 // Map globals (persistent across renders)
@@ -812,7 +943,10 @@ function render() {
       ${state.view === 'compare' ? renderCompare(ranked) : ''}
       ${state.view === 'detail' ? renderDetail(selected, ranked) : ''}
       ${state.view === 'map' ? renderMap(ranked) : ''}
+      ${state.view === 'property' ? renderPropertyView() : ''}
       ${renderFooter()}
+      ${renderFixedBar()}
+      ${renderSOModal()}
     </div>
   `;
 
@@ -838,7 +972,8 @@ function renderHeader() {
     { id: 'ranking', label: '🏆 ランキング' },
     { id: 'compare', label: '📊 比較' },
     { id: 'detail', label: '🔍 詳細' },
-    { id: 'map', label: '🗺️ 地図' }
+    { id: 'map', label: '🗺️ 地図' },
+    { id: 'property', label: '🏠 物件比較' }
   ];
   return `
     <header class="glass sticky top-0 z-50 border-b border-gray-200 shadow-sm">
@@ -1164,6 +1299,26 @@ function renderDetail(area, ranked) {
               <div class="text-sm font-medium text-gray-800">${r}</div>
             </div>
           `).join('')}
+        </div>
+      </div>
+
+      <!-- 物件検索/URL取り込みセクション -->
+      <div class="card p-6 space-y-4">
+        <h3 class="text-base font-bold text-gray-800">🤖 ${area.name}で物件を探す</h3>
+        <div class="flex flex-wrap gap-3">
+          <button onclick="openSearchModal('${area.id}')" class="px-5 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm">
+            🤖 AIで物件を検索
+          </button>
+          <span class="text-xs text-gray-400 self-center">希望条件を自由に入力 → AIが検索</span>
+        </div>
+        <div class="border-t border-gray-200 pt-4">
+          <p class="text-sm text-gray-600 mb-2">物件情報をAIで取り込み（物件サイトの情報をコピペ）</p>
+          <div class="flex gap-2">
+            <input id="url-import-detail" type="url" placeholder="物件URL（任意）" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+            <button onclick="openImportModal('${area.id}')" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+              🤖 AI取り込み
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -2505,7 +2660,7 @@ function renderTransactionList(transactions) {
 
 function renderFooter() {
   return `
-    <footer class="mt-8 py-6 border-t border-gray-200">
+    <footer class="mt-8 py-6 border-t border-gray-200" style="margin-bottom: ${state.savedProperties.length > 0 ? '70px' : '0'}">
       <div class="text-center space-y-2">
         <p class="text-xs text-gray-400">
           データ出典: 国土交通省 不動産情報ライブラリAPI / 総務省 e-Stat API（2025年公示地価ベース）
@@ -2520,6 +2675,507 @@ function renderFooter() {
       </div>
     </footer>
   `;
+}
+
+// ============================================================
+// Second Opinion: Property View (saved list + comparison)
+// ============================================================
+function renderPropertyView() {
+  const savedCount = state.savedProperties.length;
+  const compProps = state.savedProperties.filter(p => p.in_comparison);
+
+  // Sub-view: comparison table
+  if (state.soView === 'compare' && state.soComparison) {
+    return renderComparisonTable();
+  }
+
+  return `
+    <div class="space-y-4 fade-in">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-bold text-gray-800">🏠 保存した物件${savedCount > 0 ? `（${savedCount}件）` : ''}</h2>
+        ${savedCount > 0 ? `<div class="flex gap-2">
+          <button onclick="clearAllProperties()" class="text-xs text-gray-400 hover:text-red-500 transition-colors">全件削除</button>
+        </div>` : ''}
+      </div>
+
+      ${savedCount === 0 ? `
+        <div class="card p-8 text-center">
+          <div class="text-4xl mb-3">🏠</div>
+          <p class="text-gray-600 font-medium mb-2">まだ物件が保存されていません</p>
+          <p class="text-sm text-gray-400 mb-4">エリア詳細ページの「物件を探す」から<br>物件URLを取り込んで保存・比較できます</p>
+          <button onclick="state.view='detail'; render();" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+            エリア詳細を見る →
+          </button>
+        </div>
+      ` : `
+        <div class="grid grid-cols-1 gap-3">
+          ${state.savedProperties.map(prop => {
+            const badgeClass = prop.badge === 'red' ? 'so-badge-red' : prop.badge === 'yellow' ? 'so-badge-yellow' : 'so-badge-none';
+            const badgeLabel = prop.badge === 'red' ? '🔴 注意' : prop.badge === 'yellow' ? '🟡 要確認' : '🟢 OK';
+            const areaName = AREAS.find(a => a.id === prop.area_id)?.name || prop.area_id || '';
+            const priceStr = prop.price ? `${(prop.price / 10000).toLocaleString()}万円` : '価格未入力';
+            const areaStr = prop.land_area ? `${(prop.land_area / 3.305785).toFixed(1)}坪（${prop.land_area}㎡）` : '面積未入力';
+            return `
+              <div class="card p-4">
+                <div class="flex items-start justify-between">
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="${badgeClass}" style="font-size:11px;padding:2px 8px;border-radius:9999px;">${badgeLabel}</span>
+                      ${areaName ? `<span class="text-xs text-gray-400">${areaName}</span>` : ''}
+                    </div>
+                    <div class="text-sm font-medium text-gray-800">${prop.address || '住所未入力'}</div>
+                    <div class="flex items-center gap-3 mt-1 text-sm">
+                      <span class="font-bold text-blue-700">${priceStr}</span>
+                      <span class="text-gray-500">${areaStr}</span>
+                    </div>
+                    ${prop.station_distance ? `<div class="text-xs text-gray-400 mt-1">🚃 ${prop.station_distance}</div>` : ''}
+                    ${prop.memo ? `<div class="text-xs text-gray-500 mt-1 bg-gray-50 rounded px-2 py-1">📝 ${prop.memo}</div>` : ''}
+                    ${prop.url ? `<a href="${prop.url}" target="_blank" rel="noopener" class="text-xs text-blue-500 mt-1 inline-block hover:underline">🔗 物件ページ</a>` : ''}
+                  </div>
+                  <div class="flex flex-col gap-1 ml-3">
+                    <button onclick="handleToggleComparison('${prop.id}')" class="px-3 py-1 text-xs rounded-lg border transition-colors ${prop.in_comparison ? 'bg-blue-500 text-white border-blue-500' : 'bg-white text-gray-600 border-gray-300 hover:bg-blue-50'}">
+                      ${prop.in_comparison ? '✓ 比較中' : '比較に追加'}
+                    </button>
+                    <button onclick="handleDeleteProperty('${prop.id}')" class="px-3 py-1 text-xs rounded-lg border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-300 transition-colors">削除</button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+        ${compProps.length > 0 ? `
+          <div class="card p-4 bg-blue-50 border-blue-200">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-sm font-medium text-blue-800">📊 比較に追加: ${compProps.length}件</span>
+                <span class="text-xs text-blue-500 ml-2">${compProps.length < 2 ? '（2件以上で比較可能）' : ''}</span>
+              </div>
+              <button onclick="handleGenerateComparison()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors ${compProps.length < 2 ? 'opacity-50 cursor-not-allowed' : ''}" ${compProps.length < 2 ? 'disabled' : ''}>
+                比較表を作成
+              </button>
+            </div>
+          </div>
+        ` : ''}
+      `}
+    </div>
+  `;
+}
+
+// ============================================================
+// Second Opinion: Comparison Table
+// ============================================================
+function renderComparisonTable() {
+  const comp = state.soComparison;
+  if (!comp) return '';
+  const props = comp.properties || [];
+  if (props.length === 0) return '';
+
+  const labels = ['A','B','C','D','E'];
+  const rows = [
+    { label: '価格', key: 'price', fmt: v => v ? `${(v/10000).toLocaleString()}万円` : '—' },
+    { label: '土地面積', key: 'land_area', fmt: v => v ? `${(v/3.305785).toFixed(1)}坪（${v}㎡）` : '—' },
+    { label: '坪単価', key: '_tsubo', fmt: (v, p) => p.price && p.land_area ? `${(p.price / (p.land_area / 3.305785) / 10000).toFixed(1)}万円/坪` : '—' },
+    { label: '所在地', key: 'address', fmt: v => v || '—' },
+    { label: '駅距離', key: 'station_distance', fmt: v => v || '—' },
+    { label: '間取り', key: 'floor_plan', fmt: v => v || '—' },
+    { label: '築年', key: 'building_year', fmt: v => v || '—' },
+  ];
+  const checkRows = [
+    { label: '用途地域', key: 'zoning' },
+    { label: '建ぺい率', key: 'building_coverage' },
+    { label: '容積率', key: 'floor_area_ratio' },
+    { label: '接道', key: 'road_access' },
+    { label: '高低差/造成', key: 'elevation' },
+    { label: 'インフラ', key: 'infrastructure' },
+    { label: 'ハザード', key: 'hazard' },
+  ];
+
+  let questions = [];
+  try { questions = typeof comp.questions === 'string' ? JSON.parse(comp.questions) : (comp.questions || []); } catch(e) { questions = []; }
+  if (typeof questions === 'string') questions = questions.split('\n').filter(q => q.trim());
+
+  return `
+    <div class="space-y-4 fade-in">
+      <div class="flex items-center gap-3">
+        <button onclick="state.soView='saved'; state.soComparison=null; render();" class="text-sm text-blue-600 hover:underline">← 保存リストに戻る</button>
+        <h2 class="text-lg font-bold text-gray-800">📊 比較表</h2>
+      </div>
+
+      ${comp.summary ? `
+        <div class="card p-4 bg-blue-50 border-blue-200">
+          <h3 class="text-sm font-bold text-blue-800 mb-2">💡 AIサマリ</h3>
+          <p class="text-sm text-gray-700 leading-relaxed">${comp.summary}</p>
+        </div>
+      ` : ''}
+
+      <div class="card overflow-x-auto">
+        <table class="so-compare-table">
+          <thead>
+            <tr>
+              <th class="text-left p-3 bg-gray-50 text-xs text-gray-500 font-medium" style="min-width:80px;"></th>
+              ${props.map((p,i) => `
+                <th class="p-3 bg-gray-50 text-sm font-bold text-gray-800" style="min-width:120px;">
+                  物件${labels[i]}<br><span class="text-xs font-normal text-gray-400">${AREAS.find(a=>a.id===p.area_id)?.name || ''}</span>
+                </th>
+              `).join('')}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => `
+              <tr>
+                <td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">${r.label}</td>
+                ${props.map(p => `<td class="p-3 text-sm text-gray-800">${r.fmt(p[r.key], p)}</td>`).join('')}
+              </tr>
+            `).join('')}
+            <tr><td colspan="${props.length+1}" class="p-2 bg-amber-50"><span class="text-xs font-bold text-amber-700">⚠️ 重要確認項目（不動産屋に確認）</span></td></tr>
+            ${checkRows.map(r => `
+              <tr>
+                <td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">${r.label}</td>
+                ${props.map(p => {
+                  const val = p[r.key];
+                  return `<td class="p-3 text-sm ${val ? 'text-gray-800' : 'text-amber-600'}">${val || '🟡 不明'}</td>`;
+                }).join('')}
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      ${questions.length > 0 ? `
+        <div class="card p-4">
+          <h3 class="text-sm font-bold text-gray-800 mb-3">📋 確認質問テンプレート</h3>
+          <div class="space-y-2">
+            ${questions.map((q,i) => `
+              <label class="flex items-start gap-2 text-sm text-gray-700">
+                <input type="checkbox" class="mt-1 so-question-check" />
+                <span>${typeof q === 'object' ? q.text || q.question || JSON.stringify(q) : q}</span>
+              </label>
+            `).join('')}
+          </div>
+          <button onclick="copyQuestions()" class="mt-3 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200 transition-colors">📋 質問をコピー</button>
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function copyQuestions() {
+  const checks = document.querySelectorAll('.so-question-check');
+  const texts = [];
+  checks.forEach((cb, i) => {
+    const label = cb.parentElement?.querySelector('span')?.textContent;
+    if (label) texts.push(`${cb.checked ? '✅' : '□'} ${label}`);
+  });
+  if (texts.length === 0) return;
+  navigator.clipboard.writeText(texts.join('\n')).then(() => alert('質問をクリップボードにコピーしました'));
+}
+
+// ============================================================
+// Second Opinion: Fixed Bottom Bar
+// ============================================================
+function renderFixedBar() {
+  if (state.savedProperties.length === 0) return '';
+  if (state.view === 'property') return ''; // Property viewでは不要（既に表示済み）
+  const compCount = state.savedProperties.filter(p => p.in_comparison).length;
+  return `
+    <div class="so-fixed-bar">
+      <div class="max-w-6xl mx-auto px-4 flex items-center justify-between">
+        <span class="text-sm font-medium text-gray-700">
+          📋 保存: ${state.savedProperties.length}件${compCount > 0 ? ` | 比較: ${compCount}件` : ''}
+        </span>
+        <div class="flex gap-2">
+          <button onclick="state.view='property'; render();" class="px-3 py-1.5 bg-white text-blue-600 border border-blue-200 rounded-lg text-sm hover:bg-blue-50 transition-colors">
+            一覧を見る
+          </button>
+          ${compCount >= 2 ? `
+            <button onclick="handleGenerateComparison()" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors">
+              比較表を作成
+            </button>
+          ` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// Second Opinion: Modals (Search & Import)
+// ============================================================
+function renderSOModal() {
+  if (!state.soModalOpen) return '';
+
+  if (state.soModalType === 'search') {
+    return renderSearchModal();
+  }
+  if (state.soModalType === 'import') {
+    return renderImportModal();
+  }
+  return '';
+}
+
+function renderSearchModal() {
+  const areaId = state.soSearchAreaId;
+  const area = AREAS.find(a => a.id === areaId);
+  const areaName = area ? area.name : '';
+  const result = state._aiSearchResult;
+
+  return `
+    <div class="so-modal-overlay" onclick="closeSOModal(event)">
+      <div class="so-modal" onclick="event.stopPropagation()">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-gray-800">🤖 ${areaName} の物件をAI検索</h3>
+          <button onclick="state.soModalOpen=false; state._aiSearchResult=null; render();" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="text-sm font-medium text-gray-700">どんな土地を探していますか？</label>
+            <textarea id="ai-search-query" rows="3" placeholder="例: 2000万以下で50坪くらいの土地。駅から近いほうがいい。子供の通学も気になる。" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg text-sm" style="resize:vertical;">${state._aiSearchQuery || ''}</textarea>
+            <div class="flex flex-wrap gap-2 mt-2">
+              <button onclick="document.getElementById('ai-search-query').value='2000万以下、40坪以上'" class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">💡 2000万/40坪</button>
+              <button onclick="document.getElementById('ai-search-query').value='広い土地（60坪以上）、駅近は不要'" class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">💡 広い土地</button>
+              <button onclick="document.getElementById('ai-search-query').value='3000万以下、駅徒歩15分以内、50坪前後'" class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">💡 駅近/予算重視</button>
+            </div>
+          </div>
+
+          <button id="btn-ai-search" onclick="handleAISearch()" class="w-full px-4 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+            🤖 AIで検索条件を生成
+          </button>
+
+          ${result ? `
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-3">
+              ${result.summary ? `<p class="text-sm text-gray-800">📋 <strong>${result.summary}</strong></p>` : ''}
+              ${result.tips ? `<p class="text-xs text-blue-700">💡 ${result.tips}</p>` : ''}
+              <div class="space-y-2">
+                <a href="${result.suumoUrl}" target="_blank" rel="noopener" class="block w-full px-4 py-3 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors text-center">
+                  🏠 SUUMOで検索結果を見る →
+                </a>
+                <a href="${result.athomeUrl}" target="_blank" rel="noopener" class="block w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors text-center">
+                  アットホームで検索 →
+                </a>
+              </div>
+            </div>
+          ` : ''}
+        </div>
+        <p class="text-xs text-gray-400 mt-4 text-center">
+          ※ 検索結果で気になる物件があれば、物件ページの情報をコピーして「取り込み」で保存できます
+        </p>
+      </div>
+    </div>
+  `;
+}
+
+function renderImportModal() {
+  const areaId = state.soSearchAreaId;
+  const area = AREAS.find(a => a.id === areaId);
+  const areaName = area ? area.name : '';
+  const importUrl = state._importUrl || '';
+  const parsed = state._aiParsedProperty;
+
+  return `
+    <div class="so-modal-overlay" onclick="closeSOModal(event)">
+      <div class="so-modal" onclick="event.stopPropagation()">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-gray-800">🤖 物件情報をAIで取り込み${areaName ? `（${areaName}）` : ''}</h3>
+          <button onclick="state.soModalOpen=false; state._aiParsedProperty=null; render();" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="text-sm font-medium text-gray-700">物件URL（任意）</label>
+            <input id="import-url" type="url" value="${importUrl}" placeholder="https://suumo.jp/... の物件URL" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+          </div>
+          <div>
+            <label class="text-sm font-medium text-gray-700">物件情報を貼り付け <span class="text-red-500">*</span></label>
+            <textarea id="ai-import-text" rows="5" placeholder="物件サイトの情報をコピペしてください&#10;&#10;例:&#10;価格 2,580万円&#10;土地面積 182.5㎡（55.2坪）&#10;所在地 四日市市富田浜町&#10;最寄り駅 富田浜駅 徒歩5分&#10;用途地域 第一種住居地域" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" style="resize:vertical;"></textarea>
+          </div>
+
+          <button id="btn-ai-parse" onclick="handleAIParse()" class="w-full px-4 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+            🤖 AIで情報を整理して保存
+          </button>
+
+          ${parsed ? `
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 space-y-2">
+              <p class="text-sm font-bold text-green-800">✅ AIが整理した物件情報</p>
+              <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                <span class="text-gray-500">価格:</span><span class="font-medium">${parsed.price ? parsed.price.toLocaleString() + '万円' : '—'}</span>
+                <span class="text-gray-500">面積:</span><span class="font-medium">${parsed.land_area ? (parsed.land_area/3.305785).toFixed(1) + '坪（' + parsed.land_area + '㎡）' : '—'}</span>
+                <span class="text-gray-500">住所:</span><span class="font-medium">${parsed.address || '—'}</span>
+                <span class="text-gray-500">駅:</span><span class="font-medium">${parsed.station_distance || '—'}</span>
+                ${parsed.zoning ? `<span class="text-gray-500">用途地域:</span><span class="font-medium">${parsed.zoning}</span>` : ''}
+                ${parsed.building_coverage ? `<span class="text-gray-500">建ぺい率:</span><span class="font-medium">${parsed.building_coverage}</span>` : ''}
+                ${parsed.road_access ? `<span class="text-gray-500">接道:</span><span class="font-medium">${parsed.road_access}</span>` : ''}
+              </div>
+              ${parsed.memo ? `<p class="text-xs text-amber-700 mt-2">💡 ${parsed.memo}</p>` : ''}
+              <div class="flex gap-2 mt-3">
+                <button onclick="handleSaveParsed()" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">💾 この内容で保存</button>
+                <button onclick="state._aiParsedProperty=null; render();" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm hover:bg-gray-200 transition-colors">やり直す</button>
+              </div>
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// Second Opinion: Event Handlers
+// ============================================================
+function openSearchModal(areaId) {
+  state.soSearchAreaId = areaId;
+  state._aiSearchResult = null;
+  state._aiSearchQuery = '';
+  state.soModalOpen = true;
+  state.soModalType = 'search';
+  render();
+}
+
+function openImportModal(areaId) {
+  const urlInput = document.getElementById('url-import-detail');
+  state._importUrl = urlInput ? urlInput.value.trim() : '';
+  state._aiParsedProperty = null;
+  state.soSearchAreaId = areaId;
+  state.soModalOpen = true;
+  state.soModalType = 'import';
+  render();
+}
+
+function closeSOModal(event) {
+  if (event.target === event.currentTarget) {
+    state.soModalOpen = false;
+    state._aiSearchResult = null;
+    state._aiParsedProperty = null;
+    render();
+  }
+}
+
+// AI検索: 自然言語 → SUUMO URL生成
+async function handleAISearch() {
+  const queryEl = document.getElementById('ai-search-query');
+  const query = queryEl ? queryEl.value.trim() : '';
+  if (!query) { alert('検索条件を入力してください'); return; }
+
+  const btn = document.getElementById('btn-ai-search');
+  if (btn) { btn.textContent = '🤖 AIが考えています...'; btn.disabled = true; }
+
+  try {
+    const session = await supabaseClient.auth.getSession();
+    const token = session.data.session?.access_token;
+    const res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/ai-assist`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, 'apikey': CONFIG.SUPABASE_ANON_KEY },
+      body: JSON.stringify({ action: 'search', query, areaId: state.soSearchAreaId })
+    });
+    const result = await res.json();
+    if (result.error) throw new Error(result.error);
+    state._aiSearchResult = result;
+    state._aiSearchQuery = query;
+    render();
+  } catch(e) {
+    alert('AI検索に失敗しました: ' + e.message);
+    if (btn) { btn.textContent = '🤖 AIで検索条件を生成'; btn.disabled = false; }
+  }
+}
+
+// AIカード作成: テキスト → 構造化 → プレビュー
+async function handleAIParse() {
+  const textEl = document.getElementById('ai-import-text');
+  const urlEl = document.getElementById('import-url');
+  const text = textEl ? textEl.value.trim() : '';
+  const url = urlEl ? urlEl.value.trim() : '';
+  if (!text) { alert('物件情報を貼り付けてください'); return; }
+
+  const btn = document.getElementById('btn-ai-parse');
+  if (btn) { btn.textContent = '🤖 AIが解析中...'; btn.disabled = true; }
+
+  try {
+    const session = await supabaseClient.auth.getSession();
+    const token = session.data.session?.access_token;
+    const res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/ai-assist`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, 'apikey': CONFIG.SUPABASE_ANON_KEY },
+      body: JSON.stringify({ action: 'parse', text, url, areaId: state.soSearchAreaId })
+    });
+    const result = await res.json();
+    if (result.error) throw new Error(result.error);
+    state._aiParsedProperty = result;
+    state._importUrl = url;
+    render();
+  } catch(e) {
+    alert('AI解析に失敗しました: ' + e.message);
+    if (btn) { btn.textContent = '🤖 AIで情報を整理して保存'; btn.disabled = false; }
+  }
+}
+
+// AI解析結果を保存
+async function handleSaveParsed() {
+  const parsed = state._aiParsedProperty;
+  if (!parsed) return;
+  if (!parsed.price || !parsed.land_area) {
+    alert('価格と面積が必要です。テキストに含まれているか確認してください。');
+    return;
+  }
+
+  const prop = {
+    area_id: state.soSearchAreaId || null,
+    url: state._importUrl || null,
+    source: parsed.source || null,
+    price: parsed.price * 10000, // 万円 → 円
+    land_area: parsed.land_area,
+    address: parsed.address || null,
+    station_distance: parsed.station_distance || null,
+    floor_plan: parsed.floor_plan || null,
+    building_year: parsed.building_year || null,
+    zoning: parsed.zoning || null,
+    building_coverage: parsed.building_coverage || null,
+    floor_area_ratio: parsed.floor_area_ratio || null,
+    road_access: parsed.road_access || null,
+    elevation: parsed.elevation || null,
+    infrastructure: parsed.infrastructure || null,
+    hazard: parsed.hazard || null,
+    memo: parsed.memo || null,
+  };
+
+  const saved = await saveProperty(prop);
+  if (saved) {
+    state.soModalOpen = false;
+    state._importUrl = '';
+    state._aiParsedProperty = null;
+    render();
+  }
+}
+
+async function handleToggleComparison(id) {
+  await toggleComparison(id);
+  render();
+}
+
+async function handleDeleteProperty(id) {
+  if (!confirm('この物件を削除しますか？')) return;
+  await deleteProperty(id);
+  render();
+}
+
+async function handleGenerateComparison() {
+  const btn = event?.target;
+  if (btn) { btn.textContent = '生成中...'; btn.disabled = true; }
+  const result = await generateComparison();
+  if (result) {
+    state.soComparison = result;
+    state.soView = 'compare';
+    state.view = 'property';
+  }
+  render();
+}
+
+async function clearAllProperties() {
+  if (!confirm('保存した物件をすべて削除しますか？')) return;
+  for (const p of [...state.savedProperties]) {
+    await deleteProperty(p.id);
+  }
+  render();
 }
 
 // ============================================================
@@ -2676,6 +3332,9 @@ function bindEvents(ranked) {
       if (state.view === 'detail' && !state.selectedAreaId) {
         state.selectedAreaId = ranked[0]?.id;
       }
+      if (state.view === 'property' && state.savedProperties.length === 0) {
+        loadSavedProperties().then(() => render());
+      }
       render();
     });
   });
@@ -2734,6 +3393,12 @@ loadDistrictCache();
 render();
 // ページロード時: まず静的JSONを読み込み、なければMCP接続を案内
 loadStaticData();
+// Supabase匿名認証を初期化（バックグラウンド）
+ensureAuth().then(() => {
+  loadSavedProperties().then(() => {
+    if (state.savedProperties.length > 0) render();
+  });
+}).catch(e => console.warn('Auth init skipped:', e.message));
 </script>
 </body>
 </html>
