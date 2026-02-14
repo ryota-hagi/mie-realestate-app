@@ -2922,7 +2922,7 @@ function renderSearchModal() {
 
   return `
     <div class="so-modal-overlay" onclick="closeSOModal(event)">
-      <div class="so-modal" onclick="event.stopPropagation()">
+      <div class="so-modal" onclick="event.stopPropagation()" style="max-width:640px;">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-bold text-gray-800">🤖 ${areaName} の物件をAI検索</h3>
           <button onclick="state.soModalOpen=false; state._aiSearchResult=null; render();" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
@@ -2931,35 +2931,65 @@ function renderSearchModal() {
         <div class="space-y-4">
           <div>
             <label class="text-sm font-medium text-gray-700">どんな土地を探していますか？</label>
-            <textarea id="ai-search-query" rows="3" placeholder="例: 2000万以下で50坪くらいの土地。駅から近いほうがいい。子供の通学も気になる。" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg text-sm" style="resize:vertical;">${state._aiSearchQuery || ''}</textarea>
+            <textarea id="ai-search-query" rows="2" placeholder="例: 2000万以下で50坪くらいの土地。駅から近いほうがいい。" class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg text-sm" style="resize:vertical;">${state._aiSearchQuery || ''}</textarea>
             <div class="flex flex-wrap gap-2 mt-2">
               <button onclick="document.getElementById('ai-search-query').value='2000万以下、40坪以上'" class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">💡 2000万/40坪</button>
-              <button onclick="document.getElementById('ai-search-query').value='広い土地（60坪以上）、駅近は不要'" class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">💡 広い土地</button>
-              <button onclick="document.getElementById('ai-search-query').value='3000万以下、駅徒歩15分以内、50坪前後'" class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">💡 駅近/予算重視</button>
+              <button onclick="document.getElementById('ai-search-query').value='広い土地（60坪以上）、予算3000万まで'" class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">💡 広め/3000万</button>
+              <button onclick="document.getElementById('ai-search-query').value='駅徒歩15分以内、50坪前後、閑静な住宅街'" class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors">💡 駅近/住宅街</button>
             </div>
           </div>
 
           <button id="btn-ai-search" onclick="handleAISearch()" class="w-full px-4 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-            🤖 AIで検索条件を生成
+            🔍 AIがWeb検索して物件を探す
           </button>
 
           ${result ? `
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-3">
-              ${result.summary ? `<p class="text-sm text-gray-800">📋 <strong>${result.summary}</strong></p>` : ''}
-              ${result.tips ? `<p class="text-xs text-blue-700">💡 ${result.tips}</p>` : ''}
-              <div class="space-y-2">
-                <a href="${result.suumoUrl}" target="_blank" rel="noopener" class="block w-full px-4 py-3 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors text-center">
-                  🏠 SUUMOで検索結果を見る →
-                </a>
-                <a href="${result.athomeUrl}" target="_blank" rel="noopener" class="block w-full px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors text-center">
-                  アットホームで検索 →
-                </a>
-              </div>
+            <div class="space-y-3">
+              <p class="text-sm font-bold text-gray-800">📋 検索結果（${result.properties?.length || 0}件）</p>
+
+              ${result.properties && result.properties.length > 0 ? result.properties.map((p, i) => `
+                <div class="border border-gray-200 rounded-lg p-3 bg-white space-y-2">
+                  <div class="flex items-start justify-between">
+                    <div class="flex-1 min-w-0">
+                      <div class="text-sm font-medium text-gray-800">${p.title || p.address || '物件' + (i+1)}</div>
+                      ${p.address ? `<div class="text-xs text-gray-500">📍 ${p.address}</div>` : ''}
+                    </div>
+                    <button onclick="handleSaveSearchResult(${i})" class="ml-2 px-3 py-1 bg-green-600 text-white text-xs rounded-lg hover:bg-green-700 transition-colors flex-shrink-0">
+                      💾 保存
+                    </button>
+                  </div>
+                  <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                    ${p.price ? `<span class="font-bold text-blue-700">${Number(p.price).toLocaleString()}万円</span>` : ''}
+                    ${p.land_area ? `<span class="text-gray-600">${(p.land_area/3.305785).toFixed(1)}坪（${p.land_area}㎡）</span>` : ''}
+                    ${p.station_distance ? `<span class="text-gray-500">🚃 ${p.station_distance}</span>` : ''}
+                  </div>
+                  ${p.zoning || p.road_access ? `
+                    <div class="flex flex-wrap gap-2 text-xs">
+                      ${p.zoning ? `<span class="bg-gray-100 px-2 py-0.5 rounded">${p.zoning}</span>` : ''}
+                      ${p.road_access ? `<span class="bg-gray-100 px-2 py-0.5 rounded">${p.road_access}</span>` : ''}
+                    </div>
+                  ` : ''}
+                  ${p.memo ? `<div class="text-xs text-amber-700">💡 ${p.memo}</div>` : ''}
+                  ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener" class="text-xs text-blue-500 hover:underline">🔗 物件ページを見る</a>` : ''}
+                </div>
+              `).join('') : `
+                <div class="text-sm text-gray-500 bg-gray-50 rounded-lg p-4 text-center">
+                  <p>条件に合う物件が見つかりませんでした。</p>
+                  <p class="text-xs mt-1">条件を変えて再検索してみてください。</p>
+                </div>
+              `}
+
+              ${result.sources && result.sources.length > 0 ? `
+                <div class="text-xs text-gray-400 border-t border-gray-100 pt-2">
+                  <span class="font-medium">情報元:</span>
+                  ${result.sources.slice(0, 5).map(s => `<a href="${s.url}" target="_blank" rel="noopener" class="text-blue-400 hover:underline ml-1">${s.title || 'リンク'}</a>`).join(' ・')}
+                </div>
+              ` : ''}
             </div>
           ` : ''}
         </div>
         <p class="text-xs text-gray-400 mt-4 text-center">
-          ※ 検索結果で気になる物件があれば、物件ページの情報をコピーして「取り込み」で保存できます
+          ※ AIがGoogle検索で不動産サイトから物件を探します。情報の正確性は物件ページでご確認ください。
         </p>
       </div>
     </div>
@@ -3058,7 +3088,7 @@ async function handleAISearch() {
   if (!query) { alert('検索条件を入力してください'); return; }
 
   const btn = document.getElementById('btn-ai-search');
-  if (btn) { btn.textContent = '🤖 AIが考えています...'; btn.disabled = true; }
+  if (btn) { btn.textContent = '🔍 AIがWeb検索中...（10〜20秒）'; btn.disabled = true; }
 
   try {
     const session = await supabaseClient.auth.getSession();
@@ -3075,7 +3105,7 @@ async function handleAISearch() {
     render();
   } catch(e) {
     alert('AI検索に失敗しました: ' + e.message);
-    if (btn) { btn.textContent = '🤖 AIで検索条件を生成'; btn.disabled = false; }
+    if (btn) { btn.textContent = '🔍 AIがWeb検索して物件を探す'; btn.disabled = false; }
   }
 }
 
@@ -3144,6 +3174,43 @@ async function handleSaveParsed() {
     state._importUrl = '';
     state._aiParsedProperty = null;
     render();
+  }
+}
+
+// 検索結果から物件を保存
+async function handleSaveSearchResult(index) {
+  const result = state._aiSearchResult;
+  if (!result || !result.properties || !result.properties[index]) return;
+  const p = result.properties[index];
+
+  if (!p.price || !p.land_area) {
+    alert('この物件は価格または面積が不明のため保存できません');
+    return;
+  }
+
+  const prop = {
+    area_id: state.soSearchAreaId || null,
+    url: p.url || null,
+    source: p.source || null,
+    price: p.price * 10000, // 万円 → 円
+    land_area: p.land_area,
+    address: p.address || null,
+    station_distance: p.station_distance || null,
+    zoning: p.zoning || null,
+    building_coverage: p.building_coverage || null,
+    floor_area_ratio: p.floor_area_ratio || null,
+    road_access: p.road_access || null,
+    elevation: p.elevation || null,
+    infrastructure: p.infrastructure || null,
+    hazard: p.hazard || null,
+    memo: p.memo || null,
+  };
+
+  const saved = await saveProperty(prop);
+  if (saved) {
+    // ボタンを「保存済み」に変更
+    const btns = document.querySelectorAll(`[onclick="handleSaveSearchResult(${index})"]`);
+    btns.forEach(btn => { btn.textContent = '✅ 保存済み'; btn.disabled = true; btn.style.opacity = '0.6'; });
   }
 }
 
