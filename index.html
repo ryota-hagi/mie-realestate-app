@@ -3047,18 +3047,40 @@ function renderImportModal() {
         </div>
 
         <div class="space-y-4">
-          <div>
-            <label class="text-sm font-medium text-gray-700">物件URL（任意）</label>
-            <input id="import-url" type="url" value="${importUrl}" placeholder="https://suumo.jp/... の物件URL" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" />
-          </div>
-          <div>
-            <label class="text-sm font-medium text-gray-700">物件情報を貼り付け <span class="text-red-500">*</span></label>
-            <textarea id="ai-import-text" rows="5" placeholder="物件サイトの情報をコピペしてください&#10;&#10;例:&#10;価格 2,580万円&#10;土地面積 182.5㎡（55.2坪）&#10;所在地 四日市市富田浜町&#10;最寄り駅 富田浜駅 徒歩5分&#10;用途地域 第一種住居地域" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" style="resize:vertical;"></textarea>
+          <!-- タブ切替: URL / テキスト -->
+          <div class="flex border-b border-gray-200">
+            <button id="tab-url" onclick="document.getElementById('panel-url').style.display='block'; document.getElementById('panel-text').style.display='none'; document.getElementById('tab-url').className='flex-1 py-2 text-sm font-medium text-blue-600 border-b-2 border-blue-600'; document.getElementById('tab-text').className='flex-1 py-2 text-sm font-medium text-gray-400 border-b-2 border-transparent';" class="flex-1 py-2 text-sm font-medium text-blue-600 border-b-2 border-blue-600">
+              🔗 物件URLから登録
+            </button>
+            <button id="tab-text" onclick="document.getElementById('panel-text').style.display='block'; document.getElementById('panel-url').style.display='none'; document.getElementById('tab-text').className='flex-1 py-2 text-sm font-medium text-blue-600 border-b-2 border-blue-600'; document.getElementById('tab-url').className='flex-1 py-2 text-sm font-medium text-gray-400 border-b-2 border-transparent';" class="flex-1 py-2 text-sm font-medium text-gray-400 border-b-2 border-transparent">
+              📋 テキスト貼り付け
+            </button>
           </div>
 
-          <button id="btn-ai-parse" onclick="handleAIParse()" class="w-full px-4 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-            🤖 AIで情報を整理して保存
-          </button>
+          <!-- URL入力パネル -->
+          <div id="panel-url">
+            <label class="text-sm font-medium text-gray-700">物件ページのURL</label>
+            <input id="import-url" type="url" value="${importUrl}" placeholder="https://suumo.jp/tochi/... や athome.co.jp/... のURL" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+            <p class="text-xs text-gray-400 mt-1">SUUMO・アットホーム・HOMES等の個別物件ページURLを貼ってください</p>
+            <button id="btn-fetch-url" onclick="handleFetchUrl()" class="w-full mt-3 px-4 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+              🔗 URLから物件情報を取得
+            </button>
+          </div>
+
+          <!-- テキスト貼り付けパネル -->
+          <div id="panel-text" style="display:none;">
+            <div>
+              <label class="text-sm font-medium text-gray-700">物件URL（任意）</label>
+              <input id="import-url-text" type="url" placeholder="https://suumo.jp/... （任意）" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+            </div>
+            <div class="mt-3">
+              <label class="text-sm font-medium text-gray-700">物件情報を貼り付け <span class="text-red-500">*</span></label>
+              <textarea id="ai-import-text" rows="5" placeholder="物件サイトの情報をコピペしてください&#10;&#10;例:&#10;価格 2,580万円&#10;土地面積 182.5㎡（55.2坪）&#10;所在地 四日市市富田浜町&#10;最寄り駅 富田浜駅 徒歩5分&#10;用途地域 第一種住居地域" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" style="resize:vertical;"></textarea>
+            </div>
+            <button id="btn-ai-parse" onclick="handleAIParse()" class="w-full mt-3 px-4 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+              🤖 AIで情報を整理して保存
+            </button>
+          </div>
 
           ${parsed ? `
             <div class="bg-green-50 border border-green-200 rounded-lg p-4 space-y-2">
@@ -3073,6 +3095,7 @@ function renderImportModal() {
                 ${parsed.road_access ? `<span class="text-gray-500">接道:</span><span class="font-medium">${parsed.road_access}</span>` : ''}
               </div>
               ${parsed.memo ? `<p class="text-xs text-amber-700 mt-2">💡 ${parsed.memo}</p>` : ''}
+              ${parsed.source_url ? `<p class="text-xs mt-1"><a href="${parsed.source_url}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">🔗 ${parsed.source_url}</a></p>` : ''}
               <div class="flex gap-2 mt-3">
                 <button onclick="handleSaveParsed()" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">💾 この内容で保存</button>
                 <button onclick="state._aiParsedProperty=null; render();" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm hover:bg-gray-200 transition-colors">やり直す</button>
@@ -3151,9 +3174,43 @@ async function handleAISearch() {
 }
 
 // AIカード作成: テキスト → 構造化 → プレビュー
+// URL貼り付け → AI解析
+async function handleFetchUrl() {
+  const urlEl = document.getElementById('import-url');
+  const url = urlEl ? urlEl.value.trim() : '';
+  if (!url) { alert('物件ページのURLを入力してください'); return; }
+  if (!url.startsWith('http')) { alert('正しいURLを入力してください（http://... または https://...）'); return; }
+
+  const btn = document.getElementById('btn-fetch-url');
+  if (btn) { btn.textContent = '🔗 AIが物件情報を読み取り中...（10〜20秒）'; btn.disabled = true; }
+
+  try {
+    const headers = { 'Content-Type': 'application/json', 'apikey': CONFIG.SUPABASE_ANON_KEY };
+    const session = await supabaseClient.auth.getSession();
+    const token = session?.data?.session?.access_token;
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    else headers['Authorization'] = `Bearer ${CONFIG.SUPABASE_ANON_KEY}`;
+    const res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/ai-assist`, {
+      method: 'POST', headers,
+      body: JSON.stringify({ action: 'fetch_url', url, areaId: state.soSearchAreaId })
+    });
+    if (!res.ok) { const errText = await res.text(); throw new Error(`HTTP ${res.status}: ${errText}`); }
+    const result = await res.json();
+    if (result.error) throw new Error(result.error);
+    state._aiParsedProperty = result;
+    state._importUrl = url;
+    render();
+  } catch(e) {
+    console.error('URL Fetch error:', e);
+    alert('物件情報の取得に失敗しました: ' + e.message);
+    if (btn) { btn.textContent = '🔗 URLから物件情報を取得'; btn.disabled = false; }
+  }
+}
+
+// テキスト貼り付け → AI解析
 async function handleAIParse() {
   const textEl = document.getElementById('ai-import-text');
-  const urlEl = document.getElementById('import-url');
+  const urlEl = document.getElementById('import-url-text');
   const text = textEl ? textEl.value.trim() : '';
   const url = urlEl ? urlEl.value.trim() : '';
   if (!text) { alert('物件情報を貼り付けてください'); return; }
@@ -3195,7 +3252,7 @@ async function handleSaveParsed() {
 
   const prop = {
     area_id: state.soSearchAreaId || null,
-    url: state._importUrl || null,
+    url: parsed.source_url || state._importUrl || null,
     source: parsed.source || null,
     price: parsed.price * 10000, // 万円 → 円
     land_area: parsed.land_area,
