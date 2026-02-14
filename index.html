@@ -2976,9 +2976,10 @@ function renderSearchModal() {
                   ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener" class="text-xs text-blue-500 hover:underline">🔗 物件ページを見る</a>` : ''}
                 </div>
               `).join('') : `
-                <div class="text-sm text-gray-500 bg-gray-50 rounded-lg p-4 text-center">
-                  <p>条件に合う物件が見つかりませんでした。</p>
-                  <p class="text-xs mt-1">条件を変えて再検索してみてください。</p>
+                <div class="text-sm text-gray-500 bg-gray-50 rounded-lg p-4">
+                  <p class="text-center">条件に合う物件が見つかりませんでした。</p>
+                  <p class="text-xs mt-1 text-center">条件を変えて再検索してみてください。</p>
+                  ${result.rawText ? `<details class="mt-2"><summary class="text-xs text-gray-400 cursor-pointer">AI応答を確認</summary><pre class="text-xs text-gray-400 whitespace-pre-wrap mt-1 max-h-40 overflow-auto">${result.rawText.replace(/</g,'&lt;')}</pre></details>` : ''}
                 </div>
               `}
 
