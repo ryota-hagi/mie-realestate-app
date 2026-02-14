@@ -3097,7 +3097,7 @@ async function handleAISearch() {
   if (!query) { alert('検索条件を入力してください'); return; }
 
   const btn = document.getElementById('btn-ai-search');
-  if (btn) { btn.textContent = '🔍 AIがWeb検索中...（10〜20秒）'; btn.disabled = true; }
+  if (btn) { btn.textContent = '🔍 AIが検索中...（物件+個別URL取得で30〜60秒）'; btn.disabled = true; }
 
   try {
     const headers = { 'Content-Type': 'application/json', 'apikey': CONFIG.SUPABASE_ANON_KEY };
