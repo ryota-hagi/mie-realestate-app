@@ -2976,7 +2976,7 @@ function renderSearchModal() {
                   <div class="flex items-center gap-2 text-xs flex-wrap">
                     ${p.source ? `<span class="text-gray-400">📰 ${p.source}</span>` : ''}
                     ${p.source_url ? `<a href="${p.source_url}" target="_blank" rel="noopener" class="inline-flex items-center px-2 py-0.5 bg-blue-600 text-white rounded hover:bg-blue-700 font-medium">🔗 物件ページを見る</a>` : ''}
-                    ${!p.source_url && p.search_url ? `<a href="${p.search_url}" target="_blank" rel="noopener" class="inline-flex items-center px-2 py-0.5 bg-gray-500 text-white rounded hover:bg-gray-600 font-medium">🔍 ${p.source || 'サイト'}で検索</a>` : ''}
+                    ${!p.source_url ? `<span class="text-gray-300 italic">（個別URLなし）</span>` : ''}
                   </div>
                 </div>
               `).join('') : `
@@ -2988,30 +2988,21 @@ function renderSearchModal() {
               `}
 
               ${(() => {
-                const searchPages = result.searchPageUrls || [];
                 const allSources = result.sources || [];
                 const debug = result.debugInfo || {};
 
-                return `
+                return allSources.length > 0 ? `
                   <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 space-y-2">
-                    ${searchPages.length > 0 ? `
-                      <p class="text-xs font-bold text-gray-600">🔍 もっと探す:</p>
-                      <div class="flex flex-wrap gap-2">
-                        ${searchPages.map(s => {
-                          let siteName = 'サイト';
-                          try { const h = new URL(s.url).hostname.replace('www.',''); siteName = h.split('.')[0].toUpperCase(); } catch(e) {}
-                          return `<a href="${s.url}" target="_blank" rel="noopener" class="inline-flex items-center px-3 py-1 bg-white border border-gray-300 rounded-full text-xs text-gray-700 hover:bg-gray-100">${siteName}で検索</a>`;
-                        }).join('')}
-                      </div>
-                    ` : ''}
-                    <details class="mt-1">
-                      <summary class="text-xs text-gray-400 cursor-pointer">参照元 (${allSources.length}件)</summary>
-                      <div class="mt-1 space-y-0.5">
-                        ${allSources.map(s => `<a href="${s.url}" target="_blank" rel="noopener" class="block text-xs text-blue-400 hover:underline truncate">${s.title || s.url}</a>`).join('')}
-                      </div>
-                    </details>
+                    <p class="text-xs font-bold text-gray-600">🔗 参照元サイト (${allSources.length}件):</p>
+                    <div class="space-y-1">
+                      ${allSources.map(s => {
+                        let siteName = s.url;
+                        try { siteName = new URL(s.url).hostname.replace('www.',''); } catch(e) {}
+                        return `<a href="${s.url}" target="_blank" rel="noopener" class="block text-xs text-blue-600 hover:underline truncate">🔗 ${s.title || siteName}</a>`;
+                      }).join('')}
+                    </div>
                   </div>
-                `;
+                ` : '';
               })()}
             </div>
           ` : ''}
