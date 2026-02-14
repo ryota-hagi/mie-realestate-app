@@ -423,6 +423,50 @@ function getRankedAreas() {
 }
 
 // ============================================================
+// Static Data Loading (from pre-fetched JSON)
+// ============================================================
+async function loadStaticData() {
+  try {
+    updateStatusText('キャッシュデータ読み込み中...');
+    const res = await fetch('data/live-data.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    applyStaticData(data);
+    return true;
+  } catch (e) {
+    console.log('Static data not available:', e.message);
+    return false;
+  }
+}
+
+function applyStaticData(data) {
+  for (const area of AREAS) {
+    const src = data.areas[area.id];
+    if (!src) continue;
+    area._liveTransactions = src.transactions;
+    area._liveAvgTradePrice = src.avgTradePrice;
+    area._liveTransactionCount = src.transactionCount;
+    AREA_FULL_LOADED.add(area.id);
+  }
+
+  state.mcpStatus = 'connected';
+  state.fetchedAt = data.fetchedAt;
+
+  let totalTx = 0;
+  AREAS.forEach(a => { if (a._liveTransactions) totalTx += a._liveTransactions.length; });
+
+  const fetchDate = new Date(data.fetchedAt).toLocaleDateString('ja-JP');
+  state.mcpMessage = `データ読込完了（${fetchDate}取得・計${totalTx.toLocaleString()}件）`;
+
+  render();
+
+  // マップ表示中ならピン表示
+  if (state.view === 'map' && txMarkerLayer) {
+    showAllTransactionPins();
+  }
+}
+
+// ============================================================
 // MCP Connection
 // ============================================================
 let mcpReinfo = null;
@@ -826,26 +870,27 @@ function renderMCPStatus() {
     error: { bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-500' }
   };
   const s = statusColors[state.mcpStatus];
-  const statusLabel = { disconnected: '未接続', connecting: '接続中', connected: 'ライブ接続', error: 'フォールバック' }[state.mcpStatus];
+  const statusLabel = { disconnected: '未接続', connecting: '取得中', connected: 'データ取得済', error: 'フォールバック' }[state.mcpStatus];
 
   return `
     <div class="card p-4 mb-4 flex items-center justify-between flex-wrap gap-3">
       <div class="flex items-center gap-3">
         <div class="status-badge ${s.bg} ${s.text}">
           <span class="pulse-dot ${s.dot}"></span>
-          MCP: ${statusLabel}
+          ${statusLabel}
         </div>
-        <span id="mcp-status-text" class="text-sm text-gray-500">${state.mcpMessage || 'MCPサーバー未接続 — キャッシュデータを使用中'}</span>
+        <span id="mcp-status-text" class="text-sm text-gray-500">${state.mcpMessage || 'データ読み込み中...'}</span>
       </div>
       <div class="flex gap-2">
-        ${state.mcpStatus !== 'connected' ? `
-          <button id="btn-connect-mcp" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm">
-            🔌 MCPサーバーに接続（プロキシ経由）
+        ${state.mcpStatus === 'connected' ? `
+          <button id="btn-connect-mcp" class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm">
+            🔄 最新データ取得
           </button>
+        ` : state.mcpStatus === 'connecting' ? `
+          <span class="text-xs text-blue-600 self-center">取得中...</span>
         ` : `
-          <span class="text-xs text-green-600 self-center mr-2">${mcpReinfo?.useProxy ? '🔀 プロキシ経由' : '📡 直接接続'}</span>
-          <button id="btn-refresh-mcp" class="px-3 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
-            🔄 データ更新
+          <button id="btn-connect-mcp" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm">
+            🔌 MCPサーバーに接続
           </button>
         `}
       </div>
@@ -2666,13 +2711,9 @@ function bindEvents(ranked) {
   const backBtn = document.getElementById('btn-back');
   if (backBtn) backBtn.addEventListener('click', () => { state.view = 'ranking'; render(); });
 
-  // MCP connect button
+  // MCP connect / refresh button
   const connectBtn = document.getElementById('btn-connect-mcp');
   if (connectBtn) connectBtn.addEventListener('click', connectMCP);
-
-  // MCP refresh button
-  const refreshBtn = document.getElementById('btn-refresh-mcp');
-  if (refreshBtn) refreshBtn.addEventListener('click', fetchLiveData);
 
   // Detail → Map button
   const toMapBtn = document.getElementById('btn-to-map');
@@ -2690,8 +2731,8 @@ function bindEvents(ranked) {
 // ============================================================
 loadDistrictCache();
 render();
-// ページロード時にMCP自動接続→データ取得開始
-connectMCP();
+// ページロード時: まず静的JSONを読み込み、なければMCP接続を案内
+loadStaticData();
 </script>
 </body>
 </html>
