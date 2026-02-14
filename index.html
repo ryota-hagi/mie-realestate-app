@@ -2973,7 +2973,7 @@ function renderSearchModal() {
                     </div>
                   ` : ''}
                   ${p.memo ? `<div class="text-xs text-amber-700">💡 ${p.memo}</div>` : ''}
-                  ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener" class="text-xs text-blue-500 hover:underline">🔗 物件ページを見る</a>` : ''}
+                  ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener" class="text-xs text-blue-500 hover:underline">🔗 物件ページを見る（${p.source || new URL(p.url).hostname.replace('www.','')}）</a>` : `<span class="text-xs text-gray-400">※ URLが取得できませんでした</span>`}
                 </div>
               `).join('') : `
                 <div class="text-sm text-gray-500 bg-gray-50 rounded-lg p-4">
