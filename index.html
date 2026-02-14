@@ -807,7 +807,6 @@ function render() {
   app.innerHTML = `
     ${renderHeader()}
     <div class="max-w-6xl mx-auto px-4 py-6">
-      ${renderMCPStatus()}
       ${renderWeights()}
       ${state.view === 'ranking' ? renderRanking(ranked) : ''}
       ${state.view === 'compare' ? renderCompare(ranked) : ''}
@@ -848,6 +847,12 @@ function renderHeader() {
           <div>
             <h1 class="text-2xl font-bold text-gray-900">🏠 三重県 注文住宅エリア比較</h1>
             <p class="text-sm text-gray-500 mt-1">三重県北部の土地相場・取引データを比較して、注文住宅に最適なエリアを見つけよう</p>
+            ${state.mcpStatus === 'connected' ? (() => {
+              let totalTx = 0;
+              AREAS.forEach(a => { if (a._liveTransactions) totalTx += a._liveTransactions.length; });
+              const dateStr = state.fetchedAt ? new Date(state.fetchedAt).toLocaleDateString('ja-JP') : '';
+              return `<p class="text-xs text-green-600 mt-1">📊 取引データ ${totalTx.toLocaleString()}件${dateStr ? `（${dateStr} 更新）` : ''}</p>`;
+            })() : state.mcpStatus === 'connecting' ? `<p class="text-xs text-blue-500 mt-1">⏳ データ読み込み中...</p>` : ''}
           </div>
           <div class="flex gap-2">
             ${tabs.map(t => `
@@ -2710,10 +2715,6 @@ function bindEvents(ranked) {
   // Back button
   const backBtn = document.getElementById('btn-back');
   if (backBtn) backBtn.addEventListener('click', () => { state.view = 'ranking'; render(); });
-
-  // MCP connect / refresh button
-  const connectBtn = document.getElementById('btn-connect-mcp');
-  if (connectBtn) connectBtn.addEventListener('click', connectMCP);
 
   // Detail → Map button
   const toMapBtn = document.getElementById('btn-to-map');
