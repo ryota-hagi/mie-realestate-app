@@ -173,6 +173,8 @@
     .comp-layout-sidebar { flex-direction: column !important; }
     .comp-layout-sidebar > div:first-child { width: 100% !important; }
     .comp-layout-sidebar > div:first-child .sticky { position: relative !important; top: 0 !important; }
+    .mobile-title-text { font-size: 1.1rem; }
+    .mobile-subtitle-text { font-size: 0.75rem; }
   }
 </style>
 </head>
@@ -1118,13 +1120,15 @@ function renderHeader() {
     { id: 'map', label: '🗺️ 地図' },
     { id: 'property', label: '🏠 物件比較' }
   ];
+  const currentTab = tabs.find(t => t.id === state.view) || tabs[0];
   return `
-    <header class="glass sticky top-0 z-50 border-b border-gray-200 shadow-sm">
+    <!-- タイトル（スクロールで消える） -->
+    <header class="glass border-b border-gray-200">
       <div class="max-w-6xl mx-auto px-4 py-4">
-        <div class="flex items-center justify-between flex-wrap gap-3">
+        <div class="flex items-center justify-between">
           <div>
-            <h1 class="text-2xl font-bold text-gray-900">🏠 三重県 注文住宅エリア比較</h1>
-            <p class="text-sm text-gray-500 mt-1">三重県北部の土地相場・取引データを比較して、注文住宅に最適なエリアを見つけよう</p>
+            <h1 class="text-2xl font-bold text-gray-900 mobile-title-text">🏠 三重県 注文住宅エリア比較</h1>
+            <p class="text-sm text-gray-500 mt-1 mobile-subtitle-text">三重県北部の土地相場・取引データを比較して、注文住宅に最適なエリアを見つけよう</p>
             ${state.mcpStatus === 'connected' ? (() => {
               let totalTx = 0;
               AREAS.forEach(a => { if (a._liveTransactions) totalTx += a._liveTransactions.length; });
@@ -1132,17 +1136,50 @@ function renderHeader() {
               return `<p class="text-xs text-green-600 mt-1">📊 取引データ ${totalTx.toLocaleString()}件${dateStr ? `（${dateStr} 更新）` : ''}</p>`;
             })() : state.mcpStatus === 'connecting' ? `<p class="text-xs text-blue-500 mt-1">⏳ データ読み込み中...</p>` : ''}
           </div>
-          <div class="flex gap-2">
-            ${tabs.map(t => `
-              <button data-tab="${t.id}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all ${state.view === t.id ? 'tab-active' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">
-                ${t.label}
-              </button>
-            `).join('')}
-          </div>
         </div>
       </div>
     </header>
+    <!-- タブバー（PC: 通常表示 / モバイル: 現在タブ + ハンバーガー） -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-200 shadow-sm">
+      <div class="max-w-6xl mx-auto px-4 py-2">
+        <!-- PC用タブ -->
+        <div class="hidden sm:flex gap-2">
+          ${tabs.map(t => `
+            <button data-tab="${t.id}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all ${state.view === t.id ? 'tab-active' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">
+              ${t.label}
+            </button>
+          `).join('')}
+        </div>
+        <!-- モバイル用: 現在タブ + メニューボタン -->
+        <div class="flex sm:hidden items-center justify-between">
+          <span class="text-sm font-bold text-gray-800">${currentTab.label}</span>
+          <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 text-sm font-medium hover:bg-gray-200 transition-colors">
+            ☰ メニュー
+          </button>
+        </div>
+      </div>
+      <!-- モバイルメニュー展開 -->
+      <div id="mobile-menu-panel" class="sm:hidden overflow-hidden transition-all duration-300" style="max-height:0;">
+        <div class="px-4 pb-3 pt-1 flex flex-col gap-1.5">
+          ${tabs.map(t => `
+            <button data-tab="${t.id}" class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${state.view === t.id ? 'tab-active' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'}">
+              ${t.label}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    </nav>
   `;
+}
+
+function toggleMobileMenu() {
+  const panel = document.getElementById('mobile-menu-panel');
+  if (!panel) return;
+  if (panel.style.maxHeight && panel.style.maxHeight !== '0px') {
+    panel.style.maxHeight = '0';
+  } else {
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+  }
 }
 
 function renderMCPStatus() {
@@ -3648,6 +3685,9 @@ function bindEvents(ranked) {
   document.querySelectorAll('[data-tab]').forEach(btn => {
     btn.addEventListener('click', () => {
       state.view = btn.dataset.tab;
+      // モバイルメニューを閉じる
+      const mobilePanel = document.getElementById('mobile-menu-panel');
+      if (mobilePanel) mobilePanel.style.maxHeight = '0';
       if (state.view === 'detail' && !state.selectedAreaId) {
         state.selectedAreaId = ranked[0]?.id;
       }
