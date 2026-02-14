@@ -2947,53 +2947,73 @@ function renderSearchModal() {
           </button>
 
           ${result ? `
-            <div class="space-y-3">
+            <div class="space-y-4">
               <p class="text-sm font-bold text-gray-800">📋 検索結果（${result.properties?.length || 0}件）</p>
 
-              ${result.properties && result.properties.length > 0 ? result.properties.map((p, i) => `
-                <div class="border border-gray-200 rounded-lg p-3 bg-white space-y-2">
-                  <div class="flex items-start justify-between">
-                    <div class="flex-1 min-w-0">
-                      <div class="text-sm font-medium text-gray-800">${p.title || p.address || '物件' + (i+1)}</div>
-                      ${p.address ? `<div class="text-xs text-gray-500">📍 ${p.address}</div>` : ''}
+              ${result.sections && result.sections.length > 0 ? result.sections.map((section, si) => `
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                  <!-- サイトヘッダー + grounding URL -->
+                  <div class="bg-gradient-to-r ${section.siteKey === 'suumo' ? 'from-green-600 to-green-700' : section.siteKey === 'athome' ? 'from-red-500 to-red-600' : section.siteKey === 'homes' ? 'from-orange-500 to-orange-600' : 'from-gray-500 to-gray-600'} px-3 py-2">
+                    <div class="flex items-center justify-between">
+                      <span class="text-white font-bold text-sm">${section.siteName}（${section.properties.length}件）</span>
                     </div>
-                    <button onclick="handleSaveSearchResult(${i})" class="ml-2 px-3 py-1 bg-green-600 text-white text-xs rounded-lg hover:bg-green-700 transition-colors flex-shrink-0">
-                      💾 保存
-                    </button>
+                    ${section.groundingUrls && section.groundingUrls.length > 0 ? `
+                      <div class="mt-1 space-y-0.5">
+                        ${section.groundingUrls.map(u => `<a href="${u.url}" target="_blank" rel="noopener" class="block text-xs text-white/90 hover:text-white hover:underline truncate">🔗 ${u.title || u.url}</a>`).join('')}
+                      </div>
+                    ` : ''}
                   </div>
-                  <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-                    ${p.price ? `<span class="font-bold text-blue-700">${Number(p.price).toLocaleString()}万円</span>` : ''}
-                    ${p.land_area ? `<span class="text-gray-600">${(p.land_area/3.305785).toFixed(1)}坪（${p.land_area}㎡）</span>` : ''}
-                    ${p.station_distance ? `<span class="text-gray-500">🚃 ${p.station_distance}</span>` : ''}
+
+                  <!-- 物件リスト -->
+                  <div class="divide-y divide-gray-100">
+                    ${section.properties.map((p, pi) => {
+                      const globalIdx = result.sections.slice(0, si).reduce((sum, s) => sum + s.properties.length, 0) + pi;
+                      return `
+                      <div class="p-3 bg-white space-y-1.5">
+                        <div class="flex items-start justify-between">
+                          <div class="flex-1 min-w-0">
+                            <div class="text-sm font-medium text-gray-800">${p.title || p.address || '物件' + (pi+1)}</div>
+                            ${p.address ? `<div class="text-xs text-gray-500">📍 ${p.address}</div>` : ''}
+                          </div>
+                          <button onclick="handleSaveSearchResult(${globalIdx})" class="ml-2 px-3 py-1 bg-green-600 text-white text-xs rounded-lg hover:bg-green-700 transition-colors flex-shrink-0">
+                            💾 保存
+                          </button>
+                        </div>
+                        <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                          ${p.price ? `<span class="font-bold text-blue-700">${Number(p.price).toLocaleString()}万円</span>` : ''}
+                          ${p.land_area ? `<span class="text-gray-600">${(p.land_area/3.305785).toFixed(1)}坪（${p.land_area}㎡）</span>` : ''}
+                          ${p.station_distance ? `<span class="text-gray-500">🚃 ${p.station_distance}</span>` : ''}
+                        </div>
+                        ${p.zoning || p.road_access ? `
+                          <div class="flex flex-wrap gap-2 text-xs">
+                            ${p.zoning ? `<span class="bg-gray-100 px-2 py-0.5 rounded">${p.zoning}</span>` : ''}
+                            ${p.road_access ? `<span class="bg-gray-100 px-2 py-0.5 rounded">${p.road_access}</span>` : ''}
+                          </div>
+                        ` : ''}
+                        ${p.memo ? `<div class="text-xs text-amber-700">💡 ${p.memo}</div>` : ''}
+                      </div>`;
+                    }).join('')}
                   </div>
-                  ${p.zoning || p.road_access ? `
-                    <div class="flex flex-wrap gap-2 text-xs">
-                      ${p.zoning ? `<span class="bg-gray-100 px-2 py-0.5 rounded">${p.zoning}</span>` : ''}
-                      ${p.road_access ? `<span class="bg-gray-100 px-2 py-0.5 rounded">${p.road_access}</span>` : ''}
-                    </div>
-                  ` : ''}
-                  ${p.memo ? `<div class="text-xs text-amber-700">💡 ${p.memo}</div>` : ''}
-                  ${p.source ? `<div class="text-xs text-gray-400">📰 情報元: ${p.source}</div>` : ''}
-                  ${p._groundingUrls && p._groundingUrls.length > 0 ? `
-                    <div class="bg-blue-50 rounded p-2 space-y-1">
-                      ${p._groundingUrls.map(u => {
-                        let host = '';
-                        try { host = new URL(u.url).hostname.replace('www.',''); } catch(e) {}
-                        return `<a href="${u.url}" target="_blank" rel="noopener" class="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 hover:underline">
-                          <span>🔗</span><span class="truncate">${u.title || host}</span>
-                        </a>`;
-                      }).join('')}
-                    </div>
-                  ` : ''}
                 </div>
               `).join('') : `
-                <div class="text-sm text-gray-500 bg-gray-50 rounded-lg p-4">
-                  <p class="text-center">条件に合う物件が見つかりませんでした。</p>
-                  <p class="text-xs mt-1 text-center">条件を変えて再検索してみてください。</p>
-                  ${result.rawText ? `<details class="mt-2"><summary class="text-xs text-gray-400 cursor-pointer">AI応答を確認</summary><pre class="text-xs text-gray-400 whitespace-pre-wrap mt-1 max-h-40 overflow-auto">${result.rawText.replace(/</g,'&lt;')}</pre></details>` : ''}
-                </div>
+                ${result.properties && result.properties.length > 0 ? result.properties.map((p, i) => `
+                  <div class="border border-gray-200 rounded-lg p-3 bg-white space-y-2">
+                    <div class="text-sm font-medium text-gray-800">${p.title || p.address || '物件' + (i+1)}</div>
+                    ${p.address ? `<div class="text-xs text-gray-500">📍 ${p.address}</div>` : ''}
+                    <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                      ${p.price ? `<span class="font-bold text-blue-700">${Number(p.price).toLocaleString()}万円</span>` : ''}
+                      ${p.land_area ? `<span class="text-gray-600">${(p.land_area/3.305785).toFixed(1)}坪（${p.land_area}㎡）</span>` : ''}
+                    </div>
+                    <button onclick="handleSaveSearchResult(${i})" class="px-3 py-1 bg-green-600 text-white text-xs rounded-lg hover:bg-green-700">💾 保存</button>
+                  </div>
+                `).join('') : `
+                  <div class="text-sm text-gray-500 bg-gray-50 rounded-lg p-4">
+                    <p class="text-center">条件に合う物件が見つかりませんでした。</p>
+                    <p class="text-xs mt-1 text-center">条件を変えて再検索してみてください。</p>
+                    ${result.rawText ? `<details class="mt-2"><summary class="text-xs text-gray-400 cursor-pointer">AI応答を確認</summary><pre class="text-xs text-gray-400 whitespace-pre-wrap mt-1 max-h-40 overflow-auto">${result.rawText.replace(/</g,'&lt;')}</pre></details>` : ''}
+                  </div>
+                `}
               `}
-
             </div>
           ` : ''}
         </div>
@@ -3097,7 +3117,7 @@ async function handleAISearch() {
   if (!query) { alert('検索条件を入力してください'); return; }
 
   const btn = document.getElementById('btn-ai-search');
-  if (btn) { btn.textContent = '🔍 AIが検索中...（物件+個別URL取得で30〜60秒）'; btn.disabled = true; }
+  if (btn) { btn.textContent = '🔍 AIが検索中...（10〜20秒）'; btn.disabled = true; }
 
   try {
     const headers = { 'Content-Type': 'application/json', 'apikey': CONFIG.SUPABASE_ANON_KEY };
