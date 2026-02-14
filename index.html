@@ -2810,8 +2810,10 @@ function renderPropertyView() {
     return renderComparisonWithSidebar();
   }
 
-  return `
-    <div class="space-y-4 fade-in">
+  const hasSavedComps = state.savedComparisons.length > 0;
+
+  const mainContent = `
+    <div class="space-y-4">
       <!-- サイト説明セクション -->
       <div class="card p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
         <h2 class="text-lg font-bold text-gray-800 mb-3">📊 物件比較ツールとは？</h2>
@@ -2915,45 +2917,64 @@ function renderPropertyView() {
       `}
     </div>
   `;
+
+  // サイドバーあり（過去の比較表がある場合）
+  if (hasSavedComps) {
+    return `
+      <div class="flex gap-4 fade-in comp-layout-sidebar">
+        ${renderComparisonSidebar()}
+        <div class="flex-1 min-w-0">${mainContent}</div>
+      </div>
+    `;
+  }
+  // サイドバーなし
+  return `<div class="fade-in">${mainContent}</div>`;
 }
 
 // ============================================================
 // Second Opinion: Comparison Table
 // ============================================================
-function renderComparisonWithSidebar() {
+function renderComparisonSidebar() {
   const comps = state.savedComparisons;
   const currentId = state.soComparison?.id;
+  const isCompareView = state.soView === 'compare' && state.soComparison;
 
   return `
-    <div class="flex gap-4 fade-in comp-layout-sidebar" style="min-height:60vh;">
-      <!-- サイドバー: 過去の比較表一覧 -->
-      <div class="flex-shrink-0" style="width:220px;">
-        <div class="card p-3 sticky" style="top:1rem;">
-          <h3 class="text-xs font-bold text-gray-500 uppercase mb-3">📂 比較表一覧</h3>
+    <div class="flex-shrink-0" style="width:220px;">
+      <div class="card p-3 sticky" style="top:1rem;">
+        <h3 class="text-xs font-bold text-gray-500 uppercase mb-3">📂 比較表一覧</h3>
+        ${isCompareView ? `
           <button onclick="state.soView=null; state.soComparison=null; render();" class="w-full mb-3 px-3 py-2 text-xs bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors text-left">
             ← 物件リストに戻る
           </button>
-          <div class="space-y-1 max-h-96 overflow-y-auto">
-            ${comps.length === 0 ? `<p class="text-xs text-gray-400 py-2">まだ比較表がありません</p>` : ''}
-            ${comps.map(c => {
-              const isActive = c.id === currentId;
-              const dateStr = c.created_at ? new Date(c.created_at).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' }) : '';
-              return `
-                <div class="group rounded-lg p-2 cursor-pointer transition-colors ${isActive ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50 border border-transparent'}" onclick="loadComparisonDetail('${c.id}')">
-                  <div class="flex items-start justify-between gap-1">
-                    <div class="flex-1 min-w-0">
-                      <div class="text-xs font-medium ${isActive ? 'text-blue-700' : 'text-gray-700'} truncate">${c.name || '比較表'}</div>
-                      <div class="text-xs text-gray-400">${dateStr} · ${(c.property_ids||[]).length}件</div>
-                    </div>
-                    <button onclick="event.stopPropagation(); handleDeleteComparison('${c.id}')" class="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 text-xs transition-opacity" title="削除">✕</button>
+        ` : ''}
+        <div class="space-y-1 max-h-96 overflow-y-auto">
+          ${comps.length === 0 ? `<p class="text-xs text-gray-400 py-2">比較表を作成すると<br>ここに一覧表示されます</p>` : ''}
+          ${comps.map(c => {
+            const isActive = isCompareView && c.id === currentId;
+            const dateStr = c.created_at ? new Date(c.created_at).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' }) : '';
+            return `
+              <div class="group rounded-lg p-2 cursor-pointer transition-colors ${isActive ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50 border border-transparent'}" onclick="loadComparisonDetail('${c.id}')">
+                <div class="flex items-start justify-between gap-1">
+                  <div class="flex-1 min-w-0">
+                    <div class="text-xs font-medium ${isActive ? 'text-blue-700' : 'text-gray-700'} truncate">${c.name || '比較表'}</div>
+                    <div class="text-xs text-gray-400">${dateStr} · ${(c.property_ids||[]).length}件</div>
                   </div>
+                  <button onclick="event.stopPropagation(); handleDeleteComparison('${c.id}')" class="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 text-xs transition-opacity" title="削除">✕</button>
                 </div>
-              `;
-            }).join('')}
-          </div>
+              </div>
+            `;
+          }).join('')}
         </div>
       </div>
-      <!-- メイン: 比較表 -->
+    </div>
+  `;
+}
+
+function renderComparisonWithSidebar() {
+  return `
+    <div class="flex gap-4 fade-in comp-layout-sidebar" style="min-height:60vh;">
+      ${renderComparisonSidebar()}
       <div class="flex-1 min-w-0">
         ${renderComparisonTable()}
       </div>
