@@ -2961,7 +2961,7 @@ function renderSearchModal() {
                       <div class="mt-1 space-y-0.5">
                         ${section.groundingUrls.map(u => `<a href="${u.url}" target="_blank" rel="noopener" class="block text-xs text-white/90 hover:text-white hover:underline truncate">🔗 ${u.title || u.url}</a>`).join('')}
                       </div>
-                    ` : ''}
+                    ` : `<div class="mt-1"><span class="text-xs text-white/60">（参照元URL取得なし）</span></div>`}
                   </div>
 
                   <!-- 物件リスト -->
@@ -3020,6 +3020,12 @@ function renderSearchModal() {
         <p class="text-xs text-gray-400 mt-4 text-center">
           ※ AIがGoogle検索で不動産サイトから物件を探します。情報の正確性は物件ページでご確認ください。
         </p>
+        ${result && result._debug ? `
+          <details class="mt-2">
+            <summary class="text-xs text-gray-400 cursor-pointer text-center">🔧 デバッグ情報</summary>
+            <pre class="text-xs text-gray-400 whitespace-pre-wrap mt-1 max-h-60 overflow-auto bg-gray-50 p-2 rounded">${JSON.stringify(result._debug, null, 2).replace(/</g,'&lt;')}</pre>
+          </details>
+        ` : ''}
       </div>
     </div>
   `;
@@ -3131,6 +3137,8 @@ async function handleAISearch() {
     });
     if (!res.ok) { const errText = await res.text(); throw new Error(`HTTP ${res.status}: ${errText}`); }
     const result = await res.json();
+    console.log('AI Search result:', JSON.stringify(result._debug || {}, null, 2));
+    console.log('Sections:', result.sections?.map(s => ({ key: s.siteKey, name: s.siteName, urls: s.groundingUrls?.length, props: s.properties?.length })));
     if (result.error) throw new Error(result.error);
     state._aiSearchResult = result;
     state._aiSearchQuery = query;
