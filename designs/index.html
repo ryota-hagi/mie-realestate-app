@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>女性向けUIデザイン案一覧｜注文住宅 物件比較ツール</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans JP', sans-serif; }
+  body { background: #f8f9fb; min-height: 100vh; color: #1f2937; }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+  header { padding: 48px 0 32px; text-align: center; }
+  header h1 { font-size: 28px; font-weight: 700; color: #1f2937; margin-bottom: 8px; }
+  header p { font-size: 15px; color: #6b7280; line-height: 1.7; }
+  header .note { display: inline-block; margin-top: 16px; padding: 8px 16px; background: #fef3c7; border: 1px solid #fde68a; border-radius: 8px; font-size: 13px; color: #92400e; }
+
+  .designs { display: grid; grid-template-columns: 1fr; gap: 24px; padding-bottom: 48px; }
+
+  .design-card {
+    background: white; border-radius: 20px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #e5e7eb;
+    transition: all 0.3s ease; display: flex; flex-direction: column;
+  }
+  .design-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.1); transform: translateY(-2px); }
+
+  .preview-frame {
+    width: 100%; height: 500px; border: none; border-bottom: 1px solid #e5e7eb;
+    pointer-events: none;
+  }
+
+  .design-info { padding: 24px; }
+  .design-info h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .design-info .subtitle { font-size: 14px; color: #6b7280; margin-bottom: 12px; }
+  .design-info .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .design-info .tag { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+
+  .design-info .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+  .design-info .feature { padding: 10px; background: #f9fafb; border-radius: 10px; text-align: center; }
+  .design-info .feature-label { font-size: 11px; color: #9ca3af; }
+  .design-info .feature-value { font-size: 13px; font-weight: 600; color: #374151; margin-top: 2px; }
+
+  .btn-view {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 12px 28px; border-radius: 12px; font-size: 14px; font-weight: 600;
+    text-decoration: none; color: white; transition: all 0.2s;
+  }
+  .btn-view:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  @media (max-width: 640px) {
+    .preview-frame { height: 350px; }
+    .design-info .features { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>女性向けUIデザイン案</h1>
+    <p>注文住宅 物件比較ツールの女性向けUI/UXデザインを3パターン作成しました。<br>各デザインは機能構成はそのままに、カラーパレット・フォント・UIの雰囲気を変えています。</p>
+    <div class="note">本番環境とは分離されたデザインモックです。既存ファイルへの変更はありません。</div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="designs">
+
+    <!-- Design A -->
+    <div class="design-card">
+      <iframe src="design-a-elegant.html" class="preview-frame" loading="lazy"></iframe>
+      <div class="design-info">
+        <h2>Design A: Elegant & Warm</h2>
+        <div class="subtitle">ローズピンク基調の温かみあるデザイン</div>
+        <div class="tags">
+          <span class="tag" style="background: #fdf2f8; color: #be185d; border: 1px solid #fbcfe8;">Rose Pink</span>
+          <span class="tag" style="background: #ede9fe; color: #6d28d9; border: 1px solid #c4b5fd;">Purple Accent</span>
+          <span class="tag" style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">Zen Maru Gothic</span>
+        </div>
+        <div class="features">
+          <div class="feature">
+            <div class="feature-label">Primary Color</div>
+            <div class="feature-value" style="color: #ec4899;">#ec4899</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Font</div>
+            <div class="feature-value">Zen Maru Gothic</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Corner Radius</div>
+            <div class="feature-value">20px</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Background</div>
+            <div class="feature-value">Pink Gradient</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Style</div>
+            <div class="feature-value">Soft & Warm</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Target</div>
+            <div class="feature-value">20-30s Female</div>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: #6b7280; line-height: 1.7; margin-bottom: 16px;">
+          やわらかいピンク〜ローズのグラデーション背景に丸みのあるフォント（Zen Maru Gothic）。カード角は大きめの丸みでやさしい印象。ボタンはグラデーションで存在感を出しつつ上品に。スコアバーやメダルもピンク〜パープル系で統一。
+        </p>
+        <a href="design-a-elegant.html" class="btn-view" style="background: linear-gradient(135deg, #ec4899, #f472b6);">
+          Design A を見る &rarr;
+        </a>
+      </div>
+    </div>
+
+    <!-- Design B -->
+    <div class="design-card">
+      <iframe src="design-b-modern.html" class="preview-frame" loading="lazy"></iframe>
+      <div class="design-info">
+        <h2>Design B: Modern & Sophisticated</h2>
+        <div class="subtitle">アースカラー基調の大人モダンなデザイン</div>
+        <div class="tags">
+          <span class="tag" style="background: #f5f0e8; color: #8b7355; border: 1px solid #d4c5a9;">Earth Tone</span>
+          <span class="tag" style="background: #fffbeb; color: #b8860b; border: 1px solid #fde68a;">Gold Accent</span>
+          <span class="tag" style="background: #f5f5f4; color: #57534e; border: 1px solid #d6d3d1;">Noto Serif JP</span>
+        </div>
+        <div class="features">
+          <div class="feature">
+            <div class="feature-label">Primary Color</div>
+            <div class="feature-value" style="color: #8b7355;">#8b7355</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Heading Font</div>
+            <div class="feature-value">Noto Serif JP</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Corner Radius</div>
+            <div class="feature-value">10-16px</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Background</div>
+            <div class="feature-value">Warm Beige</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Style</div>
+            <div class="feature-value">Elegant & Calm</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Target</div>
+            <div class="feature-value">30-40s Female</div>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: #6b7280; line-height: 1.7; margin-bottom: 16px;">
+          ベージュ〜トープのアースカラーで落ち着いた印象。見出しに明朝体（Noto Serif JP）を使い高級感を演出。カード左ボーダーでランクを示すなどミニマルなデザイン。ゴールドのアクセントカラーがプレミアムな雰囲気。
+        </p>
+        <a href="design-b-modern.html" class="btn-view" style="background: #8b7355;">
+          Design B を見る &rarr;
+        </a>
+      </div>
+    </div>
+
+    <!-- Design C -->
+    <div class="design-card">
+      <iframe src="design-c-natural.html" class="preview-frame" loading="lazy"></iframe>
+      <div class="design-info">
+        <h2>Design C: Fresh & Natural</h2>
+        <div class="subtitle">セージグリーン基調のナチュラルなデザイン</div>
+        <div class="tags">
+          <span class="tag" style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">Sage Green</span>
+          <span class="tag" style="background: #fdf2f8; color: #be185d; border: 1px solid #fbcfe8;">Pink Accent</span>
+          <span class="tag" style="background: #f0f9ff; color: #0369a1; border: 1px solid #bae6fd;">M PLUS Rounded 1c</span>
+        </div>
+        <div class="features">
+          <div class="feature">
+            <div class="feature-label">Primary Color</div>
+            <div class="feature-value" style="color: #059669;">#059669</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Font</div>
+            <div class="feature-value">M PLUS Rounded 1c</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Corner Radius</div>
+            <div class="feature-value">14-24px</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Background</div>
+            <div class="feature-value">Multi Gradient</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Style</div>
+            <div class="feature-value">Organic & Fresh</div>
+          </div>
+          <div class="feature">
+            <div class="feature-label">Target</div>
+            <div class="feature-value">All Age Female</div>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: #6b7280; line-height: 1.7; margin-bottom: 16px;">
+          グリーン〜ブルー〜ピンクのパステルグラデーション背景。丸ゴシック（M PLUS Rounded 1c）で親しみやすい印象。カラフルなグラデーションアイコンがポイント。各カードの角は大きめ（24px）でオーガニックな雰囲気。メダルも緑・紫・ピンクで華やかに。
+        </p>
+        <a href="design-c-natural.html" class="btn-view" style="background: linear-gradient(135deg, #059669, #10b981);">
+          Design C を見る &rarr;
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer style="text-align: center; padding: 24px 0; border-top: 1px solid #e5e7eb;">
+  <p style="font-size: 12px; color: #9ca3af;">&copy; 注文相談.com &mdash; UIデザインモック（本番環境とは分離）</p>
+</footer>
+
+</body>
+</html>
