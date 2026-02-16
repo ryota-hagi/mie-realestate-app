@@ -490,7 +490,7 @@ function calculateScores(prop) {
 
 function getScoreColor(score) {
   if (score >= 70) return '#16a34a'; // green
-  if (score >= 50) return '#d97706'; // amber
+  if (score >= 45) return '#d97706'; // amber
   return '#dc2626'; // red
 }
 
@@ -767,6 +767,7 @@ function renderPropertyView() {
             const badgeLabel = prop.badge === 'red' ? '🔴 注意' : prop.badge === 'yellow' ? '🟡 要確認' : '🟢 OK';
             const areaName = AREAS.find(a => a.id === prop.area_id)?.name || (prop.address ? AREAS.find(a => prop.address.includes(a.name))?.name : '') || '';
             const priceStr = prop.price ? `${(prop.price / 10000).toLocaleString()}万円` : '価格未入力';
+            const tsuboPriceStr = (prop.price && prop.land_area) ? `（坪${(prop.price / (prop.land_area / 3.305785) / 10000).toFixed(1)}万）` : '';
             const areaStr = prop.land_area ? `${(prop.land_area / 3.305785).toFixed(1)}坪（${prop.land_area}㎡）` : '面積未入力';
             // 位置精度バッジ
             const geoConf = prop.geo_confidence;
@@ -826,7 +827,7 @@ function renderPropertyView() {
                     </div>
                     <div class="text-sm font-medium text-gray-800">${prop.address || '住所未入力'}</div>
                     <div class="flex items-center gap-3 mt-1 text-sm">
-                      <span class="font-bold text-blue-700">${priceStr}</span>
+                      <span class="font-bold text-blue-700">${priceStr}</span><span class="text-xs text-gray-400">${tsuboPriceStr}</span>
                       <span class="text-gray-500">${areaStr}</span>
                     </div>
                     ${prop.station_distance ? `<div class="text-xs text-gray-400 mt-1">🚃 ${prop.station_distance}</div>` : ''}
