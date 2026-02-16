@@ -1018,9 +1018,9 @@ function renderComparisonTable() {
                     const v = s[key];
                     const color = getScoreColor(v);
                     const isBest = v === maxCat && maxCat > 0;
-                    return '<td class="p-2">' +
-                      '<div class="flex items-center gap-1 justify-center">' +
-                      '<div class="flex-1 max-w-[60px] h-1.5 bg-gray-100 rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:' + v + '%;background:' + color + ';"></div></div>' +
+                    return '<td class="p-2 text-center">' +
+                      '<div style="display:inline-flex;align-items:center;gap:4px;">' +
+                      '<div style="width:50px;height:6px;background:#e5e7eb;border-radius:9999px;overflow:hidden;"><div style="height:100%;border-radius:9999px;width:' + v + '%;background:' + color + ';"></div></div>' +
                       '<span class="text-xs font-semibold" style="color:' + color + ';">' + v + '</span>' +
                       (isBest ? '<span style="font-size:9px;">★</span>' : '') +
                       '</div></td>';
@@ -1034,8 +1034,8 @@ function renderComparisonTable() {
                   if (!s) return '<td class="p-2 text-center text-xs text-gray-300">—</td>';
                   const isBest = s.score_total === maxTotal && maxTotal > 0;
                   return '<td class="p-2 text-center">' +
-                    '<div class="text-2xl font-black" style="color:' + getScoreColor(s.score_total) + ';">' + s.score_total +
-                    (isBest ? '<span class="text-xs ml-0.5">👑</span>' : '') + '</div></td>';
+                    '<div style="text-align:center;font-size:1.5rem;font-weight:900;color:' + getScoreColor(s.score_total) + ';">' + s.score_total +
+                    (isBest ? '<span style="font-size:0.75rem;margin-left:2px;">👑</span>' : '') + '</div></td>';
                 }).join('') + '</tr>' + scoreRows;
             })()}
             ${rows.map(r => `
