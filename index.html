@@ -556,7 +556,8 @@ const state = {
   _importUrl: '',
   _aiParsedProperty: null,
   // 一括取り込み用
-  _batchResults: [],      // [{url, status, parsed, error}]
+  _batchUrls: [''],       // URL入力欄の値一覧
+  _batchResults: [],      // [{url, status, parsed, error, saved}]
   _batchProcessing: false,
   _batchCurrentIndex: -1,
 };
@@ -708,9 +709,9 @@ function renderPropertyView() {
       <!-- 物件取り込みセクション（常に表示） -->
       <div class="card p-5 space-y-3 border-green-200 bg-green-50/30">
         <h3 class="text-sm font-bold text-gray-700">🤖 物件情報をAIで取り込み</h3>
-        <p class="text-xs text-gray-500">不動産サイトの物件ページURLを貼り付けてください。<span class="text-green-600 font-medium">複数URL一括取り込みOK!</span></p>
+        <p class="text-xs text-gray-500">不動産サイトの物件ページURLを貼り付けてAI取り込み。<span class="text-green-600 font-medium">複数件まとめて取り込みOK！</span></p>
         <div class="flex gap-2">
-          <input id="url-import-property" type="url" placeholder="物件URLを貼り付け（複数OK: AI取り込みで入力）" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+          <input id="url-import-property" type="url" placeholder="物件URLを貼り付け（https://suumo.jp/...）" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" />
           <button onclick="openImportModal()" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors whitespace-nowrap">
             🤖 AI取り込み
           </button>
@@ -1188,10 +1189,10 @@ function renderImportModal() {
   const areaId = state.soSearchAreaId;
   const area = AREAS.find(a => a.id === areaId);
   const areaName = area ? area.name : '';
-  const importUrl = state._importUrl || '';
   const parsed = state._aiParsedProperty;
   const batch = state._batchResults;
   const batchProcessing = state._batchProcessing;
+  const batchUrls = state._batchUrls;
 
   return `
     <div class="so-modal-overlay" onclick="closeSOModal(event)">
@@ -1212,14 +1213,25 @@ function renderImportModal() {
             </button>
           </div>
 
-          <!-- URL入力パネル（複数URL対応） -->
+          <!-- URL入力パネル（複数URL入力欄） -->
           <div id="panel-url">
             ${batch.length === 0 && !batchProcessing ? `
-              <label class="text-sm font-medium text-gray-700">物件ページのURL（複数可）</label>
-              <textarea id="import-urls" rows="4" placeholder="URLを1行に1つ貼り付けてください（複数OK）&#10;&#10;https://suumo.jp/tochi/...&#10;https://www.athome.co.jp/tochi/...&#10;https://www.homes.co.jp/tochi/..." class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg text-sm font-mono" style="resize:vertical;">${importUrl}</textarea>
-              <p class="text-xs text-gray-400 mt-1">SUUMO・アットホーム・HOMES等の個別物件ページURL。1行1件で複数入力できます</p>
+              <label class="text-sm font-medium text-gray-700">物件ページのURL</label>
+              <div class="space-y-2 mt-1" id="url-fields-container">
+                ${batchUrls.map((url, i) => `
+                  <div class="flex gap-2 items-center">
+                    <span class="text-xs text-gray-400 w-5 text-right shrink-0">${i + 1}</span>
+                    <input type="url" value="${(url || '').replace(/"/g, '&quot;')}" placeholder="https://suumo.jp/tochi/... や athome.co.jp/..." class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm batch-url-input" data-idx="${i}" oninput="updateBatchUrlValue(${i}, this.value)" />
+                    ${batchUrls.length > 1 ? `<button onclick="removeBatchUrlField(${i})" class="text-gray-300 hover:text-red-400 text-lg leading-none shrink-0" title="削除">×</button>` : '<div class="w-5"></div>'}
+                  </div>
+                `).join('')}
+              </div>
+              <button onclick="addBatchUrlField()" class="mt-2 text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                ＋ URLを追加
+              </button>
+              <p class="text-xs text-gray-400 mt-1">SUUMO・アットホーム・HOMES等の個別物件ページURLを入力してください</p>
               <button id="btn-fetch-url" onclick="handleBatchFetchUrls()" class="w-full mt-3 px-4 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-                🔗 URLから物件情報を取得
+                🔗 URLから物件情報を取得${batchUrls.filter(u => u && u.startsWith('http')).length > 1 ? `（${batchUrls.filter(u => u && u.startsWith('http')).length}件）` : ''}
               </button>
             ` : ''}
 
@@ -1400,8 +1412,10 @@ function renderBatchProgress() {
 // ============================================================
 function openImportModal(areaId) {
   const urlInput = document.getElementById('url-import-property') || document.getElementById('url-import-detail');
-  state._importUrl = urlInput ? urlInput.value.trim() : '';
+  const initialUrl = urlInput ? urlInput.value.trim() : '';
+  state._importUrl = initialUrl;
   state._aiParsedProperty = null;
+  state._batchUrls = initialUrl ? [initialUrl] : [''];
   state._batchResults = [];
   state._batchProcessing = false;
   state._batchCurrentIndex = -1;
@@ -1418,12 +1432,34 @@ function closeSOModal(event) {
 }
 
 // ============================================================
-// 一括URL取り込み
+// 一括URL取り込み: URL入力欄の管理
 // ============================================================
-function parseUrlsFromInput(text) {
-  return text.split(/[\n\r]+/)
-    .map(line => line.trim())
-    .filter(line => line.startsWith('http'));
+function addBatchUrlField() {
+  state._batchUrls.push('');
+  render();
+  // 追加後に最後の入力欄にフォーカス
+  setTimeout(() => {
+    const inputs = document.querySelectorAll('.batch-url-input');
+    if (inputs.length > 0) inputs[inputs.length - 1].focus();
+  }, 50);
+}
+
+function removeBatchUrlField(idx) {
+  if (state._batchUrls.length <= 1) return;
+  state._batchUrls.splice(idx, 1);
+  render();
+}
+
+function updateBatchUrlValue(idx, value) {
+  state._batchUrls[idx] = value;
+  // ボタンの件数表示を更新（renderしない＝入力中のフォーカスを保持）
+  const btn = document.getElementById('btn-fetch-url');
+  if (btn) {
+    const count = state._batchUrls.filter(u => u && u.trim().startsWith('http')).length;
+    btn.textContent = count > 1
+      ? `🔗 URLから物件情報を取得（${count}件）`
+      : '🔗 URLから物件情報を取得';
+  }
 }
 
 async function fetchSingleUrl(url) {
@@ -1443,13 +1479,14 @@ async function fetchSingleUrl(url) {
 }
 
 async function handleBatchFetchUrls() {
-  const textEl = document.getElementById('import-urls');
-  const text = textEl ? textEl.value.trim() : '';
-  const urls = parseUrlsFromInput(text);
+  // 入力欄からURL一覧を取得
+  const urls = state._batchUrls
+    .map(u => (u || '').trim())
+    .filter(u => u.startsWith('http'));
 
   if (urls.length === 0) { alert('物件ページのURLを入力してください'); return; }
 
-  // 単件の場合も一括フローで処理
+  // 一括フローに入る
   state._batchResults = urls.map(url => ({ url, status: 'pending', parsed: null, error: null, saved: false }));
   state._batchProcessing = true;
   state._batchCurrentIndex = 0;
@@ -1534,8 +1571,9 @@ function skipBatchItem(idx) {
   render();
 }
 
-// バッチリセット
+// バッチリセット（URL入力に戻す）
 function resetBatch() {
+  state._batchUrls = [''];
   state._batchResults = [];
   state._batchProcessing = false;
   state._batchCurrentIndex = -1;
@@ -1545,6 +1583,7 @@ function resetBatch() {
 function closeBatchModal() {
   state.soModalOpen = false;
   state._aiParsedProperty = null;
+  state._batchUrls = [''];
   state._batchResults = [];
   state._batchProcessing = false;
   state._batchCurrentIndex = -1;
