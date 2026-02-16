@@ -143,6 +143,10 @@ async function saveProperty(prop) {
     if (error) { alert('保存に失敗しました: ' + error.message); console.error('Save failed:', error); return null; }
     state.savedProperties.unshift(data);
     backupToLocalStorage();
+    // 位置情報がある場合、バックグラウンドでenrichment実行
+    if (data.lat && data.lng) {
+      triggerEnrichment(data.id).catch(e => console.warn('Auto-enrichment failed:', e.message));
+    }
     return data;
   } catch(e) { alert('保存エラー: ' + e.message); return null; }
 }
@@ -161,6 +165,50 @@ async function deleteProperty(id) {
   const { error } = await supabaseClient.from('saved_properties').delete().eq('id', id);
   if (!error) state.savedProperties = state.savedProperties.filter(p => p.id !== id);
   backupToLocalStorage();
+}
+
+// ============================================================
+// Property Enrichment（詳細情報の自動取得）
+// ============================================================
+async function triggerEnrichment(propertyId) {
+  // ローカルステートを「取得中」に更新
+  const prop = state.savedProperties.find(p => p.id === propertyId);
+  if (prop) { prop.enrichment_status = 'pending'; render(); }
+
+  try {
+    const headers = { 'Content-Type': 'application/json', 'apikey': CONFIG.SUPABASE_ANON_KEY };
+    const session = await supabaseClient.auth.getSession();
+    const token = session?.data?.session?.access_token;
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    else headers['Authorization'] = `Bearer ${CONFIG.SUPABASE_ANON_KEY}`;
+    const res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/property-enrich`, {
+      method: 'POST', headers,
+      body: JSON.stringify({ action: 'enrich', property_id: propertyId })
+    });
+    if (!res.ok) { const errText = await res.text(); throw new Error(`HTTP ${res.status}: ${errText}`); }
+    const result = await res.json();
+    if (result.error) throw new Error(result.error);
+
+    // ローカルステートに結果を反映
+    if (prop) {
+      Object.assign(prop, result);
+      backupToLocalStorage();
+      render();
+    }
+    return result;
+  } catch(e) {
+    console.warn('Enrichment failed for', propertyId, ':', e.message);
+    if (prop) { prop.enrichment_status = 'error'; render(); }
+    throw e;
+  }
+}
+
+async function handleEnrichProperty(propertyId) {
+  try {
+    await triggerEnrichment(propertyId);
+  } catch(e) {
+    // silently handled in triggerEnrichment
+  }
 }
 
 // ============================================================
@@ -330,6 +378,156 @@ function calculateBadge(property, areaData) {
   const missingCritical = [property.zoning, property.road_access, property.building_coverage, property.elevation, property.infrastructure].filter(v => !v).length;
   if (missingCritical >= 3) redReasons.push('重要項目が複数不明');
   return redReasons.length > 0 ? 'red' : yellowReasons.length > 0 ? 'yellow' : 'none';
+}
+
+// ============================================================
+// Auto Scoring（物件スコアリング）
+// ============================================================
+function calculateScores(prop) {
+  if (!prop) return null;
+
+  // 安全性スコア (0-100)
+  let scoreSafety = 70; // ベースライン
+  if (prop.hazard_flood) {
+    if (prop.hazard_flood.includes('低')) scoreSafety += 15;
+    else if (prop.hazard_flood.includes('高')) scoreSafety -= 20;
+    else scoreSafety -= 5;
+  }
+  if (prop.hazard_sediment) {
+    if (prop.hazard_sediment.includes('低')) scoreSafety += 10;
+    else if (prop.hazard_sediment.includes('高')) scoreSafety -= 25;
+    else scoreSafety -= 5;
+  }
+  if (prop.hazard_tsunami) {
+    if (prop.hazard_tsunami.includes('低')) scoreSafety += 5;
+    else if (prop.hazard_tsunami.includes('高')) scoreSafety -= 15;
+  }
+  if (prop.ground_type) {
+    if (prop.ground_type.includes('台地') || prop.ground_type.includes('丘陵')) scoreSafety += 10;
+    else if (prop.ground_type.includes('沖積') || prop.ground_type.includes('埋立')) scoreSafety -= 10;
+  }
+
+  // 利便性スコア (0-100)
+  let scoreConvenience = 50;
+  const extractDist = (str) => {
+    if (!str) return null;
+    const m = str.match(/(\d+)m/);
+    return m ? parseInt(m[1]) : null;
+  };
+  const superDist = extractDist(prop.nearest_supermarket);
+  if (superDist) { scoreConvenience += superDist < 500 ? 20 : superDist < 1000 ? 10 : superDist < 2000 ? 0 : -10; }
+  const hospDist = extractDist(prop.nearest_hospital);
+  if (hospDist) { scoreConvenience += hospDist < 1000 ? 10 : hospDist < 2000 ? 5 : 0; }
+  const parkDist = extractDist(prop.nearest_park);
+  if (parkDist) { scoreConvenience += parkDist < 500 ? 10 : parkDist < 1000 ? 5 : 0; }
+  if (prop.school_elementary) {
+    const schoolDist = extractDist(prop.school_elementary);
+    if (schoolDist) { scoreConvenience += schoolDist < 800 ? 10 : schoolDist < 1500 ? 5 : 0; }
+  }
+
+  // コストスコア (0-100) — エリア相場との比較
+  let scoreCost = 50;
+  if (prop.price && prop.land_area) {
+    const tsuboPrice = prop.price / (prop.land_area / 3.305785) / 10000; // 万円/坪
+    const areaData = AREAS.find(a => a.id === prop.area_id);
+    if (areaData) {
+      const areaAvg = areaData.pricePerTsubo / 10000; // 万円/坪
+      const ratio = tsuboPrice / areaAvg;
+      if (ratio < 0.7) scoreCost += 30;
+      else if (ratio < 0.9) scoreCost += 15;
+      else if (ratio < 1.1) scoreCost += 5;
+      else if (ratio > 1.3) scoreCost -= 15;
+      else if (ratio > 1.1) scoreCost -= 5;
+    }
+  }
+
+  // 総合スコア
+  const scoreTotal = Math.round(scoreSafety * 0.35 + scoreConvenience * 0.35 + scoreCost * 0.3);
+
+  return {
+    score_safety: Math.max(0, Math.min(100, Math.round(scoreSafety))),
+    score_convenience: Math.max(0, Math.min(100, Math.round(scoreConvenience))),
+    score_cost: Math.max(0, Math.min(100, Math.round(scoreCost))),
+    score_total: Math.max(0, Math.min(100, scoreTotal)),
+  };
+}
+
+function getScoreColor(score) {
+  if (score >= 75) return '#16a34a'; // green
+  if (score >= 50) return '#d97706'; // amber
+  return '#dc2626'; // red
+}
+
+function renderScoreBar(label, score) {
+  if (score == null) return '';
+  const color = getScoreColor(score);
+  return `<div class="flex items-center gap-2 text-xs">
+    <span class="text-gray-500 w-12">${label}</span>
+    <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+      <div class="h-full rounded-full" style="width:${score}%;background:${color};"></div>
+    </div>
+    <span class="font-medium" style="color:${color};">${score}</span>
+  </div>`;
+}
+
+// ============================================================
+// CSV Export
+// ============================================================
+function exportComparisonCSV() {
+  const comp = state.soComparison;
+  if (!comp || !comp.properties || comp.properties.length === 0) { alert('比較表がありません'); return; }
+  const props = comp.properties;
+  const labels = ['A','B','C','D','E'];
+
+  const allKeys = [
+    { label: '物件', fmt: (p, i) => '物件' + labels[i] },
+    { label: '所在地', fmt: p => p.address || '' },
+    { label: '価格(万円)', fmt: p => p.price ? (p.price / 10000) : '' },
+    { label: '土地面積(㎡)', fmt: p => p.land_area || '' },
+    { label: '坪単価(万円)', fmt: p => p.price && p.land_area ? (p.price / (p.land_area / 3.305785) / 10000).toFixed(1) : '' },
+    { label: '駅距離', fmt: p => p.station_distance || '' },
+    { label: '用途地域', fmt: p => p.zoning || '' },
+    { label: '建ぺい率', fmt: p => p.building_coverage || '' },
+    { label: '容積率', fmt: p => p.floor_area_ratio || '' },
+    { label: '接道', fmt: p => p.road_access || '' },
+    { label: 'インフラ', fmt: p => p.infrastructure || '' },
+    { label: 'ハザード', fmt: p => p.hazard || '' },
+    { label: '小学校区', fmt: p => p.school_elementary || '' },
+    { label: '中学校区', fmt: p => p.school_junior_high || '' },
+    { label: '最寄スーパー', fmt: p => p.nearest_supermarket || '' },
+    { label: '最寄病院', fmt: p => p.nearest_hospital || '' },
+    { label: '洪水リスク', fmt: p => p.hazard_flood || '' },
+    { label: '土砂災害', fmt: p => p.hazard_sediment || '' },
+    { label: '地盤', fmt: p => p.ground_type || '' },
+    { label: 'AIコメント', fmt: p => p.ai_comment || '' },
+    { label: 'メモ', fmt: p => p.user_memo || p.memo || '' },
+    { label: '物件URL', fmt: p => p.url || '' },
+  ];
+
+  const csvRows = [];
+  // ヘッダー
+  csvRows.push(['項目', ...props.map((_, i) => '物件' + labels[i])].join(','));
+  // データ行
+  for (const row of allKeys) {
+    const values = props.map((p, i) => {
+      const val = row.fmt(p, i);
+      // CSVエスケープ
+      const str = String(val).replace(/"/g, '""');
+      return str.includes(',') || str.includes('"') || str.includes('\n') ? `"${str}"` : str;
+    });
+    csvRows.push([row.label, ...values].join(','));
+  }
+
+  const bom = '\uFEFF';
+  const blob = new Blob([bom + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (comp.name || '比較表') + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 // SUUMO検索URL生成
@@ -529,12 +727,53 @@ function renderPropertyView() {
             const areaName = AREAS.find(a => a.id === prop.area_id)?.name || prop.area_id || '';
             const priceStr = prop.price ? `${(prop.price / 10000).toLocaleString()}万円` : '価格未入力';
             const areaStr = prop.land_area ? `${(prop.land_area / 3.305785).toFixed(1)}坪（${prop.land_area}㎡）` : '面積未入力';
+            // 位置精度バッジ
+            const geoConf = prop.geo_confidence;
+            const geoBadge = geoConf === 'high' ? '<span style="font-size:10px;padding:1px 6px;border-radius:9999px;background:#dcfce7;color:#166534;border:1px solid #86efac;">📍 高精度</span>'
+              : geoConf === 'medium' ? '<span style="font-size:10px;padding:1px 6px;border-radius:9999px;background:#fef9c3;color:#854d0e;border:1px solid #fde047;">📍 中精度</span>'
+              : geoConf === 'low' ? '<span style="font-size:10px;padding:1px 6px;border-radius:9999px;background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;">📍 低精度</span>'
+              : '';
+            const mapLink = (prop.lat && prop.lng) ? `<a href="https://www.google.com/maps?q=${prop.lat},${prop.lng}" target="_blank" rel="noopener" class="text-xs text-green-600 hover:underline">🗺️ 地図で確認</a>` : '';
+            // enrichmentステータス
+            const enrichBadge = prop.enrichment_status === 'done' ? '<span style="font-size:10px;padding:1px 6px;border-radius:9999px;background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;">✅ 詳細情報あり</span>'
+              : prop.enrichment_status === 'pending' ? '<span style="font-size:10px;padding:1px 6px;border-radius:9999px;background:#fef3c7;color:#92400e;border:1px solid #fbbf24;">⏳ 詳細取得中</span>'
+              : prop.enrichment_status === 'error' ? '<span style="font-size:10px;padding:1px 6px;border-radius:9999px;background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;">❌ 取得失敗</span>'
+              : '';
+            // enrichmentボタン表示条件
+            const canEnrich = prop.lat && prop.lng && !prop.enrichment_status;
+            const canRetryEnrich = prop.lat && prop.lng && prop.enrichment_status === 'error';
+            // enrichment詳細表示 + スコア
+            const enrichDetails = prop.enrichment_status === 'done' ? (() => {
+              const scores = calculateScores(prop);
+              const scoreSection = scores ? '<div class="grid grid-cols-2 gap-1 mb-2">' +
+                renderScoreBar('安全', scores.score_safety) +
+                renderScoreBar('利便', scores.score_convenience) +
+                renderScoreBar('コスト', scores.score_cost) +
+                '<div class="flex items-center gap-2 text-xs"><span class="text-gray-500 w-12">総合</span><div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:' + scores.score_total + '%;background:' + getScoreColor(scores.score_total) + ';"></div></div><span class="font-bold" style="color:' + getScoreColor(scores.score_total) + ';">' + scores.score_total + '</span></div>' +
+                '</div>' : '';
+              const items = [];
+              if (prop.school_elementary) items.push('🏫 ' + prop.school_elementary);
+              if (prop.school_junior_high) items.push('🏫 ' + prop.school_junior_high);
+              if (prop.nearest_supermarket) items.push('🛒 ' + prop.nearest_supermarket);
+              if (prop.nearest_hospital) items.push('🏥 ' + prop.nearest_hospital);
+              if (prop.nearest_park) items.push('🌳 ' + prop.nearest_park);
+              if (prop.hazard_flood) items.push('🌊 洪水: ' + prop.hazard_flood);
+              if (prop.hazard_sediment) items.push('⛰️ 土砂: ' + prop.hazard_sediment);
+              if (prop.ground_type) items.push('🪨 地盤: ' + prop.ground_type);
+              if (prop.ai_comment) items.push('💬 ' + prop.ai_comment);
+              return (scoreSection || items.length > 0) ? '<div class="mt-2 p-2 bg-blue-50 rounded border border-blue-100 space-y-1">' +
+                scoreSection +
+                items.map(i => '<div class="text-xs text-gray-600">' + i + '</div>').join('') +
+                '</div>' : '';
+            })() : '';
             return `
               <div class="card p-4">
                 <div class="flex items-start justify-between">
                   <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-2 mb-1">
+                    <div class="flex items-center gap-2 mb-1 flex-wrap">
                       <span class="${badgeClass}" style="font-size:11px;padding:2px 8px;border-radius:9999px;">${badgeLabel}</span>
+                      ${geoBadge}
+                      ${enrichBadge}
                       ${areaName ? `<span class="text-xs text-gray-400">${areaName}</span>` : ''}
                     </div>
                     <div class="text-sm font-medium text-gray-800">${prop.address || '住所未入力'}</div>
@@ -544,12 +783,17 @@ function renderPropertyView() {
                     </div>
                     ${prop.station_distance ? `<div class="text-xs text-gray-400 mt-1">🚃 ${prop.station_distance}</div>` : ''}
                     ${prop.user_memo ? `<div class="text-xs text-gray-500 mt-1 bg-green-50 rounded px-2 py-1">📝 ${prop.user_memo}</div>` : (prop.memo ? `<div class="text-xs text-gray-500 mt-1 bg-gray-50 rounded px-2 py-1">💡 ${prop.memo}</div>` : '')}
-                    ${prop.url ? `<a href="${prop.url}" target="_blank" rel="noopener" class="text-xs text-blue-500 mt-1 inline-block hover:underline">🔗 物件ページ</a>` : ''}
+                    <div class="flex items-center gap-3 mt-1">
+                      ${prop.url ? `<a href="${prop.url}" target="_blank" rel="noopener" class="text-xs text-blue-500 hover:underline">🔗 物件ページ</a>` : ''}
+                      ${mapLink}
+                    </div>
+                    ${enrichDetails}
                   </div>
                   <div class="flex flex-col gap-1 ml-3">
                     <button onclick="handleToggleComparison('${prop.id}')" class="px-3 py-1 text-xs rounded-lg border transition-colors ${prop.in_comparison ? 'bg-blue-500 text-white border-blue-500' : 'bg-white text-gray-600 border-gray-300 hover:bg-blue-50'}">
                       ${prop.in_comparison ? '✓ 比較中' : '比較に追加'}
                     </button>
+                    ${canEnrich || canRetryEnrich ? `<button onclick="handleEnrichProperty('${prop.id}')" class="px-3 py-1 text-xs rounded-lg border border-purple-200 text-purple-600 hover:bg-purple-50 transition-colors">🔍 詳細取得</button>` : ''}
                     <button onclick="handleDeleteProperty('${prop.id}')" class="px-3 py-1 text-xs rounded-lg border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-300 transition-colors">削除</button>
                   </div>
                 </div>
@@ -686,7 +930,29 @@ function renderComparisonTable() {
         <h2 class="text-lg font-bold text-gray-800">📊</h2>
         <span id="comp-name-display" class="text-lg font-bold text-gray-800 cursor-pointer hover:text-blue-600 border-b border-dashed border-gray-300" onclick="startCompNameEdit()" title="クリックして名前を変更">${comp.name || '比較表'}</span>
         <span class="text-xs text-gray-400">（セルをクリックして編集可能）</span>
+        <button onclick="exportComparisonCSV()" class="ml-auto px-3 py-1 text-xs rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">📥 CSV出力</button>
       </div>
+
+      ${props.some(p => p.enrichment_status === 'done') ? `
+        <div class="card p-4 bg-purple-50 border-purple-200">
+          <h3 class="text-sm font-bold text-purple-800 mb-3">📈 物件スコア比較</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-${Math.min(props.length, 5)} gap-3">
+            ${props.map((p, i) => {
+              const scores = calculateScores(p);
+              if (!scores) return '<div class="text-center text-xs text-gray-400 p-2">スコアなし</div>';
+              return '<div class="bg-white rounded-lg p-3 border border-purple-100 text-center">' +
+                '<div class="text-sm font-bold text-gray-800 mb-2">物件' + labels[i] + '</div>' +
+                '<div class="text-3xl font-bold mb-1" style="color:' + getScoreColor(scores.score_total) + ';">' + scores.score_total + '</div>' +
+                '<div class="text-xs text-gray-500 mb-2">総合スコア</div>' +
+                '<div class="space-y-1">' +
+                renderScoreBar('安全', scores.score_safety) +
+                renderScoreBar('利便', scores.score_convenience) +
+                renderScoreBar('コスト', scores.score_cost) +
+                '</div></div>';
+            }).join('')}
+          </div>
+        </div>
+      ` : ''}
 
       ${comp.summary ? `
         <div class="card p-4 bg-blue-50 border-blue-200">
@@ -727,6 +993,37 @@ function renderComparisonTable() {
                 }).join('')}
               </tr>
             `).join('')}
+            <!-- AI詳細情報（enrichment） -->
+            ${props.some(p => p.enrichment_status === 'done') || props.some(p => p.lat && p.lng) ? `
+              <tr><td colspan="${props.length+1}" class="p-2 bg-blue-50"><span class="text-xs font-bold text-blue-700">🔍 AI自動取得情報（周辺環境・ハザード）</span></td></tr>
+              ${[
+                { label: '小学校区', key: 'school_elementary' },
+                { label: '中学校区', key: 'school_junior_high' },
+                { label: '最寄スーパー', key: 'nearest_supermarket' },
+                { label: '最寄病院', key: 'nearest_hospital' },
+                { label: '最寄公園', key: 'nearest_park' },
+                { label: '最寄保育園', key: 'nearest_nursery' },
+                { label: '洪水リスク', key: 'hazard_flood' },
+                { label: '土砂災害', key: 'hazard_sediment' },
+                { label: '津波リスク', key: 'hazard_tsunami' },
+                { label: '地盤', key: 'ground_type' },
+                { label: 'AIコメント', key: 'ai_comment' },
+              ].map(r => {
+                return '<tr><td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">' + r.label + '</td>' +
+                  props.map(p => {
+                    const val = p[r.key];
+                    if (p.enrichment_status === 'done') {
+                      return '<td class="p-3 text-xs text-gray-700">' + (val || '<span class="text-gray-300">\u2014</span>') + '</td>';
+                    } else if (p.enrichment_status === 'pending') {
+                      return '<td class="p-3 text-xs text-amber-500">\u23f3 取得中...</td>';
+                    } else if (p.lat && p.lng) {
+                      return '<td class="p-3 text-xs"><button onclick="handleEnrichProperty(' + "'" + p.id + "'" + ')" class="text-blue-500 hover:underline text-xs">\ud83d\udd0d 取得する</button></td>';
+                    } else {
+                      return '<td class="p-3 text-xs text-gray-300">位置情報なし</td>';
+                    }
+                  }).join('') + '</tr>';
+              }).join('')}
+            ` : ''}
             <!-- メモ行 -->
             <tr><td colspan="${props.length+1}" class="p-2 bg-green-50"><span class="text-xs font-bold text-green-700">📝 メモ（自由入力）</span></td></tr>
             <tr>
@@ -946,6 +1243,39 @@ function renderImportModal() {
                 ${parsed.building_coverage ? `<span class="text-gray-500">建ぺい率:</span><span class="font-medium">${parsed.building_coverage}</span>` : ''}
                 ${parsed.road_access ? `<span class="text-gray-500">接道:</span><span class="font-medium">${parsed.road_access}</span>` : ''}
               </div>
+              ${(() => {
+                // 位置情報表示
+                const geoConf = parsed.geo_confidence;
+                const geoSrc = parsed.geo_source || '';
+                if (parsed.lat && parsed.lng) {
+                  const confLabel = geoConf === 'high' ? '🟢 高精度（ページ内座標）'
+                    : geoConf === 'medium' ? '🟡 中精度（住所ジオコーディング）'
+                    : '🔴 低精度（AI推定）';
+                  const confClass = geoConf === 'high' ? 'text-green-700 bg-green-50'
+                    : geoConf === 'medium' ? 'text-amber-700 bg-amber-50'
+                    : 'text-red-700 bg-red-50';
+                  return '<div class="mt-2 p-2 rounded ' + confClass + ' border">' +
+                    '<div class="flex items-center gap-2 text-xs font-medium">' +
+                    '<span>📍 位置情報: ' + confLabel + '</span>' +
+                    '<a href="https://www.google.com/maps?q=' + parsed.lat + ',' + parsed.lng + '" target="_blank" rel="noopener" class="text-blue-600 hover:underline ml-auto">🗺️ 地図で確認</a>' +
+                    '</div>' +
+                    (geoConf !== 'high' ? '<p class="text-xs mt-1 opacity-75">※ 保存後、地図リンクから位置をご確認ください</p>' : '') +
+                    '</div>';
+                }
+                return '';
+              })()}
+              ${(() => {
+                // 重複警告
+                if (parsed.dedup_hash) {
+                  const dup = state.savedProperties.find(p => p.dedup_hash === parsed.dedup_hash);
+                  if (dup) {
+                    return '<div class="mt-2 p-2 rounded bg-red-50 border border-red-200 text-xs text-red-700">' +
+                      '⚠️ <strong>重複の可能性:</strong> 同じ住所・面積・価格の物件が既に保存されています（' + (dup.address || '住所不明') + '）' +
+                      '</div>';
+                  }
+                }
+                return '';
+              })()}
               ${parsed.memo ? `<p class="text-xs text-amber-700 mt-2">💡 ${parsed.memo}</p>` : ''}
               ${parsed.source_url ? `<p class="text-xs mt-1"><a href="${parsed.source_url}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">🔗 ${parsed.source_url}</a></p>` : ''}
               <div class="flex gap-2 mt-3">
@@ -1058,6 +1388,17 @@ async function handleSaveParsed() {
     return;
   }
 
+  // 重複チェック（dedup_hash）
+  if (parsed.dedup_hash) {
+    const existing = state.savedProperties.find(p => p.dedup_hash === parsed.dedup_hash);
+    if (existing) {
+      const existAddr = existing.address || '住所不明';
+      if (!confirm(`⚠️ この物件は既に保存されている可能性があります。\n\n既存: ${existAddr}\n\nそれでも保存しますか？`)) {
+        return;
+      }
+    }
+  }
+
   const prop = {
     area_id: state.soSearchAreaId || null,
     url: parsed.source_url || state._importUrl || null,
@@ -1076,6 +1417,12 @@ async function handleSaveParsed() {
     infrastructure: parsed.infrastructure || null,
     hazard: parsed.hazard || null,
     memo: parsed.memo || null,
+    // Phase 1: 位置情報・重複排除
+    lat: parsed.lat || null,
+    lng: parsed.lng || null,
+    geo_confidence: parsed.geo_confidence || null,
+    geo_source: parsed.geo_source || null,
+    dedup_hash: parsed.dedup_hash || null,
   };
 
   const saved = await saveProperty(prop);
