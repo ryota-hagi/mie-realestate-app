@@ -555,6 +555,10 @@ const state = {
   soSearchAreaId: null,
   _importUrl: '',
   _aiParsedProperty: null,
+  // 一括取り込み用
+  _batchResults: [],      // [{url, status, parsed, error}]
+  _batchProcessing: false,
+  _batchCurrentIndex: -1,
 };
 
 // ============================================================
@@ -704,9 +708,9 @@ function renderPropertyView() {
       <!-- 物件取り込みセクション（常に表示） -->
       <div class="card p-5 space-y-3 border-green-200 bg-green-50/30">
         <h3 class="text-sm font-bold text-gray-700">🤖 物件情報をAIで取り込み</h3>
-        <p class="text-xs text-gray-500">不動産サイト（SUUMO・アットホーム等）の物件ページURLを貼るか、物件情報テキストを貼り付けてください</p>
+        <p class="text-xs text-gray-500">不動産サイトの物件ページURLを貼り付けてください。<span class="text-green-600 font-medium">複数URL一括取り込みOK!</span></p>
         <div class="flex gap-2">
-          <input id="url-import-property" type="url" placeholder="物件URLを貼り付け（https://suumo.jp/...）" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+          <input id="url-import-property" type="url" placeholder="物件URLを貼り付け（複数OK: AI取り込みで入力）" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" />
           <button onclick="openImportModal()" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors whitespace-nowrap">
             🤖 AI取り込み
           </button>
@@ -1186,13 +1190,15 @@ function renderImportModal() {
   const areaName = area ? area.name : '';
   const importUrl = state._importUrl || '';
   const parsed = state._aiParsedProperty;
+  const batch = state._batchResults;
+  const batchProcessing = state._batchProcessing;
 
   return `
     <div class="so-modal-overlay" onclick="closeSOModal(event)">
-      <div class="so-modal" onclick="event.stopPropagation()">
+      <div class="so-modal" onclick="event.stopPropagation()" style="max-height:90vh; overflow-y:auto;">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-bold text-gray-800">🤖 物件情報をAIで取り込み${areaName ? `（${areaName}）` : ''}</h3>
-          <button onclick="state.soModalOpen=false; state._aiParsedProperty=null; render();" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+          <button onclick="closeBatchModal()" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
         </div>
 
         <div class="space-y-4">
@@ -1206,14 +1212,18 @@ function renderImportModal() {
             </button>
           </div>
 
-          <!-- URL入力パネル -->
+          <!-- URL入力パネル（複数URL対応） -->
           <div id="panel-url">
-            <label class="text-sm font-medium text-gray-700">物件ページのURL</label>
-            <input id="import-url" type="url" value="${importUrl}" placeholder="https://suumo.jp/tochi/... や athome.co.jp/... のURL" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" />
-            <p class="text-xs text-gray-400 mt-1">SUUMO・アットホーム・HOMES等の個別物件ページURLを貼ってください</p>
-            <button id="btn-fetch-url" onclick="handleFetchUrl()" class="w-full mt-3 px-4 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-              🔗 URLから物件情報を取得
-            </button>
+            ${batch.length === 0 && !batchProcessing ? `
+              <label class="text-sm font-medium text-gray-700">物件ページのURL（複数可）</label>
+              <textarea id="import-urls" rows="4" placeholder="URLを1行に1つ貼り付けてください（複数OK）&#10;&#10;https://suumo.jp/tochi/...&#10;https://www.athome.co.jp/tochi/...&#10;https://www.homes.co.jp/tochi/..." class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg text-sm font-mono" style="resize:vertical;">${importUrl}</textarea>
+              <p class="text-xs text-gray-400 mt-1">SUUMO・アットホーム・HOMES等の個別物件ページURL。1行1件で複数入力できます</p>
+              <button id="btn-fetch-url" onclick="handleBatchFetchUrls()" class="w-full mt-3 px-4 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                🔗 URLから物件情報を取得
+              </button>
+            ` : ''}
+
+            ${batchProcessing || batch.length > 0 ? renderBatchProgress() : ''}
           </div>
 
           <!-- テキスト貼り付けパネル -->
@@ -1231,61 +1241,156 @@ function renderImportModal() {
             </button>
           </div>
 
-          ${parsed ? `
-            <div class="bg-green-50 border border-green-200 rounded-lg p-4 space-y-2">
-              <p class="text-sm font-bold text-green-800">✅ AIが整理した物件情報</p>
-              <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-                <span class="text-gray-500">価格:</span><span class="font-medium">${parsed.price ? parsed.price.toLocaleString() + '万円' : '—'}</span>
-                <span class="text-gray-500">面積:</span><span class="font-medium">${parsed.land_area ? (parsed.land_area/3.305785).toFixed(1) + '坪（' + parsed.land_area + '㎡）' : '—'}</span>
-                <span class="text-gray-500">住所:</span><span class="font-medium">${parsed.address || '—'}</span>
-                <span class="text-gray-500">駅:</span><span class="font-medium">${parsed.station_distance || '—'}</span>
-                ${parsed.zoning ? `<span class="text-gray-500">用途地域:</span><span class="font-medium">${parsed.zoning}</span>` : ''}
-                ${parsed.building_coverage ? `<span class="text-gray-500">建ぺい率:</span><span class="font-medium">${parsed.building_coverage}</span>` : ''}
-                ${parsed.road_access ? `<span class="text-gray-500">接道:</span><span class="font-medium">${parsed.road_access}</span>` : ''}
-              </div>
-              ${(() => {
-                // 位置情報表示
-                const geoConf = parsed.geo_confidence;
-                const geoSrc = parsed.geo_source || '';
-                if (parsed.lat && parsed.lng) {
-                  const confLabel = geoConf === 'high' ? '🟢 高精度（ページ内座標）'
-                    : geoConf === 'medium' ? '🟡 中精度（住所ジオコーディング）'
-                    : '🔴 低精度（AI推定）';
-                  const confClass = geoConf === 'high' ? 'text-green-700 bg-green-50'
-                    : geoConf === 'medium' ? 'text-amber-700 bg-amber-50'
-                    : 'text-red-700 bg-red-50';
-                  return '<div class="mt-2 p-2 rounded ' + confClass + ' border">' +
-                    '<div class="flex items-center gap-2 text-xs font-medium">' +
-                    '<span>📍 位置情報: ' + confLabel + '</span>' +
-                    '<a href="https://www.google.com/maps?q=' + parsed.lat + ',' + parsed.lng + '" target="_blank" rel="noopener" class="text-blue-600 hover:underline ml-auto">🗺️ 地図で確認</a>' +
-                    '</div>' +
-                    (geoConf !== 'high' ? '<p class="text-xs mt-1 opacity-75">※ 保存後、地図リンクから位置をご確認ください</p>' : '') +
-                    '</div>';
-                }
-                return '';
-              })()}
-              ${(() => {
-                // 重複警告
-                if (parsed.dedup_hash) {
-                  const dup = state.savedProperties.find(p => p.dedup_hash === parsed.dedup_hash);
-                  if (dup) {
-                    return '<div class="mt-2 p-2 rounded bg-red-50 border border-red-200 text-xs text-red-700">' +
-                      '⚠️ <strong>重複の可能性:</strong> 同じ住所・面積・価格の物件が既に保存されています（' + (dup.address || '住所不明') + '）' +
-                      '</div>';
-                  }
-                }
-                return '';
-              })()}
-              ${parsed.memo ? `<p class="text-xs text-amber-700 mt-2">💡 ${parsed.memo}</p>` : ''}
-              ${parsed.source_url ? `<p class="text-xs mt-1"><a href="${parsed.source_url}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">🔗 ${parsed.source_url}</a></p>` : ''}
-              <div class="flex gap-2 mt-3">
-                <button onclick="handleSaveParsed()" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">💾 この内容で保存</button>
-                <button onclick="state._aiParsedProperty=null; render();" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm hover:bg-gray-200 transition-colors">やり直す</button>
-              </div>
-            </div>
-          ` : ''}
+          ${parsed && batch.length === 0 ? renderSingleParsedPreview(parsed) : ''}
         </div>
       </div>
+    </div>
+  `;
+}
+
+// 単件プレビュー表示（テキスト貼り付け用）
+function renderSingleParsedPreview(parsed) {
+  return `
+    <div class="bg-green-50 border border-green-200 rounded-lg p-4 space-y-2">
+      <p class="text-sm font-bold text-green-800">✅ AIが整理した物件情報</p>
+      ${renderParsedPropertyGrid(parsed)}
+      ${renderGeoInfo(parsed)}
+      ${renderDupWarning(parsed)}
+      ${parsed.memo ? `<p class="text-xs text-amber-700 mt-2">💡 ${parsed.memo}</p>` : ''}
+      ${parsed.source_url ? `<p class="text-xs mt-1"><a href="${parsed.source_url}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">🔗 ${parsed.source_url}</a></p>` : ''}
+      <div class="flex gap-2 mt-3">
+        <button onclick="handleSaveParsed()" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">💾 この内容で保存</button>
+        <button onclick="state._aiParsedProperty=null; render();" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm hover:bg-gray-200 transition-colors">やり直す</button>
+      </div>
+    </div>
+  `;
+}
+
+// 物件情報グリッド（共通パーツ）
+function renderParsedPropertyGrid(parsed) {
+  return `<div class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+    <span class="text-gray-500">価格:</span><span class="font-medium">${parsed.price ? parsed.price.toLocaleString() + '万円' : '—'}</span>
+    <span class="text-gray-500">面積:</span><span class="font-medium">${parsed.land_area ? (parsed.land_area/3.305785).toFixed(1) + '坪（' + parsed.land_area + '㎡）' : '—'}</span>
+    <span class="text-gray-500">住所:</span><span class="font-medium">${parsed.address || '—'}</span>
+    <span class="text-gray-500">駅:</span><span class="font-medium">${parsed.station_distance || '—'}</span>
+    ${parsed.zoning ? `<span class="text-gray-500">用途地域:</span><span class="font-medium">${parsed.zoning}</span>` : ''}
+    ${parsed.building_coverage ? `<span class="text-gray-500">建ぺい率:</span><span class="font-medium">${parsed.building_coverage}</span>` : ''}
+    ${parsed.road_access ? `<span class="text-gray-500">接道:</span><span class="font-medium">${parsed.road_access}</span>` : ''}
+  </div>`;
+}
+
+// 位置情報表示（共通パーツ）
+function renderGeoInfo(parsed) {
+  const geoConf = parsed.geo_confidence;
+  if (!parsed.lat || !parsed.lng) return '';
+  const confLabel = geoConf === 'high' ? '🟢 高精度（ページ内座標）'
+    : geoConf === 'medium' ? '🟡 中精度（住所ジオコーディング）'
+    : '🔴 低精度（AI推定）';
+  const confClass = geoConf === 'high' ? 'text-green-700 bg-green-50'
+    : geoConf === 'medium' ? 'text-amber-700 bg-amber-50'
+    : 'text-red-700 bg-red-50';
+  return '<div class="mt-2 p-2 rounded ' + confClass + ' border">' +
+    '<div class="flex items-center gap-2 text-xs font-medium">' +
+    '<span>📍 位置情報: ' + confLabel + '</span>' +
+    '<a href="https://www.google.com/maps?q=' + parsed.lat + ',' + parsed.lng + '" target="_blank" rel="noopener" class="text-blue-600 hover:underline ml-auto">🗺️ 地図で確認</a>' +
+    '</div>' +
+    (geoConf !== 'high' ? '<p class="text-xs mt-1 opacity-75">※ 保存後、地図リンクから位置をご確認ください</p>' : '') +
+    '</div>';
+}
+
+// 重複警告（共通パーツ）
+function renderDupWarning(parsed) {
+  if (!parsed.dedup_hash) return '';
+  const dup = state.savedProperties.find(p => p.dedup_hash === parsed.dedup_hash);
+  if (!dup) return '';
+  return '<div class="mt-2 p-2 rounded bg-red-50 border border-red-200 text-xs text-red-700">' +
+    '⚠️ <strong>重複の可能性:</strong> 同じ住所・面積・価格の物件が既に保存されています（' + (dup.address || '住所不明') + '）' +
+    '</div>';
+}
+
+// 一括取り込みの進捗表示
+function renderBatchProgress() {
+  const batch = state._batchResults;
+  const processing = state._batchProcessing;
+  const currentIdx = state._batchCurrentIndex;
+  const total = batch.length;
+  const doneCount = batch.filter(b => b.status === 'done' || b.status === 'error').length;
+  const successCount = batch.filter(b => b.status === 'done').length;
+  const errorCount = batch.filter(b => b.status === 'error').length;
+  const savedCount = batch.filter(b => b.saved).length;
+
+  // 全完了したか
+  const allDone = !processing && doneCount === total;
+
+  return `
+    <div class="space-y-3">
+      <!-- プログレスバー -->
+      <div>
+        <div class="flex items-center justify-between text-sm mb-1">
+          <span class="font-medium text-gray-700">${processing ? `⏳ 取得中... (${doneCount}/${total})` : allDone ? `✅ 取得完了 (${successCount}件成功${errorCount > 0 ? '、' + errorCount + '件失敗' : ''})` : ''}</span>
+          ${allDone ? `<button onclick="resetBatch()" class="text-xs text-gray-400 hover:text-gray-600">✕ 閉じる</button>` : ''}
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+          <div class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: ${total > 0 ? (doneCount / total * 100) : 0}%"></div>
+        </div>
+      </div>
+
+      <!-- 各URL結果一覧 -->
+      <div class="space-y-2 max-h-96 overflow-y-auto">
+        ${batch.map((item, idx) => {
+          const isProcessing = processing && idx === currentIdx;
+          const isDone = item.status === 'done';
+          const isError = item.status === 'error';
+          const isSaved = item.saved;
+
+          // URL短縮表示
+          let shortUrl = item.url;
+          try { shortUrl = new URL(item.url).hostname + new URL(item.url).pathname.substring(0, 30) + '...'; } catch(e) {}
+
+          return `
+            <div class="border rounded-lg ${isDone ? (isSaved ? 'border-green-300 bg-green-50/50' : 'border-blue-200 bg-blue-50/30') : isError ? 'border-red-200 bg-red-50/30' : isProcessing ? 'border-amber-200 bg-amber-50/30' : 'border-gray-200'} p-3">
+              <div class="flex items-center gap-2">
+                <span class="text-sm">${isProcessing ? '⏳' : isDone ? (isSaved ? '✅' : '📋') : isError ? '❌' : '⏸️'}</span>
+                <span class="text-xs text-gray-500 truncate flex-1" title="${item.url}">${shortUrl}</span>
+                ${isProcessing ? '<span class="text-xs text-amber-600 animate-pulse">AI解析中...</span>' : ''}
+              </div>
+
+              ${isDone && item.parsed ? `
+                <div class="mt-2 pl-6">
+                  <div class="grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs">
+                    <span class="text-gray-400">価格:</span><span class="font-medium">${item.parsed.price ? item.parsed.price.toLocaleString() + '万円' : '—'}</span>
+                    <span class="text-gray-400">面積:</span><span class="font-medium">${item.parsed.land_area ? (item.parsed.land_area/3.305785).toFixed(1) + '坪' : '—'}</span>
+                    <span class="text-gray-400">住所:</span><span class="font-medium col-span-1 truncate">${item.parsed.address || '—'}</span>
+                  </div>
+                  ${renderDupWarning(item.parsed)}
+                  ${!isSaved ? `
+                    <div class="flex gap-2 mt-2">
+                      <button onclick="handleSaveBatchItem(${idx})" class="px-3 py-1 bg-green-600 text-white rounded text-xs font-medium hover:bg-green-700 transition-colors">💾 保存</button>
+                      <button onclick="skipBatchItem(${idx})" class="px-3 py-1 bg-gray-100 text-gray-500 rounded text-xs hover:bg-gray-200 transition-colors">スキップ</button>
+                    </div>
+                  ` : `<p class="text-xs text-green-600 mt-1">✅ 保存済み</p>`}
+                </div>
+              ` : ''}
+
+              ${isError ? `<p class="text-xs text-red-500 mt-1 pl-6">${item.error || '取得失敗'}</p>` : ''}
+            </div>
+          `;
+        }).join('')}
+      </div>
+
+      ${allDone && successCount > 0 ? `
+        <div class="flex gap-2">
+          ${successCount - savedCount > 0 ? `
+            <button onclick="handleSaveBatchAll()" class="flex-1 px-4 py-2.5 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+              💾 未保存をまとめて保存（${successCount - savedCount}件）
+            </button>
+          ` : `
+            <button onclick="closeBatchModal()" class="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+              ✅ 完了 — モーダルを閉じる
+            </button>
+          `}
+        </div>
+      ` : ''}
     </div>
   `;
 }
@@ -1297,6 +1402,9 @@ function openImportModal(areaId) {
   const urlInput = document.getElementById('url-import-property') || document.getElementById('url-import-detail');
   state._importUrl = urlInput ? urlInput.value.trim() : '';
   state._aiParsedProperty = null;
+  state._batchResults = [];
+  state._batchProcessing = false;
+  state._batchCurrentIndex = -1;
   state.soSearchAreaId = areaId || null;
   state.soModalOpen = true;
   state.soModalType = 'import';
@@ -1305,44 +1413,176 @@ function openImportModal(areaId) {
 
 function closeSOModal(event) {
   if (event.target === event.currentTarget) {
-    state.soModalOpen = false;
-    state._aiParsedProperty = null;
+    closeBatchModal();
+  }
+}
+
+// ============================================================
+// 一括URL取り込み
+// ============================================================
+function parseUrlsFromInput(text) {
+  return text.split(/[\n\r]+/)
+    .map(line => line.trim())
+    .filter(line => line.startsWith('http'));
+}
+
+async function fetchSingleUrl(url) {
+  const headers = { 'Content-Type': 'application/json', 'apikey': CONFIG.SUPABASE_ANON_KEY };
+  const session = await supabaseClient.auth.getSession();
+  const token = session?.data?.session?.access_token;
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+  else headers['Authorization'] = `Bearer ${CONFIG.SUPABASE_ANON_KEY}`;
+  const res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/ai-assist`, {
+    method: 'POST', headers,
+    body: JSON.stringify({ action: 'fetch_url', url, areaId: state.soSearchAreaId })
+  });
+  if (!res.ok) { const errText = await res.text(); throw new Error(`HTTP ${res.status}: ${errText}`); }
+  const result = await res.json();
+  if (result.error) throw new Error(result.error);
+  return result;
+}
+
+async function handleBatchFetchUrls() {
+  const textEl = document.getElementById('import-urls');
+  const text = textEl ? textEl.value.trim() : '';
+  const urls = parseUrlsFromInput(text);
+
+  if (urls.length === 0) { alert('物件ページのURLを入力してください'); return; }
+
+  // 単件の場合も一括フローで処理
+  state._batchResults = urls.map(url => ({ url, status: 'pending', parsed: null, error: null, saved: false }));
+  state._batchProcessing = true;
+  state._batchCurrentIndex = 0;
+  state._aiParsedProperty = null;
+  render();
+
+  // 順次処理（Edge Function 25秒制限対策 + Jina APIレート制限対策）
+  for (let i = 0; i < urls.length; i++) {
+    state._batchCurrentIndex = i;
+    state._batchResults[i].status = 'processing';
+    render();
+
+    try {
+      const result = await fetchSingleUrl(urls[i]);
+      state._batchResults[i].status = 'done';
+      state._batchResults[i].parsed = result;
+    } catch(e) {
+      console.error(`URL Fetch error [${i}]:`, e);
+      state._batchResults[i].status = 'error';
+      state._batchResults[i].error = e.message;
+    }
+    render();
+
+    // 次のリクエストまで少し待つ（レートリミット対策）
+    if (i < urls.length - 1) {
+      await new Promise(r => setTimeout(r, 1000));
+    }
+  }
+
+  state._batchProcessing = false;
+  state._batchCurrentIndex = -1;
+  render();
+}
+
+// 個別保存
+async function handleSaveBatchItem(idx) {
+  const item = state._batchResults[idx];
+  if (!item || !item.parsed || item.saved) return;
+  const parsed = item.parsed;
+
+  if (!parsed.price || !parsed.land_area) {
+    alert('価格と面積が必要です。この物件はスキップしてください。');
+    return;
+  }
+
+  const prop = buildPropertyFromParsed(parsed);
+  const saved = await saveProperty(prop);
+  if (saved) {
+    state._batchResults[idx].saved = true;
     render();
   }
 }
 
-// AIカード作成: テキスト → 構造化 → プレビュー
-// URL貼り付け → AI解析
-async function handleFetchUrl() {
-  const urlEl = document.getElementById('import-url');
-  const url = urlEl ? urlEl.value.trim() : '';
-  if (!url) { alert('物件ページのURLを入力してください'); return; }
-  if (!url.startsWith('http')) { alert('正しいURLを入力してください（http://... または https://...）'); return; }
-
-  const btn = document.getElementById('btn-fetch-url');
-  if (btn) { btn.textContent = '🔗 AIが物件情報を読み取り中...（10〜20秒）'; btn.disabled = true; }
-
-  try {
-    const headers = { 'Content-Type': 'application/json', 'apikey': CONFIG.SUPABASE_ANON_KEY };
-    const session = await supabaseClient.auth.getSession();
-    const token = session?.data?.session?.access_token;
-    if (token) headers['Authorization'] = `Bearer ${token}`;
-    else headers['Authorization'] = `Bearer ${CONFIG.SUPABASE_ANON_KEY}`;
-    const res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/ai-assist`, {
-      method: 'POST', headers,
-      body: JSON.stringify({ action: 'fetch_url', url, areaId: state.soSearchAreaId })
-    });
-    if (!res.ok) { const errText = await res.text(); throw new Error(`HTTP ${res.status}: ${errText}`); }
-    const result = await res.json();
-    if (result.error) throw new Error(result.error);
-    state._aiParsedProperty = result;
-    state._importUrl = url;
-    render();
-  } catch(e) {
-    console.error('URL Fetch error:', e);
-    alert('物件情報の取得に失敗しました: ' + e.message);
-    if (btn) { btn.textContent = '🔗 URLから物件情報を取得'; btn.disabled = false; }
+// 一括保存（未保存の成功分すべて）
+async function handleSaveBatchAll() {
+  const unsaved = state._batchResults.filter(b => b.status === 'done' && !b.saved && b.parsed);
+  let savedCount = 0;
+  for (const item of unsaved) {
+    if (!item.parsed.price || !item.parsed.land_area) continue;
+    // 重複チェック
+    if (item.parsed.dedup_hash) {
+      const dup = state.savedProperties.find(p => p.dedup_hash === item.parsed.dedup_hash);
+      if (dup) continue; // 重複はスキップ
+    }
+    const prop = buildPropertyFromParsed(item.parsed);
+    const saved = await saveProperty(prop);
+    if (saved) {
+      item.saved = true;
+      savedCount++;
+    }
   }
+  render();
+  if (savedCount > 0) {
+    // 少し待ってから閉じない（ユーザーに結果を見せる）
+  }
+}
+
+// スキップ
+function skipBatchItem(idx) {
+  state._batchResults[idx].saved = true; // saved=trueにしてUIから消す
+  state._batchResults[idx].status = 'skipped';
+  render();
+}
+
+// バッチリセット
+function resetBatch() {
+  state._batchResults = [];
+  state._batchProcessing = false;
+  state._batchCurrentIndex = -1;
+  render();
+}
+
+function closeBatchModal() {
+  state.soModalOpen = false;
+  state._aiParsedProperty = null;
+  state._batchResults = [];
+  state._batchProcessing = false;
+  state._batchCurrentIndex = -1;
+  render();
+}
+
+// parsed → property オブジェクト変換（共通）
+function buildPropertyFromParsed(parsed) {
+  return {
+    area_id: state.soSearchAreaId || null,
+    url: parsed.source_url || state._importUrl || null,
+    source: parsed.source || null,
+    price: parsed.price * 10000, // 万円 → 円
+    land_area: parsed.land_area,
+    address: parsed.address || null,
+    station_distance: parsed.station_distance || null,
+    floor_plan: parsed.floor_plan || null,
+    building_year: parsed.building_year || null,
+    zoning: parsed.zoning || null,
+    building_coverage: parsed.building_coverage || null,
+    floor_area_ratio: parsed.floor_area_ratio || null,
+    road_access: parsed.road_access || null,
+    elevation: parsed.elevation || null,
+    infrastructure: parsed.infrastructure || null,
+    hazard: parsed.hazard || null,
+    memo: parsed.memo || null,
+    lat: parsed.lat || null,
+    lng: parsed.lng || null,
+    geo_confidence: parsed.geo_confidence || null,
+    geo_source: parsed.geo_source || null,
+    dedup_hash: parsed.dedup_hash || null,
+  };
+}
+
+// 旧互換: 単件URL取得（テキスト貼り付けパネルでは使わない）
+async function handleFetchUrl() {
+  // 一括フローにリダイレクト
+  handleBatchFetchUrls();
 }
 
 // テキスト貼り付け → AI解析
@@ -1399,32 +1639,7 @@ async function handleSaveParsed() {
     }
   }
 
-  const prop = {
-    area_id: state.soSearchAreaId || null,
-    url: parsed.source_url || state._importUrl || null,
-    source: parsed.source || null,
-    price: parsed.price * 10000, // 万円 → 円
-    land_area: parsed.land_area,
-    address: parsed.address || null,
-    station_distance: parsed.station_distance || null,
-    floor_plan: parsed.floor_plan || null,
-    building_year: parsed.building_year || null,
-    zoning: parsed.zoning || null,
-    building_coverage: parsed.building_coverage || null,
-    floor_area_ratio: parsed.floor_area_ratio || null,
-    road_access: parsed.road_access || null,
-    elevation: parsed.elevation || null,
-    infrastructure: parsed.infrastructure || null,
-    hazard: parsed.hazard || null,
-    memo: parsed.memo || null,
-    // Phase 1: 位置情報・重複排除
-    lat: parsed.lat || null,
-    lng: parsed.lng || null,
-    geo_confidence: parsed.geo_confidence || null,
-    geo_source: parsed.geo_source || null,
-    dedup_hash: parsed.dedup_hash || null,
-  };
-
+  const prop = buildPropertyFromParsed(parsed);
   const saved = await saveProperty(prop);
   if (saved) {
     state.soModalOpen = false;
