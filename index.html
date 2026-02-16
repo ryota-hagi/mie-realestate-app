@@ -386,14 +386,21 @@ function calculateBadge(property, areaData) {
 function calculateScores(prop) {
   if (!prop) return null;
 
-  // リスクレベル判定ヘルパー（「低」「中」「高」＋危険指定キーワード検出）
+  // リスクレベル判定ヘルパー
+  // AI出力形式: 「低（理由...）」「中。理由...」「高（理由...）」
+  // → 先頭の「低/中/高」を最優先で判定する（理由文中のキーワードに惑わされない）
   function riskLevel(text) {
     if (!text) return null;
-    // 「危険箇所」「警戒区域」「特別警戒」「指定有」等があれば強制的に高リスク
-    if (/危険箇所|特別警戒|警戒区域|指定有|指定あり|レッドゾーン|イエローゾーン/.test(text)) return 'high';
-    if (text.includes('高')) return 'high';
-    if (text.includes('中')) return 'medium';
-    if (text.includes('低')) return 'low';
+    const t = text.trim();
+    // 先頭が「高」「中」「低」で始まる場合はそれを採用
+    if (/^高/.test(t)) return 'high';
+    if (/^中/.test(t)) return 'medium';
+    if (/^低/.test(t)) return 'low';
+    // 先頭にない場合: 「。」や「（」の前の部分で判定
+    const prefix = t.split(/[。（(]/)[0];
+    if (prefix.includes('高')) return 'high';
+    if (prefix.includes('中')) return 'medium';
+    if (prefix.includes('低')) return 'low';
     return 'unknown';
   }
 
@@ -420,9 +427,10 @@ function calculateScores(prop) {
     else if (prop.ground_type.includes('沖積') || prop.ground_type.includes('埋立')) scoreSafety -= 15;
   }
 
-  // 物件自体のhazardフィールドにも危険キーワードがあれば減点
+  // 物件情報のhazardフィールドに明確な指定記載がある場合のみ減点
+  // 「指定有」「指定されています」等の確定表現のみ対象（「可能性」「推定」は除外）
   if (prop.hazard) {
-    if (/危険箇所|警戒区域|浸水|土砂|崩壊|特別警戒/.test(prop.hazard)) scoreSafety -= 15;
+    if (/指定有|指定されて|該当して|区域内/.test(prop.hazard)) scoreSafety -= 15;
   }
 
   // 利便性スコア (0-100)
