@@ -800,9 +800,16 @@ function renderPropertyView() {
               if (prop.hazard_sediment) items.push('⛰️ 土砂: ' + prop.hazard_sediment);
               if (prop.ground_type) items.push('🪨 地盤: ' + prop.ground_type);
               if (prop.ai_comment) items.push('💬 ' + prop.ai_comment);
-              return (scoreSection || items.length > 0) ? '<div class="mt-2 p-2 bg-blue-50 rounded border border-blue-100 space-y-1">' +
+              // 追加コスト要因の表示
+              const costReasonHtml = (prop.extra_cost_reasons && prop.extra_cost_score != null && prop.extra_cost_score < 0)
+                ? '<div class="mt-1 p-1.5 bg-amber-50 rounded border border-amber-200">' +
+                  '<div class="text-xs font-medium text-amber-800 mb-0.5">💰 追加コスト要因（' + Math.abs(prop.extra_cost_score) + '点減点）</div>' +
+                  '<div class="text-xs text-amber-700">' + prop.extra_cost_reasons.split('、').map(r => '・' + r.trim()).join('<br>') + '</div>' +
+                  '</div>' : '';
+              return (scoreSection || items.length > 0 || costReasonHtml) ? '<div class="mt-2 p-2 bg-blue-50 rounded border border-blue-100 space-y-1">' +
                 scoreSection +
                 items.map(i => '<div class="text-xs text-gray-600">' + i + '</div>').join('') +
+                costReasonHtml +
                 '</div>' : '';
             })() : '';
             return `
