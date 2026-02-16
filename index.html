@@ -452,8 +452,16 @@ function calculateScores(prop) {
     if (schoolDist) { scoreConvenience += schoolDist < 800 ? 10 : schoolDist < 1500 ? 5 : 0; }
   }
 
-  // コストスコア (0-100) — エリア相場比較 ＋ 追加費用リスク
-  let scoreCost = 50;
+  // コストスコア (0-100) — 追加費用リスクが主軸、エリア相場は参考程度
+  // 追加コストが少ない物件ほど高スコアにする
+  let scoreCost = 70; // 追加コストなしならベース70
+
+  // AI判定による追加コスト減点（主軸: 0〜-50の範囲）
+  if (prop.extra_cost_score != null && typeof prop.extra_cost_score === 'number') {
+    scoreCost += prop.extra_cost_score; // 負の値が加算される（減点）
+  }
+
+  // エリア相場比較（参考: 控えめな加減点）
   if (prop.price && prop.land_area) {
     const tsuboPrice = prop.price / (prop.land_area / 3.305785) / 10000; // 万円/坪
     let areaData = AREAS.find(a => a.id === prop.area_id);
@@ -461,18 +469,12 @@ function calculateScores(prop) {
     if (areaData) {
       const areaAvg = areaData.pricePerTsubo / 10000; // 万円/坪
       const ratio = tsuboPrice / areaAvg;
-      if (ratio < 0.7) scoreCost += 30;
-      else if (ratio < 0.9) scoreCost += 15;
-      else if (ratio < 1.1) scoreCost += 5;
-      else if (ratio > 1.3) scoreCost -= 15;
-      else if (ratio > 1.1) scoreCost -= 5;
+      if (ratio < 0.7) scoreCost += 15;       // 相場よりかなり安い
+      else if (ratio < 0.9) scoreCost += 8;   // 相場よりやや安い
+      else if (ratio < 1.1) scoreCost += 0;   // 相場並み
+      else if (ratio > 1.3) scoreCost -= 10;  // 相場よりかなり高い
+      else if (ratio > 1.1) scoreCost -= 5;   // 相場よりやや高い
     }
-  }
-
-  // 追加コスト要因（AI判定: property-enrich Edge Function で Gemini が物件情報を読み取って判定）
-  // extra_cost_score: 0（追加コストなし）〜 -50（非常に多額の追加コスト）
-  if (prop.extra_cost_score != null && typeof prop.extra_cost_score === 'number') {
-    scoreCost += prop.extra_cost_score; // 負の値が加算される（減点）
   }
 
   // 総合スコア
