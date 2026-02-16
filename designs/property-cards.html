@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物件カード デザイン比較｜女性向けUI案</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;500;700&family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  transition: background 0.5s ease, font-family 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   THEME BACKGROUNDS
+   ============================================ */
+body.theme-a {
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 30%, #fff1f2 60%, #fef2f2 100%);
+  font-family: 'Zen Maru Gothic', 'Noto Sans JP', sans-serif;
+  color: #4a3040;
+}
+
+body.theme-b {
+  background: #f8f6f3;
+  font-family: 'Noto Sans JP', sans-serif;
+  color: #3d3529;
+}
+
+body.theme-c {
+  background: linear-gradient(160deg, #f0fdf4 0%, #ecfdf5 25%, #f0f9ff 50%, #f5f3ff 75%, #fdf2f8 100%);
+  font-family: 'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif;
+  color: #1a3a2a;
+}
+
+/* ============================================
+   PAGE HEADER
+   ============================================ */
+.page-header {
+  text-align: center;
+  padding: 40px 20px 0;
+}
+
+.page-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.theme-a .page-header h1 {
+  color: #be185d;
+}
+
+.theme-b .page-header h1 {
+  font-family: 'Noto Serif JP', serif;
+  color: #8b7355;
+}
+
+.theme-c .page-header h1 {
+  color: #059669;
+}
+
+.page-header p {
+  font-size: 0.95rem;
+  opacity: 0.7;
+  margin-bottom: 24px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  margin-bottom: 20px;
+  transition: opacity 0.2s;
+}
+
+.back-link:hover {
+  opacity: 0.7;
+}
+
+.theme-a .back-link {
+  color: #ec4899;
+}
+
+.theme-b .back-link {
+  color: #8b7355;
+}
+
+.theme-c .back-link {
+  color: #059669;
+}
+
+/* ============================================
+   THEME TABS
+   ============================================ */
+.theme-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 20px 32px;
+  flex-wrap: wrap;
+}
+
+.theme-tab {
+  padding: 12px 24px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.6);
+  font-family: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.theme-tab[data-theme="a"]::before {
+  background: linear-gradient(90deg, #ec4899, #a855f7);
+}
+
+.theme-tab[data-theme="b"]::before {
+  background: linear-gradient(90deg, #8b7355, #b8860b);
+}
+
+.theme-tab[data-theme="c"]::before {
+  background: linear-gradient(90deg, #059669, #7c3aed);
+}
+
+.theme-tab:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.theme-tab.active::before {
+  opacity: 1;
+}
+
+/* Theme A tab active */
+.theme-a .theme-tab.active[data-theme="a"] {
+  border-color: #ec4899;
+  background: white;
+  color: #be185d;
+}
+
+/* Theme B tab active */
+.theme-b .theme-tab.active[data-theme="b"] {
+  border-color: #8b7355;
+  background: #fffdf9;
+  color: #6b5a42;
+}
+
+/* Theme C tab active */
+.theme-c .theme-tab.active[data-theme="c"] {
+  border-color: #059669;
+  background: white;
+  color: #047857;
+}
+
+.theme-tab .tab-label {
+  display: block;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.theme-tab .tab-sub {
+  display: block;
+  font-size: 0.78rem;
+  opacity: 0.65;
+  margin-top: 2px;
+}
+
+/* ============================================
+   CARDS CONTAINER
+   ============================================ */
+.theme-section {
+  display: none;
+  padding: 0 20px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeInUp 0.5s ease;
+}
+
+.theme-section.active {
+  display: block;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-title {
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  text-align: center;
+  font-size: 0.88rem;
+  opacity: 0.6;
+  margin-bottom: 32px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 28px;
+}
+
+/* ============================================
+   DESIGN A - PROPERTY CARD
+   ============================================ */
+.card-a {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #fce7f3;
+  box-shadow: 0 2px 8px rgba(190, 120, 150, 0.08);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-a:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(190, 120, 150, 0.16);
+}
+
+.card-a .card-image {
+  height: 200px;
+  position: relative;
+}
+
+.card-a .card-image.img-1 {
+  background: linear-gradient(135deg, #fce4ec, #f8bbd0, #f48fb1);
+}
+
+.card-a .card-image.img-2 {
+  background: linear-gradient(135deg, #e8eaf6, #c5cae9, #9fa8da);
+}
+
+.card-a .card-image.img-3 {
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2, #ffcc80);
+}
+
+.card-a .status-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #ec4899, #a855f7);
+}
+
+.card-a .score-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: white;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-a .score-badge .score-label {
+  font-size: 0.6rem;
+  color: #a855f7;
+  font-weight: 500;
+}
+
+.card-a .score-badge .score-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ec4899;
+  line-height: 1;
+}
+
+.card-a .score-badge .score-unit {
+  font-size: 0.55rem;
+  color: #d946ef;
+}
+
+.card-a .card-body {
+  padding: 20px;
+}
+
+.card-a .card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4a3040;
+  margin-bottom: 6px;
+}
+
+.card-a .card-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ec4899;
+  margin-bottom: 4px;
+}
+
+.card-a .card-price .unit {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.card-a .card-area {
+  font-size: 0.88rem;
+  color: #9a7b8d;
+  margin-bottom: 14px;
+}
+
+.card-a .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.card-a .tag {
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: #fdf2f8;
+  color: #be185d;
+  border: 1px solid #fce7f3;
+}
+
+.card-a .tag.accent {
+  background: #faf5ff;
+  color: #7c3aed;
+  border-color: #ede9fe;
+}
+
+.card-a .stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 12px;
+  background: #fdf2f8;
+  border-radius: 14px;
+}
+
+.card-a .stat-item {
+  text-align: center;
+}
+
+.card-a .stat-label {
+  font-size: 0.68rem;
+  color: #b07090;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.card-a .stat-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #7c3050;
+}
+
+.card-a .ai-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, #fdf2f8, #faf5ff);
+  border-radius: 14px;
+  margin-bottom: 16px;
+  font-size: 0.82rem;
+  color: #8b5070;
+  line-height: 1.5;
+}
+
+.card-a .ai-comment .ai-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, #ec4899, #a855f7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.card-a .card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.card-a .btn {
+  flex: 1;
+  padding: 10px 8px;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.card-a .btn-primary {
+  background: linear-gradient(135deg, #ec4899, #f472b6);
+  color: white;
+}
+
+.card-a .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+}
+
+.card-a .btn-secondary {
+  background: #fdf2f8;
+  color: #be185d;
+  border: 1px solid #fce7f3;
+}
+
+.card-a .btn-secondary:hover {
+  background: #fce7f3;
+}
+
+.card-a .btn-icon {
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: #fdf2f8;
+  border: 1px solid #fce7f3;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1.1rem;
+}
+
+.card-a .btn-icon:hover {
+  background: #fce7f3;
+  transform: scale(1.05);
+}
+
+/* ============================================
+   DESIGN B - PROPERTY CARD
+   ============================================ */
+.card-b {
+  background: #fffdf9;
+  border-radius: 16px;
+  border: 1px solid #ede8e0;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-b:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(100, 80, 50, 0.1);
+}
+
+.card-b .card-image {
+  height: 200px;
+  position: relative;
+}
+
+.card-b .card-image.img-1 {
+  background: linear-gradient(135deg, #d7ccc8, #bcaaa4, #a1887f);
+}
+
+.card-b .card-image.img-2 {
+  background: linear-gradient(135deg, #c5cae9, #9fa8da, #7986cb);
+}
+
+.card-b .card-image.img-3 {
+  background: linear-gradient(135deg, #c8e6c9, #a5d6a7, #81c784);
+}
+
+.card-b .status-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: white;
+  background: #8b7355;
+  letter-spacing: 0.02em;
+}
+
+.card-b .score-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 253, 249, 0.95);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #ede8e0;
+}
+
+.card-b .score-badge .score-label {
+  font-size: 0.6rem;
+  color: #8b7355;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.card-b .score-badge .score-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #b8860b;
+  line-height: 1.1;
+  font-family: 'Noto Serif JP', serif;
+}
+
+.card-b .score-badge .score-unit {
+  font-size: 0.6rem;
+  color: #a08a6e;
+}
+
+.card-b .card-body {
+  padding: 20px;
+}
+
+.card-b .card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #3d3529;
+  margin-bottom: 6px;
+  font-family: 'Noto Serif JP', serif;
+}
+
+.card-b .card-price {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #8b7355;
+  margin-bottom: 4px;
+  font-family: 'Noto Serif JP', serif;
+}
+
+.card-b .card-price .unit {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.card-b .card-area {
+  font-size: 0.88rem;
+  color: #a08a6e;
+  margin-bottom: 14px;
+}
+
+.card-b .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.card-b .tag {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.73rem;
+  font-weight: 500;
+  background: #f5f0ea;
+  color: #6b5a42;
+  border: 1px solid #ede8e0;
+}
+
+.card-b .tag.accent {
+  background: #fef7e8;
+  color: #b8860b;
+  border-color: #f5e6c0;
+}
+
+.card-b .stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  margin-bottom: 14px;
+  background: #ede8e0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #ede8e0;
+}
+
+.card-b .stat-item {
+  background: #fffdf9;
+  text-align: center;
+  padding: 10px 8px;
+}
+
+.card-b .stat-label {
+  font-size: 0.66rem;
+  color: #a08a6e;
+  display: block;
+  margin-bottom: 2px;
+  letter-spacing: 0.03em;
+}
+
+.card-b .stat-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #5a4a36;
+  font-family: 'Noto Serif JP', serif;
+}
+
+.card-b .ai-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #f5f0ea;
+  border-radius: 10px;
+  border-left: 3px solid #b8860b;
+  margin-bottom: 16px;
+  font-size: 0.82rem;
+  color: #6b5a42;
+  line-height: 1.5;
+}
+
+.card-b .ai-comment .ai-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  background: #8b7355;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.card-b .card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.card-b .btn {
+  flex: 1;
+  padding: 10px 8px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.card-b .btn-primary {
+  background: #8b7355;
+  color: white;
+}
+
+.card-b .btn-primary:hover {
+  background: #7a644a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 115, 85, 0.25);
+}
+
+.card-b .btn-secondary {
+  background: #f5f0ea;
+  color: #6b5a42;
+  border: 1px solid #ede8e0;
+}
+
+.card-b .btn-secondary:hover {
+  background: #ede8e0;
+}
+
+.card-b .btn-icon {
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: #f5f0ea;
+  border: 1px solid #ede8e0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1.1rem;
+}
+
+.card-b .btn-icon:hover {
+  background: #ede8e0;
+  transform: scale(1.05);
+}
+
+/* ============================================
+   DESIGN C - PROPERTY CARD
+   ============================================ */
+.card-c {
+  background: white;
+  border-radius: 24px;
+  border: 1px solid #d1fae5;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-c:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(5, 150, 105, 0.1);
+}
+
+.card-c .card-image {
+  height: 200px;
+  position: relative;
+}
+
+.card-c .card-image.img-1 {
+  background: linear-gradient(135deg, #a7f3d0, #6ee7b7, #34d399);
+}
+
+.card-c .card-image.img-2 {
+  background: linear-gradient(135deg, #c4b5fd, #a78bfa, #8b5cf6);
+}
+
+.card-c .card-image.img-3 {
+  background: linear-gradient(135deg, #fda4af, #fb7185, #f43f5e);
+}
+
+.card-c .status-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #059669, #10b981);
+}
+
+.card-c .score-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: white;
+  border-radius: 16px;
+  padding: 8px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(5, 150, 105, 0.12);
+}
+
+.card-c .score-badge .score-label {
+  font-size: 0.6rem;
+  color: #059669;
+  font-weight: 600;
+}
+
+.card-c .score-badge .score-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #059669;
+  line-height: 1.1;
+}
+
+.card-c .score-badge .score-unit {
+  font-size: 0.6rem;
+  color: #10b981;
+}
+
+.card-c .card-body {
+  padding: 20px;
+}
+
+.card-c .card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a3a2a;
+  margin-bottom: 6px;
+}
+
+.card-c .card-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #059669;
+  margin-bottom: 4px;
+}
+
+.card-c .card-price .unit {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.card-c .card-area {
+  font-size: 0.88rem;
+  color: #6b9080;
+  margin-bottom: 14px;
+}
+
+.card-c .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.card-c .tag {
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #d1fae5;
+}
+
+.card-c .tag.accent {
+  background: #fdf2f8;
+  color: #be185d;
+  border-color: #fce7f3;
+}
+
+.card-c .tag.purple {
+  background: #f5f3ff;
+  color: #7c3aed;
+  border-color: #ede9fe;
+}
+
+.card-c .stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 12px;
+  background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+  border-radius: 18px;
+}
+
+.card-c .stat-item {
+  text-align: center;
+}
+
+.card-c .stat-label {
+  font-size: 0.68rem;
+  color: #6b9080;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.card-c .stat-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1a5040;
+}
+
+.card-c .ai-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, #ecfdf5, #f5f3ff);
+  border-radius: 16px;
+  margin-bottom: 16px;
+  font-size: 0.82rem;
+  color: #3a6050;
+  line-height: 1.5;
+}
+
+.card-c .ai-comment .ai-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, #059669, #7c3aed);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.card-c .card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.card-c .btn {
+  flex: 1;
+  padding: 10px 8px;
+  border: none;
+  border-radius: 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.card-c .btn-primary {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: white;
+}
+
+.card-c .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+.card-c .btn-secondary {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #d1fae5;
+}
+
+.card-c .btn-secondary:hover {
+  background: #d1fae5;
+}
+
+.card-c .btn-icon {
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: #ecfdf5;
+  border: 1px solid #d1fae5;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1.1rem;
+}
+
+.card-c .btn-icon:hover {
+  background: #d1fae5;
+  transform: scale(1.05);
+}
+
+/* ============================================
+   IMAGE PLACEHOLDER TEXT
+   ============================================ */
+.card-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.card-image .placeholder-text {
+  background: rgba(255, 255, 255, 0.25);
+  padding: 6px 16px;
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
+  font-size: 0.78rem;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.page-footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.82rem;
+  opacity: 0.5;
+  padding-bottom: 40px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .theme-tabs {
+    gap: 6px;
+    padding: 0 12px 24px;
+  }
+
+  .theme-tab {
+    padding: 10px 16px;
+    font-size: 0.88rem;
+  }
+
+  .theme-tab .tab-label {
+    font-size: 0.9rem;
+  }
+
+  .theme-tab .tab-sub {
+    font-size: 0.72rem;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .theme-section {
+    padding: 0 12px 40px;
+  }
+
+  .card-a .card-body,
+  .card-b .card-body,
+  .card-c .card-body {
+    padding: 16px;
+  }
+
+  .card-a .card-price,
+  .card-b .card-price,
+  .card-c .card-price {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .theme-tabs {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 12px 20px;
+  }
+
+  .theme-tab {
+    text-align: center;
+  }
+
+  .card-a .card-actions,
+  .card-b .card-actions,
+  .card-c .card-actions {
+    flex-wrap: wrap;
+  }
+
+  .card-a .btn,
+  .card-b .btn,
+  .card-c .btn {
+    font-size: 0.75rem;
+    padding: 9px 6px;
+  }
+}
+</style>
+</head>
+<body class="theme-a">
+
+<!-- ===== PAGE HEADER ===== -->
+<header class="page-header">
+  <a href="index.html" class="back-link">&larr; デザイン一覧に戻る</a>
+  <h1>物件カード デザイン比較</h1>
+  <p>3つのデザインテーマで物件カードの表示を比較できます</p>
+</header>
+
+<!-- ===== THEME TABS ===== -->
+<nav class="theme-tabs">
+  <button class="theme-tab active" data-theme="a" onclick="switchTheme('a')">
+    <span class="tab-label">Design A</span>
+    <span class="tab-sub">Elegant &amp; Warm</span>
+  </button>
+  <button class="theme-tab" data-theme="b" onclick="switchTheme('b')">
+    <span class="tab-label">Design B</span>
+    <span class="tab-sub">Modern &amp; Sophisticated</span>
+  </button>
+  <button class="theme-tab" data-theme="c" onclick="switchTheme('c')">
+    <span class="tab-label">Design C</span>
+    <span class="tab-sub">Fresh &amp; Natural</span>
+  </button>
+</nav>
+
+<!-- ============================================
+     DESIGN A: Elegant & Warm
+     ============================================ -->
+<section id="section-a" class="theme-section active">
+  <h2 class="section-title">Design A: Elegant &amp; Warm</h2>
+  <p class="section-desc">ローズピンク基調の柔らかく上品なデザイン</p>
+
+  <div class="cards-grid">
+    <!-- Card A-1 -->
+    <article class="card-a">
+      <div class="card-image img-1">
+        <span class="placeholder-text">物件写真エリア</span>
+        <span class="status-badge">SUUMO掲載中</span>
+        <div class="score-badge">
+          <span class="score-label">総合</span>
+          <span class="score-value">82</span>
+          <span class="score-unit">pt</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">桑名市大山田 南向き角地</h3>
+        <div class="card-price">1,580<span class="unit">万円</span></div>
+        <div class="card-area">土地面積: 165.23m&sup2;</div>
+        <div class="tags">
+          <span class="tag">南向き</span>
+          <span class="tag">角地</span>
+          <span class="tag accent">整形地</span>
+          <span class="tag">小学校近く</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-label">建ぺい率</span>
+            <span class="stat-value">60%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">容積率</span>
+            <span class="stat-value">200%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">用途地域</span>
+            <span class="stat-value">第一種住居</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">接道状況</span>
+            <span class="stat-value">南6m公道</span>
+          </div>
+        </div>
+        <div class="ai-comment">
+          <span class="ai-icon">AI</span>
+          <span>日当たり良好。小学校まで徒歩8分。スーパーも近く生活利便性が高い物件です。</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary">比較に追加</button>
+          <button class="btn btn-primary">詳細を見る</button>
+          <button class="btn-icon" title="お気に入り">&hearts;</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card A-2 -->
+    <article class="card-a">
+      <div class="card-image img-2">
+        <span class="placeholder-text">物件写真エリア</span>
+        <span class="status-badge">アットホーム掲載中</span>
+        <div class="score-badge">
+          <span class="score-label">総合</span>
+          <span class="score-value">76</span>
+          <span class="score-unit">pt</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">四日市市日永 閑静な住宅街</h3>
+        <div class="card-price">2,180<span class="unit">万円</span></div>
+        <div class="card-area">土地面積: 198.45m&sup2;</div>
+        <div class="tags">
+          <span class="tag">閑静</span>
+          <span class="tag accent">整形地</span>
+          <span class="tag">都市ガス</span>
+          <span class="tag">上下水道</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-label">建ぺい率</span>
+            <span class="stat-value">50%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">容積率</span>
+            <span class="stat-value">100%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">用途地域</span>
+            <span class="stat-value">第一種低層</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">接道状況</span>
+            <span class="stat-value">東5m公道</span>
+          </div>
+        </div>
+        <div class="ai-comment">
+          <span class="ai-icon">AI</span>
+          <span>閑静な住宅街で子育て環境に最適。広い敷地でゆとりある間取りが可能です。</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary">比較に追加</button>
+          <button class="btn btn-primary">詳細を見る</button>
+          <button class="btn-icon" title="お気に入り">&hearts;</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card A-3 -->
+    <article class="card-a">
+      <div class="card-image img-3">
+        <span class="placeholder-text">物件写真エリア</span>
+        <span class="status-badge">SUUMO掲載中</span>
+        <div class="score-badge">
+          <span class="score-label">総合</span>
+          <span class="score-value">89</span>
+          <span class="score-unit">pt</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">津市江戸橋 駅徒歩5分</h3>
+        <div class="card-price">1,980<span class="unit">万円</span></div>
+        <div class="card-area">土地面積: 142.67m&sup2;</div>
+        <div class="tags">
+          <span class="tag">駅近</span>
+          <span class="tag">南向き</span>
+          <span class="tag accent">角地</span>
+          <span class="tag">商業施設近く</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-label">建ぺい率</span>
+            <span class="stat-value">60%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">容積率</span>
+            <span class="stat-value">200%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">用途地域</span>
+            <span class="stat-value">第二種住居</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">接道状況</span>
+            <span class="stat-value">南西二面</span>
+          </div>
+        </div>
+        <div class="ai-comment">
+          <span class="ai-icon">AI</span>
+          <span>駅徒歩5分で通勤・通学に便利。イオン津店まで車3分。資産価値の維持が期待できます。</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary">比較に追加</button>
+          <button class="btn btn-primary">詳細を見る</button>
+          <button class="btn-icon" title="お気に入り">&hearts;</button>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============================================
+     DESIGN B: Modern & Sophisticated
+     ============================================ -->
+<section id="section-b" class="theme-section">
+  <h2 class="section-title" style="font-family: 'Noto Serif JP', serif; color: #8b7355;">Design B: Modern &amp; Sophisticated</h2>
+  <p class="section-desc">ブラウン・ゴールド基調の上質で洗練されたデザイン</p>
+
+  <div class="cards-grid">
+    <!-- Card B-1 -->
+    <article class="card-b">
+      <div class="card-image img-1">
+        <span class="placeholder-text">物件写真エリア</span>
+        <span class="status-badge">SUUMO掲載中</span>
+        <div class="score-badge">
+          <span class="score-label">総合</span>
+          <span class="score-value">82</span>
+          <span class="score-unit">pt</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">桑名市大山田 南向き角地</h3>
+        <div class="card-price">1,580<span class="unit">万円</span></div>
+        <div class="card-area">土地面積: 165.23m&sup2;</div>
+        <div class="tags">
+          <span class="tag">南向き</span>
+          <span class="tag">角地</span>
+          <span class="tag accent">整形地</span>
+          <span class="tag">小学校近く</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-label">建ぺい率</span>
+            <span class="stat-value">60%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">容積率</span>
+            <span class="stat-value">200%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">用途地域</span>
+            <span class="stat-value">第一種住居</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">接道状況</span>
+            <span class="stat-value">南6m公道</span>
+          </div>
+        </div>
+        <div class="ai-comment">
+          <span class="ai-icon">AI</span>
+          <span>日当たり良好。小学校まで徒歩8分。スーパーも近く生活利便性が高い物件です。</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary">比較に追加</button>
+          <button class="btn btn-primary">詳細を見る</button>
+          <button class="btn-icon" title="お気に入り">&hearts;</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card B-2 -->
+    <article class="card-b">
+      <div class="card-image img-2">
+        <span class="placeholder-text">物件写真エリア</span>
+        <span class="status-badge">アットホーム掲載中</span>
+        <div class="score-badge">
+          <span class="score-label">総合</span>
+          <span class="score-value">76</span>
+          <span class="score-unit">pt</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">四日市市日永 閑静な住宅街</h3>
+        <div class="card-price">2,180<span class="unit">万円</span></div>
+        <div class="card-area">土地面積: 198.45m&sup2;</div>
+        <div class="tags">
+          <span class="tag">閑静</span>
+          <span class="tag accent">整形地</span>
+          <span class="tag">都市ガス</span>
+          <span class="tag">上下水道</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-label">建ぺい率</span>
+            <span class="stat-value">50%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">容積率</span>
+            <span class="stat-value">100%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">用途地域</span>
+            <span class="stat-value">第一種低層</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">接道状況</span>
+            <span class="stat-value">東5m公道</span>
+          </div>
+        </div>
+        <div class="ai-comment">
+          <span class="ai-icon">AI</span>
+          <span>閑静な住宅街で子育て環境に最適。広い敷地でゆとりある間取りが可能です。</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary">比較に追加</button>
+          <button class="btn btn-primary">詳細を見る</button>
+          <button class="btn-icon" title="お気に入り">&hearts;</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card B-3 -->
+    <article class="card-b">
+      <div class="card-image img-3">
+        <span class="placeholder-text">物件写真エリア</span>
+        <span class="status-badge">SUUMO掲載中</span>
+        <div class="score-badge">
+          <span class="score-label">総合</span>
+          <span class="score-value">89</span>
+          <span class="score-unit">pt</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">津市江戸橋 駅徒歩5分</h3>
+        <div class="card-price">1,980<span class="unit">万円</span></div>
+        <div class="card-area">土地面積: 142.67m&sup2;</div>
+        <div class="tags">
+          <span class="tag">駅近</span>
+          <span class="tag">南向き</span>
+          <span class="tag accent">角地</span>
+          <span class="tag">商業施設近く</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-label">建ぺい率</span>
+            <span class="stat-value">60%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">容積率</span>
+            <span class="stat-value">200%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">用途地域</span>
+            <span class="stat-value">第二種住居</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">接道状況</span>
+            <span class="stat-value">南西二面</span>
+          </div>
+        </div>
+        <div class="ai-comment">
+          <span class="ai-icon">AI</span>
+          <span>駅徒歩5分で通勤・通学に便利。イオン津店まで車3分。資産価値の維持が期待できます。</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary">比較に追加</button>
+          <button class="btn btn-primary">詳細を見る</button>
+          <button class="btn-icon" title="お気に入り">&hearts;</button>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============================================
+     DESIGN C: Fresh & Natural
+     ============================================ -->
+<section id="section-c" class="theme-section">
+  <h2 class="section-title" style="color: #059669;">Design C: Fresh &amp; Natural</h2>
+  <p class="section-desc">グリーン基調のフレッシュで親しみやすいデザイン</p>
+
+  <div class="cards-grid">
+    <!-- Card C-1 -->
+    <article class="card-c">
+      <div class="card-image img-1">
+        <span class="placeholder-text">物件写真エリア</span>
+        <span class="status-badge">SUUMO掲載中</span>
+        <div class="score-badge">
+          <span class="score-label">総合</span>
+          <span class="score-value">82</span>
+          <span class="score-unit">pt</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">桑名市大山田 南向き角地</h3>
+        <div class="card-price">1,580<span class="unit">万円</span></div>
+        <div class="card-area">土地面積: 165.23m&sup2;</div>
+        <div class="tags">
+          <span class="tag">南向き</span>
+          <span class="tag">角地</span>
+          <span class="tag accent">整形地</span>
+          <span class="tag purple">小学校近く</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-label">建ぺい率</span>
+            <span class="stat-value">60%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">容積率</span>
+            <span class="stat-value">200%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">用途地域</span>
+            <span class="stat-value">第一種住居</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">接道状況</span>
+            <span class="stat-value">南6m公道</span>
+          </div>
+        </div>
+        <div class="ai-comment">
+          <span class="ai-icon">AI</span>
+          <span>日当たり良好。小学校まで徒歩8分。スーパーも近く生活利便性が高い物件です。</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary">比較に追加</button>
+          <button class="btn btn-primary">詳細を見る</button>
+          <button class="btn-icon" title="お気に入り">&hearts;</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card C-2 -->
+    <article class="card-c">
+      <div class="card-image img-2">
+        <span class="placeholder-text">物件写真エリア</span>
+        <span class="status-badge">アットホーム掲載中</span>
+        <div class="score-badge">
+          <span class="score-label">総合</span>
+          <span class="score-value">76</span>
+          <span class="score-unit">pt</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">四日市市日永 閑静な住宅街</h3>
+        <div class="card-price">2,180<span class="unit">万円</span></div>
+        <div class="card-area">土地面積: 198.45m&sup2;</div>
+        <div class="tags">
+          <span class="tag">閑静</span>
+          <span class="tag purple">整形地</span>
+          <span class="tag">都市ガス</span>
+          <span class="tag accent">上下水道</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-label">建ぺい率</span>
+            <span class="stat-value">50%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">容積率</span>
+            <span class="stat-value">100%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">用途地域</span>
+            <span class="stat-value">第一種低層</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">接道状況</span>
+            <span class="stat-value">東5m公道</span>
+          </div>
+        </div>
+        <div class="ai-comment">
+          <span class="ai-icon">AI</span>
+          <span>閑静な住宅街で子育て環境に最適。広い敷地でゆとりある間取りが可能です。</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary">比較に追加</button>
+          <button class="btn btn-primary">詳細を見る</button>
+          <button class="btn-icon" title="お気に入り">&hearts;</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card C-3 -->
+    <article class="card-c">
+      <div class="card-image img-3">
+        <span class="placeholder-text">物件写真エリア</span>
+        <span class="status-badge">SUUMO掲載中</span>
+        <div class="score-badge">
+          <span class="score-label">総合</span>
+          <span class="score-value">89</span>
+          <span class="score-unit">pt</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">津市江戸橋 駅徒歩5分</h3>
+        <div class="card-price">1,980<span class="unit">万円</span></div>
+        <div class="card-area">土地面積: 142.67m&sup2;</div>
+        <div class="tags">
+          <span class="tag">駅近</span>
+          <span class="tag">南向き</span>
+          <span class="tag accent">角地</span>
+          <span class="tag purple">商業施設近く</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-label">建ぺい率</span>
+            <span class="stat-value">60%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">容積率</span>
+            <span class="stat-value">200%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">用途地域</span>
+            <span class="stat-value">第二種住居</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">接道状況</span>
+            <span class="stat-value">南西二面</span>
+          </div>
+        </div>
+        <div class="ai-comment">
+          <span class="ai-icon">AI</span>
+          <span>駅徒歩5分で通勤・通学に便利。イオン津店まで車3分。資産価値の維持が期待できます。</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary">比較に追加</button>
+          <button class="btn btn-primary">詳細を見る</button>
+          <button class="btn-icon" title="お気に入り">&hearts;</button>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="page-footer">
+  <p>三重県不動産アプリ デザイン検討用モックアップ</p>
+</footer>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+function switchTheme(theme) {
+  // Update body class
+  document.body.className = 'theme-' + theme;
+
+  // Update active tab
+  document.querySelectorAll('.theme-tab').forEach(function(tab) {
+    tab.classList.remove('active');
+  });
+  document.querySelector('.theme-tab[data-theme="' + theme + '"]').classList.add('active');
+
+  // Update active section
+  document.querySelectorAll('.theme-section').forEach(function(section) {
+    section.classList.remove('active');
+  });
+  document.getElementById('section-' + theme).classList.add('active');
+}
+</script>
+</body>
+</html>

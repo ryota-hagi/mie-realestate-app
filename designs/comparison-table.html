@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物件比較表 デザイン比較｜女性向けUI案</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;500;700&family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  transition: background 0.5s ease, font-family 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   THEME A: Elegant & Warm
+   ============================================ */
+body.theme-a {
+  font-family: 'Zen Maru Gothic', 'Noto Sans JP', sans-serif;
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 30%, #fff1f2 60%, #fef2f2 100%);
+  color: #4a2040;
+}
+
+.theme-a .page-header {
+  background: linear-gradient(135deg, #ec4899, #a855f7);
+}
+
+.theme-a .page-header h1 {
+  font-family: 'Zen Maru Gothic', sans-serif;
+}
+
+.theme-a .theme-tab {
+  border: 2px solid #ec4899;
+  color: #ec4899;
+  background: white;
+}
+
+.theme-a .theme-tab.active {
+  background: linear-gradient(135deg, #ec4899, #a855f7);
+  color: white;
+  border-color: transparent;
+}
+
+.theme-a .theme-tab:hover:not(.active) {
+  background: #fdf2f8;
+}
+
+.theme-a .comparison-wrapper {
+  background: rgba(255,255,255,0.85);
+  border: 1px solid #fce7f3;
+  box-shadow: 0 8px 32px rgba(236, 72, 153, 0.08);
+}
+
+.theme-a .table-header-cell {
+  background: #fdf2f8;
+  border-bottom: 3px solid #ec4899;
+}
+
+.theme-a .property-name {
+  color: #831843;
+}
+
+.theme-a .property-image {
+  background: linear-gradient(135deg, #ec4899 0%, #f472b6 40%, #a855f7 100%);
+}
+
+.theme-a .ai-badge {
+  background: linear-gradient(135deg, #ec4899, #a855f7);
+  color: white;
+}
+
+.theme-a .score-bar-fill {
+  background: linear-gradient(90deg, #ec4899, #f472b6, #a855f7);
+}
+
+.theme-a .score-value {
+  color: #ec4899;
+}
+
+.theme-a .category-label {
+  background: #fdf2f8;
+  color: #831843;
+  border-left: 4px solid #ec4899;
+}
+
+.theme-a .best-cell {
+  background: #fce7f3;
+  position: relative;
+}
+
+.theme-a .best-cell::after {
+  color: #ec4899;
+}
+
+.theme-a .worst-cell {
+  background: #fef3c7;
+}
+
+.theme-a .worst-cell::after {
+  color: #d97706;
+}
+
+.theme-a .hazard-safe {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.theme-a .hazard-caution {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.theme-a .hazard-warning {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.theme-a .ai-comment {
+  background: #fdf2f8;
+  border-left: 3px solid #ec4899;
+}
+
+.theme-a .back-link {
+  color: #ec4899;
+}
+
+.theme-a .back-link:hover {
+  color: #be185d;
+}
+
+.theme-a .section-title {
+  color: #831843;
+}
+
+.theme-a .section-title::after {
+  background: linear-gradient(90deg, #ec4899, transparent);
+}
+
+/* ============================================
+   THEME B: Modern & Sophisticated
+   ============================================ */
+body.theme-b {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #f8f6f3;
+  color: #3d3528;
+}
+
+.theme-b .page-header {
+  background: linear-gradient(135deg, #8b7355, #b8860b);
+}
+
+.theme-b .page-header h1 {
+  font-family: 'Noto Serif JP', serif;
+  letter-spacing: 0.1em;
+}
+
+.theme-b .theme-tab {
+  border: 2px solid #8b7355;
+  color: #8b7355;
+  background: white;
+  font-family: 'Noto Serif JP', serif;
+}
+
+.theme-b .theme-tab.active {
+  background: linear-gradient(135deg, #8b7355, #b8860b);
+  color: white;
+  border-color: transparent;
+}
+
+.theme-b .theme-tab:hover:not(.active) {
+  background: #f5f0e8;
+}
+
+.theme-b .comparison-wrapper {
+  background: rgba(255,255,255,0.95);
+  border: 1px solid #e8e0d4;
+  box-shadow: 0 4px 24px rgba(139, 115, 85, 0.08);
+}
+
+.theme-b .table-header-cell {
+  background: #f5f0e8;
+  border-bottom: 3px solid #8b7355;
+}
+
+.theme-b .property-name {
+  color: #3d3528;
+  font-family: 'Noto Serif JP', serif;
+}
+
+.theme-b .property-image {
+  background: linear-gradient(135deg, #8b7355 0%, #b8860b 50%, #d4a846 100%);
+}
+
+.theme-b .ai-badge {
+  background: linear-gradient(135deg, #8b7355, #b8860b);
+  color: white;
+}
+
+.theme-b .score-bar-fill {
+  background: linear-gradient(90deg, #8b7355, #b8860b, #d4a846);
+}
+
+.theme-b .score-value {
+  color: #8b7355;
+}
+
+.theme-b .category-label {
+  background: #f5f0e8;
+  color: #3d3528;
+  border-left: 4px solid #8b7355;
+  font-family: 'Noto Serif JP', serif;
+}
+
+.theme-b .best-cell {
+  background: #faf7f2;
+  position: relative;
+}
+
+.theme-b .best-cell::after {
+  color: #b8860b;
+}
+
+.theme-b .worst-cell {
+  background: #fef3c7;
+}
+
+.theme-b .worst-cell::after {
+  color: #92400e;
+}
+
+.theme-b .hazard-safe {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.theme-b .hazard-caution {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.theme-b .hazard-warning {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.theme-b .ai-comment {
+  background: #f5f0e8;
+  border-left: 3px solid #8b7355;
+}
+
+.theme-b .back-link {
+  color: #8b7355;
+}
+
+.theme-b .back-link:hover {
+  color: #6b5a42;
+}
+
+.theme-b .section-title {
+  color: #3d3528;
+  font-family: 'Noto Serif JP', serif;
+}
+
+.theme-b .section-title::after {
+  background: linear-gradient(90deg, #8b7355, transparent);
+}
+
+/* ============================================
+   THEME C: Fresh & Natural
+   ============================================ */
+body.theme-c {
+  font-family: 'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif;
+  background: linear-gradient(160deg, #f0fdf4 0%, #ecfdf5 25%, #f0f9ff 50%, #f5f3ff 75%, #fdf2f8 100%);
+  color: #1a3a2a;
+}
+
+.theme-c .page-header {
+  background: linear-gradient(135deg, #059669, #7c3aed);
+}
+
+.theme-c .page-header h1 {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+
+.theme-c .theme-tab {
+  border: 2px solid #059669;
+  color: #059669;
+  background: white;
+  border-radius: 24px;
+}
+
+.theme-c .theme-tab.active {
+  background: linear-gradient(135deg, #059669, #7c3aed);
+  color: white;
+  border-color: transparent;
+}
+
+.theme-c .theme-tab:hover:not(.active) {
+  background: #ecfdf5;
+}
+
+.theme-c .comparison-wrapper {
+  background: rgba(255,255,255,0.85);
+  border: 1px solid #d1fae5;
+  box-shadow: 0 8px 32px rgba(5, 150, 105, 0.08);
+  border-radius: 20px;
+}
+
+.theme-c .table-header-cell {
+  background: #ecfdf5;
+  border-bottom: 3px solid #059669;
+}
+
+.theme-c .property-name {
+  color: #065f46;
+}
+
+.theme-c .property-image {
+  background: linear-gradient(135deg, #059669 0%, #34d399 40%, #7c3aed 100%);
+  border-radius: 12px;
+}
+
+.theme-c .ai-badge {
+  background: linear-gradient(135deg, #059669, #7c3aed);
+  color: white;
+  border-radius: 16px;
+}
+
+.theme-c .score-bar-fill {
+  background: linear-gradient(90deg, #059669, #34d399, #7c3aed);
+}
+
+.theme-c .score-bar {
+  border-radius: 8px;
+}
+
+.theme-c .score-bar-fill {
+  border-radius: 8px;
+}
+
+.theme-c .score-value {
+  color: #059669;
+}
+
+.theme-c .category-label {
+  background: #ecfdf5;
+  color: #065f46;
+  border-left: 4px solid #059669;
+  border-radius: 0 8px 8px 0;
+}
+
+.theme-c .best-cell {
+  background: #d1fae5;
+  position: relative;
+  border-radius: 8px;
+}
+
+.theme-c .best-cell::after {
+  color: #059669;
+}
+
+.theme-c .worst-cell {
+  background: #fef3c7;
+  border-radius: 8px;
+}
+
+.theme-c .worst-cell::after {
+  color: #d97706;
+}
+
+.theme-c .hazard-safe {
+  background: #d1fae5;
+  color: #065f46;
+  border-radius: 8px;
+}
+
+.theme-c .hazard-caution {
+  background: #fef3c7;
+  color: #92400e;
+  border-radius: 8px;
+}
+
+.theme-c .hazard-warning {
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 8px;
+}
+
+.theme-c .ai-comment {
+  background: #ecfdf5;
+  border-left: 3px solid #059669;
+  border-radius: 0 12px 12px 0;
+}
+
+.theme-c .back-link {
+  color: #059669;
+}
+
+.theme-c .back-link:hover {
+  color: #047857;
+}
+
+.theme-c .section-title {
+  color: #065f46;
+}
+
+.theme-c .section-title::after {
+  background: linear-gradient(90deg, #059669, transparent);
+}
+
+/* ============================================
+   SHARED LAYOUT STYLES
+   ============================================ */
+.page-header {
+  padding: 28px 24px 20px;
+  text-align: center;
+  color: white;
+  position: relative;
+}
+
+.page-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.page-header p {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.back-link-container {
+  padding: 16px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.back-link {
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s;
+}
+
+.back-link::before {
+  content: "\2190";
+  font-size: 1.1rem;
+}
+
+/* Theme Tabs */
+.theme-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px 16px 8px;
+  flex-wrap: wrap;
+}
+
+.theme-tab {
+  padding: 10px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 160px;
+}
+
+.theme-tab .tab-label {
+  font-size: 0.9rem;
+}
+
+.theme-tab .tab-sublabel {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+/* Section Title */
+.section-title-container {
+  max-width: 1200px;
+  margin: 24px auto 16px;
+  padding: 0 24px;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.section-title::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  margin-top: 6px;
+  border-radius: 2px;
+}
+
+/* Comparison Table Container */
+.comparison-container {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  padding: 0 24px;
+}
+
+.comparison-wrapper {
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.comparison-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Comparison Table */
+.comparison-table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 14px 16px;
+  vertical-align: middle;
+  text-align: center;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  font-size: 0.88rem;
+  transition: background 0.3s;
+}
+
+.comparison-table th:first-child,
+.comparison-table td:first-child {
+  text-align: left;
+  width: 150px;
+  min-width: 150px;
+}
+
+/* Table Header */
+.table-header-cell {
+  padding: 20px 16px !important;
+  position: relative;
+}
+
+.property-image {
+  width: 100%;
+  height: 120px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.property-image::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(transparent, rgba(0,0,0,0.3));
+}
+
+.property-image .image-label {
+  position: relative;
+  z-index: 1;
+  color: white;
+  font-size: 0.7rem;
+  opacity: 0.9;
+}
+
+.property-name {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.property-address {
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+
+/* AI Recommend Badge */
+.ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.ai-badge::before {
+  content: "\2605";
+  font-size: 0.8rem;
+}
+
+/* Category Label */
+.category-label {
+  font-weight: 700;
+  font-size: 0.82rem !important;
+  padding: 12px 14px !important;
+  white-space: nowrap;
+}
+
+/* Score Bar */
+.score-cell {
+  padding: 12px 16px !important;
+}
+
+.score-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.score-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.score-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s ease;
+}
+
+/* Best / Worst Cell Indicators */
+.best-cell {
+  position: relative;
+}
+
+.best-cell::after {
+  content: " \2713";
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-left: 4px;
+}
+
+.worst-cell {
+  position: relative;
+}
+
+.worst-cell::after {
+  content: " \25B2";
+  font-size: 0.65rem;
+  margin-left: 4px;
+}
+
+/* Hazard Badges */
+.hazard-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* AI Comment Row */
+.ai-comment {
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  text-align: left;
+  margin: 4px;
+}
+
+.ai-comment-label {
+  font-weight: 700;
+  font-size: 0.7rem;
+  display: block;
+  margin-bottom: 4px;
+  opacity: 0.7;
+}
+
+/* Data Value Styling */
+.data-main {
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: block;
+}
+
+.data-sub {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Footer */
+.page-footer {
+  text-align: center;
+  padding: 32px 24px;
+  font-size: 0.78rem;
+  opacity: 0.5;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 1.2rem;
+  }
+
+  .theme-tabs {
+    gap: 8px;
+    padding: 16px 12px 8px;
+  }
+
+  .theme-tab {
+    min-width: 100px;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+
+  .theme-tab .tab-sublabel {
+    display: none;
+  }
+
+  .comparison-container {
+    padding: 0 12px;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 10px 12px;
+    font-size: 0.82rem;
+  }
+
+  .property-image {
+    height: 90px;
+  }
+
+  .score-value {
+    font-size: 1.2rem;
+  }
+
+  .section-title-container {
+    padding: 0 12px;
+  }
+}
+
+/* Scroll hint for mobile */
+.scroll-hint {
+  display: none;
+  text-align: center;
+  font-size: 0.75rem;
+  opacity: 0.5;
+  padding: 8px 0 0;
+}
+
+@media (max-width: 860px) {
+  .scroll-hint {
+    display: block;
+  }
+}
+
+/* Transition animation */
+.comparison-wrapper {
+  animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+</head>
+<body class="theme-a">
+
+<!-- Page Header -->
+<header class="page-header">
+  <h1>物件比較表 デザイン比較</h1>
+  <p>3つのデザインテーマで比較表の見え方を確認できます</p>
+</header>
+
+<!-- Back Link -->
+<div class="back-link-container">
+  <a href="index.html" class="back-link">デザイン一覧に戻る</a>
+</div>
+
+<!-- Theme Tabs -->
+<nav class="theme-tabs" role="tablist">
+  <button class="theme-tab active" role="tab" aria-selected="true" onclick="switchTheme('a')" id="tab-a">
+    <span class="tab-label">Design A</span>
+    <span class="tab-sublabel">Elegant &amp; Warm</span>
+  </button>
+  <button class="theme-tab" role="tab" aria-selected="false" onclick="switchTheme('b')" id="tab-b">
+    <span class="tab-label">Design B</span>
+    <span class="tab-sublabel">Modern &amp; Sophisticated</span>
+  </button>
+  <button class="theme-tab" role="tab" aria-selected="false" onclick="switchTheme('c')" id="tab-c">
+    <span class="tab-label">Design C</span>
+    <span class="tab-sublabel">Fresh &amp; Natural</span>
+  </button>
+</nav>
+
+<!-- Section Title -->
+<div class="section-title-container">
+  <h2 class="section-title">物件比較表（3物件）</h2>
+</div>
+
+<!-- Comparison Table -->
+<div class="comparison-container">
+  <p class="scroll-hint">&#8592; 横にスクロールできます &#8594;</p>
+  <div class="comparison-wrapper">
+    <div class="comparison-scroll">
+      <table class="comparison-table">
+        <!-- Header Row: Property Names & Images -->
+        <thead>
+          <tr>
+            <th class="table-header-cell" style="vertical-align: bottom;">
+              <span style="font-size: 0.8rem; opacity: 0.6;">比較項目</span>
+            </th>
+            <th class="table-header-cell">
+              <div class="ai-badge">AIおすすめ</div>
+              <div class="property-image">
+                <span class="image-label">物件写真</span>
+              </div>
+              <div class="property-name">桑名市大山田 土地A</div>
+              <div class="property-address">三重県桑名市大山田3丁目</div>
+            </th>
+            <th class="table-header-cell">
+              <div style="height: 26px;"></div>
+              <div class="property-image">
+                <span class="image-label">物件写真</span>
+              </div>
+              <div class="property-name">四日市市日永 土地B</div>
+              <div class="property-address">三重県四日市市日永5丁目</div>
+            </th>
+            <th class="table-header-cell">
+              <div style="height: 26px;"></div>
+              <div class="property-image">
+                <span class="image-label">物件写真</span>
+              </div>
+              <div class="property-name">鈴鹿市白子 土地C</div>
+              <div class="property-address">三重県鈴鹿市白子本町</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 総合スコア -->
+          <tr>
+            <td class="category-label">総合スコア</td>
+            <td class="score-cell best-cell">
+              <span class="score-value">82<small style="font-size:0.6em;">pt</small></span>
+              <div class="score-bar"><div class="score-bar-fill" style="width: 82%;"></div></div>
+            </td>
+            <td class="score-cell">
+              <span class="score-value">76<small style="font-size:0.6em;">pt</small></span>
+              <div class="score-bar"><div class="score-bar-fill" style="width: 76%;"></div></div>
+            </td>
+            <td class="score-cell worst-cell">
+              <span class="score-value">71<small style="font-size:0.6em;">pt</small></span>
+              <div class="score-bar"><div class="score-bar-fill" style="width: 71%;"></div></div>
+            </td>
+          </tr>
+          <!-- 価格 -->
+          <tr>
+            <td class="category-label">価格</td>
+            <td class="best-cell">
+              <span class="data-main">1,580万円</span>
+              <span class="data-sub">最も安い</span>
+            </td>
+            <td class="worst-cell">
+              <span class="data-main">2,180万円</span>
+              <span class="data-sub">最も高い</span>
+            </td>
+            <td>
+              <span class="data-main">1,980万円</span>
+            </td>
+          </tr>
+          <!-- 土地面積 -->
+          <tr>
+            <td class="category-label">土地面積</td>
+            <td>
+              <span class="data-main">165.23m&sup2;</span>
+              <span class="data-sub">（49.98坪）</span>
+            </td>
+            <td class="best-cell">
+              <span class="data-main">198.45m&sup2;</span>
+              <span class="data-sub">（60.03坪）</span>
+            </td>
+            <td class="worst-cell">
+              <span class="data-main">142.67m&sup2;</span>
+              <span class="data-sub">（43.16坪）</span>
+            </td>
+          </tr>
+          <!-- 坪単価 -->
+          <tr>
+            <td class="category-label">坪単価</td>
+            <td class="best-cell">
+              <span class="data-main">31.5万円/坪</span>
+            </td>
+            <td>
+              <span class="data-main">36.2万円/坪</span>
+            </td>
+            <td class="worst-cell">
+              <span class="data-main">45.8万円/坪</span>
+            </td>
+          </tr>
+          <!-- 用途地域 -->
+          <tr>
+            <td class="category-label">用途地域</td>
+            <td>
+              <span class="data-main">第一種低層住居<br>専用地域</span>
+            </td>
+            <td>
+              <span class="data-main">第一種中高層住居<br>専用地域</span>
+            </td>
+            <td>
+              <span class="data-main">第二種中高層住居<br>専用地域</span>
+            </td>
+          </tr>
+          <!-- 建ぺい率/容積率 -->
+          <tr>
+            <td class="category-label">建ぺい率/容積率</td>
+            <td class="best-cell">
+              <span class="data-main">60% / 200%</span>
+              <span class="data-sub">ゆとりある設計可</span>
+            </td>
+            <td>
+              <span class="data-main">50% / 100%</span>
+            </td>
+            <td>
+              <span class="data-main">60% / 200%</span>
+            </td>
+          </tr>
+          <!-- 接道状況 -->
+          <tr>
+            <td class="category-label">接道状況</td>
+            <td class="best-cell">
+              <span class="data-main">南6m公道</span>
+              <span class="data-sub">日当たり良好</span>
+            </td>
+            <td class="worst-cell">
+              <span class="data-main">東4m私道</span>
+              <span class="data-sub">要確認</span>
+            </td>
+            <td>
+              <span class="data-main">西5m公道</span>
+            </td>
+          </tr>
+          <!-- 最寄り駅 -->
+          <tr>
+            <td class="category-label">最寄り駅</td>
+            <td>
+              <span class="data-main">桑名駅</span>
+              <span class="data-sub">徒歩15分</span>
+            </td>
+            <td class="best-cell">
+              <span class="data-main">四日市駅</span>
+              <span class="data-sub">徒歩8分</span>
+            </td>
+            <td>
+              <span class="data-main">白子駅</span>
+              <span class="data-sub">徒歩12分</span>
+            </td>
+          </tr>
+          <!-- 名古屋アクセス -->
+          <tr>
+            <td class="category-label">名古屋アクセス</td>
+            <td class="best-cell">
+              <span class="data-main">25分</span>
+              <span class="data-sub">JR関西本線</span>
+            </td>
+            <td>
+              <span class="data-main">35分</span>
+              <span class="data-sub">近鉄名古屋線</span>
+            </td>
+            <td class="worst-cell">
+              <span class="data-main">45分</span>
+              <span class="data-sub">近鉄名古屋線</span>
+            </td>
+          </tr>
+          <!-- 小学校区 -->
+          <tr>
+            <td class="category-label">小学校区</td>
+            <td>
+              <span class="data-main">大山田東小</span>
+              <span class="data-sub">徒歩10分</span>
+            </td>
+            <td class="best-cell">
+              <span class="data-main">日永小</span>
+              <span class="data-sub">徒歩5分</span>
+            </td>
+            <td>
+              <span class="data-main">白子小</span>
+              <span class="data-sub">徒歩8分</span>
+            </td>
+          </tr>
+          <!-- ハザードマップ -->
+          <tr>
+            <td class="category-label">ハザードマップ</td>
+            <td>
+              <span class="hazard-badge hazard-safe">&#9679; 安全</span>
+            </td>
+            <td>
+              <span class="hazard-badge hazard-caution">&#9650; 注意</span>
+              <span class="data-sub">浸水想定 0.5m未満</span>
+            </td>
+            <td>
+              <span class="hazard-badge hazard-warning">&#9888; 警戒</span>
+              <span class="data-sub">津波浸水想定区域</span>
+            </td>
+          </tr>
+          <!-- AI総評 -->
+          <tr>
+            <td class="category-label">AI総評</td>
+            <td>
+              <div class="ai-comment">
+                <span class="ai-comment-label">AI分析コメント</span>
+                名古屋へのアクセスが最も良く、坪単価もお手頃です。子育て環境と安全性のバランスが最も優れた物件です。初めてのマイホームに最適。
+              </div>
+            </td>
+            <td>
+              <div class="ai-comment">
+                <span class="ai-comment-label">AI分析コメント</span>
+                広い土地面積と駅近が魅力。ただし価格が高めで私道接道の確認が必要。将来の資産価値は期待できる立地です。
+              </div>
+            </td>
+            <td>
+              <div class="ai-comment">
+                <span class="ai-comment-label">AI分析コメント</span>
+                コンパクトな土地ですが利便性は高い。ハザードマップの警戒区域に注意が必要。地盤や保険の追加調査をおすすめします。
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="page-footer">
+  <p>&copy; 2026 三重県不動産アプリ デザイン比較 &#8212; 女性向けUI案</p>
+</footer>
+
+<script>
+/**
+ * Switch between design themes A, B, C
+ */
+function switchTheme(theme) {
+  // Update body class
+  document.body.className = 'theme-' + theme;
+
+  // Update tab active states
+  document.querySelectorAll('.theme-tab').forEach(function(tab) {
+    tab.classList.remove('active');
+    tab.setAttribute('aria-selected', 'false');
+  });
+  document.getElementById('tab-' + theme).classList.add('active');
+  document.getElementById('tab-' + theme).setAttribute('aria-selected', 'true');
+
+  // Re-trigger animation on the comparison wrapper
+  var wrapper = document.querySelector('.comparison-wrapper');
+  wrapper.style.animation = 'none';
+  // Force reflow
+  void wrapper.offsetHeight;
+  wrapper.style.animation = 'fadeInUp 0.4s ease';
+
+  // Animate score bars
+  animateScoreBars();
+}
+
+/**
+ * Animate score bars filling up
+ */
+function animateScoreBars() {
+  var bars = document.querySelectorAll('.score-bar-fill');
+  bars.forEach(function(bar) {
+    var width = bar.style.width;
+    bar.style.width = '0%';
+    setTimeout(function() {
+      bar.style.width = width;
+    }, 100);
+  });
+}
+
+// Initial animation on page load
+document.addEventListener('DOMContentLoaded', function() {
+  animateScoreBars();
+});
+</script>
+</body>
+</html>
