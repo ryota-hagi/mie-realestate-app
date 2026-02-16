@@ -136,7 +136,8 @@ async function saveProperty(prop) {
   try {
     const user = await ensureAuth();
     if (!user) { alert('物件の保存にはページの再読み込みが必要です'); return null; }
-    const areaData = AREAS.find(a => a.id === prop.area_id);
+    let areaData = AREAS.find(a => a.id === prop.area_id);
+    if (!areaData && prop.address) areaData = AREAS.find(a => prop.address.includes(a.name));
     const badge = calculateBadge(prop, areaData);
     const row = { ...prop, user_id: user.id, badge };
     const { data, error } = await supabaseClient.from('saved_properties').insert(row).select().single();
@@ -455,7 +456,11 @@ function calculateScores(prop) {
   let scoreCost = 50;
   if (prop.price && prop.land_area) {
     const tsuboPrice = prop.price / (prop.land_area / 3.305785) / 10000; // 万円/坪
-    const areaData = AREAS.find(a => a.id === prop.area_id);
+    // area_idがあればそれを使い、なければ住所から自動判定
+    let areaData = AREAS.find(a => a.id === prop.area_id);
+    if (!areaData && prop.address) {
+      areaData = AREAS.find(a => prop.address.includes(a.name));
+    }
     if (areaData) {
       const areaAvg = areaData.pricePerTsubo / 10000; // 万円/坪
       const ratio = tsuboPrice / areaAvg;
@@ -755,7 +760,7 @@ function renderPropertyView() {
           ${state.savedProperties.map(prop => {
             const badgeClass = prop.badge === 'red' ? 'so-badge-red' : prop.badge === 'yellow' ? 'so-badge-yellow' : 'so-badge-none';
             const badgeLabel = prop.badge === 'red' ? '🔴 注意' : prop.badge === 'yellow' ? '🟡 要確認' : '🟢 OK';
-            const areaName = AREAS.find(a => a.id === prop.area_id)?.name || prop.area_id || '';
+            const areaName = AREAS.find(a => a.id === prop.area_id)?.name || (prop.address ? AREAS.find(a => prop.address.includes(a.name))?.name : '') || '';
             const priceStr = prop.price ? `${(prop.price / 10000).toLocaleString()}万円` : '価格未入力';
             const areaStr = prop.land_area ? `${(prop.land_area / 3.305785).toFixed(1)}坪（${prop.land_area}㎡）` : '面積未入力';
             // 位置精度バッジ
@@ -999,7 +1004,7 @@ function renderComparisonTable() {
               <th class="text-left p-3 bg-gray-50 text-xs text-gray-500 font-medium" style="min-width:80px;"></th>
               ${props.map((p,i) => `
                 <th class="p-3 bg-gray-50 text-sm font-bold text-gray-800" style="min-width:140px;">
-                  物件${labels[i]}<br><span class="text-xs font-normal text-gray-400">${AREAS.find(a=>a.id===p.area_id)?.name || ''}</span>
+                  物件${labels[i]}<br><span class="text-xs font-normal text-gray-400">${AREAS.find(a=>a.id===p.area_id)?.name || (p.address ? AREAS.find(a=>p.address.includes(a.name))?.name : '') || ''}</span>
                   ${p.url ? `<br><a href="${p.url}" target="_blank" rel="noopener" class="text-xs text-blue-500 font-normal hover:underline">🔗 物件ページ</a>` : ''}
                 </th>
               `).join('')}
