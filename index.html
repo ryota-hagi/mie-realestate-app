@@ -948,8 +948,6 @@ function renderComparisonTable() {
     { label: '坪単価', key: '_tsubo', fmt: (v, p) => p.price && p.land_area ? `${(p.price / (p.land_area / 3.305785) / 10000).toFixed(1)}万円/坪` : '—' },
     { label: '所在地', key: 'address', fmt: v => v || '—', editable: true },
     { label: '駅距離', key: 'station_distance', fmt: v => v || '—', editable: true },
-    { label: '間取り', key: 'floor_plan', fmt: v => v || '—', editable: true },
-    { label: '築年', key: 'building_year', fmt: v => v || '—', editable: true },
   ];
   const checkRows = [
     { label: '用途地域', key: 'zoning', editable: true },
@@ -1044,6 +1042,12 @@ function renderComparisonTable() {
                 ${props.map(p => editableCell(p, r.key, r.fmt(p[r.key], p), r.editable)).join('')}
               </tr>
             `).join('')}
+            ${props.some(p => p.ai_comment) ? `
+            <tr>
+              <td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">💬 AIコメント</td>
+              ${props.map(p => `<td class="p-3 text-xs text-gray-700">${p.ai_comment || '<span class="text-gray-300">—</span>'}</td>`).join('')}
+            </tr>
+            ` : ''}
             <tr><td colspan="${props.length+1}" class="p-2 bg-amber-50"><span class="text-xs font-bold text-amber-700">⚠️ 重要確認項目（不動産屋に確認）</span></td></tr>
             ${checkRows.map(r => `
               <tr>
@@ -1070,7 +1074,6 @@ function renderComparisonTable() {
                 { label: '土砂災害', key: 'hazard_sediment' },
                 { label: '津波リスク', key: 'hazard_tsunami' },
                 { label: '地盤', key: 'ground_type' },
-                { label: 'AIコメント', key: 'ai_comment' },
               ].map(r => {
                 return '<tr><td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">' + r.label + '</td>' +
                   props.map(p => {
