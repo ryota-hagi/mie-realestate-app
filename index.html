@@ -469,53 +469,10 @@ function calculateScores(prop) {
     }
   }
 
-  // 追加コスト要因の検出（物件情報の全テキストフィールドから）
-  // 確定的な記載 → 大きく減点、未確定（「可能性」「必要な場合」等）→ 軽く減点
-  const allText = [prop.elevation, prop.infrastructure, prop.hazard, prop.memo, prop.ground_type].filter(Boolean).join(' ');
-
-  // --- 造成・地盤改良（高コスト: 100〜500万円）---
-  if (/造成工事|地盤改良|擁壁工事/.test(allText)) {
-    // 「必要」「買主負担」= 確定的、「案内可能」「ご相談」= 未確定
-    if (/造成.{0,10}(必要|要|買主|負担)|地盤改良.{0,10}(必要|要)/.test(allText)) scoreCost -= 15;
-    else scoreCost -= 8;
-  }
-  if (/高低差|傾斜地|法面|崖/.test(allText) && !/造成完|整地済|造成済/.test(allText)) {
-    scoreCost -= 5; // 造成が必要になる可能性
-  }
-
-  // --- 農地転用（手続き: 5〜20万円）---
-  if (/農地転用|農地法/.test(allText)) {
-    if (/売主.{0,5}負担|売主負担/.test(allText)) scoreCost -= 2; // 売主負担なら軽微
-    else scoreCost -= 5;
-  }
-
-  // --- 解体・撤去（コスト: 数万〜200万円）---
-  if (/解体.{0,10}(必要|要|買主|負担)|撤去.{0,10}(買主|負担|別途)/.test(allText)) {
-    scoreCost -= 8;
-  } else if (/古家|建物あり|解体|撤去/.test(allText)) {
-    scoreCost -= 4;
-  }
-
-  // --- インフラ引込（上下水道・ガス: 各30〜100万円）---
-  let infraCostHits = 0;
-  if (/上水道.{0,8}(引込無|引込なし|引込が必要|工事費)|水道.{0,8}引込.{0,8}(必要|買主|負担)/.test(allText)) infraCostHits++;
-  if (/下水道.{0,8}(接続無|接続なし|接続が必要|工事費)|下水.{0,8}(必要|買主|負担)/.test(allText)) infraCostHits++;
-  if (/都市ガス.{0,8}(引込無|引込なし|引込が必要)/.test(allText)) infraCostHits++;
-  if (infraCostHits > 0) scoreCost -= infraCostHits * 5;
-
-  // --- 浄化槽（下水道なし: 設置50〜100万円）---
-  if (/浄化槽/.test(allText) && !/下水道/.test(prop.infrastructure || '')) {
-    scoreCost -= 5;
-  }
-
-  // --- 水道分担金・加入金（10〜20万円）---
-  if (/水道分担金|水道加入金|加入者負担金|受益者.{0,3}負担金/.test(allText)) {
-    scoreCost -= 3;
-  }
-
-  // --- 地盤リスク（沖積地・埋立地 → 改良の可能性）---
-  if (prop.ground_type && /沖積|埋立|軟弱/.test(prop.ground_type)) {
-    scoreCost -= 5; // 地盤改良費が追加で発生する可能性
+  // 追加コスト要因（AI判定: property-enrich Edge Function で Gemini が物件情報を読み取って判定）
+  // extra_cost_score: 0（追加コストなし）〜 -50（非常に多額の追加コスト）
+  if (prop.extra_cost_score != null && typeof prop.extra_cost_score === 'number') {
+    scoreCost += prop.extra_cost_score; // 負の値が加算される（減点）
   }
 
   // 総合スコア
