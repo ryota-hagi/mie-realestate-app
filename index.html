@@ -110,6 +110,134 @@ async function ensureAuth() {
 }
 
 // ============================================================
+// Auth Helpers
+// ============================================================
+function isAnonymousUser() {
+  return !state.authUser || state.authUser.is_anonymous;
+}
+
+function updateAuthState(user) {
+  if (user) {
+    state.authUser = {
+      id: user.id,
+      email: user.email || null,
+      is_anonymous: user.is_anonymous || !user.email,
+    };
+  } else {
+    state.authUser = null;
+  }
+}
+
+async function handleSendOtp(email) {
+  state.authLoading = true;
+  state.authError = '';
+  render();
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    const currentUser = session?.user;
+    if (currentUser && currentUser.is_anonymous) {
+      // 匿名→正式アカウントへアップグレード（確認メール送信）
+      const { error } = await supabaseClient.auth.updateUser({ email });
+      if (error) throw error;
+      state.authEmail = email;
+      state.authStep = 'link_sent'; // リンククリック待ち
+    } else {
+      // 通常ログイン（OTP送信）
+      const { error } = await supabaseClient.auth.signInWithOtp({
+        email,
+        options: { shouldCreateUser: true },
+      });
+      if (error) throw error;
+      state.authEmail = email;
+      state.authStep = 'otp';
+    }
+  } catch(e) {
+    state.authError = e.message || '送信に失敗しました';
+  }
+  state.authLoading = false;
+  render();
+}
+
+async function handleVerifyOtp(email, token) {
+  state.authLoading = true;
+  state.authError = '';
+  render();
+  try {
+    const { data, error } = await supabaseClient.auth.verifyOtp({
+      email,
+      token,
+      type: 'email',
+    });
+    if (error) throw error;
+    updateAuthState(data.user);
+    state.authModalOpen = false;
+    state.authStep = 'email';
+    state.authEmail = '';
+    // データ再読み込み
+    await loadSavedProperties();
+    await loadSavedComparisons();
+    // 未保存の比較表があればDBに保存
+    await saveUnsavedComparisons();
+  } catch(e) {
+    state.authError = e.message || '認証に失敗しました';
+  }
+  state.authLoading = false;
+  render();
+}
+
+async function handleLogout() {
+  await supabaseClient.auth.signOut();
+  state.authUser = null;
+  state.savedProperties = [];
+  state.savedComparisons = [];
+  state.soComparison = null;
+  state.soView = null;
+  try {
+    localStorage.removeItem('mie_saved_properties');
+    localStorage.removeItem('mie_comparison');
+    localStorage.removeItem('mie_saved_comparisons');
+  } catch(e) {}
+  // 新しい匿名セッションを開始
+  const user = await ensureAuth();
+  if (user) updateAuthState(user);
+  render();
+}
+
+function openAuthModal() {
+  state.authModalOpen = true;
+  state.authStep = 'email';
+  state.authEmail = '';
+  state.authError = '';
+  state.authLoading = false;
+  render();
+}
+
+async function saveUnsavedComparisons() {
+  const user = state.authUser;
+  if (!user || user.is_anonymous) return;
+  const unsaved = state.savedComparisons.filter(c => c._unsaved);
+  for (const comp of unsaved) {
+    try {
+      const { data } = await supabaseClient.from('comparisons').insert({
+        user_id: user.id, name: comp.name, property_ids: comp.property_ids,
+        ai_summary: comp.summary, ai_questions: comp.questions,
+      }).select().single();
+      if (data) {
+        comp.id = data.id;
+        comp.created_at = data.created_at;
+        delete comp._unsaved;
+        // soComparisonも更新
+        if (state.soComparison && state.soComparison._unsaved) {
+          state.soComparison.id = data.id;
+          delete state.soComparison._unsaved;
+        }
+      }
+    } catch(e) { console.warn('Failed to save comparison:', e.message); }
+  }
+  backupComparisonsToLS();
+}
+
+// ============================================================
 // Area Data (used by calculateBadge and generateComparison)
 // ============================================================
 const AREAS = [
@@ -279,6 +407,7 @@ async function loadComparisonDetail(compId) {
     questions,
     properties: props,
     property_ids: propIds,
+    _unsaved: comp._unsaved || false,
   };
   state.soView = 'compare';
   backupToLocalStorage();
@@ -346,12 +475,24 @@ async function generateComparison() {
       body: JSON.stringify({ properties: props, areas })
     });
     const result = await res.json();
-    // Save comparison
     const compName = '比較表 ' + new Date().toLocaleDateString('ja-JP', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+    // 匿名ユーザーの場合: DBに保存せず、ローカルのみで比較表を表示
+    if (isAnonymousUser()) {
+      const tempComp = {
+        id: 'temp_' + Date.now(), name: compName, created_at: new Date().toISOString(),
+        summary: result.summary, questions: JSON.stringify(result.questions),
+        property_ids: props.map(p => p.id), properties: props, _unsaved: true,
+      };
+      state.savedComparisons.unshift(tempComp);
+      backupComparisonsToLS();
+      return { ...result, id: tempComp.id, name: compName, properties: props, _unsaved: true };
+    }
+
+    // ログイン済み: DBに保存
     const { data } = await supabaseClient.from('comparisons').insert({
       user_id: user.id, name: compName, property_ids: props.map(p => p.id), ai_summary: result.summary, ai_questions: JSON.stringify(result.questions)
     }).select().single();
-    // savedComparisonsに追加
     if (data) {
       state.savedComparisons.unshift({
         id: data.id, name: compName, created_at: data.created_at,
@@ -596,6 +737,14 @@ const state = {
   _batchResults: [],      // [{url, status, parsed, error, saved}]
   _batchProcessing: false,
   _batchCurrentIndex: -1,
+  // 認証UI
+  authModalOpen: false,
+  authStep: 'email', // 'email' | 'otp'
+  authEmail: '',
+  authLoading: false,
+  authError: '',
+  authUser: null, // { id, email, is_anonymous }
+  _pendingSaveCompId: null, // ログイン後に保存する比較表ID
 };
 
 // ============================================================
@@ -611,12 +760,23 @@ function render() {
       ${renderSEOContent()}
       ${renderFooter()}
       ${renderSOModal()}
+      ${renderAuthModal()}
     </div>
   `;
   bindEvents();
 }
 
 function renderHeader() {
+  const user = state.authUser;
+  const loggedIn = user && !user.is_anonymous && user.email;
+
+  const authHtml = loggedIn
+    ? `<div class="flex items-center gap-2">
+        <span class="text-xs text-gray-500">${user.email}</span>
+        <button onclick="handleLogout()" class="text-xs text-gray-400 hover:text-red-500 transition-colors">ログアウト</button>
+      </div>`
+    : `<button onclick="openAuthModal()" class="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">ログイン</button>`;
+
   return `
     <header class="glass border-b border-gray-200">
       <div class="max-w-6xl mx-auto px-4 py-4">
@@ -625,9 +785,12 @@ function renderHeader() {
             <h1 class="text-2xl font-bold text-gray-900">🏠 注文住宅 物件比較ツール</h1>
             <p class="text-sm text-gray-500 mt-1">気になる物件をAIで自動整理。複数物件を並べて比較できます</p>
           </div>
-          <a href="area.html" class="hidden sm:block px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors whitespace-nowrap">
-            📊 三重県エリア比較 →
-          </a>
+          <div class="flex items-center gap-3">
+            ${authHtml}
+            <a href="area.html" class="hidden sm:block px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors whitespace-nowrap">
+              📊 三重県エリア比較 →
+            </a>
+          </div>
         </div>
       </div>
     </header>
@@ -987,6 +1150,20 @@ function renderComparisonTable() {
         </div>
       ` : ''}
 
+      ${comp._unsaved ? `
+        <div class="card p-4 bg-green-50 border-green-200" style="border:1px solid #86efac;">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div>
+              <span class="text-sm font-bold text-green-800">この比較表を保存しますか？</span>
+              <p class="text-xs text-green-600 mt-0.5">ユーザー登録すると、次回以降もこの比較表を確認できます</p>
+            </div>
+            <button onclick="openAuthModal(); state._pendingSaveCompId='${comp.id}';" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+              ユーザー登録して保存
+            </button>
+          </div>
+        </div>
+      ` : ''}
+
       <div class="card overflow-x-auto">
         <table class="so-compare-table">
           <thead>
@@ -1237,6 +1414,56 @@ async function handleMemoEdit(propId, value) {
 // ============================================================
 // Modals (Import)
 // ============================================================
+function renderAuthModal() {
+  if (!state.authModalOpen) return '';
+
+  const isOtpStep = state.authStep === 'otp';
+  const isLinkSent = state.authStep === 'link_sent';
+  const loading = state.authLoading;
+
+  return `
+    <div class="so-modal-overlay" onclick="if(event.target===this){state.authModalOpen=false;render();}">
+      <div class="so-modal" style="max-width:400px;">
+        ${isLinkSent ? `
+          <h2 class="text-lg font-bold text-gray-900 mb-1">確認メールを送信しました</h2>
+          <p class="text-sm text-gray-500 mb-4"><span class="font-medium text-gray-700">${state.authEmail}</span> に確認メールを送信しました。</p>
+          <div class="p-4 bg-blue-50 rounded-lg mb-4">
+            <p class="text-sm text-blue-800">メール内のリンクをクリックして、アカウント登録を完了してください。</p>
+            <p class="text-xs text-blue-600 mt-2">クリック後、このページに戻るとログイン状態になります。</p>
+          </div>
+          <button onclick="state.authModalOpen=false;render();" class="w-full px-4 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+            閉じる
+          </button>
+        ` : isOtpStep ? `
+          <h2 class="text-lg font-bold text-gray-900 mb-1">認証コードを入力</h2>
+          <p class="text-sm text-gray-500 mb-4"><span class="font-medium text-gray-700">${state.authEmail}</span> に6桁のコードを送信しました</p>
+          ${state.authError ? `<p class="text-sm text-red-600 mb-3">${state.authError}</p>` : ''}
+          <input id="auth-otp-input" type="text" inputmode="numeric" maxlength="6" placeholder="000000"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg text-center text-2xl font-bold tracking-widest focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
+            ${loading ? 'disabled' : ''}>
+          <button onclick="handleAuthVerify()" class="w-full mt-4 px-4 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors ${loading ? 'opacity-50 cursor-not-allowed' : ''}" ${loading ? 'disabled' : ''}>
+            ${loading ? '確認中...' : 'ログイン'}
+          </button>
+          <button onclick="state.authStep='email';state.authError='';render();" class="w-full mt-2 px-4 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors">
+            ← メールアドレスを変更
+          </button>
+        ` : `
+          <h2 class="text-lg font-bold text-gray-900 mb-1">ログイン / アカウント登録</h2>
+          <p class="text-sm text-gray-500 mb-4">メールアドレスを入力してください。パスワードは不要です。</p>
+          ${state.authError ? `<p class="text-sm text-red-600 mb-3">${state.authError}</p>` : ''}
+          <input id="auth-email-input" type="email" placeholder="example@mail.com"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none"
+            value="${state.authEmail}" ${loading ? 'disabled' : ''}>
+          <button onclick="handleAuthSendOtp()" class="w-full mt-4 px-4 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors ${loading ? 'opacity-50 cursor-not-allowed' : ''}" ${loading ? 'disabled' : ''}>
+            ${loading ? '送信中...' : '認証コードを送信'}
+          </button>
+          <p class="text-xs text-gray-400 mt-3 text-center">6桁の認証コードがメールに届きます</p>
+        `}
+      </div>
+    </div>
+  `;
+}
+
 function renderSOModal() {
   if (!state.soModalOpen) return '';
 
@@ -1820,9 +2047,30 @@ function renderFooter() {
 // ============================================================
 // Bind Events
 // ============================================================
+function handleAuthSendOtp() {
+  const input = document.getElementById('auth-email-input');
+  const email = input ? input.value.trim() : '';
+  if (!email || !email.includes('@')) { state.authError = 'メールアドレスを入力してください'; render(); return; }
+  handleSendOtp(email);
+}
+
+function handleAuthVerify() {
+  const input = document.getElementById('auth-otp-input');
+  const token = input ? input.value.trim() : '';
+  if (!token || token.length !== 6) { state.authError = '6桁のコードを入力してください'; render(); return; }
+  handleVerifyOtp(state.authEmail, token);
+}
+
 function bindEvents() {
-  // No tab switching needed - single page view
-  // Mobile link to area.html is already a regular anchor
+  // 認証モーダルのEnterキー対応
+  const emailInput = document.getElementById('auth-email-input');
+  if (emailInput) emailInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleAuthSendOtp(); });
+  const otpInput = document.getElementById('auth-otp-input');
+  if (otpInput) {
+    otpInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleAuthVerify(); });
+    otpInput.focus();
+  }
+  if (emailInput && state.authModalOpen && state.authStep === 'email') emailInput.focus();
 }
 
 // ============================================================
@@ -1830,7 +2078,20 @@ function bindEvents() {
 // ============================================================
 restoreFromLocalStorage();
 render();
-ensureAuth().then(() => {
+
+// 認証状態の変更を監視
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  if (session?.user) {
+    updateAuthState(session.user);
+  } else {
+    state.authUser = null;
+  }
+  render();
+});
+
+ensureAuth().then(user => {
+  if (user) updateAuthState(user);
+  render();
   loadSavedProperties().then(() => {
     backupToLocalStorage();
     if (state.savedProperties.length > 0) render();
