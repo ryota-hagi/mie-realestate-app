@@ -982,26 +982,62 @@ function renderComparisonTable() {
         <button onclick="exportComparisonCSV()" class="ml-auto px-3 py-1 text-xs rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">📥 CSV出力</button>
       </div>
 
-      ${props.some(p => p.enrichment_status === 'done') ? `
-        <div class="card p-4 bg-purple-50 border-purple-200">
-          <h3 class="text-sm font-bold text-purple-800 mb-3">📈 物件スコア比較</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-${Math.min(props.length, 5)} gap-3">
-            ${props.map((p, i) => {
-              const scores = calculateScores(p);
-              if (!scores) return '<div class="text-center text-xs text-gray-400 p-2">スコアなし</div>';
-              return '<div class="bg-white rounded-lg p-3 border border-purple-100 text-center">' +
-                '<div class="text-sm font-bold text-gray-800 mb-2">物件' + labels[i] + '</div>' +
-                '<div class="text-3xl font-bold mb-1" style="color:' + getScoreColor(scores.score_total) + ';">' + scores.score_total + '</div>' +
-                '<div class="text-xs text-gray-500 mb-2">総合スコア</div>' +
-                '<div class="space-y-1">' +
-                renderScoreBar('安全', scores.score_safety) +
-                renderScoreBar('利便', scores.score_convenience) +
-                renderScoreBar('コスト', scores.score_cost) +
-                '</div></div>';
-            }).join('')}
-          </div>
-        </div>
-      ` : ''}
+      ${props.some(p => p.enrichment_status === 'done') ? (() => {
+        const allScores = props.map(p => calculateScores(p));
+        const maxTotal = Math.max(...allScores.map(s => s ? s.score_total : 0));
+        return `
+        <div class="card p-4 overflow-x-auto">
+          <h3 class="text-sm font-bold text-gray-800 mb-3">📈 スコア比較</h3>
+          <table class="w-full" style="border-collapse:separate;border-spacing:0;">
+            <thead>
+              <tr>
+                <th class="text-left p-2 text-xs text-gray-400 font-medium" style="min-width:60px;"></th>
+                ${props.map((p, i) => {
+                  const shortAddr = p.address ? p.address.replace(/^三重県/, '').replace(/(市|町|村).+$/, (m) => m.charAt(0) === '市' || m.charAt(0) === '町' || m.charAt(0) === '村' ? m : m).substring(0, 10) : '';
+                  return '<th class="p-2 text-center" style="min-width:90px;">' +
+                    '<div class="text-xs font-bold text-gray-700">' + labels[i] + '</div>' +
+                    '<div class="text-xs text-gray-400 truncate" style="max-width:100px;">' + shortAddr + '</div>' +
+                    '</th>';
+                }).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:2px solid #e5e7eb;">
+                <td class="p-2 text-xs font-bold text-gray-600">総合</td>
+                ${props.map((p, i) => {
+                  const s = allScores[i];
+                  if (!s) return '<td class="p-2 text-center text-xs text-gray-300">—</td>';
+                  const isBest = s.score_total === maxTotal && maxTotal > 0;
+                  return '<td class="p-2 text-center">' +
+                    '<div class="text-2xl font-black" style="color:' + getScoreColor(s.score_total) + ';">' + s.score_total +
+                    (isBest ? '<span class="text-xs ml-0.5">👑</span>' : '') + '</div>' +
+                    '</td>';
+                }).join('')}
+              </tr>
+              ${['score_safety','score_convenience','score_cost'].map(key => {
+                const labelMap = {score_safety:'🛡️ 安全', score_convenience:'🏪 利便', score_cost:'💰 コスト'};
+                const maxCat = Math.max(...allScores.map(s => s ? s[key] : 0));
+                return '<tr>' +
+                  '<td class="p-2 text-xs font-medium text-gray-500">' + labelMap[key] + '</td>' +
+                  props.map((p, i) => {
+                    const s = allScores[i];
+                    if (!s) return '<td class="p-2 text-center text-xs text-gray-300">—</td>';
+                    const v = s[key];
+                    const color = getScoreColor(v);
+                    const isBest = v === maxCat && maxCat > 0;
+                    return '<td class="p-2">' +
+                      '<div class="flex items-center gap-1 justify-center">' +
+                      '<div class="flex-1 max-w-[60px] h-1.5 bg-gray-100 rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:' + v + '%;background:' + color + ';"></div></div>' +
+                      '<span class="text-xs font-semibold" style="color:' + color + ';">' + v + '</span>' +
+                      (isBest ? '<span style="font-size:9px;">★</span>' : '') +
+                      '</div></td>';
+                  }).join('') +
+                  '</tr>';
+              }).join('')}
+            </tbody>
+          </table>
+        </div>`;
+      })() : ''}
 
       ${comp.summary ? `
         <div class="card p-4 bg-blue-50 border-blue-200">
