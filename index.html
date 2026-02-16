@@ -386,25 +386,43 @@ function calculateBadge(property, areaData) {
 function calculateScores(prop) {
   if (!prop) return null;
 
-  // 安全性スコア (0-100)
-  let scoreSafety = 70; // ベースライン
-  if (prop.hazard_flood) {
-    if (prop.hazard_flood.includes('低')) scoreSafety += 15;
-    else if (prop.hazard_flood.includes('高')) scoreSafety -= 20;
-    else scoreSafety -= 5;
+  // リスクレベル判定ヘルパー（「低」「中」「高」＋危険指定キーワード検出）
+  function riskLevel(text) {
+    if (!text) return null;
+    // 「危険箇所」「警戒区域」「特別警戒」「指定有」等があれば強制的に高リスク
+    if (/危険箇所|特別警戒|警戒区域|指定有|指定あり|レッドゾーン|イエローゾーン/.test(text)) return 'high';
+    if (text.includes('高')) return 'high';
+    if (text.includes('中')) return 'medium';
+    if (text.includes('低')) return 'low';
+    return 'unknown';
   }
-  if (prop.hazard_sediment) {
-    if (prop.hazard_sediment.includes('低')) scoreSafety += 10;
-    else if (prop.hazard_sediment.includes('高')) scoreSafety -= 25;
-    else scoreSafety -= 5;
-  }
-  if (prop.hazard_tsunami) {
-    if (prop.hazard_tsunami.includes('低')) scoreSafety += 5;
-    else if (prop.hazard_tsunami.includes('高')) scoreSafety -= 15;
-  }
+
+  // 安全性スコア (0-100) — ベースライン50、各項目で加減点
+  let scoreSafety = 50;
+
+  const floodRisk = riskLevel(prop.hazard_flood);
+  if (floodRisk === 'low') scoreSafety += 15;
+  else if (floodRisk === 'medium') scoreSafety -= 10;
+  else if (floodRisk === 'high') scoreSafety -= 25;
+
+  const sedimentRisk = riskLevel(prop.hazard_sediment);
+  if (sedimentRisk === 'low') scoreSafety += 15;
+  else if (sedimentRisk === 'medium') scoreSafety -= 15;
+  else if (sedimentRisk === 'high') scoreSafety -= 30;
+
+  const tsunamiRisk = riskLevel(prop.hazard_tsunami);
+  if (tsunamiRisk === 'low') scoreSafety += 10;
+  else if (tsunamiRisk === 'medium') scoreSafety -= 10;
+  else if (tsunamiRisk === 'high') scoreSafety -= 20;
+
   if (prop.ground_type) {
     if (prop.ground_type.includes('台地') || prop.ground_type.includes('丘陵')) scoreSafety += 10;
-    else if (prop.ground_type.includes('沖積') || prop.ground_type.includes('埋立')) scoreSafety -= 10;
+    else if (prop.ground_type.includes('沖積') || prop.ground_type.includes('埋立')) scoreSafety -= 15;
+  }
+
+  // 物件自体のhazardフィールドにも危険キーワードがあれば減点
+  if (prop.hazard) {
+    if (/危険箇所|警戒区域|浸水|土砂|崩壊|特別警戒/.test(prop.hazard)) scoreSafety -= 15;
   }
 
   // 利便性スコア (0-100)
