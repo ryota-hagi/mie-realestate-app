@@ -1003,7 +1003,7 @@ function renderHeader() {
 
   const authHtml = loggedIn
     ? `<div class="flex items-center gap-2">
-        <button onclick="state.soView='mypage'; loadUserProfile().then(()=>render());" class="px-2 py-1 text-xs font-medium text-purple-700 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">マイページ</button>
+        <button onclick="state.soView='mypage'; loadUserProfile().then(()=>render());" class="px-2 py-1 text-xs font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">マイページ</button>
         <span class="text-xs text-gray-500">${user.email}</span>
         <button onclick="handleLogout()" class="text-xs text-gray-400 hover:text-red-500 transition-colors">ログアウト</button>
       </div>`
@@ -1101,7 +1101,7 @@ function renderMyPage() {
   const priorityCheckboxes = PRIORITY_OPTIONS.map(opt => {
     const checked = selectedPriorities.includes(opt.key) ? 'checked' : '';
     return `<label class="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 cursor-pointer select-none">
-      <input type="checkbox" name="priority" value="${opt.key}" ${checked} class="rounded border-gray-300 text-purple-600 focus:ring-purple-500" style="width:18px;height:18px;">
+      <input type="checkbox" name="priority" value="${opt.key}" ${checked} class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" style="width:18px;height:18px;">
       <span class="text-sm text-gray-700">${opt.label}</span>
     </label>`;
   }).join('');
@@ -1119,7 +1119,7 @@ function renderMyPage() {
         <form id="mypage-form" onsubmit="event.preventDefault(); handleSaveProfile();">
           <!-- 上部保存ボタン -->
           <div class="flex items-center gap-4 mb-6 pb-4 border-b border-gray-200">
-            <button type="submit" ${loading ? 'disabled' : ''} style="padding:12px 32px;background:#7c3aed;color:#fff;border-radius:8px;font-weight:700;font-size:1rem;border:none;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.1);">
+            <button type="submit" ${loading ? 'disabled' : ''} style="padding:12px 32px;background:#2563eb;color:#fff;border-radius:8px;font-weight:700;font-size:1rem;border:none;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.1);">
               ${loading ? '⏳ 保存中...' : '💾 保存する'}
             </button>
             ${saved ? '<span class="text-sm text-green-600 font-medium">✅ 保存しました</span>' : ''}
@@ -1135,11 +1135,11 @@ function renderMyPage() {
                 <div class="text-sm font-medium text-gray-600">配偶者 1</div>
                 <div>
                   <label class="text-xs text-gray-500">お名前（任意）</label>
-                  <input type="text" id="spouse1_name" value="${p.spouse1_name || ''}" placeholder="例: 太郎" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                  <input type="text" id="spouse1_name" value="${p.spouse1_name || ''}" placeholder="例: 太郎" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                   <label class="text-xs text-gray-500">勤務先の住所</label>
-                  <input type="text" id="spouse1_workplace" value="${p.spouse1_workplace || ''}" placeholder="例: 三重県四日市市諏訪町1-5" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                  <input type="text" id="spouse1_workplace" value="${p.spouse1_workplace || ''}" placeholder="例: 三重県四日市市諏訪町1-5" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 ${p.spouse1_lat ? `<div class="text-xs text-green-600">座標取得済み</div>` : ''}
               </div>
@@ -1147,11 +1147,11 @@ function renderMyPage() {
                 <div class="text-sm font-medium text-gray-600">配偶者 2</div>
                 <div>
                   <label class="text-xs text-gray-500">お名前（任意）</label>
-                  <input type="text" id="spouse2_name" value="${p.spouse2_name || ''}" placeholder="例: 花子" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                  <input type="text" id="spouse2_name" value="${p.spouse2_name || ''}" placeholder="例: 花子" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                   <label class="text-xs text-gray-500">勤務先の住所</label>
-                  <input type="text" id="spouse2_workplace" value="${p.spouse2_workplace || ''}" placeholder="例: 三重県津市栄町1-891" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                  <input type="text" id="spouse2_workplace" value="${p.spouse2_workplace || ''}" placeholder="例: 三重県津市栄町1-891" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 ${p.spouse2_lat ? `<div class="text-xs text-green-600">座標取得済み</div>` : ''}
               </div>
@@ -1161,7 +1161,7 @@ function renderMyPage() {
           <!-- 重視項目 -->
           <div class="mb-8">
             <h3 class="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-xs font-bold">重視項目</span>
+              <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs font-bold">重視項目</span>
               土地に求める条件を選んでください
             </h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-1">
@@ -1169,13 +1169,13 @@ function renderMyPage() {
             </div>
             <div class="mt-4">
               <label class="text-xs text-gray-500">その他・自由記述</label>
-              <textarea id="priorities_freetext" rows="2" placeholder="上記以外に重視することがあれば記入してください" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500">${p.priorities_freetext || ''}</textarea>
+              <textarea id="priorities_freetext" rows="2" placeholder="上記以外に重視することがあれば記入してください" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">${p.priorities_freetext || ''}</textarea>
             </div>
           </div>
 
           <!-- 保存ボタン -->
           <div class="flex items-center gap-4 pt-4 border-t border-gray-200">
-            <button type="submit" ${loading ? 'disabled' : ''} style="padding:12px 32px;background:#7c3aed;color:#fff;border-radius:8px;font-weight:700;font-size:1rem;border:none;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.1);">
+            <button type="submit" ${loading ? 'disabled' : ''} style="padding:12px 32px;background:#2563eb;color:#fff;border-radius:8px;font-weight:700;font-size:1rem;border:none;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.1);">
               ${loading ? '⏳ 保存中...' : '💾 保存する'}
             </button>
             ${saved ? '<span class="text-sm text-green-600 font-medium animate-pulse">✅ 保存しました</span>' : ''}
