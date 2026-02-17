@@ -288,6 +288,8 @@ async function saveUserProfile(profileData) {
   if (!user || user.is_anonymous) return;
   state._profileLoading = true;
   state._profileSaved = false;
+  // フォーム値を一時保持（render()でリセットされないよう）
+  state.userProfile = { ...state.userProfile, ...profileData };
   render();
 
   // 勤務先住所のジオコーディング
@@ -980,13 +982,14 @@ const state = {
 // ============================================================
 function render() {
   const app = document.getElementById('app');
+  const isMyPage = state.soView === 'mypage';
   app.innerHTML = `
     ${renderHeader()}
     <div class="max-w-6xl mx-auto px-4 py-6">
-      ${renderHeroSection()}
+      ${isMyPage ? '' : renderHeroSection()}
       ${renderPropertyView()}
-      ${renderSEOContent()}
-      ${renderFooter()}
+      ${isMyPage ? '' : renderSEOContent()}
+      ${isMyPage ? '' : renderFooter()}
       ${renderSOModal()}
       ${renderAuthModal()}
     </div>
