@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design A2: Warm Blush｜女性向けUIデザイン案</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Zen Maru Gothic', 'Noto Sans JP', sans-serif; }
+  body { background: linear-gradient(135deg, #fdfaf8 0%, #f5ede8 30%, #fdfbfa 60%, #fdfcfb 100%); min-height: 100vh; color: #5a4e48; }
+
+  /* Glass effect */
+  .glass { background: rgba(255,255,255,0.88); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.7); }
+
+  /* Card */
+  .card { background: white; border-radius: 20px; box-shadow: 0 2px 8px rgba(180, 140, 120, 0.08), 0 1px 3px rgba(180, 140, 120, 0.05); border: 1px solid #f0e6e0; transition: all 0.25s ease; }
+  .card:hover { box-shadow: 0 8px 24px rgba(180, 140, 120, 0.12); transform: translateY(-1px); }
+
+  /* Buttons */
+  .btn-primary { background: linear-gradient(135deg, #c4967e, #d9b5a5); color: white; border: none; padding: 10px 24px; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(196, 150, 126, 0.3); }
+  .btn-primary:hover { box-shadow: 0 4px 16px rgba(196, 150, 126, 0.4); transform: translateY(-1px); }
+  .btn-secondary { background: #faf6f3; color: #9a7e72; border: 1px solid #f0e6e0; padding: 8px 20px; border-radius: 12px; font-weight: 500; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+  .btn-secondary:hover { background: #f5ede8; border-color: #e0d0c6; }
+  .btn-accent { background: linear-gradient(135deg, #8fa89b, #b5c8bc); color: white; border: none; padding: 10px 24px; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(143, 168, 155, 0.3); }
+  .btn-accent:hover { box-shadow: 0 4px 16px rgba(143, 168, 155, 0.4); transform: translateY(-1px); }
+
+  /* Badge */
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge-ok { background: #faf6f3; color: #9a7e72; border: 1px solid #f0e6e0; }
+  .badge-warn { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+  .badge-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+  .badge-info { background: #eef2f0; color: #6b8a7a; border: 1px solid #d0e0d8; }
+  .badge-live { background: #f5ede8; color: #9a7e72; border: 1px solid #e0d0c6; }
+
+  /* Score bar */
+  .score-bar { height: 6px; border-radius: 3px; background: #f0e6e0; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+
+  /* Medal */
+  .medal-1 { background: linear-gradient(135deg, #d9b5a5, #c4967e); }
+  .medal-2 { background: linear-gradient(135deg, #b5c8bc, #8fa89b); }
+  .medal-3 { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+  .medal-other { background: #d1d5db; }
+
+  /* Tab */
+  .tab { padding: 10px 20px; border-radius: 12px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: none; background: transparent; color: #9ca3af; }
+  .tab:hover { background: #faf6f3; color: #9a7e72; }
+  .tab-active { background: linear-gradient(135deg, #c4967e, #d9b5a5); color: white; box-shadow: 0 2px 8px rgba(196, 150, 126, 0.35); }
+
+  /* Input */
+  input[type="text"], input[type="url"], input[type="email"] {
+    width: 100%; padding: 12px 16px; border: 1.5px solid #f0e6e0; border-radius: 12px;
+    font-size: 14px; transition: all 0.2s; background: #fdfcfb; outline: none;
+  }
+  input:focus { border-color: #d9b5a5; box-shadow: 0 0 0 3px rgba(196, 150, 126, 0.15); }
+
+  /* Range slider */
+  input[type="range"] { -webkit-appearance: none; height: 6px; border-radius: 3px; outline: none; background: #f0e6e0; }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(135deg, #c4967e, #d9b5a5); cursor: pointer; box-shadow: 0 2px 6px rgba(196, 150, 126, 0.35); }
+
+  /* Animations */
+  .fade-in { animation: fadeIn 0.4s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Decorative elements */
+  .deco-dot { position: absolute; border-radius: 50%; opacity: 0.15; pointer-events: none; }
+
+  /* Utility */
+  .container { max-width: 1152px; margin: 0 auto; padding: 0 16px; }
+  .flex { display: flex; }
+  .items-center { align-items: center; }
+  .justify-between { justify-content: space-between; }
+  .gap-2 { gap: 8px; }
+  .gap-3 { gap: 12px; }
+  .gap-4 { gap: 16px; }
+  .text-sm { font-size: 14px; }
+  .text-xs { font-size: 12px; }
+  .text-lg { font-size: 18px; }
+  .text-xl { font-size: 20px; }
+  .text-2xl { font-size: 24px; }
+  .font-bold { font-weight: 700; }
+  .font-medium { font-weight: 500; }
+  .mb-1 { margin-bottom: 4px; }
+  .mb-2 { margin-bottom: 8px; }
+  .mb-3 { margin-bottom: 12px; }
+  .mb-4 { margin-bottom: 16px; }
+  .mb-6 { margin-bottom: 24px; }
+  .mt-1 { margin-top: 4px; }
+  .mt-2 { margin-top: 8px; }
+  .mt-4 { margin-top: 16px; }
+  .mt-6 { margin-top: 24px; }
+  .p-4 { padding: 16px; }
+  .p-5 { padding: 20px; }
+  .p-6 { padding: 24px; }
+  .grid { display: grid; }
+  .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .space-y-4 > * + * { margin-top: 16px; }
+  .rounded-full { border-radius: 9999px; }
+
+  /* Pulse */
+  .pulse-dot { width: 8px; height: 8px; border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* ============================================
+     PROPERTY CARD STYLES
+     ============================================ */
+  .property-card {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #f0e6e0;
+    box-shadow: 0 2px 8px rgba(180, 140, 120, 0.08);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .property-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(180, 140, 120, 0.16);
+  }
+
+  .property-card .card-image {
+    height: 200px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .property-card .card-image .placeholder-text {
+    background: rgba(255,255,255,0.25);
+    padding: 6px 16px;
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
+    font-size: 0.78rem;
+  }
+  .property-card .card-image.img-1 { background: linear-gradient(135deg, #f5e6dd, #e8cdb8, #d9b5a5); }
+  .property-card .card-image.img-2 { background: linear-gradient(135deg, #e8ddd5, #d5c4b6, #c4b0a0); }
+  .property-card .card-image.img-3 { background: linear-gradient(135deg, #f0ddd0, #e0c8b5, #d4a98a); }
+
+  .property-card .status-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(135deg, #c4967e, #8fa89b);
+  }
+
+  .property-card .score-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: white;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .property-card .score-badge .score-label { font-size: 0.6rem; color: #8fa89b; font-weight: 500; }
+  .property-card .score-badge .score-value { font-size: 1.1rem; font-weight: 700; color: #c4967e; line-height: 1; }
+  .property-card .score-badge .score-unit { font-size: 0.55rem; color: #b5a090; }
+
+  .property-card .card-body { padding: 20px; }
+  .property-card .card-title { font-size: 1.1rem; font-weight: 700; color: #5a4e48; margin-bottom: 6px; }
+  .property-card .card-price { font-size: 1.5rem; font-weight: 700; color: #c4967e; margin-bottom: 4px; }
+  .property-card .card-price .unit { font-size: 0.85rem; font-weight: 500; }
+  .property-card .card-area { font-size: 0.88rem; color: #9a7e72; margin-bottom: 14px; }
+
+  .property-card .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .property-card .tag { padding: 3px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; background: #faf6f3; color: #9a7e72; border: 1px solid #f0e6e0; }
+  .property-card .tag.accent { background: #eef2f0; color: #6b8a7a; border-color: #d0e0d8; }
+
+  .property-card .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding: 12px;
+    background: #faf6f3;
+    border-radius: 14px;
+  }
+  .property-card .stat-item { text-align: center; }
+  .property-card .stat-label { font-size: 0.68rem; color: #b5a090; display: block; margin-bottom: 2px; }
+  .property-card .stat-value { font-size: 0.85rem; font-weight: 700; color: #6b5e55; }
+
+  .property-card .ai-comment {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #faf6f3, #eef2f0);
+    border-radius: 14px;
+    margin-bottom: 16px;
+    font-size: 0.82rem;
+    color: #7a6e65;
+    line-height: 1.5;
+  }
+  .property-card .ai-comment .ai-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    background: linear-gradient(135deg, #c4967e, #8fa89b);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
+  .property-card .card-actions { display: flex; gap: 8px; }
+  .property-card .btn { flex: 1; padding: 10px 8px; border: none; border-radius: 12px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+  .property-card .btn-primary { background: linear-gradient(135deg, #c4967e, #d9b5a5); color: white; }
+  .property-card .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(196, 150, 126, 0.35); }
+  .property-card .btn-secondary { background: #faf6f3; color: #9a7e72; border: 1px solid #f0e6e0; }
+  .property-card .btn-secondary:hover { background: #f5ede8; }
+  .property-card .btn-icon { flex: 0 0 42px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; padding: 0; background: #faf6f3; border: 1px solid #f0e6e0; border-radius: 12px; cursor: pointer; transition: all 0.2s; font-size: 1.1rem; }
+  .property-card .btn-icon:hover { background: #f5ede8; transform: scale(1.05); }
+
+  /* ============================================
+     COMPARISON TABLE STYLES
+     ============================================ */
+  .comparison-wrapper {
+    background: rgba(255,255,255,0.88);
+    border: 1px solid #f0e6e0;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(180, 140, 120, 0.08);
+    overflow: hidden;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .comparison-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .comparison-table {
+    width: 100%;
+    min-width: 800px;
+    border-collapse: collapse;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 14px 16px;
+    vertical-align: middle;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    font-size: 0.88rem;
+    transition: background 0.3s;
+  }
+
+  .comparison-table th:first-child,
+  .comparison-table td:first-child {
+    text-align: left;
+    width: 150px;
+    min-width: 150px;
+  }
+
+  .table-header-cell {
+    background: #faf6f3;
+    border-bottom: 3px solid #c4967e !important;
+    padding: 20px 16px !important;
+    position: relative;
+  }
+
+  .table-property-image {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .table-property-image::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 50%;
+    background: linear-gradient(transparent, rgba(0,0,0,0.3));
+  }
+  .table-property-image .image-label {
+    position: relative; z-index: 1;
+    color: white; font-size: 0.7rem; opacity: 0.9;
+  }
+  .table-property-image.img-a { background: linear-gradient(135deg, #c4967e 0%, #d9b5a5 40%, #8fa89b 100%); }
+  .table-property-image.img-b { background: linear-gradient(135deg, #d9b5a5 0%, #c4967e 50%, #b5c8bc 100%); }
+  .table-property-image.img-c { background: linear-gradient(135deg, #8fa89b 0%, #b5c8bc 40%, #d9b5a5 100%); }
+
+  .property-name { font-size: 1rem; font-weight: 700; color: #5a4e48; margin-bottom: 4px; }
+  .property-address { font-size: 0.75rem; opacity: 0.65; }
+
+  .ai-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 12px; border-radius: 20px;
+    font-size: 0.72rem; font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #c4967e, #8fa89b);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+  .ai-badge::before { content: "\2605"; font-size: 0.8rem; }
+
+  .category-label {
+    font-weight: 700;
+    font-size: 0.82rem !important;
+    padding: 12px 14px !important;
+    white-space: nowrap;
+    background: #faf6f3;
+    color: #5a4e48;
+    border-left: 4px solid #c4967e;
+  }
+
+  .score-cell { padding: 12px 16px !important; }
+  .score-value-lg { font-size: 1.4rem; font-weight: 700; color: #c4967e; display: block; margin-bottom: 6px; }
+  .comp-score-bar { width: 100%; height: 8px; background: rgba(0,0,0,0.06); border-radius: 4px; overflow: hidden; }
+  .comp-score-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #c4967e, #d9b5a5); transition: width 0.8s ease; }
+
+  .data-main { font-weight: 600; font-size: 0.95rem; display: block; }
+  .data-sub { font-size: 0.75rem; opacity: 0.6; display: block; margin-top: 2px; }
+
+  .best-cell { background: #f5ede8; position: relative; }
+  .best-cell::after { content: " \2713"; font-weight: 700; font-size: 0.85rem; margin-left: 4px; color: #c4967e; }
+  .worst-cell { background: #fef3c7; position: relative; }
+  .worst-cell::after { content: " \25B2"; font-size: 0.65rem; margin-left: 4px; color: #d97706; }
+
+  .hazard-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
+  .hazard-safe { background: #d1fae5; color: #065f46; }
+  .hazard-caution { background: #fef3c7; color: #92400e; }
+  .hazard-warning { background: #fee2e2; color: #991b1b; }
+
+  .ai-comment-cell {
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    text-align: left;
+    margin: 4px;
+    background: #faf6f3;
+    border-left: 3px solid #c4967e;
+    border-radius: 0 8px 8px 0;
+  }
+  .ai-comment-label {
+    font-weight: 700;
+    font-size: 0.7rem;
+    display: block;
+    margin-bottom: 4px;
+    opacity: 0.7;
+  }
+
+  /* Scroll hint */
+  .scroll-hint {
+    display: none;
+    text-align: center;
+    font-size: 0.75rem;
+    opacity: 0.5;
+    padding: 8px 0 0;
+    color: #9a7e72;
+  }
+  @media (max-width: 860px) {
+    .scroll-hint { display: block; }
+  }
+
+  /* Section title with underline */
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #5a4e48;
+    position: relative;
+    padding-bottom: 8px;
+  }
+  .section-title::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    margin-top: 6px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #c4967e, transparent);
+  }
+
+  @media (max-width: 768px) {
+    .hide-mobile { display: none !important; }
+    .grid-cols-3, .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
+    .hero-grid { grid-template-columns: 1fr !important; }
+    .cards-grid { grid-template-columns: 1fr !important; }
+    .property-card .card-body { padding: 16px; }
+    .property-card .card-price { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== 1. HEADER ===== -->
+<header class="glass" style="border-bottom: 1px solid #f0e6e0; position: relative; overflow: hidden;">
+  <div class="deco-dot" style="width: 200px; height: 200px; background: #e0d0c6; top: -80px; right: -40px;"></div>
+  <div class="container" style="padding-top: 20px; padding-bottom: 20px; position: relative; z-index: 1;">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold" style="color: #6b5548;">
+          <span style="display: inline-block; margin-right: 6px;">&#x1F3E0;</span>
+          注文住宅 物件比較ツール
+        </h1>
+        <p class="text-sm mt-1" style="color: #9a7e72;">気になる物件をAIで自動整理。複数物件を並べて比較できます</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="btn-secondary">ログイン</button>
+        <a href="#" class="btn-primary hide-mobile" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+          <span>&#x1F4CA;</span> 三重県エリア比較 &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== 2. STICKY NAVIGATION ===== -->
+<nav style="position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid #f0e6e0; box-shadow: 0 1px 4px rgba(180,140,120,0.06);">
+  <div class="container" style="padding-top: 10px; padding-bottom: 10px;">
+    <div class="flex gap-2">
+      <button class="tab tab-active">&#x1F3C6; ランキング</button>
+      <button class="tab">&#x1F4CA; 比較</button>
+      <button class="tab">&#x1F50D; 詳細</button>
+      <button class="tab">&#x1F5FA;&#xFE0F; 地図</button>
+    </div>
+  </div>
+</nav>
+
+<main class="container" style="padding-top: 24px; padding-bottom: 48px;">
+
+  <!-- ===== 3. HERO SECTION ===== -->
+  <div class="card p-6 mb-6 fade-in" style="background: linear-gradient(135deg, #fdfaf8, #f5ede8, #eef2f0); border-color: #e0d0c6; position: relative; overflow: hidden;">
+    <div class="deco-dot" style="width: 150px; height: 150px; background: #d9b5a5; bottom: -60px; right: -30px;"></div>
+    <h2 class="text-xl font-bold mb-3" style="color: #6b5548;">注文住宅の土地選び、こんなお悩みありませんか？</h2>
+    <div class="grid grid-cols-3 gap-3 mb-4 hero-grid" style="position: relative; z-index: 1;">
+      <div style="background: rgba(255,255,255,0.8); border-radius: 16px; padding: 16px; border: 1px solid #f0e6e0;">
+        <div class="text-lg mb-2">&#x1F625;</div>
+        <div class="text-sm" style="color: #7a6e65;">複数サイトの物件情報がバラバラで比較しにくい</div>
+      </div>
+      <div style="background: rgba(255,255,255,0.8); border-radius: 16px; padding: 16px; border: 1px solid #f0e6e0;">
+        <div class="text-lg mb-2">&#x1F4DD;</div>
+        <div class="text-sm" style="color: #7a6e65;">Excelにまとめるのが面倒で、結局感覚で選んでしまう</div>
+      </div>
+      <div style="background: rgba(255,255,255,0.8); border-radius: 16px; padding: 16px; border: 1px solid #f0e6e0;">
+        <div class="text-lg mb-2">&#x2753;</div>
+        <div class="text-sm" style="color: #7a6e65;">用途地域や建ぺい率など、確認すべき項目がわからない</div>
+      </div>
+    </div>
+    <div style="background: rgba(255,255,255,0.85); border-radius: 16px; padding: 20px; border: 1px solid #e0d0c6;">
+      <h3 class="font-bold mb-3" style="color: #c4967e; font-size: 15px;">このツールが解決します</h3>
+      <div class="grid grid-cols-3 gap-3 hero-grid">
+        <div class="flex gap-2" style="align-items: flex-start;">
+          <span class="text-lg">&#x1F916;</span>
+          <div>
+            <div class="text-sm font-bold" style="color: #6b5548;">AI自動整理</div>
+            <div class="text-xs" style="color: #9a7e72;">URLを貼るだけでAIが物件情報を自動抽出</div>
+          </div>
+        </div>
+        <div class="flex gap-2" style="align-items: flex-start;">
+          <span class="text-lg">&#x1F4CB;</span>
+          <div>
+            <div class="text-sm font-bold" style="color: #6b5548;">一覧で比較</div>
+            <div class="text-xs" style="color: #9a7e72;">SUUMO・アットホーム等を統一フォーマットで比較</div>
+          </div>
+        </div>
+        <div class="flex gap-2" style="align-items: flex-start;">
+          <span class="text-lg">&#x1F4A1;</span>
+          <div>
+            <div class="text-sm font-bold" style="color: #6b5548;">AI注意点指摘</div>
+            <div class="text-xs" style="color: #9a7e72;">比較表をAIが分析し注意点やおすすめを指摘</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4" style="background: #fef9c3; border: 1px solid #fde68a; border-radius: 12px; padding: 14px;">
+      <p class="text-sm font-bold" style="color: #92400e;">&#x1F4D6; 使い方はかんたん3ステップ</p>
+      <div class="flex gap-3 mt-2 items-center" style="flex-wrap: wrap;">
+        <div class="flex items-center gap-2 text-sm"><span style="background: linear-gradient(135deg, #c4967e, #d9b5a5); color: white; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">1</span> 物件URLを貼り付け</div>
+        <span class="hide-mobile" style="color: #e0d0c6;">&rarr;</span>
+        <div class="flex items-center gap-2 text-sm"><span style="background: linear-gradient(135deg, #c4967e, #d9b5a5); color: white; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">2</span> AIが自動で整理</div>
+        <span class="hide-mobile" style="color: #e0d0c6;">&rarr;</span>
+        <div class="flex items-center gap-2 text-sm"><span style="background: linear-gradient(135deg, #c4967e, #d9b5a5); color: white; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">3</span> 比較表を作成</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 4. PRIORITY WEIGHTS ===== -->
+  <div class="card p-6 mb-6 fade-in">
+    <h2 class="text-lg font-bold mb-4" style="color: #6b5548;">&#x1F3AF; あなたの優先度を設定</h2>
+    <div class="grid grid-cols-3 gap-4 hero-grid">
+      <div class="flex items-center gap-3">
+        <span class="text-xl" style="width: 32px; text-align: center;">&#x1F4B0;</span>
+        <div style="flex: 1;">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium">価格の手頃さ</span>
+            <span class="text-sm font-bold" style="color: #c4967e;">25</span>
+          </div>
+          <input type="range" min="0" max="50" value="25" style="width: 100%; background: linear-gradient(to right, #c4967e 0%, #c4967e 50%, #f0e6e0 50%, #f0e6e0 100%);">
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xl" style="width: 32px; text-align: center;">&#x1F683;</span>
+        <div style="flex: 1;">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium">名古屋アクセス</span>
+            <span class="text-sm font-bold" style="color: #c4967e;">20</span>
+          </div>
+          <input type="range" min="0" max="50" value="20" style="width: 100%; background: linear-gradient(to right, #c4967e 0%, #c4967e 40%, #f0e6e0 40%, #f0e6e0 100%);">
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xl" style="width: 32px; text-align: center;">&#x1F4C8;</span>
+        <div style="flex: 1;">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium">資産価値上昇</span>
+            <span class="text-sm font-bold" style="color: #c4967e;">15</span>
+          </div>
+          <input type="range" min="0" max="50" value="15" style="width: 100%; background: linear-gradient(to right, #c4967e 0%, #c4967e 30%, #f0e6e0 30%, #f0e6e0 100%);">
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xl" style="width: 32px; text-align: center;">&#x1F3EA;</span>
+        <div style="flex: 1;">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium">生活利便性</span>
+            <span class="text-sm font-bold" style="color: #c4967e;">15</span>
+          </div>
+          <input type="range" min="0" max="50" value="15" style="width: 100%; background: linear-gradient(to right, #c4967e 0%, #c4967e 30%, #f0e6e0 30%, #f0e6e0 100%);">
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xl" style="width: 32px; text-align: center;">&#x1F468;&#x200D;&#x1F469;&#x200D;&#x1F467;&#x200D;&#x1F466;</span>
+        <div style="flex: 1;">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium">子育て環境</span>
+            <span class="text-sm font-bold" style="color: #c4967e;">15</span>
+          </div>
+          <input type="range" min="0" max="50" value="15" style="width: 100%; background: linear-gradient(to right, #c4967e 0%, #c4967e 30%, #f0e6e0 30%, #f0e6e0 100%);">
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xl" style="width: 32px; text-align: center;">&#x1F33F;</span>
+        <div style="flex: 1;">
+          <div class="flex justify-between mb-1">
+            <span class="text-sm font-medium">自然環境</span>
+            <span class="text-sm font-bold" style="color: #c4967e;">10</span>
+          </div>
+          <input type="range" min="0" max="50" value="10" style="width: 100%; background: linear-gradient(to right, #c4967e 0%, #c4967e 20%, #f0e6e0 20%, #f0e6e0 100%);">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 5. AREA RANKING ===== -->
+  <div class="space-y-4 fade-in">
+    <h2 class="text-lg font-bold" style="color: #6b5548;">&#x1F3C6; おすすめエリアランキング</h2>
+
+    <!-- Rank 1: 桑名市 -->
+    <div class="card p-5" style="cursor: pointer;">
+      <div class="flex gap-4" style="align-items: flex-start;">
+        <div style="flex-shrink: 0; display: flex; flex-direction: column; align-items: center; width: 64px;">
+          <div class="medal-1" style="width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 18px;">1</div>
+          <div class="text-2xl font-bold mt-1" style="color: #c4967e;">78<span class="text-xs font-normal" style="color: #9ca3af;">pt</span></div>
+        </div>
+        <div style="flex: 1; min-width: 0;">
+          <div class="flex items-center gap-2 mb-1">
+            <h3 class="text-xl font-bold" style="color: #1f2937;">桑名市</h3>
+            <span class="badge badge-live"><span class="pulse-dot" style="background: #c4967e; display: inline-block; margin-right: 4px;"></span>LIVE 245件</span>
+          </div>
+          <p class="text-sm mb-3" style="color: #6b7280;">名古屋への通勤圏として人気。桑名駅から名古屋まで最短25分。ナガシマスパーランドやなばなの里など観光資源も豊富。</p>
+          <div class="grid grid-cols-4 gap-2 hero-grid">
+            <div style="text-align: center; padding: 10px; background: #faf6f3; border-radius: 12px;">
+              <div class="text-xs" style="color: #9ca3af;">住宅地価格</div>
+              <div class="text-sm font-bold" style="color: #c4967e;">5.4万/m&sup2;</div>
+            </div>
+            <div style="text-align: center; padding: 10px; background: #f0fdf4; border-radius: 12px;">
+              <div class="text-xs" style="color: #9ca3af;">名古屋まで</div>
+              <div class="text-sm font-bold" style="color: #16a34a;">25分</div>
+            </div>
+            <div style="text-align: center; padding: 10px; background: #fffbeb; border-radius: 12px;">
+              <div class="text-xs" style="color: #9ca3af;">地価変動</div>
+              <div class="text-sm font-bold" style="color: #d97706;">+0.82%</div>
+            </div>
+            <div style="text-align: center; padding: 10px; background: #eef2f0; border-radius: 12px;">
+              <div class="text-xs" style="color: #9ca3af;">人口</div>
+              <div class="text-sm font-bold" style="color: #6b8a7a;">14.0万人</div>
+            </div>
+          </div>
+        </div>
+        <div style="flex-shrink: 0; width: 110px;" class="hide-mobile">
+          <div class="flex items-center gap-1 mb-1">
+            <span class="text-xs" style="color: #9ca3af; width: 30px; text-align: right;">価格</span>
+            <div class="score-bar" style="flex: 1;"><div class="score-bar-fill" style="width: 44%; background: linear-gradient(90deg, #c4967e, #d9b5a5);"></div></div>
+            <span class="text-xs" style="color: #6b7280; width: 20px; text-align: right;">44</span>
+          </div>
+          <div class="flex items-center gap-1 mb-1">
+            <span class="text-xs" style="color: #9ca3af; width: 30px; text-align: right;">交通</span>
+            <div class="score-bar" style="flex: 1;"><div class="score-bar-fill" style="width: 64%; background: linear-gradient(90deg, #c4967e, #d9b5a5);"></div></div>
+            <span class="text-xs" style="color: #6b7280; width: 20px; text-align: right;">64</span>
+          </div>
+          <div class="flex items-center gap-1 mb-1">
+            <span class="text-xs" style="color: #9ca3af; width: 30px; text-align: right;">成長</span>
+            <div class="score-bar" style="flex: 1;"><div class="score-bar-fill" style="width: 41%; background: linear-gradient(90deg, #c4967e, #d9b5a5);"></div></div>
+            <span class="text-xs" style="color: #6b7280; width: 20px; text-align: right;">41</span>
+          </div>
+          <div class="flex items-center gap-1 mb-1">
+            <span class="text-xs" style="color: #9ca3af; width: 30px; text-align: right;">利便</span>
+            <div class="score-bar" style="flex: 1;"><div class="score-bar-fill" style="width: 55%; background: linear-gradient(90deg, #c4967e, #d9b5a5);"></div></div>
+            <span class="text-xs" style="color: #6b7280; width: 20px; text-align: right;">55</span>
+          </div>
+          <div class="flex items-center gap-1 mb-1">
+            <span class="text-xs" style="color: #9ca3af; width: 30px; text-align: right;">子育</span>
+            <div class="score-bar" style="flex: 1;"><div class="score-bar-fill" style="width: 82%; background: linear-gradient(90deg, #c4967e, #d9b5a5);"></div></div>
+            <span class="text-xs" style="color: #6b7280; width: 20px; text-align: right;">82</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="text-xs" style="color: #9ca3af; width: 30px; text-align: right;">自然</span>
+            <div class="score-bar" style="flex: 1;"><div class="score-bar-fill" style="width: 68%; background: linear-gradient(90deg, #c4967e, #d9b5a5);"></div></div>
+            <span class="text-xs" style="color: #6b7280; width: 20px; text-align: right;">68</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rank 2: 東員町 -->
+    <div class="card p-5" style="cursor: pointer;">
+      <div class="flex gap-4" style="align-items: flex-start;">
+        <div style="flex-shrink: 0; display: flex; flex-direction: column; align-items: center; width: 64px;">
+          <div class="medal-2" style="width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 18px;">2</div>
+          <div class="text-2xl font-bold mt-1" style="color: #c4967e;">72<span class="text-xs font-normal" style="color: #9ca3af;">pt</span></div>
+        </div>
+        <div style="flex: 1; min-width: 0;">
+          <div class="flex items-center gap-2 mb-1">
+            <h3 class="text-xl font-bold" style="color: #1f2937;">東員町</h3>
+            <span class="badge" style="background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; font-size: 11px;">人口増加中</span>
+          </div>
+          <p class="text-sm mb-3" style="color: #6b7280;">イオンモール東員を中心に商業施設が充実したコンパクトシティ。人口が微増傾向でファミリー層に人気。</p>
+          <div class="grid grid-cols-4 gap-2 hero-grid">
+            <div style="text-align: center; padding: 10px; background: #faf6f3; border-radius: 12px;">
+              <div class="text-xs" style="color: #9ca3af;">住宅地価格</div>
+              <div class="text-sm font-bold" style="color: #c4967e;">3.3万/m&sup2;</div>
+            </div>
+            <div style="text-align: center; padding: 10px; background: #f0fdf4; border-radius: 12px;">
+              <div class="text-xs" style="color: #9ca3af;">名古屋まで</div>
+              <div class="text-sm font-bold" style="color: #16a34a;">40分</div>
+            </div>
+            <div style="text-align: center; padding: 10px; background: #fffbeb; border-radius: 12px;">
+              <div class="text-xs" style="color: #9ca3af;">地価変動</div>
+              <div class="text-sm font-bold" style="color: #d97706;">+0.72%</div>
+            </div>
+            <div style="text-align: center; padding: 10px; background: #eef2f0; border-radius: 12px;">
+              <div class="text-xs" style="color: #9ca3af;">人口</div>
+              <div class="text-sm font-bold" style="color: #6b8a7a;">2.6万人</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rank 3: 四日市市 -->
+    <div class="card p-5" style="cursor: pointer;">
+      <div class="flex gap-4" style="align-items: flex-start;">
+        <div style="flex-shrink: 0; display: flex; flex-direction: column; align-items: center; width: 64px;">
+          <div class="medal-3" style="width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 18px;">3</div>
+          <div class="text-2xl font-bold mt-1" style="color: #c4967e;">68<span class="text-xs font-normal" style="color: #9ca3af;">pt</span></div>
+        </div>
+        <div style="flex: 1; min-width: 0;">
+          <div class="flex items-center gap-2 mb-1">
+            <h3 class="text-xl font-bold" style="color: #1f2937;">四日市市</h3>
+            <span class="badge badge-live"><span class="pulse-dot" style="background: #c4967e; display: inline-block; margin-right: 4px;"></span>LIVE 380件</span>
+          </div>
+          <p class="text-sm mb-3" style="color: #6b7280;">三重県最大の都市。近鉄・JR両線で名古屋へ直通。大型商業施設が充実し、医療・教育インフラも県内トップクラス。</p>
+          <div class="grid grid-cols-4 gap-2 hero-grid">
+            <div style="text-align: center; padding: 10px; background: #faf6f3; border-radius: 12px;">
+              <div class="text-xs" style="color: #9ca3af;">住宅地価格</div>
+              <div class="text-sm font-bold" style="color: #c4967e;">4.8万/m&sup2;</div>
+            </div>
+            <div style="text-align: center; padding: 10px; background: #f0fdf4; border-radius: 12px;">
+              <div class="text-xs" style="color: #9ca3af;">名古屋まで</div>
+              <div class="text-sm font-bold" style="color: #16a34a;">35分</div>
+            </div>
+            <div style="text-align: center; padding: 10px; background: #fffbeb; border-radius: 12px;">
+              <div class="text-xs" style="color: #9ca3af;">地価変動</div>
+              <div class="text-sm font-bold" style="color: #d97706;">+1.33%</div>
+            </div>
+            <div style="text-align: center; padding: 10px; background: #eef2f0; border-radius: 12px;">
+              <div class="text-xs" style="color: #9ca3af;">人口</div>
+              <div class="text-sm font-bold" style="color: #6b8a7a;">31.1万人</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 6. PROPERTY CARDS ===== -->
+  <div class="mt-6 mb-6 fade-in">
+    <h2 class="text-lg font-bold mb-4" style="color: #6b5548;">&#x1F3E0; おすすめ物件</h2>
+    <div class="grid grid-cols-3 gap-4 cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+
+      <!-- Card 1: 桑名市大山田 -->
+      <article class="property-card">
+        <div class="card-image img-1">
+          <span class="placeholder-text">物件写真エリア</span>
+          <span class="status-badge">SUUMO掲載中</span>
+          <div class="score-badge">
+            <span class="score-label">総合</span>
+            <span class="score-value">82</span>
+            <span class="score-unit">pt</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">桑名市大山田 南向き角地</h3>
+          <div class="card-price">1,580<span class="unit">万円</span></div>
+          <div class="card-area">土地面積: 165.23m&sup2;</div>
+          <div class="tags">
+            <span class="tag">南向き</span>
+            <span class="tag">角地</span>
+            <span class="tag accent">整形地</span>
+            <span class="tag">小学校近く</span>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-label">建ぺい率</span>
+              <span class="stat-value">60%</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">容積率</span>
+              <span class="stat-value">200%</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">用途地域</span>
+              <span class="stat-value">第一種住居</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">接道状況</span>
+              <span class="stat-value">南6m公道</span>
+            </div>
+          </div>
+          <div class="ai-comment">
+            <span class="ai-icon">AI</span>
+            <span>日当たり良好。小学校まで徒歩8分。スーパーも近く生活利便性が高い物件です。</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary">比較に追加</button>
+            <button class="btn btn-primary">詳細を見る</button>
+            <button class="btn-icon" title="お気に入り">&hearts;</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2: 四日市市日永 -->
+      <article class="property-card">
+        <div class="card-image img-2">
+          <span class="placeholder-text">物件写真エリア</span>
+          <span class="status-badge">アットホーム掲載中</span>
+          <div class="score-badge">
+            <span class="score-label">総合</span>
+            <span class="score-value">76</span>
+            <span class="score-unit">pt</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">四日市市日永 閑静な住宅街</h3>
+          <div class="card-price">2,180<span class="unit">万円</span></div>
+          <div class="card-area">土地面積: 198.45m&sup2;</div>
+          <div class="tags">
+            <span class="tag">閑静</span>
+            <span class="tag accent">整形地</span>
+            <span class="tag">都市ガス</span>
+            <span class="tag">上下水道</span>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-label">建ぺい率</span>
+              <span class="stat-value">50%</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">容積率</span>
+              <span class="stat-value">100%</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">用途地域</span>
+              <span class="stat-value">第一種低層</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">接道状況</span>
+              <span class="stat-value">東5m公道</span>
+            </div>
+          </div>
+          <div class="ai-comment">
+            <span class="ai-icon">AI</span>
+            <span>閑静な住宅街で子育て環境に最適。広い敷地でゆとりある間取りが可能です。</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary">比較に追加</button>
+            <button class="btn btn-primary">詳細を見る</button>
+            <button class="btn-icon" title="お気に入り">&hearts;</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3: 津市江戸橋 -->
+      <article class="property-card">
+        <div class="card-image img-3">
+          <span class="placeholder-text">物件写真エリア</span>
+          <span class="status-badge">SUUMO掲載中</span>
+          <div class="score-badge">
+            <span class="score-label">総合</span>
+            <span class="score-value">89</span>
+            <span class="score-unit">pt</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">津市江戸橋 駅徒歩5分</h3>
+          <div class="card-price">1,980<span class="unit">万円</span></div>
+          <div class="card-area">土地面積: 142.67m&sup2;</div>
+          <div class="tags">
+            <span class="tag">駅近</span>
+            <span class="tag">南向き</span>
+            <span class="tag accent">角地</span>
+            <span class="tag">商業施設近く</span>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-label">建ぺい率</span>
+              <span class="stat-value">60%</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">容積率</span>
+              <span class="stat-value">200%</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">用途地域</span>
+              <span class="stat-value">第二種住居</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">接道状況</span>
+              <span class="stat-value">南西二面</span>
+            </div>
+          </div>
+          <div class="ai-comment">
+            <span class="ai-icon">AI</span>
+            <span>駅徒歩5分で通勤・通学に便利。イオン津店まで車3分。資産価値の維持が期待できます。</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary">比較に追加</button>
+            <button class="btn btn-primary">詳細を見る</button>
+            <button class="btn-icon" title="お気に入り">&hearts;</button>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <!-- ===== 7. FULL COMPARISON TABLE ===== -->
+  <div class="mt-6 mb-6 fade-in">
+    <div class="mb-4">
+      <h2 class="section-title">&#x1F4CA; 物件比較表（3物件）</h2>
+    </div>
+    <p class="scroll-hint">&larr; 横にスクロールできます &rarr;</p>
+    <div class="comparison-wrapper">
+      <div class="comparison-scroll">
+        <table class="comparison-table">
+          <!-- Header Row -->
+          <thead>
+            <tr>
+              <th class="table-header-cell" style="vertical-align: bottom;">
+                <span style="font-size: 0.8rem; opacity: 0.6;">比較項目</span>
+              </th>
+              <th class="table-header-cell">
+                <div class="ai-badge">AIおすすめ</div>
+                <div class="table-property-image img-a">
+                  <span class="image-label">物件写真</span>
+                </div>
+                <div class="property-name">桑名市大山田 土地A</div>
+                <div class="property-address">三重県桑名市大山田3丁目</div>
+              </th>
+              <th class="table-header-cell">
+                <div style="height: 26px;"></div>
+                <div class="table-property-image img-b">
+                  <span class="image-label">物件写真</span>
+                </div>
+                <div class="property-name">四日市市日永 土地B</div>
+                <div class="property-address">三重県四日市市日永5丁目</div>
+              </th>
+              <th class="table-header-cell">
+                <div style="height: 26px;"></div>
+                <div class="table-property-image img-c">
+                  <span class="image-label">物件写真</span>
+                </div>
+                <div class="property-name">鈴鹿市白子 土地C</div>
+                <div class="property-address">三重県鈴鹿市白子本町</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- 総合スコア -->
+            <tr>
+              <td class="category-label">総合スコア</td>
+              <td class="score-cell best-cell">
+                <span class="score-value-lg">82<small style="font-size:0.6em;">pt</small></span>
+                <div class="comp-score-bar"><div class="comp-score-bar-fill" style="width: 82%;"></div></div>
+              </td>
+              <td class="score-cell">
+                <span class="score-value-lg">76<small style="font-size:0.6em;">pt</small></span>
+                <div class="comp-score-bar"><div class="comp-score-bar-fill" style="width: 76%;"></div></div>
+              </td>
+              <td class="score-cell worst-cell">
+                <span class="score-value-lg">71<small style="font-size:0.6em;">pt</small></span>
+                <div class="comp-score-bar"><div class="comp-score-bar-fill" style="width: 71%;"></div></div>
+              </td>
+            </tr>
+            <!-- 価格 -->
+            <tr>
+              <td class="category-label">価格</td>
+              <td class="best-cell">
+                <span class="data-main">1,580万円</span>
+                <span class="data-sub">最も安い</span>
+              </td>
+              <td class="worst-cell">
+                <span class="data-main">2,180万円</span>
+                <span class="data-sub">最も高い</span>
+              </td>
+              <td>
+                <span class="data-main">1,980万円</span>
+              </td>
+            </tr>
+            <!-- 土地面積 -->
+            <tr>
+              <td class="category-label">土地面積</td>
+              <td>
+                <span class="data-main">165.23m&sup2;</span>
+                <span class="data-sub">（49.98坪）</span>
+              </td>
+              <td class="best-cell">
+                <span class="data-main">198.45m&sup2;</span>
+                <span class="data-sub">（60.03坪）</span>
+              </td>
+              <td class="worst-cell">
+                <span class="data-main">142.67m&sup2;</span>
+                <span class="data-sub">（43.16坪）</span>
+              </td>
+            </tr>
+            <!-- 坪単価 -->
+            <tr>
+              <td class="category-label">坪単価</td>
+              <td class="best-cell">
+                <span class="data-main">31.5万円/坪</span>
+              </td>
+              <td>
+                <span class="data-main">36.2万円/坪</span>
+              </td>
+              <td class="worst-cell">
+                <span class="data-main">45.8万円/坪</span>
+              </td>
+            </tr>
+            <!-- 用途地域 -->
+            <tr>
+              <td class="category-label">用途地域</td>
+              <td>
+                <span class="data-main">第一種低層住居<br>専用地域</span>
+              </td>
+              <td>
+                <span class="data-main">第一種中高層住居<br>専用地域</span>
+              </td>
+              <td>
+                <span class="data-main">第二種中高層住居<br>専用地域</span>
+              </td>
+            </tr>
+            <!-- 建ぺい率/容積率 -->
+            <tr>
+              <td class="category-label">建ぺい率/容積率</td>
+              <td class="best-cell">
+                <span class="data-main">60% / 200%</span>
+                <span class="data-sub">ゆとりある設計可</span>
+              </td>
+              <td>
+                <span class="data-main">50% / 100%</span>
+              </td>
+              <td>
+                <span class="data-main">60% / 200%</span>
+              </td>
+            </tr>
+            <!-- 接道状況 -->
+            <tr>
+              <td class="category-label">接道状況</td>
+              <td class="best-cell">
+                <span class="data-main">南6m公道</span>
+                <span class="data-sub">日当たり良好</span>
+              </td>
+              <td class="worst-cell">
+                <span class="data-main">東4m私道</span>
+                <span class="data-sub">要確認</span>
+              </td>
+              <td>
+                <span class="data-main">西5m公道</span>
+              </td>
+            </tr>
+            <!-- 最寄り駅 -->
+            <tr>
+              <td class="category-label">最寄り駅</td>
+              <td>
+                <span class="data-main">桑名駅</span>
+                <span class="data-sub">徒歩15分</span>
+              </td>
+              <td class="best-cell">
+                <span class="data-main">四日市駅</span>
+                <span class="data-sub">徒歩8分</span>
+              </td>
+              <td>
+                <span class="data-main">白子駅</span>
+                <span class="data-sub">徒歩12分</span>
+              </td>
+            </tr>
+            <!-- 名古屋アクセス -->
+            <tr>
+              <td class="category-label">名古屋アクセス</td>
+              <td class="best-cell">
+                <span class="data-main">25分</span>
+                <span class="data-sub">JR関西本線</span>
+              </td>
+              <td>
+                <span class="data-main">35分</span>
+                <span class="data-sub">近鉄名古屋線</span>
+              </td>
+              <td class="worst-cell">
+                <span class="data-main">45分</span>
+                <span class="data-sub">近鉄名古屋線</span>
+              </td>
+            </tr>
+            <!-- 小学校区 -->
+            <tr>
+              <td class="category-label">小学校区</td>
+              <td>
+                <span class="data-main">大山田東小</span>
+                <span class="data-sub">徒歩10分</span>
+              </td>
+              <td class="best-cell">
+                <span class="data-main">日永小</span>
+                <span class="data-sub">徒歩5分</span>
+              </td>
+              <td>
+                <span class="data-main">白子小</span>
+                <span class="data-sub">徒歩8分</span>
+              </td>
+            </tr>
+            <!-- ハザードマップ -->
+            <tr>
+              <td class="category-label">ハザードマップ</td>
+              <td>
+                <span class="hazard-badge hazard-safe">&#9679; 安全</span>
+              </td>
+              <td>
+                <span class="hazard-badge hazard-caution">&#9650; 注意</span>
+                <span class="data-sub">浸水想定 0.5m未満</span>
+              </td>
+              <td>
+                <span class="hazard-badge hazard-warning">&#9888; 警戒</span>
+                <span class="data-sub">津波浸水想定区域</span>
+              </td>
+            </tr>
+            <!-- AI総評 -->
+            <tr>
+              <td class="category-label">AI総評</td>
+              <td>
+                <div class="ai-comment-cell">
+                  <span class="ai-comment-label">AI分析コメント</span>
+                  名古屋へのアクセスが最も良く、坪単価もお手頃です。子育て環境と安全性のバランスが最も優れた物件です。初めてのマイホームに最適。
+                </div>
+              </td>
+              <td>
+                <div class="ai-comment-cell">
+                  <span class="ai-comment-label">AI分析コメント</span>
+                  広い土地面積と駅近が魅力。ただし価格が高めで私道接道の確認が必要。将来の資産価値は期待できる立地です。
+                </div>
+              </td>
+              <td>
+                <div class="ai-comment-cell">
+                  <span class="ai-comment-label">AI分析コメント</span>
+                  コンパクトな土地ですが利便性は高い。ハザードマップの警戒区域に注意が必要。地盤や保険の追加調査をおすすめします。
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 8. PROPERTY IMPORT SECTION ===== -->
+  <div class="card p-5 mt-6 fade-in" style="border-color: #b5c8bc; background: linear-gradient(135deg, #f5fbf8, #fdfaf8);">
+    <h3 class="text-sm font-bold mb-2" style="color: #6b8a7a;">&#x1F916; 物件情報をAIで取り込み</h3>
+    <p class="text-xs mb-3" style="color: #8fa89b;">不動産サイトの物件ページURLを貼り付けてAI取り込み。<span style="color: #c4967e; font-weight: 600;">複数件まとめて取り込みOK!</span></p>
+    <div class="flex gap-2">
+      <input type="url" placeholder="物件URLを貼り付け（https://suumo.jp/...）" style="flex: 1;">
+      <button class="btn-accent" style="white-space: nowrap;">&#x1F916; AI取り込み</button>
+    </div>
+  </div>
+
+</main>
+
+<!-- ===== 9. FOOTER ===== -->
+<footer style="background: rgba(255,255,255,0.7); border-top: 1px solid #f0e6e0; padding: 24px 0;">
+  <div class="container" style="text-align: center;">
+    <p class="text-xs" style="color: #9ca3af;">Design A2: Warm Blush &mdash; 女性向けUIデザイン案</p>
+    <p class="text-xs mt-1" style="color: #d1d5db;">&copy; 注文相談.com</p>
+    <a href="index.html" style="display: inline-block; margin-top: 12px; font-size: 13px; color: #c4967e; text-decoration: none;">&larr; デザイン一覧に戻る</a>
+  </div>
+</footer>
+
+</body>
+</html>
