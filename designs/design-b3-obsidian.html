@@ -774,15 +774,29 @@
     </div>
   </div>
 
+  <!-- Section divider -->
+  <div style="height: 1px; background: linear-gradient(90deg, transparent, #2e2e33, transparent); margin: 32px 0;"></div>
+
   <!-- 8. Property Import Section -->
-  <div class="card p-5 mb-6 fade-in" style="background: #242428; border-color: #2e2e33;">
-    <h3 class="text-sm font-bold mb-2" style="color: #a0aab4; letter-spacing: 0.05em;">AI IMPORT &#x2014; 物件情報をAIで取り込み</h3>
-    <p class="text-xs mb-3" style="color: #9a9aa0;">不動産サイトの物件ページURLを貼り付けてAI取り込み。<span style="color: #c9b88a; font-weight: 600;">複数件まとめて取り込みOK!</span></p>
+  <div class="card p-6 mb-6 fade-in" style="background: linear-gradient(135deg, #1c1c1f, #242428); border-color: #2e2e33;">
+    <div class="flex items-center gap-3 mb-3">
+      <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #c9b88a, #b09a6a); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <span style="font-size: 16px; color: #121214; font-weight: 700;">&#x25C8;</span>
+      </div>
+      <div>
+        <h3 class="text-sm font-bold" style="color: #a0aab4; letter-spacing: 0.05em;">AI IMPORT &#x2014; 物件情報をAIで取り込み</h3>
+        <p class="text-xs mt-1" style="color: #9a9aa0;">不動産サイトの物件ページURLを貼り付けてAI取り込み。<span style="color: #c9b88a; font-weight: 600;">複数件まとめて取り込みOK!</span></p>
+      </div>
+    </div>
     <div class="flex gap-2">
       <input type="url" placeholder="物件URLを貼り付け（https://suumo.jp/...）" style="flex: 1;">
       <button class="btn-accent" style="white-space: nowrap;">AI取り込み</button>
     </div>
-    <p class="text-xs mt-2" style="color: #6a6a70;">SUUMO、アットホーム、LIFULL HOME'S等の物件URLに対応しています。</p>
+    <div class="flex gap-4 mt-3" style="flex-wrap: wrap;">
+      <span class="text-xs" style="color: #6a6a70;">&#x25CB; SUUMO対応</span>
+      <span class="text-xs" style="color: #6a6a70;">&#x25CB; アットホーム対応</span>
+      <span class="text-xs" style="color: #6a6a70;">&#x25CB; LIFULL HOME'S対応</span>
+    </div>
   </div>
 
 </main>
