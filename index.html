@@ -178,6 +178,8 @@ async function handleVerifyOtp(email, token) {
     await loadSavedComparisons();
     // 未保存の比較表があればDBに保存
     await saveUnsavedComparisons();
+    // マイページプロファイル読み込み
+    await loadUserProfile();
   } catch(e) {
     state.authError = e.message || '認証に失敗しました';
   }
@@ -188,6 +190,7 @@ async function handleVerifyOtp(email, token) {
 async function handleLogout() {
   await supabaseClient.auth.signOut();
   state.authUser = null;
+  state.userProfile = null;
   state.savedProperties = [];
   state.savedComparisons = [];
   state.soComparison = null;
@@ -235,6 +238,88 @@ async function saveUnsavedComparisons() {
     } catch(e) { console.warn('Failed to save comparison:', e.message); }
   }
   backupComparisonsToLS();
+}
+
+// ============================================================
+// User Profile (マイページ)
+// ============================================================
+const PRIORITY_OPTIONS = [
+  { key: 'garden', label: '庭が広い' },
+  { key: 'sunlight', label: '日当たりが良い' },
+  { key: 'quiet', label: '静かな環境' },
+  { key: 'childcare', label: '子育てしやすい' },
+  { key: 'park_nearby', label: '近くに公園がある' },
+  { key: 'shopping_nearby', label: '商業施設が近い' },
+  { key: 'residential', label: '閑静な住宅街' },
+  { key: 'station_near', label: '駅が近い' },
+  { key: 'large_lot', label: '土地が広い' },
+  { key: 'nature', label: '自然環境が豊か' },
+];
+
+async function loadUserProfile() {
+  const user = state.authUser;
+  if (!user || user.is_anonymous) return;
+  try {
+    const { data } = await supabaseClient
+      .from('user_profiles')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle();
+    state.userProfile = data || null;
+  } catch(e) { console.warn('Failed to load profile:', e.message); }
+}
+
+async function geocodeAddress(address) {
+  if (!address || !address.trim()) return null;
+  try {
+    const res = await fetch(`https://msearch.gsi.go.jp/address-search/AddressSearch?q=${encodeURIComponent(address)}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data && data.length > 0 && data[0].geometry && data[0].geometry.coordinates) {
+      const [lng, lat] = data[0].geometry.coordinates;
+      return { lat, lng };
+    }
+  } catch(e) { console.warn('Geocode failed:', e.message); }
+  return null;
+}
+
+async function saveUserProfile(profileData) {
+  const user = state.authUser;
+  if (!user || user.is_anonymous) return;
+  state._profileLoading = true;
+  state._profileSaved = false;
+  render();
+
+  // 勤務先住所のジオコーディング
+  if (profileData.spouse1_workplace) {
+    const geo = await geocodeAddress(profileData.spouse1_workplace);
+    if (geo) { profileData.spouse1_lat = geo.lat; profileData.spouse1_lng = geo.lng; }
+    else { profileData.spouse1_lat = null; profileData.spouse1_lng = null; }
+  } else {
+    profileData.spouse1_lat = null; profileData.spouse1_lng = null;
+  }
+  if (profileData.spouse2_workplace) {
+    const geo = await geocodeAddress(profileData.spouse2_workplace);
+    if (geo) { profileData.spouse2_lat = geo.lat; profileData.spouse2_lng = geo.lng; }
+    else { profileData.spouse2_lat = null; profileData.spouse2_lng = null; }
+  } else {
+    profileData.spouse2_lat = null; profileData.spouse2_lng = null;
+  }
+
+  const row = { ...profileData, user_id: user.id, updated_at: new Date().toISOString() };
+
+  try {
+    const { error } = await supabaseClient
+      .from('user_profiles')
+      .upsert(row, { onConflict: 'user_id' });
+    if (error) throw error;
+    state.userProfile = row;
+    state._profileSaved = true;
+    setTimeout(() => { state._profileSaved = false; render(); }, 3000);
+  } catch(e) { console.warn('Failed to save profile:', e.message); alert('保存に失敗しました: ' + e.message); }
+
+  state._profileLoading = false;
+  render();
 }
 
 // ============================================================
@@ -525,7 +610,137 @@ function calculateBadge(property, areaData) {
 // ============================================================
 // Auto Scoring（物件スコアリング）
 // ============================================================
-function calculateScores(prop) {
+// Haversine距離（メートル）
+function haversineDistanceClient(lat1, lng1, lat2, lng2) {
+  const R = 6371000;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function calculateLifestyleScore(prop, profile) {
+  if (!profile) return null;
+  const priorities = profile.priorities || [];
+  const hasWorkplace = (profile.spouse1_lat && profile.spouse1_lng) || (profile.spouse2_lat && profile.spouse2_lng);
+  if (priorities.length === 0 && !hasWorkplace) return null;
+
+  let score = 50;
+
+  // --- 通勤サブスコア（±25pt） ---
+  if (hasWorkplace && prop.lat && prop.lng) {
+    const distances = [];
+    if (profile.spouse1_lat && profile.spouse1_lng) {
+      distances.push(haversineDistanceClient(prop.lat, prop.lng, profile.spouse1_lat, profile.spouse1_lng) / 1000);
+    }
+    if (profile.spouse2_lat && profile.spouse2_lng) {
+      distances.push(haversineDistanceClient(prop.lat, prop.lng, profile.spouse2_lat, profile.spouse2_lng) / 1000);
+    }
+    if (distances.length > 0) {
+      const avgKm = distances.reduce((a, b) => a + b, 0) / distances.length;
+      if (avgKm < 5) score += 25;
+      else if (avgKm < 10) score += 15;
+      else if (avgKm < 20) score += 5;
+      else if (avgKm < 30) score += 0;
+      else score -= 10;
+    }
+  }
+
+  // --- 重視項目サブスコア（±25pt） ---
+  if (priorities.length > 0) {
+    const extractDist = (str) => {
+      if (!str) return null;
+      const m = str.match(/(\d+)m/);
+      return m ? parseInt(m[1]) : null;
+    };
+
+    const checks = {
+      garden: () => {
+        if (!prop.land_area) return null;
+        return prop.land_area >= 200 ? 1 : prop.land_area >= 150 ? 0.5 : 0.2;
+      },
+      sunlight: () => {
+        if (!prop.zoning) return null;
+        if (/一低住|第一種低層/.test(prop.zoning)) return 1;
+        if (/二低住|第二種低層/.test(prop.zoning)) return 0.7;
+        if (/商業|工業/.test(prop.zoning)) return 0.2;
+        return 0.5;
+      },
+      quiet: () => {
+        if (!prop.zoning) return null;
+        if (/低層|低住/.test(prop.zoning)) return 1;
+        if (/住居/.test(prop.zoning)) return 0.6;
+        if (/商業|工業/.test(prop.zoning)) return 0.1;
+        return 0.5;
+      },
+      childcare: () => {
+        const nursery = extractDist(prop.nearest_nursery);
+        const school = extractDist(prop.school_elementary);
+        let val = 0, count = 0;
+        if (nursery != null) { val += nursery < 800 ? 1 : nursery < 1500 ? 0.6 : 0.2; count++; }
+        if (school != null) { val += school < 800 ? 1 : school < 1500 ? 0.6 : 0.2; count++; }
+        return count > 0 ? val / count : null;
+      },
+      park_nearby: () => {
+        const d = extractDist(prop.nearest_park);
+        if (d == null) return null;
+        return d < 300 ? 1 : d < 600 ? 0.7 : d < 1000 ? 0.4 : 0.1;
+      },
+      shopping_nearby: () => {
+        const d = extractDist(prop.nearest_supermarket);
+        if (d == null) return null;
+        return d < 500 ? 1 : d < 1000 ? 0.7 : d < 2000 ? 0.4 : 0.1;
+      },
+      residential: () => {
+        if (!prop.zoning) return null;
+        if (/低層|低住/.test(prop.zoning)) return 1;
+        if (/住居/.test(prop.zoning)) return 0.7;
+        if (/商業|工業/.test(prop.zoning)) return 0.2;
+        return 0.5;
+      },
+      station_near: () => {
+        if (!prop.station_distance) return null;
+        const m = prop.station_distance.match(/(\d+)\s*分/);
+        if (m) {
+          const mins = parseInt(m[1]);
+          return mins <= 5 ? 1 : mins <= 10 ? 0.7 : mins <= 20 ? 0.4 : 0.1;
+        }
+        const m2 = prop.station_distance.match(/(\d+)\s*m/);
+        if (m2) {
+          const mins = Math.round(parseInt(m2[1]) / 80);
+          return mins <= 5 ? 1 : mins <= 10 ? 0.7 : mins <= 20 ? 0.4 : 0.1;
+        }
+        return null;
+      },
+      large_lot: () => {
+        if (!prop.land_area) return null;
+        return prop.land_area >= 250 ? 1 : prop.land_area >= 200 ? 0.7 : prop.land_area >= 150 ? 0.5 : 0.2;
+      },
+      nature: () => {
+        const d = extractDist(prop.nearest_park);
+        if (d == null) return null;
+        return d < 500 ? 1 : d < 1000 ? 0.7 : 0.3;
+      },
+    };
+
+    let totalVal = 0;
+    let count = 0;
+    for (const key of priorities) {
+      const fn = checks[key];
+      if (fn) {
+        const result = fn();
+        if (result !== null) { totalVal += result; count++; }
+      }
+    }
+    if (count > 0) {
+      score += Math.round((totalVal / count) * 25);
+    }
+  }
+
+  return Math.max(0, Math.min(100, Math.round(score)));
+}
+
+function calculateScores(prop, userProfile) {
   if (!prop) return null;
 
   // リスクレベル判定ヘルパー
@@ -618,13 +833,22 @@ function calculateScores(prop) {
     }
   }
 
+  // ライフスタイルスコア
+  const lifestyle = calculateLifestyleScore(prop, userProfile || null);
+
   // 総合スコア
-  const scoreTotal = Math.round(scoreSafety * 0.35 + scoreConvenience * 0.35 + scoreCost * 0.3);
+  let scoreTotal;
+  if (lifestyle !== null) {
+    scoreTotal = Math.round(scoreSafety * 0.25 + scoreConvenience * 0.25 + scoreCost * 0.25 + lifestyle * 0.25);
+  } else {
+    scoreTotal = Math.round(scoreSafety * 0.35 + scoreConvenience * 0.35 + scoreCost * 0.3);
+  }
 
   return {
     score_safety: Math.max(0, Math.min(100, Math.round(scoreSafety))),
     score_convenience: Math.max(0, Math.min(100, Math.round(scoreConvenience))),
     score_cost: Math.max(0, Math.min(100, Math.round(scoreCost))),
+    score_lifestyle: lifestyle,
     score_total: Math.max(0, Math.min(100, scoreTotal)),
   };
 }
@@ -745,6 +969,10 @@ const state = {
   authError: '',
   authUser: null, // { id, email, is_anonymous }
   _pendingSaveCompId: null, // ログイン後に保存する比較表ID
+  // マイページ
+  userProfile: null,       // { spouse1_name, spouse1_workplace, ..., priorities[], priorities_freetext }
+  _profileLoading: false,
+  _profileSaved: false,
 };
 
 // ============================================================
@@ -772,6 +1000,7 @@ function renderHeader() {
 
   const authHtml = loggedIn
     ? `<div class="flex items-center gap-2">
+        <button onclick="state.soView='mypage'; loadUserProfile().then(()=>render());" class="px-2 py-1 text-xs font-medium text-purple-700 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">マイページ</button>
         <span class="text-xs text-gray-500">${user.email}</span>
         <button onclick="handleLogout()" class="text-xs text-gray-400 hover:text-red-500 transition-colors">ログアウト</button>
       </div>`
@@ -860,7 +1089,114 @@ function renderHeroSection() {
 // ============================================================
 // Property View
 // ============================================================
+function renderMyPage() {
+  const p = state.userProfile || {};
+  const selectedPriorities = p.priorities || [];
+  const loading = state._profileLoading;
+  const saved = state._profileSaved;
+
+  const priorityCheckboxes = PRIORITY_OPTIONS.map(opt => {
+    const checked = selectedPriorities.includes(opt.key) ? 'checked' : '';
+    return `<label class="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 cursor-pointer select-none">
+      <input type="checkbox" name="priority" value="${opt.key}" ${checked} class="rounded border-gray-300 text-purple-600 focus:ring-purple-500" style="width:18px;height:18px;">
+      <span class="text-sm text-gray-700">${opt.label}</span>
+    </label>`;
+  }).join('');
+
+  return `
+    <div class="space-y-6">
+      <button onclick="state.soView=null; render();" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+        &larr; 物件リストに戻る
+      </button>
+
+      <div class="card p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-6">マイページ</h2>
+        <p class="text-sm text-gray-500 mb-6">勤務先と重視項目を登録すると、比較表に「ライフスタイル」スコアが追加されます。</p>
+
+        <form id="mypage-form" onsubmit="event.preventDefault(); handleSaveProfile();">
+          <!-- 勤務先情報 -->
+          <div class="mb-8">
+            <h3 class="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs font-bold">勤務先情報</span>
+              通勤距離からスコアを算出します
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-3 p-4 bg-gray-50 rounded-lg">
+                <div class="text-sm font-medium text-gray-600">配偶者 1</div>
+                <div>
+                  <label class="text-xs text-gray-500">お名前（任意）</label>
+                  <input type="text" id="spouse1_name" value="${p.spouse1_name || ''}" placeholder="例: 太郎" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                </div>
+                <div>
+                  <label class="text-xs text-gray-500">勤務先の住所</label>
+                  <input type="text" id="spouse1_workplace" value="${p.spouse1_workplace || ''}" placeholder="例: 三重県四日市市諏訪町1-5" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                </div>
+                ${p.spouse1_lat ? `<div class="text-xs text-green-600">座標取得済み</div>` : ''}
+              </div>
+              <div class="space-y-3 p-4 bg-gray-50 rounded-lg">
+                <div class="text-sm font-medium text-gray-600">配偶者 2</div>
+                <div>
+                  <label class="text-xs text-gray-500">お名前（任意）</label>
+                  <input type="text" id="spouse2_name" value="${p.spouse2_name || ''}" placeholder="例: 花子" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                </div>
+                <div>
+                  <label class="text-xs text-gray-500">勤務先の住所</label>
+                  <input type="text" id="spouse2_workplace" value="${p.spouse2_workplace || ''}" placeholder="例: 三重県津市栄町1-891" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                </div>
+                ${p.spouse2_lat ? `<div class="text-xs text-green-600">座標取得済み</div>` : ''}
+              </div>
+            </div>
+          </div>
+
+          <!-- 重視項目 -->
+          <div class="mb-8">
+            <h3 class="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-xs font-bold">重視項目</span>
+              土地に求める条件を選んでください
+            </h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-1">
+              ${priorityCheckboxes}
+            </div>
+            <div class="mt-4">
+              <label class="text-xs text-gray-500">その他・自由記述</label>
+              <textarea id="priorities_freetext" rows="2" placeholder="上記以外に重視することがあれば記入してください" class="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500">${p.priorities_freetext || ''}</textarea>
+            </div>
+          </div>
+
+          <!-- 保存ボタン -->
+          <div class="flex items-center gap-4">
+            <button type="submit" ${loading ? 'disabled' : ''} class="px-6 py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:opacity-50">
+              ${loading ? '保存中...' : '保存する'}
+            </button>
+            ${saved ? '<span class="text-sm text-green-600 font-medium">保存しました</span>' : ''}
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+}
+
+function handleSaveProfile() {
+  const form = document.getElementById('mypage-form');
+  if (!form) return;
+  const checkedPriorities = Array.from(form.querySelectorAll('input[name="priority"]:checked')).map(el => el.value);
+  const profileData = {
+    spouse1_name: document.getElementById('spouse1_name')?.value?.trim() || null,
+    spouse1_workplace: document.getElementById('spouse1_workplace')?.value?.trim() || null,
+    spouse2_name: document.getElementById('spouse2_name')?.value?.trim() || null,
+    spouse2_workplace: document.getElementById('spouse2_workplace')?.value?.trim() || null,
+    priorities: checkedPriorities,
+    priorities_freetext: document.getElementById('priorities_freetext')?.value?.trim() || null,
+  };
+  saveUserProfile(profileData);
+}
+
 function renderPropertyView() {
+  // マイページ
+  if (state.soView === 'mypage') {
+    return renderMyPage();
+  }
+
   const savedCount = state.savedProperties.length;
   const compProps = state.savedProperties.filter(p => p.in_comparison);
 
@@ -949,11 +1285,13 @@ function renderPropertyView() {
             const canRetryEnrich = prop.lat && prop.lng && prop.enrichment_status === 'error';
             // enrichment詳細表示 + スコア
             const enrichDetails = prop.enrichment_status === 'done' ? (() => {
-              const scores = calculateScores(prop);
+              const scores = calculateScores(prop, state.userProfile);
+              const lifestyleBar = scores && scores.score_lifestyle != null ? renderScoreBar('ライフ', scores.score_lifestyle) : '';
               const scoreSection = scores ? '<div class="grid grid-cols-2 gap-1 mb-2">' +
                 renderScoreBar('安全', scores.score_safety) +
                 renderScoreBar('利便', scores.score_convenience) +
                 renderScoreBar('コスト', scores.score_cost) +
+                lifestyleBar +
                 '<div class="flex items-center gap-2 text-xs"><span class="text-gray-500 w-12">総合</span><div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:' + scores.score_total + '%;background:' + getScoreColor(scores.score_total) + ';"></div></div><span class="font-bold" style="color:' + getScoreColor(scores.score_total) + ';">' + scores.score_total + '</span></div>' +
                 '</div>' : '';
               const items = [];
@@ -1180,16 +1518,19 @@ function renderComparisonTable() {
           <tbody>
             ${(() => {
               if (!props.some(p => p.enrichment_status === 'done')) return '';
-              const allScores = props.map(p => calculateScores(p));
+              const allScores = props.map(p => calculateScores(p, state.userProfile));
               const maxTotal = Math.max(...allScores.map(s => s ? s.score_total : 0));
-              const scoreRows = ['score_safety','score_convenience','score_cost'].map(key => {
-                const labelMap = {score_safety:'🛡️ 安全', score_convenience:'🏪 利便', score_cost:'💰 コスト'};
-                const maxCat = Math.max(...allScores.map(s => s ? s[key] : 0));
+              const hasLifestyle = allScores.some(s => s && s.score_lifestyle !== null);
+              const scoreKeys = ['score_safety','score_convenience','score_cost'];
+              if (hasLifestyle) scoreKeys.push('score_lifestyle');
+              const labelMap = {score_safety:'🛡️ 安全', score_convenience:'🏪 利便', score_cost:'💰 コスト', score_lifestyle:'🏡 ライフ'};
+              const scoreRows = scoreKeys.map(key => {
+                const maxCat = Math.max(...allScores.map(s => s && s[key] != null ? s[key] : 0));
                 return '<tr>' +
                   '<td class="p-2 text-xs font-medium text-gray-500 bg-gray-50">' + labelMap[key] + '</td>' +
                   props.map((p, i) => {
                     const s = allScores[i];
-                    if (!s) return '<td class="p-2 text-center text-xs text-gray-300">—</td>';
+                    if (!s || s[key] == null) return '<td class="p-2 text-center text-xs text-gray-300">—</td>';
                     const v = s[key];
                     const color = getScoreColor(v);
                     const isBest = v === maxCat && maxCat > 0;
@@ -1201,7 +1542,8 @@ function renderComparisonTable() {
                       '</div></td>';
                   }).join('') + '</tr>';
               }).join('');
-              return '<tr><td colspan="' + (props.length + 1) + '" class="p-2 bg-purple-50"><span class="text-xs font-bold text-purple-700">📈 スコア比較</span></td></tr>' +
+              const lifestyleBadge = hasLifestyle ? '<span class="text-xs text-purple-500 ml-2">🏡 ライフスタイルスコアあり</span>' : '';
+              return '<tr><td colspan="' + (props.length + 1) + '" class="p-2 bg-purple-50"><span class="text-xs font-bold text-purple-700">📈 スコア比較</span>' + lifestyleBadge + '</td></tr>' +
                 '<tr style="border-bottom:2px solid #e5e7eb;">' +
                 '<td class="p-2 text-xs font-bold text-gray-600 bg-gray-50">総合</td>' +
                 props.map((p, i) => {
@@ -2097,6 +2439,7 @@ ensureAuth().then(user => {
     if (state.savedProperties.length > 0) render();
   });
   loadSavedComparisons().then(() => render());
+  loadUserProfile().then(() => render());
 }).catch(e => console.warn('Auth init skipped:', e.message));
 </script>
 </body>
