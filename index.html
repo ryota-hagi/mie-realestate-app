@@ -1119,7 +1119,7 @@ function renderMyPage() {
         <form id="mypage-form" onsubmit="event.preventDefault(); handleSaveProfile();">
           <!-- 上部保存ボタン -->
           <div class="flex items-center gap-4 mb-6 pb-4 border-b border-gray-200">
-            <button type="submit" ${loading ? 'disabled' : ''} class="px-8 py-3 bg-purple-600 text-white rounded-lg font-bold text-base hover:bg-purple-700 transition-colors disabled:opacity-50 shadow-lg">
+            <button type="submit" ${loading ? 'disabled' : ''} style="padding:12px 32px;background:#7c3aed;color:#fff;border-radius:8px;font-weight:700;font-size:1rem;border:none;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.1);"
               ${loading ? '⏳ 保存中...' : '💾 保存する'}
             </button>
             ${saved ? '<span class="text-sm text-green-600 font-medium">✅ 保存しました</span>' : ''}
@@ -1175,7 +1175,7 @@ function renderMyPage() {
 
           <!-- 保存ボタン -->
           <div class="flex items-center gap-4 pt-4 border-t border-gray-200">
-            <button type="submit" ${loading ? 'disabled' : ''} class="px-8 py-3 bg-purple-600 text-white rounded-lg font-bold text-base hover:bg-purple-700 transition-colors disabled:opacity-50 shadow-lg">
+            <button type="submit" ${loading ? 'disabled' : ''} style="padding:12px 32px;background:#7c3aed;color:#fff;border-radius:8px;font-weight:700;font-size:1rem;border:none;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.1);"
               ${loading ? '⏳ 保存中...' : '💾 保存する'}
             </button>
             ${saved ? '<span class="text-sm text-green-600 font-medium animate-pulse">✅ 保存しました</span>' : ''}
