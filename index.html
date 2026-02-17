@@ -742,6 +742,114 @@ function calculateLifestyleScore(prop, profile) {
   return Math.max(0, Math.min(100, Math.round(score)));
 }
 
+function getLifestyleBreakdown(prop, profile) {
+  if (!profile) return null;
+  const priorities = profile.priorities || [];
+  const hasWorkplace = (profile.spouse1_lat && profile.spouse1_lng) || (profile.spouse2_lat && profile.spouse2_lng);
+  if (priorities.length === 0 && !hasWorkplace) return null;
+
+  const reasons = [];
+
+  // 通勤距離
+  if (hasWorkplace && prop.lat && prop.lng) {
+    const dists = [];
+    if (profile.spouse1_lat && profile.spouse1_lng) {
+      const km = haversineDistanceClient(prop.lat, prop.lng, profile.spouse1_lat, profile.spouse1_lng) / 1000;
+      dists.push({ name: profile.spouse1_name || '配偶者1', km });
+    }
+    if (profile.spouse2_lat && profile.spouse2_lng) {
+      const km = haversineDistanceClient(prop.lat, prop.lng, profile.spouse2_lat, profile.spouse2_lng) / 1000;
+      dists.push({ name: profile.spouse2_name || '配偶者2', km });
+    }
+    for (const d of dists) {
+      const rating = d.km < 5 ? '◎' : d.km < 10 ? '○' : d.km < 20 ? '△' : '×';
+      reasons.push('🚗 ' + d.name + 'の通勤: 約' + d.km.toFixed(1) + 'km ' + rating);
+    }
+  }
+
+  // 重視項目
+  if (priorities.length > 0) {
+    const extractDist = (str) => { if (!str) return null; const m = str.match(/(\d+)m/); return m ? parseInt(m[1]) : null; };
+    const labelMap = {};
+    PRIORITY_OPTIONS.forEach(o => { labelMap[o.key] = o.label; });
+
+    const evalMap = {
+      garden: () => {
+        if (!prop.land_area) return '情報なし';
+        return prop.land_area >= 200 ? '◎ ' + prop.land_area + '㎡' : prop.land_area >= 150 ? '○ ' + prop.land_area + '㎡' : '△ ' + prop.land_area + '㎡';
+      },
+      sunlight: () => {
+        if (!prop.zoning) return '情報なし';
+        if (/一低住|第一種低層/.test(prop.zoning)) return '◎ ' + prop.zoning;
+        if (/二低住|第二種低層/.test(prop.zoning)) return '○ ' + prop.zoning;
+        if (/商業|工業/.test(prop.zoning)) return '× ' + prop.zoning;
+        return '△ ' + prop.zoning;
+      },
+      quiet: () => {
+        if (!prop.zoning) return '情報なし';
+        if (/低層|低住/.test(prop.zoning)) return '◎ ' + prop.zoning;
+        if (/住居/.test(prop.zoning)) return '○ ' + prop.zoning;
+        if (/商業|工業/.test(prop.zoning)) return '× ' + prop.zoning;
+        return '△ ' + prop.zoning;
+      },
+      childcare: () => {
+        const parts = [];
+        const nd = extractDist(prop.nearest_nursery);
+        const sd = extractDist(prop.school_elementary);
+        if (nd != null) parts.push('保育園' + nd + 'm');
+        if (sd != null) parts.push('小学校' + sd + 'm');
+        if (parts.length === 0) return '情報なし';
+        const avg = ((nd || 9999) + (sd || 9999)) / (parts.length);
+        const r = avg < 800 ? '◎' : avg < 1500 ? '○' : '△';
+        return r + ' ' + parts.join('／');
+      },
+      park_nearby: () => {
+        const d = extractDist(prop.nearest_park);
+        if (d == null) return '情報なし';
+        const r = d < 300 ? '◎' : d < 600 ? '○' : d < 1000 ? '△' : '×';
+        return r + ' ' + d + 'm';
+      },
+      shopping_nearby: () => {
+        const d = extractDist(prop.nearest_supermarket);
+        if (d == null) return '情報なし';
+        const r = d < 500 ? '◎' : d < 1000 ? '○' : d < 2000 ? '△' : '×';
+        return r + ' ' + d + 'm';
+      },
+      residential: () => {
+        if (!prop.zoning) return '情報なし';
+        if (/低層|低住/.test(prop.zoning)) return '◎ ' + prop.zoning;
+        if (/住居/.test(prop.zoning)) return '○ ' + prop.zoning;
+        if (/商業|工業/.test(prop.zoning)) return '× ' + prop.zoning;
+        return '△ ' + prop.zoning;
+      },
+      station_near: () => {
+        if (!prop.station_distance) return '情報なし';
+        return prop.station_distance;
+      },
+      large_lot: () => {
+        if (!prop.land_area) return '情報なし';
+        return prop.land_area >= 250 ? '◎ ' + prop.land_area + '㎡' : prop.land_area >= 200 ? '○ ' + prop.land_area + '㎡' : prop.land_area >= 150 ? '△ ' + prop.land_area + '㎡' : '× ' + prop.land_area + '㎡';
+      },
+      nature: () => {
+        const d = extractDist(prop.nearest_park);
+        if (d == null) return '情報なし';
+        const r = d < 500 ? '◎' : d < 1000 ? '○' : '△';
+        return r + ' 公園' + d + 'm';
+      },
+    };
+
+    for (const key of priorities) {
+      const fn = evalMap[key];
+      const label = labelMap[key] || key;
+      if (fn) {
+        reasons.push(label + ': ' + fn());
+      }
+    }
+  }
+
+  return reasons;
+}
+
 function calculateScores(prop, userProfile) {
   if (!prop) return null;
 
@@ -1321,10 +1429,18 @@ function renderPropertyView() {
                   '<div class="text-xs font-medium text-amber-800 mb-0.5">💰 追加コスト要因（' + Math.abs(prop.extra_cost_score) + '点減点）</div>' +
                   '<div class="text-xs text-amber-700">' + prop.extra_cost_reasons.split('、').map(r => '・' + r.trim()).join('<br>') + '</div>' +
                   '</div>' : '';
-              return (scoreSection || items.length > 0 || costReasonHtml) ? '<div class="mt-2 p-2 bg-blue-50 rounded border border-blue-100 space-y-1">' +
+              // ライフスタイルスコア根拠
+              const lifestyleReasons = getLifestyleBreakdown(prop, state.userProfile);
+              const lifestyleReasonHtml = (lifestyleReasons && lifestyleReasons.length > 0)
+                ? '<div class="mt-1 p-1.5 bg-blue-50 rounded border border-blue-200">' +
+                  '<div class="text-xs font-medium text-blue-800 mb-0.5">🏡 ライフスタイル根拠（スコア ' + (scores ? scores.score_lifestyle : '-') + '）</div>' +
+                  '<div class="text-xs text-blue-700">' + lifestyleReasons.map(r => '・' + r).join('<br>') + '</div>' +
+                  '</div>' : '';
+              return (scoreSection || items.length > 0 || costReasonHtml || lifestyleReasonHtml) ? '<div class="mt-2 p-2 bg-blue-50 rounded border border-blue-100 space-y-1">' +
                 scoreSection +
                 items.map(i => '<div class="text-xs text-gray-600">' + i + '</div>').join('') +
                 costReasonHtml +
+                lifestyleReasonHtml +
                 '</div>' : '';
             })() : '';
             return `
