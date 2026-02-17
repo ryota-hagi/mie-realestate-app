@@ -1117,6 +1117,13 @@ function renderMyPage() {
         <p class="text-sm text-gray-500 mb-6">勤務先と重視項目を登録すると、比較表に「ライフスタイル」スコアが追加されます。</p>
 
         <form id="mypage-form" onsubmit="event.preventDefault(); handleSaveProfile();">
+          <!-- 上部保存ボタン -->
+          <div class="flex items-center gap-4 mb-6 pb-4 border-b border-gray-200">
+            <button type="submit" ${loading ? 'disabled' : ''} class="px-8 py-3 bg-purple-600 text-white rounded-lg font-bold text-base hover:bg-purple-700 transition-colors disabled:opacity-50 shadow-lg">
+              ${loading ? '⏳ 保存中...' : '💾 保存する'}
+            </button>
+            ${saved ? '<span class="text-sm text-green-600 font-medium">✅ 保存しました</span>' : ''}
+          </div>
           <!-- 勤務先情報 -->
           <div class="mb-8">
             <h3 class="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -1167,12 +1174,13 @@ function renderMyPage() {
           </div>
 
           <!-- 保存ボタン -->
-          <div class="flex items-center gap-4">
-            <button type="submit" ${loading ? 'disabled' : ''} class="px-6 py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors disabled:opacity-50">
-              ${loading ? '保存中...' : '保存する'}
+          <div class="flex items-center gap-4 pt-4 border-t border-gray-200">
+            <button type="submit" ${loading ? 'disabled' : ''} class="px-8 py-3 bg-purple-600 text-white rounded-lg font-bold text-base hover:bg-purple-700 transition-colors disabled:opacity-50 shadow-lg">
+              ${loading ? '⏳ 保存中...' : '💾 保存する'}
             </button>
-            ${saved ? '<span class="text-sm text-green-600 font-medium">保存しました</span>' : ''}
+            ${saved ? '<span class="text-sm text-green-600 font-medium animate-pulse">✅ 保存しました</span>' : ''}
           </div>
+          <p class="text-xs text-gray-400 mt-3">登録した内容は比較表の「🏡 ライフスタイル」スコアに反映されます</p>
         </form>
       </div>
     </div>
