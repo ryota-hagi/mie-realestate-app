@@ -13,6 +13,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { minify } from 'terser';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -381,6 +382,32 @@ function buildNeighborLinksHtml(cityId) {
       <h2 class="text-base font-bold text-gray-800 mb-3">🔗 近隣エリアの注文住宅情報</h2>
       <div class="flex flex-wrap gap-2">${links}</div>
     </div>`;
+}
+
+// ---------------------------------------------------------------------------
+// CITY_SEO_DATA JS variable (injected into template for modal rendering)
+// ---------------------------------------------------------------------------
+function buildCitySeoDataJs() {
+  const data = {};
+  for (const city of CITIES) {
+    const cd = cityData[city.id];
+    if (!cd) continue;
+    data[city.id] = {
+      nameJa: cd.nameJa || city.name,
+      tips: (cd.tips || []).map(t => ({ title: t.title, body: t.body })),
+      faqs: (cd.faqs || []).map(f => ({ question: f.question, answer: f.answer })),
+      checklist_notes: cd.checklist_notes || '',
+      neighbors: (cd.neighbors || []).map(nId => {
+        const nc = cityData[nId];
+        return nc ? { id: nId, name: nc.nameJa } : null;
+      }).filter(Boolean),
+      cityUrl: `/area/mie/${city.id}/`,
+    };
+  }
+  data._checklist = (cityData.checklist || []).map(item => ({
+    id: item.id, label: item.label, detail: item.detail,
+  }));
+  return `const CITY_SEO_DATA = ${JSON.stringify(data)};`;
 }
 
 // ---------------------------------------------------------------------------
@@ -820,6 +847,12 @@ document.addEventListener('DOMContentLoaded', function() { var el = document.get
         </div>`
   );
 
+  // 16. Inject CITY_SEO_DATA for modal rendering
+  html = html.replace(
+    "const COLORS = ['#3b82f6'",
+    buildCitySeoDataJs() + "\nconst COLORS = ['#3b82f6'"
+  );
+
   return html;
 }
 
@@ -965,15 +998,9 @@ function generateCityPage(cityId) {
     `selectedAreaId: '${cityId}'`
   );
 
-  // 14. Inject city-specific sections before footer
+  // 14. Inject city-specific sections before footer (only cost simulator remains here; tips/FAQ/checklist moved to modal)
   const cityExtraSections = `
-      ${buildTipsHtml(cityId)}
-      ${buildCostSimulatorHtml(cityId)}
-      ${buildChecklistHtml(cityId)}
-      ${buildFaqHtml(cityId)}
-      ${buildNeighborLinksHtml(cityId)}
-      ${buildCtaHtml()}
-      ${buildShareButtonsHtml(DOMAIN + '/area/mie/' + cityId + '/', cityName + 'で注文住宅｜土地相場・費用シミュレーション')}`;
+      ${buildCostSimulatorHtml(cityId)}`;
 
   html = html.replace(
     '${renderFooter()}',
@@ -1046,6 +1073,12 @@ function openMobileDrawer`
           <p class="text-xs text-gray-400" style="margin-bottom:4px;"><strong>データ更新</strong>: ${TODAY} ｜ 国土交通省 不動産情報ライブラリAPI・地価公示データを定期取得</p>
           <p class="text-xs text-gray-300">© 注文相談.com — 本ツールの利用は無料です。不動産購入の最終判断は専門家にご相談ください。</p>
         </div>`
+  );
+
+  // 19. Inject CITY_SEO_DATA for modal rendering
+  html = html.replace(
+    "const COLORS = ['#3b82f6'",
+    buildCitySeoDataJs() + "\nconst COLORS = ['#3b82f6'"
   );
 
   return html;
@@ -1486,15 +1519,44 @@ ${urls.map(u => `  <url>
 }
 
 // ---------------------------------------------------------------------------
+// HTML minification (terser for inline JS, strip comments/whitespace)
+// ---------------------------------------------------------------------------
+async function minifyHtml(html) {
+  // Minify inline <script> blocks (skip JSON-LD and external src scripts)
+  const scriptRe = /<script(?![^>]*\btype\s*=\s*["']application\/ld\+json["'])(?![^>]*\bsrc\s*=)([^>]*)>([\s\S]*?)<\/script>/gi;
+  const matches = [...html.matchAll(scriptRe)];
+  for (const m of matches) {
+    const original = m[2];
+    if (!original.trim()) continue;
+    try {
+      const result = await minify(original, {
+        compress: true,
+        mangle: false,  // onclick等のHTML属性で関数名を参照しているため
+      });
+      if (result.code) {
+        html = html.replace(m[0], `<script${m[1]}>${result.code}</script>`);
+      }
+    } catch (e) {
+      console.warn('  ⚠ terser minify warning:', e.message?.substring(0, 80));
+    }
+  }
+  // Strip HTML comments (keep IE conditionals)
+  html = html.replace(/<!--(?!\[if)[\s\S]*?-->/g, '');
+  // Collapse runs of whitespace between tags
+  html = html.replace(/>\s{2,}</g, '> <');
+  return html;
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
-function main() {
+async function main() {
   console.log('Building pages...');
 
   // Hub page
   const hubDir = join(ROOT, 'area', 'mie');
   ensureDir(hubDir);
-  const hubHtml = generateHubPage();
+  const hubHtml = await minifyHtml(generateHubPage());
   writeFileSync(join(hubDir, 'index.html'), hubHtml, 'utf-8');
   console.log('  ✓ area/mie/index.html');
 
@@ -1502,7 +1564,7 @@ function main() {
   for (const city of CITIES) {
     const cityDir = join(hubDir, city.id);
     ensureDir(cityDir);
-    const cityHtml = generateCityPage(city.id);
+    const cityHtml = await minifyHtml(generateCityPage(city.id));
     writeFileSync(join(cityDir, 'index.html'), cityHtml, 'utf-8');
     console.log(`  ✓ area/mie/${city.id}/index.html`);
   }
@@ -1510,7 +1572,7 @@ function main() {
   // Knowledge hub page
   const knowledgeDir = join(ROOT, 'knowledge');
   ensureDir(knowledgeDir);
-  const knowledgeHubHtml = generateKnowledgeHubPage();
+  const knowledgeHubHtml = await minifyHtml(generateKnowledgeHubPage());
   writeFileSync(join(knowledgeDir, 'index.html'), knowledgeHubHtml, 'utf-8');
   console.log('  ✓ knowledge/index.html');
 
@@ -1518,7 +1580,7 @@ function main() {
   for (const article of knowledgeData.articles) {
     const articleDir = join(knowledgeDir, article.id);
     ensureDir(articleDir);
-    const articleHtml = generateKnowledgePage(article);
+    const articleHtml = await minifyHtml(generateKnowledgePage(article));
     writeFileSync(join(articleDir, 'index.html'), articleHtml, 'utf-8');
     console.log(`  ✓ knowledge/${article.id}/index.html`);
   }
@@ -1526,7 +1588,7 @@ function main() {
   // About page
   const aboutDir = join(ROOT, 'about');
   ensureDir(aboutDir);
-  writeFileSync(join(aboutDir, 'index.html'), generateAboutPage(), 'utf-8');
+  writeFileSync(join(aboutDir, 'index.html'), await minifyHtml(generateAboutPage()), 'utf-8');
   console.log('  ✓ about/index.html');
 
   // Sitemap

@@ -8,6 +8,8 @@ on:
       - 'scripts/build-pages.mjs'
       - 'scripts/city-data.json'
       - 'scripts/knowledge-data.json'
+      - 'package.json'
+      - 'package-lock.json'
   workflow_dispatch: {}  # 手動実行ボタン
 
 permissions:
@@ -24,6 +26,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Build area pages and sitemap
         run: node scripts/build-pages.mjs
