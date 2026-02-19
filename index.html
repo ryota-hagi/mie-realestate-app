@@ -982,6 +982,38 @@ function renderScoreBar(label, score) {
 }
 
 // ============================================================
+// 建築費シミュレーション
+// ============================================================
+function calcBuildingCost(prop) {
+  const landArea = prop.land_area;
+  const price = prop.price;
+  if (!landArea || !price) return null;
+
+  const parsePct = str => {
+    if (!str) return null;
+    const m = String(str).match(/([\d.]+)/);
+    return m ? parseFloat(m[1]) / 100 : null;
+  };
+
+  const coverageRate = parsePct(prop.building_coverage);
+  const farRate = parsePct(prop.floor_area_ratio);
+  if (coverageRate === null || farRate === null) return null;
+
+  const maxBuildingArea = landArea * coverageRate;
+  const maxFloorArea = landArea * farRate;
+  const maxFloorAreaTsubo = maxFloorArea / 3.305785;
+
+  const costLow = maxFloorAreaTsubo * 500000;
+  const costStd = maxFloorAreaTsubo * 650000;
+  const costHigh = maxFloorAreaTsubo * 850000;
+
+  const misc = (price + costStd) * 0.08;
+  const totalEstimate = price + costStd + misc;
+
+  return { maxBuildingArea, maxFloorArea, maxFloorAreaTsubo, costLow, costStd, costHigh, misc, totalEstimate };
+}
+
+// ============================================================
 // CSV Export
 // ============================================================
 function exportComparisonCSV() {
@@ -1010,6 +1042,11 @@ function exportComparisonCSV() {
     { label: '洪水リスク', fmt: p => p.hazard_flood || '' },
     { label: '土砂災害', fmt: p => p.hazard_sediment || '' },
     { label: '地盤', fmt: p => p.ground_type || '' },
+    { label: '建築費総額目安(万円)', fmt: p => { const c = calcBuildingCost(p); return c ? (c.totalEstimate / 10000).toFixed(0) : ''; } },
+    { label: '建築費ローコスト(万円)', fmt: p => { const c = calcBuildingCost(p); return c ? (c.costLow / 10000).toFixed(0) : ''; } },
+    { label: '建築費スタンダード(万円)', fmt: p => { const c = calcBuildingCost(p); return c ? (c.costStd / 10000).toFixed(0) : ''; } },
+    { label: '建築費ハイグレード(万円)', fmt: p => { const c = calcBuildingCost(p); return c ? (c.costHigh / 10000).toFixed(0) : ''; } },
+    { label: '諸費用概算(万円)', fmt: p => { const c = calcBuildingCost(p); return c ? (c.misc / 10000).toFixed(0) : ''; } },
     { label: 'AIコメント', fmt: p => p.ai_comment || '' },
     { label: 'メモ', fmt: p => p.user_memo || p.memo || '' },
     { label: '物件URL', fmt: p => p.url || '' },
@@ -1127,7 +1164,7 @@ function renderHeader() {
           </div>
           <div class="flex items-center gap-3">
             ${authHtml}
-            <a href="area.html" class="hidden sm:block px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors whitespace-nowrap">
+            <a href="/area/mie/" class="hidden sm:block px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors whitespace-nowrap">
               📊 三重県エリア比較 →
             </a>
           </div>
@@ -1706,6 +1743,34 @@ function renderComparisonTable() {
                 }).join('')}
               </tr>
             `).join('')}
+            <!-- 建築費シミュレーション -->
+            ${(() => {
+              const costs = props.map(p => calcBuildingCost(p));
+              const fmtYen = v => v >= 100000000 ? (v/100000000).toFixed(2) + '億円' : (v/10000).toLocaleString() + '万円';
+              const buildRows = [
+                { label: '最大建築面積', fmt: (c, p) => c ? c.maxBuildingArea.toFixed(1) + ' ㎡' : '—' },
+                { label: '最大延床面積', fmt: (c, p) => c ? c.maxFloorArea.toFixed(1) + ' ㎡（' + c.maxFloorAreaTsubo.toFixed(1) + '坪）' : '—' },
+                { label: '建築費 ローコスト', fmt: (c, p) => c ? fmtYen(c.costLow) : '—' },
+                { label: '建築費 スタンダード', fmt: (c, p) => c ? fmtYen(c.costStd) : '—' },
+                { label: '建築費 ハイグレード', fmt: (c, p) => c ? fmtYen(c.costHigh) : '—' },
+                { label: '諸費用概算(8%)', fmt: (c, p) => c ? fmtYen(c.misc) : '—' },
+              ];
+              return `
+              <tr><td colspan="${props.length+1}" class="p-2 bg-orange-50"><span class="text-xs font-bold text-orange-700">🏗️ 建築費シミュレーション</span><span class="text-xs text-gray-400 ml-2">※建蔽率・容積率から自動算出</span></td></tr>
+              ${buildRows.map(r => '<tr><td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">' + r.label + '</td>' +
+                props.map((p, i) => {
+                  const c = costs[i];
+                  if (c) return '<td class="p-3 text-sm text-gray-800">' + r.fmt(c, p) + '</td>';
+                  return '<td class="p-3 text-sm text-gray-400 hover:bg-blue-50 transition-colors" onclick="startCellEdit(this, \'' + p.id + '\', \'building_coverage\', true)" title="建蔽率・容積率を入力すると算出されます" style="cursor:pointer;border-bottom:1px dashed #cbd5e1;">—<span class="text-gray-300 text-xs ml-1">✏️</span></td>';
+                }).join('') + '</tr>').join('')}
+              <tr style="border-top:2px solid #fed7aa;"><td class="p-3 text-xs font-bold text-orange-800 bg-orange-50">💰 総額目安</td>${
+                props.map((p, i) => {
+                  const c = costs[i];
+                  if (c) return '<td class="p-3 text-sm font-bold text-orange-800" style="background:#fff7ed;"><strong>' + fmtYen(c.totalEstimate) + '</strong><br><span class="text-xs font-normal text-gray-400">（土地代+建築費std+諸費用）</span></td>';
+                  return '<td class="p-3 text-sm text-gray-400" style="background:#fff7ed;">—</td>';
+                }).join('')
+              }</tr>`;
+            })()}
             <!-- AI詳細情報（enrichment） -->
             ${props.some(p => p.enrichment_status === 'done') || props.some(p => p.lat && p.lng) ? `
               <tr><td colspan="${props.length+1}" class="p-2 bg-blue-50"><span class="text-xs font-bold text-blue-700">🔍 AI自動取得情報（周辺環境・ハザード）</span></td></tr>
@@ -2488,9 +2553,21 @@ function renderSEOContent() {
         <p>当ツールは、SUUMO・アットホーム・LIFULL HOME'S等の不動産サイトの物件情報をAIが自動で読み取り、統一フォーマットの比較表として整理します。さらに、AIが各物件の注意点やおすすめポイントを分析してコメントを生成。見落としがちな確認事項もテンプレートとして提示するので、不動産会社への質問準備にも活用できます。</p>
       </div>
       <div class="mt-4 flex flex-col sm:flex-row gap-3">
-        <a href="area.html" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">
+        <a href="/area/mie/" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">
           📊 三重県エリア別の土地相場を見る →
         </a>
+      </div>
+      <div class="mt-4 pt-4 border-t border-gray-100">
+        <h3 class="text-sm font-bold text-gray-700 mb-2">エリア別 注文住宅ガイド</h3>
+        <div class="flex flex-wrap gap-2">
+          <a href="/area/mie/yokkaichi/" class="text-xs text-blue-600 hover:underline">四日市市</a>
+          <a href="/area/mie/kuwana/" class="text-xs text-blue-600 hover:underline">桑名市</a>
+          <a href="/area/mie/suzuka/" class="text-xs text-blue-600 hover:underline">鈴鹿市</a>
+          <a href="/area/mie/inabe/" class="text-xs text-blue-600 hover:underline">いなべ市</a>
+          <a href="/area/mie/kameyama/" class="text-xs text-blue-600 hover:underline">亀山市</a>
+          <a href="/area/mie/komono/" class="text-xs text-blue-600 hover:underline">菰野町</a>
+          <a href="/area/mie/toin/" class="text-xs text-blue-600 hover:underline">東員町</a>
+        </div>
       </div>
     </div>
   `;
@@ -2504,10 +2581,19 @@ function renderFooter() {
     <footer class="mt-8 py-6 border-t border-gray-200">
       <div class="text-center space-y-2">
         <div class="flex justify-center gap-4 mb-3">
-          <a href="area.html" class="text-sm text-blue-600 hover:underline">📊 エリア比較ページ</a>
+          <a href="/area/mie/" class="text-sm text-blue-600 hover:underline">📊 三重県エリア比較</a>
         </div>
-        <p class="text-xs text-gray-400">※ 本ツールは参考情報であり、不動産購入の最終判断は専門家にご相談ください</p>
-        <p class="text-xs text-gray-300 mt-3">© 注文相談.com</p>
+        <div class="flex justify-center flex-wrap gap-2 mb-3">
+          <a href="/area/mie/yokkaichi/" class="text-xs text-blue-600 hover:underline">四日市市</a> |
+          <a href="/area/mie/kuwana/" class="text-xs text-blue-600 hover:underline">桑名市</a> |
+          <a href="/area/mie/suzuka/" class="text-xs text-blue-600 hover:underline">鈴鹿市</a> |
+          <a href="/area/mie/inabe/" class="text-xs text-blue-600 hover:underline">いなべ市</a> |
+          <a href="/area/mie/kameyama/" class="text-xs text-blue-600 hover:underline">亀山市</a> |
+          <a href="/area/mie/komono/" class="text-xs text-blue-600 hover:underline">菰野町</a> |
+          <a href="/area/mie/toin/" class="text-xs text-blue-600 hover:underline">東員町</a>
+        </div>
+        <p class="text-xs text-gray-400">\u203B 本ツールは参考情報であり、不動産購入の最終判断は専門家にご相談ください</p>
+        <p class="text-xs text-gray-300 mt-3">\u00A9 注文相談.com</p>
       </div>
     </footer>
   `;
