@@ -1,18 +1,22 @@
-name: Fetch Real Estate Data
+name: Build Pages
 
 on:
-  schedule:
-    # 毎週月曜 03:00 UTC (日本時間 12:00)
-    - cron: '0 3 * * 1'
+  push:
+    branches: [main, master]
+    paths:
+      - 'scripts/area-template.html'
+      - 'scripts/build-pages.mjs'
+      - 'scripts/city-data.json'
+      - 'scripts/knowledge-data.json'
   workflow_dispatch: {}  # 手動実行ボタン
 
 permissions:
   contents: write
 
 jobs:
-  fetch:
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 5
 
     steps:
       - uses: actions/checkout@v4
@@ -21,16 +25,13 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Fetch real estate data via MCP
-        run: node scripts/fetch-data.mjs
-
       - name: Build area pages and sitemap
         run: node scripts/build-pages.mjs
 
-      - name: Commit and push data + generated pages
+      - name: Commit and push generated pages
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/live-data.json area/ sitemap.xml
-          git diff --staged --quiet || git commit -m "chore: update real estate data + rebuild pages [$(date -u +%Y-%m-%d)]"
+          git add area/ knowledge/ about/ sitemap.xml
+          git diff --staged --quiet || git commit -m "chore: rebuild pages and sitemap [$(date -u +%Y-%m-%d)]"
           git push

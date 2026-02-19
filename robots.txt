@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /geocoder.html
+Disallow: /data/
 
 Sitemap: https://research.chuumon-soudan.com/sitemap.xml
