@@ -75,10 +75,124 @@
   .so-radio-group label:hover { border-color: #3b82f6; background: #eff6ff; }
   .so-radio-group input:checked + span { color: #1d4ed8; }
   .so-radio-group label:has(input:checked) { border-color: #3b82f6; background: #dbeafe; }
+  /* === サイドバー Desktop/Mobile 切り替え === */
+  .comp-sidebar-desktop { display: block; }
+  .comp-sidebar-mobile { display: none; }
   @media (max-width: 768px) {
-    .comp-layout-sidebar { flex-direction: column !important; }
+    .comp-layout-sidebar { flex-direction: column !important; gap: 0 !important; }
     .comp-layout-sidebar > div:first-child { width: 100% !important; }
-    .comp-layout-sidebar > div:first-child .sticky { position: relative !important; top: 0 !important; }
+    .comp-sidebar-desktop { display: none !important; }
+    .comp-sidebar-mobile { display: flex !important; }
+  }
+  .comp-sidebar-mobile {
+    align-items: center; gap: 8px; padding: 8px 12px;
+    background: white; border: 1px solid #e5e7eb; border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 8px;
+    position: sticky; top: 0; z-index: 40;
+  }
+  .comp-sidebar-mobile select {
+    flex: 1; min-width: 0; padding: 6px 10px; border: 1px solid #e5e7eb; border-radius: 8px;
+    font-size: 13px; color: #374151; background: #f9fafb; outline: none; appearance: auto;
+  }
+  .comp-sidebar-mobile select:focus { border-color: #93c5fd; }
+  .comp-mobile-back-btn {
+    flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb;
+    background: #f9fafb; cursor: pointer; font-size: 14px; display: flex; align-items: center;
+    justify-content: center; color: #6b7280; transition: background 0.15s;
+  }
+  .comp-mobile-back-btn:hover { background: #e5e7eb; }
+  .comp-mobile-count {
+    flex-shrink: 0; font-size: 11px; color: #9ca3af; white-space: nowrap;
+  }
+  /* === 比較表 B+Aハイブリッド CSS === */
+  .so-comp-summary-bar { display:flex; gap:10px; overflow-x:auto; padding-top:14px; padding-bottom:4px; margin-bottom:12px; }
+  .so-comp-summary-card { flex:1; min-width:145px; background:#fff; border-radius:12px; border:2px solid #e5e7eb; padding:14px 12px; text-align:center; cursor:pointer; transition:all 0.2s; position:relative; scroll-snap-align:start; }
+  .so-comp-summary-card:hover { border-color:#93c5fd; box-shadow:0 4px 12px rgba(59,130,246,0.1); transform:translateY(-2px); }
+  .so-comp-summary-card.best { border-color:#22c55e; }
+  .so-comp-summary-card.best::after { content:'👑 おすすめ'; position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:#fef3c7; color:#b45309; font-size:10px; font-weight:700; padding:2px 10px; border-radius:999px; white-space:nowrap; }
+  .so-comp-label-chip { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; font-weight:800; font-size:14px; color:#fff; margin-bottom:6px; }
+  .so-comp-summary-name { font-size:11px; font-weight:600; color:#374151; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .so-comp-summary-score { font-size:28px; font-weight:900; line-height:1.1; }
+  .so-comp-summary-score-label { font-size:10px; color:#9ca3af; }
+  .so-comp-summary-price { font-size:14px; font-weight:700; color:#1e40af; margin-top:4px; }
+  .so-comp-summary-sub { font-size:10px; color:#9ca3af; }
+  /* アコーディオン */
+  .so-comp-acc-section { background:#fff; border-radius:12px; border:1px solid #e5e7eb; margin-bottom:10px; overflow:hidden; }
+  .so-comp-acc-header { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; cursor:pointer; user-select:none; transition:background 0.15s; }
+  .so-comp-acc-header:hover { background:#f9fafb; }
+  .so-comp-acc-header h3 { font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; margin:0; }
+  .so-comp-acc-header .so-comp-count { font-size:11px; color:#9ca3af; font-weight:400; }
+  .so-comp-acc-header .so-comp-chev { font-size:10px; color:#9ca3af; transition:transform 0.3s; }
+  .so-comp-acc-section.open .so-comp-acc-header .so-comp-chev { transform:rotate(180deg); }
+  .so-comp-acc-body { display:none; border-top:1px solid #e5e7eb; }
+  .so-comp-acc-section.open .so-comp-acc-body { display:block; }
+  /* テーブル */
+  .so-comp-t-table { width:100%; border-collapse:collapse; }
+  .so-comp-t-table th, .so-comp-t-table td { padding:8px 10px; border-bottom:1px solid #f3f4f6; text-align:left; font-size:12px; vertical-align:top; }
+  .so-comp-t-table th { background:#f9fafb; font-weight:600; color:#6b7280; white-space:nowrap; min-width:80px; width:90px; }
+  .so-comp-t-table td { color:#1f2937; min-width:120px; }
+  .so-comp-t-table tr:last-child td, .so-comp-t-table tr:last-child th { border-bottom:none; }
+  /* スコアバー */
+  .so-comp-score-bar { display:inline-flex; align-items:center; gap:5px; }
+  .so-comp-score-bar-track { width:50px; height:6px; background:#e5e7eb; border-radius:99px; overflow:hidden; }
+  .so-comp-score-bar-fill { height:100%; border-radius:99px; }
+  .so-comp-score-val { font-size:13px; font-weight:700; }
+  .so-comp-highlight-cell { background:#fefce8; }
+  /* ハザードバッジ */
+  .so-comp-hz-badge { display:inline-flex; align-items:center; gap:3px; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600; cursor:pointer; transition:background 0.2s; }
+  .so-comp-hz-low { background:#dcfce7; color:#15803d; }
+  .so-comp-hz-mid { background:#fef3c7; color:#b45309; }
+  .so-comp-hz-high { background:#fee2e2; color:#dc2626; }
+  .so-comp-hz-badge:hover { opacity:0.8; }
+  .so-comp-hz-detail { display:none; margin-top:6px; padding:8px 10px; background:#f8fafc; border-radius:6px; border-left:3px solid #94a3b8; font-size:11px; color:#475569; line-height:1.6; }
+  .so-comp-hz-detail.open { display:block; }
+  /* Bプラン風グリッド行 */
+  .so-comp-cpt-grid { overflow-x:auto; }
+  .so-comp-cpt-row { display:grid; grid-template-columns:90px repeat(var(--cols,5), 1fr); border-bottom:1px solid #f3f4f6; }
+  .so-comp-cpt-row:last-child { border-bottom:none; }
+  .so-comp-cpt-row-label { padding:9px 10px; font-size:11px; font-weight:600; color:#6b7280; background:#f9fafb; display:flex; align-items:center; white-space:nowrap; }
+  .so-comp-cpt-row-cell { padding:9px 10px; font-size:12px; text-align:center; display:flex; align-items:center; justify-content:center; word-break:break-all; }
+  .so-comp-cpt-row-cell.highlight { background:#fefce8; font-weight:700; }
+  .so-comp-cpt-expand-btn { grid-column:1/-1; padding:6px 10px; font-size:11px; color:#6b7280; cursor:pointer; text-align:center; background:#f9fafb; border-top:1px solid #f3f4f6; transition:background 0.15s; }
+  .so-comp-cpt-expand-btn:hover { background:#f3f4f6; color:#374151; }
+  .so-comp-cpt-hidden { display:none; }
+  .so-comp-cpt-hidden.open { display:grid; grid-template-columns:90px repeat(var(--cols,5), 1fr); }
+  /* 物件リンク */
+  .so-comp-prop-link { display:inline-block; padding:3px 10px; background:#eff6ff; color:#2563eb; border-radius:4px; font-size:11px; font-weight:600; text-decoration:none; transition:background 0.15s; }
+  .so-comp-prop-link:hover { background:#dbeafe; }
+  /* メモ */
+  .so-comp-memo-area { width:100%; padding:6px 8px; border:1px solid #e5e7eb; border-radius:6px; font-size:12px; resize:vertical; outline:none; font-family:inherit; }
+  .so-comp-memo-area:focus { border-color:#93c5fd; box-shadow:0 0 0 2px rgba(59,130,246,0.1); }
+  /* モーダル */
+  .so-comp-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9998; justify-content:center; align-items:flex-start; padding:20px 16px; overflow-y:auto; }
+  .so-comp-modal-overlay.open { display:flex; }
+  .so-comp-modal-box { background:#fff; border-radius:16px; max-width:560px; width:100%; margin:auto; padding:20px; max-height:90vh; overflow-y:auto; }
+  .so-comp-modal-close { width:32px; height:32px; border-radius:50%; background:#f3f4f6; border:none; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; color:#6b7280; }
+  .so-comp-modal-close:hover { background:#e5e7eb; }
+  .so-comp-fold-header { display:flex; align-items:center; justify-content:space-between; cursor:pointer; padding:8px 0; border-top:1px solid #f3f4f6; margin-top:8px; }
+  .so-comp-fold-header h4 { font-size:12px; font-weight:700; color:#6b7280; display:flex; align-items:center; gap:4px; margin:0; }
+  .so-comp-fold-body { display:none; padding-top:6px; }
+  .so-comp-fold-body.open { display:block; }
+  .so-comp-kv-row { display:flex; justify-content:space-between; align-items:baseline; padding:7px 0; border-bottom:1px solid #f3f4f6; }
+  .so-comp-kv-row:last-child { border-bottom:none; }
+  .so-comp-kv-label { font-size:11px; color:#6b7280; }
+  .so-comp-kv-value { font-size:12px; font-weight:600; text-align:right; max-width:60%; }
+  .so-comp-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:#e5e7eb; border-radius:8px; overflow:hidden; }
+  .so-comp-info-cell { background:#fff; padding:8px 10px; }
+  .so-comp-info-cell-label { font-size:10px; color:#9ca3af; margin-bottom:1px; }
+  .so-comp-info-cell-value { font-size:12px; font-weight:600; }
+  .so-comp-m-score-row { display:flex; align-items:center; gap:6px; padding:6px 8px; background:#f9fafb; border-radius:6px; margin-bottom:4px; }
+  .so-comp-m-score-label { font-size:11px; color:#6b7280; width:50px; }
+  .so-comp-m-score-bar { flex:1; height:5px; background:#e5e7eb; border-radius:99px; overflow:hidden; }
+  .so-comp-m-score-fill { height:100%; border-radius:99px; }
+  .so-comp-m-score-val { font-size:12px; font-weight:700; width:28px; text-align:right; }
+  .so-comp-editable-cell { cursor:pointer; border-bottom:1px dashed #cbd5e1; transition:background 0.15s; }
+  .so-comp-editable-cell:hover { background:#eff6ff; }
+  @media (max-width:640px) {
+    .so-comp-summary-card { min-width:130px; }
+    .so-comp-t-table td { min-width:100px; }
+    .so-comp-cpt-row { grid-template-columns:80px repeat(var(--cols,5), 1fr); }
+    .so-comp-cpt-row-cell { font-size:11px; padding:8px 6px; }
   }
 </style>
 </head>
@@ -1556,31 +1670,47 @@ function renderComparisonSidebar() {
 
   return `
     <div class="flex-shrink-0" style="width:220px;">
-      <div class="card p-3 sticky" style="top:1rem;">
-        <h3 class="text-xs font-bold text-gray-500 uppercase mb-3">📂 比較表一覧</h3>
-        ${isCompareView ? `
-          <button onclick="state.soView=null; state.soComparison=null; render();" class="w-full mb-3 px-3 py-2 text-xs bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors text-left">
-            ← 物件リストに戻る
-          </button>
-        ` : ''}
-        <div class="space-y-1 max-h-96 overflow-y-auto">
-          ${comps.length === 0 ? `<p class="text-xs text-gray-400 py-2">比較表を作成すると<br>ここに一覧表示されます</p>` : ''}
-          ${comps.map(c => {
-            const isActive = isCompareView && c.id === currentId;
-            const dateStr = c.created_at ? new Date(c.created_at).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' }) : '';
-            return `
-              <div class="group rounded-lg p-2 cursor-pointer transition-colors ${isActive ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50 border border-transparent'}" onclick="loadComparisonDetail('${c.id}')">
-                <div class="flex items-start justify-between gap-1">
-                  <div class="flex-1 min-w-0">
-                    <div class="text-xs font-medium ${isActive ? 'text-blue-700' : 'text-gray-700'} truncate">${c.name || '比較表'}</div>
-                    <div class="text-xs text-gray-400">${dateStr} · ${(c.property_ids||[]).length}件</div>
+      <!-- デスクトップ版サイドバー -->
+      <div class="comp-sidebar-desktop">
+        <div class="card p-3 sticky" style="top:1rem;">
+          <h3 class="text-xs font-bold text-gray-500 uppercase mb-3">📂 比較表一覧</h3>
+          ${isCompareView ? `
+            <button onclick="state.soView=null; state.soComparison=null; render();" class="w-full mb-3 px-3 py-2 text-xs bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors text-left">
+              ← 物件リストに戻る
+            </button>
+          ` : ''}
+          <div class="space-y-1 max-h-96 overflow-y-auto">
+            ${comps.length === 0 ? `<p class="text-xs text-gray-400 py-2">比較表を作成すると<br>ここに一覧表示されます</p>` : ''}
+            ${comps.map(c => {
+              const isActive = isCompareView && c.id === currentId;
+              const dateStr = c.created_at ? new Date(c.created_at).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' }) : '';
+              return `
+                <div class="group rounded-lg p-2 cursor-pointer transition-colors ${isActive ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50 border border-transparent'}" onclick="loadComparisonDetail('${c.id}')">
+                  <div class="flex items-start justify-between gap-1">
+                    <div class="flex-1 min-w-0">
+                      <div class="text-xs font-medium ${isActive ? 'text-blue-700' : 'text-gray-700'} truncate">${c.name || '比較表'}</div>
+                      <div class="text-xs text-gray-400">${dateStr} · ${(c.property_ids||[]).length}件</div>
+                    </div>
+                    <button onclick="event.stopPropagation(); handleDeleteComparison('${c.id}')" class="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 text-xs transition-opacity" title="削除">✕</button>
                   </div>
-                  <button onclick="event.stopPropagation(); handleDeleteComparison('${c.id}')" class="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 text-xs transition-opacity" title="削除">✕</button>
                 </div>
-              </div>
-            `;
-          }).join('')}
+              `;
+            }).join('')}
+          </div>
         </div>
+      </div>
+      <!-- モバイル版コンパクトバー -->
+      <div class="comp-sidebar-mobile">
+        <button class="comp-mobile-back-btn" onclick="state.soView=null; state.soComparison=null; render();" title="物件リストへ戻る">←</button>
+        <select onchange="if(this.value) loadComparisonDetail(this.value);">
+          ${comps.length === 0 ? `<option value="">比較表なし</option>` : ''}
+          ${comps.map(c => {
+            const dateStr = c.created_at ? new Date(c.created_at).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' }) : '';
+            const n = (c.property_ids||[]).length;
+            return `<option value="${c.id}" ${c.id === currentId ? 'selected' : ''}>${c.name || '比較表'} (${dateStr} ${n}件)</option>`;
+          }).join('')}
+        </select>
+        <span class="comp-mobile-count">${comps.length}表</span>
       </div>
     </div>
   `;
@@ -1604,51 +1734,319 @@ function renderComparisonTable() {
   if (props.length === 0) return '';
 
   const labels = ['A','B','C','D','E'];
+  const COLORS = ['#2563eb','#16a34a','#9333ea','#f59e0b','#ef4444'];
 
-  // editable=true のセルはクリックで編集可能（テキスト型）
-  // editable='number' は万円単位の数値入力
-  const rows = [
-    { label: '価格', key: 'price', fmt: v => v ? `${(v/10000).toLocaleString()}万円` : '—', editable: 'price' },
-    { label: '土地面積', key: 'land_area', fmt: v => v ? `${(v/3.305785).toFixed(1)}坪（${v}㎡）` : '—', editable: 'area' },
-    { label: '坪単価', key: '_tsubo', fmt: (v, p) => p.price && p.land_area ? `${(p.price / (p.land_area / 3.305785) / 10000).toFixed(1)}万円/坪` : '—' },
-    { label: '所在地', key: 'address', fmt: v => v || '—', editable: true },
-    { label: '駅距離', key: 'station_distance', fmt: v => v || '—', editable: true },
-  ];
-  const checkRows = [
-    { label: '用途地域', key: 'zoning', editable: true },
-    { label: '建ぺい率', key: 'building_coverage', editable: true },
-    { label: '容積率', key: 'floor_area_ratio', editable: true },
-    { label: '接道', key: 'road_access', editable: true },
-    { label: '高低差/造成', key: 'elevation', editable: true },
-    { label: 'インフラ', key: 'infrastructure', editable: true },
-    { label: 'ハザード', key: 'hazard', editable: true },
-  ];
+  // ===== スコア計算 =====
+  const allScores = props.map(p => calculateScores(p, state.userProfile));
+  const hasScores = allScores.some(s => s);
+  const maxTotal = Math.max(...allScores.map(s => s ? s.score_total : 0));
+  const bestIdx = hasScores ? allScores.findIndex(s => s && s.score_total === maxTotal && maxTotal > 0) : -1;
+  const hasLifestyle = allScores.some(s => s && s.score_lifestyle !== null);
 
-  function editableCell(prop, key, displayVal, editType) {
-    const propId = prop.id;
-    const escaped = (typeof displayVal === 'string' ? displayVal : String(displayVal || '')).replace(/"/g, '&quot;');
-    const editHint = editType ? ' title="クリックして編集" style="cursor:pointer;border-bottom:1px dashed #cbd5e1;"' : '';
-    if (!editType) return `<td class="p-3 text-sm text-gray-800">${displayVal}</td>`;
-    return `<td class="p-3 text-sm text-gray-800 hover:bg-blue-50 transition-colors" onclick="startCellEdit(this, '${propId}', '${key}', '${editType}')"${editHint}>${displayVal}<span class="text-gray-300 text-xs ml-1">✏️</span></td>`;
+  // ===== スコア色 =====
+  function sc(v) { return v >= 80 ? '#16a34a' : v >= 60 ? '#2563eb' : v >= 40 ? '#f59e0b' : '#dc2626'; }
+
+  // ===== 建築費 =====
+  const costs = props.map(p => calcBuildingCost(p));
+  const fmtYen = v => v >= 100000000 ? (v/100000000).toFixed(2) + '億円' : (v/10000).toLocaleString() + '万円';
+
+  // ===== ハザードリスクレベル =====
+  function compRiskLevel(text) {
+    if (!text) return 'unknown';
+    const first = text.split(/[。（(]/)[0].trim();
+    if (/^高/.test(first)) return 'high';
+    if (/^中/.test(first)) return 'mid';
+    if (/^低/.test(first)) return 'low';
+    if (first.includes('高')) return 'high';
+    if (first.includes('中')) return 'mid';
+    return 'low';
+  }
+  function compRiskBadgeHtml(text, id) {
+    if (!text) return '<span style="color:#9ca3af;">—</span>';
+    const level = compRiskLevel(text);
+    const cls = level === 'high' ? 'so-comp-hz-high' : level === 'mid' ? 'so-comp-hz-mid' : 'so-comp-hz-low';
+    const lbl = level === 'high' ? '高' : level === 'mid' ? '中' : '低';
+    return '<div>' +
+      '<span class="so-comp-hz-badge ' + cls + '" onclick="event.stopPropagation();toggleCompHzDetail(\'' + id + '\')">' +
+      (lbl === '低' ? '✓' : '⚠') + ' ' + lbl + 'リスク <span style="font-size:9px;opacity:0.7;">▼</span></span>' +
+      '<div class="so-comp-hz-detail" id="' + id + '">' + text + '</div></div>';
   }
 
+  // ===== questions =====
   let questions = [];
   try { questions = typeof comp.questions === 'string' ? JSON.parse(comp.questions) : (comp.questions || []); } catch(e) { questions = []; }
   if (typeof questions === 'string') questions = questions.split('\n').filter(q => q.trim());
 
+  // ===== 編集可能セル（テーブル用） =====
+  function editTd(prop, key, displayVal, editType) {
+    if (!editType) return '<td style="padding:8px 10px;font-size:12px;color:#1f2937;min-width:120px;border-bottom:1px solid #f3f4f6;vertical-align:top;">' + displayVal + '</td>';
+    return '<td class="so-comp-editable-cell" style="padding:8px 10px;font-size:12px;color:#1f2937;min-width:120px;border-bottom:1px solid #f3f4f6;vertical-align:top;" onclick="startCellEdit(this, \'' + prop.id + '\', \'' + key + '\', \'' + editType + '\')" title="クリックして編集">' + displayVal + '<span style="color:#d1d5db;font-size:10px;margin-left:3px;">✏️</span></td>';
+  }
+
+  // ===== サマリーカード =====
+  const summaryCards = `<div class="so-comp-summary-bar">
+    ${props.map((p, i) => {
+      const s = allScores[i];
+      const isBest = i === bestIdx;
+      const score = s ? s.score_total : '—';
+      const priceStr = p.price ? (p.price/10000).toLocaleString() + '万円' : '—';
+      const tsubo = p.land_area ? (p.land_area / 3.305785).toFixed(1) : '';
+      const tsuboPrice = p.price && p.land_area ? (p.price / (p.land_area / 3.305785) / 10000).toFixed(1) + '万/坪' : '';
+      const subStr = [tsubo ? tsubo + '坪' : '', tsuboPrice].filter(Boolean).join(' · ');
+      return '<div class="so-comp-summary-card' + (isBest ? ' best' : '') + '" onclick="openPropertyDetailModal(' + i + ')">' +
+        '<div class="so-comp-label-chip" style="background:' + COLORS[i] + ';">' + labels[i] + '</div>' +
+        '<div class="so-comp-summary-name">' + (p.address || AREAS.find(a=>a.id===p.area_id)?.name || '物件' + labels[i]) + '</div>' +
+        '<div class="so-comp-summary-score" style="color:' + (s ? sc(s.score_total) : '#9ca3af') + ';">' + score + '</div>' +
+        '<div class="so-comp-summary-score-label">総合スコア</div>' +
+        '<div class="so-comp-summary-price">' + priceStr + '</div>' +
+        '<div class="so-comp-summary-sub">' + subStr + '</div>' +
+      '</div>';
+    }).join('')}
+  </div>`;
+
+  // ===== アコーディオンヘルパー =====
+  function accSection(id, icon, title, count, isOpen, bodyHtml) {
+    return '<div class="so-comp-acc-section' + (isOpen ? ' open' : '') + '" id="so-comp-acc-' + id + '">' +
+      '<div class="so-comp-acc-header" onclick="toggleCompAccordion(\'so-comp-acc-' + id + '\')">' +
+      '<h3>' + icon + ' ' + title + (count ? ' <span class="so-comp-count">（' + count + '）</span>' : '') + '</h3>' +
+      '<span class="so-comp-chev">▼</span></div>' +
+      '<div class="so-comp-acc-body">' + bodyHtml + '</div></div>';
+  }
+
+  // ===== セクション: スコア比較 =====
+  function renderScoreSection() {
+    if (!hasScores) return '<div style="padding:14px;font-size:12px;color:#9ca3af;">スコアデータなし（AI分析後に表示）</div>';
+    const scoreKeys = ['score_safety','score_convenience','score_cost'];
+    if (hasLifestyle) scoreKeys.push('score_lifestyle');
+    const labelMap = {score_safety:'🛡️ 安全', score_convenience:'🏪 利便', score_cost:'💰 コスト', score_lifestyle:'🏡 ライフ'};
+    let html = '<div style="overflow-x:auto;"><table class="so-comp-t-table">';
+    // 総合
+    html += '<tr><th>総合</th>' + props.map((p,i) => {
+      const s = allScores[i];
+      if (!s) return '<td style="text-align:center;color:#d1d5db;">—</td>';
+      const isBest = s.score_total === maxTotal && maxTotal > 0;
+      return '<td class="' + (isBest ? 'so-comp-highlight-cell' : '') + '" style="text-align:center;">' +
+        '<span style="font-size:20px;font-weight:900;color:' + sc(s.score_total) + ';">' + s.score_total + '</span>' +
+        (isBest ? ' 👑' : '') + '</td>';
+    }).join('') + '</tr>';
+    // カテゴリ
+    scoreKeys.forEach(key => {
+      const vals = allScores.map(s => s && s[key] != null ? s[key] : 0);
+      const maxCat = Math.max(...vals);
+      html += '<tr><th>' + labelMap[key] + '</th>' + props.map((p,i) => {
+        const s = allScores[i];
+        if (!s || s[key] == null) return '<td style="text-align:center;color:#d1d5db;">—</td>';
+        const v = s[key];
+        const best = v === maxCat && maxCat > 0;
+        return '<td class="' + (best ? 'so-comp-highlight-cell' : '') + '">' +
+          '<div class="so-comp-score-bar"><div class="so-comp-score-bar-track"><div class="so-comp-score-bar-fill" style="width:' + v + '%;background:' + sc(v) + ';"></div></div>' +
+          '<span class="so-comp-score-val" style="color:' + sc(v) + ';">' + v + '</span>' +
+          (best ? '<span style="font-size:9px;">★</span>' : '') + '</div></td>';
+      }).join('') + '</tr>';
+    });
+    html += '</table></div>';
+    return html;
+  }
+
+  // ===== セクション: 基本情報 =====
+  function renderBasicSection() {
+    const basicRows = [
+      { label: '価格', key: 'price', fmt: v => v ? (v/10000).toLocaleString() + '万円' : '—', edit: 'price' },
+      { label: '土地面積', key: 'land_area', fmt: v => v ? (v/3.305785).toFixed(1) + '坪（' + v + '㎡）' : '—', edit: 'area' },
+      { label: '坪単価', key: '_tsubo', fmt: (v,p) => p.price && p.land_area ? (p.price/(p.land_area/3.305785)/10000).toFixed(1) + '万円/坪' : '—' },
+      { label: '所在地', key: 'address', fmt: v => v || '—', edit: true },
+      { label: '駅距離', key: 'station_distance', fmt: v => v || '—', edit: true },
+    ];
+    let html = '<div style="overflow-x:auto;"><table class="so-comp-t-table">';
+    basicRows.forEach(r => {
+      html += '<tr><th>' + r.label + '</th>' +
+        props.map(p => editTd(p, r.key, r.fmt(p[r.key], p), r.edit)).join('') + '</tr>';
+    });
+    // 物件ページリンク
+    html += '<tr><th>物件ページ</th>' + props.map(p =>
+      '<td style="padding:8px 10px;border-bottom:1px solid #f3f4f6;">' +
+      (p.url ? '<a href="' + p.url + '" target="_blank" rel="noopener" class="so-comp-prop-link">🔗 物件ページ</a>' : '<span style="color:#d1d5db;">—</span>') +
+      '</td>'
+    ).join('') + '</tr>';
+    html += '</table></div>';
+    return html;
+  }
+
+  // ===== セクション: 重要確認項目（コンパクト+展開） =====
+  function renderCheckSection() {
+    const items = [
+      { label: '用途地域', key: 'zoning' },
+      { label: '建ぺい率/容積率', key: '_cov_far', fmt: p => [p.building_coverage, p.floor_area_ratio].filter(Boolean).join(' / ') || '' },
+      { label: '接道', key: 'road_access' },
+      { label: '高低差/造成', key: 'elevation' },
+      { label: 'インフラ', key: 'infrastructure' },
+      { label: 'ハザード', key: 'hazard' },
+    ];
+    const cols = props.length;
+    const visible = items.slice(0, 3);
+    const hidden = items.slice(3);
+    let html = '<div class="so-comp-cpt-grid">';
+    visible.forEach(r => {
+      html += '<div class="so-comp-cpt-row" style="--cols:' + cols + '">' +
+        '<div class="so-comp-cpt-row-label">' + r.label + '</div>' +
+        props.map(p => {
+          const val = r.fmt ? r.fmt(p) : p[r.key];
+          return '<div class="so-comp-cpt-row-cell so-comp-editable-cell" onclick="startCellEdit(this,\'' + p.id + '\',\'' + (r.key.startsWith('_') ? 'building_coverage' : r.key) + '\',true)">' + (val || '<span style="color:#d97706;">🟡 不明</span>') + '</div>';
+        }).join('') + '</div>';
+    });
+    if (hidden.length > 0) {
+      html += '<div class="so-comp-cpt-expand-btn" onclick="toggleCompExpandRows(\'so-comp-check-extra\');this.textContent=this.textContent.includes(\'▼\')?\'▲ 閉じる\':\'▼ 他' + hidden.length + '項目を見る\';">▼ 他' + hidden.length + '項目を見る</div>';
+      hidden.forEach(r => {
+        html += '<div class="so-comp-cpt-hidden so-comp-check-extra" style="--cols:' + cols + '">' +
+          '<div class="so-comp-cpt-row-label">' + r.label + '</div>' +
+          props.map(p => {
+            const val = r.fmt ? r.fmt(p) : p[r.key];
+            const display = val || '<span style="color:#d97706;">🟡 不明</span>';
+            const hazardStyle = r.key === 'hazard' && val ? 'color:#dc2626;font-weight:600;font-size:10px;' : '';
+            return '<div class="so-comp-cpt-row-cell so-comp-editable-cell" style="' + hazardStyle + '" onclick="startCellEdit(this,\'' + p.id + '\',\'' + r.key + '\',true)">' + (r.key === 'hazard' && !val ? '<span style="color:#16a34a;">記載なし</span>' : display) + '</div>';
+          }).join('') + '</div>';
+      });
+    }
+    html += '</div>';
+    return html;
+  }
+
+  // ===== セクション: 建築費シミュレーション =====
+  function renderBuildSection() {
+    const buildRows = [
+      { label: '最大建築面積', fmt: c => c ? c.maxBuildingArea.toFixed(1) + ' ㎡' : '—' },
+      { label: '最大延床面積', fmt: c => c ? c.maxFloorArea.toFixed(1) + ' ㎡（' + c.maxFloorAreaTsubo.toFixed(1) + '坪）' : '—' },
+      { label: 'ローコスト', fmt: c => c ? fmtYen(c.costLow) : '—' },
+      { label: 'スタンダード', fmt: c => c ? '<strong style="color:#1e40af;">' + fmtYen(c.costStd) + '</strong>' : '—' },
+      { label: 'ハイグレード', fmt: c => c ? fmtYen(c.costHigh) : '—' },
+      { label: '諸費用(8%)', fmt: c => c ? fmtYen(c.misc) : '—' },
+    ];
+    let html = '<div style="overflow-x:auto;"><table class="so-comp-t-table">';
+    buildRows.forEach(r => {
+      html += '<tr><th>' + r.label + '</th>' + props.map((p,i) => {
+        const c = costs[i];
+        if (c) return '<td>' + r.fmt(c) + '</td>';
+        return '<td class="so-comp-editable-cell" onclick="startCellEdit(this,\'' + p.id + '\',\'building_coverage\',true)" title="建蔽率・容積率を入力すると算出"><span style="color:#d1d5db;">—</span> <span style="color:#d1d5db;font-size:10px;">✏️</span></td>';
+      }).join('') + '</tr>';
+    });
+    html += '<tr style="border-top:2px solid #fed7aa;background:#fff7ed;"><th style="color:#c2410c;font-weight:700;">💰 総額目安</th>' +
+      props.map((p,i) => {
+        const c = costs[i];
+        return c ? '<td style="font-weight:900;color:#c2410c;font-size:13px;">' + fmtYen(c.totalEstimate) + '<br><span style="font-size:10px;font-weight:400;color:#9ca3af;">（土地代+建築費std+諸費用）</span></td>' : '<td style="color:#d1d5db;">—</td>';
+      }).join('') + '</tr></table></div>';
+    return html;
+  }
+
+  // ===== セクション: 周辺環境（コンパクト+展開） =====
+  function renderEnvSection() {
+    const hasEnrich = props.some(p => p.enrichment_status === 'done');
+    if (!hasEnrich && !props.some(p => p.lat && p.lng)) return '<div style="padding:14px;font-size:12px;color:#9ca3af;">AI分析後に表示されます</div>';
+    const envItems = [
+      { label: '小学校区', key: 'school_elementary' },
+      { label: '最寄スーパー', key: 'nearest_supermarket' },
+      { label: '最寄病院', key: 'nearest_hospital' },
+      { label: '中学校区', key: 'school_junior_high' },
+      { label: '最寄公園', key: 'nearest_park' },
+      { label: '最寄保育園', key: 'nearest_nursery' },
+    ];
+    const cols = props.length;
+    const visible = envItems.slice(0, 3);
+    const hidden = envItems.slice(3);
+
+    function envCell(p, key) {
+      if (p.enrichment_status === 'done') return p[key] || '<span style="color:#d1d5db;">—</span>';
+      if (p.enrichment_status === 'pending') return '<span style="color:#f59e0b;">⏳ 取得中...</span>';
+      if (p.lat && p.lng) return '<button onclick="handleEnrichProperty(\'' + p.id + '\')" style="color:#2563eb;font-size:11px;cursor:pointer;background:none;border:none;text-decoration:underline;">🔍 取得する</button>';
+      return '<span style="color:#d1d5db;">位置情報なし</span>';
+    }
+
+    let html = '<div class="so-comp-cpt-grid">';
+    visible.forEach(r => {
+      html += '<div class="so-comp-cpt-row" style="--cols:' + cols + '">' +
+        '<div class="so-comp-cpt-row-label">' + r.label + '</div>' +
+        props.map(p => '<div class="so-comp-cpt-row-cell">' + envCell(p, r.key) + '</div>').join('') + '</div>';
+    });
+    if (hidden.length > 0) {
+      html += '<div class="so-comp-cpt-expand-btn" onclick="toggleCompExpandRows(\'so-comp-env-extra\');this.textContent=this.textContent.includes(\'▼\')?\'▲ 閉じる\':\'▼ 他' + hidden.length + '施設を見る\';">▼ 他' + hidden.length + '施設を見る</div>';
+      hidden.forEach(r => {
+        html += '<div class="so-comp-cpt-hidden so-comp-env-extra" style="--cols:' + cols + '">' +
+          '<div class="so-comp-cpt-row-label">' + r.label + '</div>' +
+          props.map(p => '<div class="so-comp-cpt-row-cell">' + envCell(p, r.key) + '</div>').join('') + '</div>';
+      });
+    }
+    html += '</div>';
+    return html;
+  }
+
+  // ===== セクション: ハザード・地盤 =====
+  function renderHazardSection() {
+    const hasEnrich = props.some(p => p.enrichment_status === 'done');
+    if (!hasEnrich && !props.some(p => p.lat && p.lng)) return '<div style="padding:14px;font-size:12px;color:#9ca3af;">AI分析後に表示されます</div>';
+    const hazardItems = [
+      { label: '洪水リスク', key: 'hazard_flood' },
+      { label: '土砂災害', key: 'hazard_sediment' },
+      { label: '津波リスク', key: 'hazard_tsunami' },
+      { label: '地盤', key: 'ground_type' },
+    ];
+    let html = '<div style="overflow-x:auto;"><table class="so-comp-t-table">';
+    hazardItems.forEach(r => {
+      html += '<tr><th>' + r.label + '</th>' + props.map((p,i) => {
+        if (p.enrichment_status === 'done') {
+          return '<td>' + compRiskBadgeHtml(p[r.key], 'so-hz-' + r.key + '-' + i) + '</td>';
+        } else if (p.enrichment_status === 'pending') {
+          return '<td style="color:#f59e0b;font-size:11px;">⏳ 取得中...</td>';
+        } else if (p.lat && p.lng) {
+          return '<td><button onclick="handleEnrichProperty(\'' + p.id + '\')" style="color:#2563eb;font-size:11px;cursor:pointer;background:none;border:none;text-decoration:underline;">🔍 取得する</button></td>';
+        }
+        return '<td style="color:#d1d5db;font-size:11px;">位置情報なし</td>';
+      }).join('') + '</tr>';
+    });
+    html += '</table></div>';
+    return html;
+  }
+
+  // ===== セクション: AIコメント =====
+  function renderAICommentSection() {
+    if (!props.some(p => p.ai_comment)) return '<div style="padding:14px;font-size:12px;color:#9ca3af;">AIコメントなし</div>';
+    let html = '<div style="overflow-x:auto;"><table class="so-comp-t-table"><tr><th>AIコメント</th>';
+    html += props.map(p => '<td style="font-size:11px;line-height:1.6;">' + (p.ai_comment || '<span style="color:#d1d5db;">—</span>') + '</td>').join('');
+    html += '</tr></table></div>';
+    return html;
+  }
+
+  // ===== セクション: メモ =====
+  function renderMemoSection() {
+    let html = '<div style="overflow-x:auto;"><table class="so-comp-t-table"><tr><th>メモ</th>';
+    html += props.map(p => '<td style="padding:6px;"><textarea class="so-comp-memo-area" rows="2" placeholder="自由にメモを入力..." onblur="handleMemoEdit(\'' + p.id + '\', this.value)">' + (p.user_memo || p.memo || '') + '</textarea></td>').join('');
+    html += '</tr></table></div>';
+    return html;
+  }
+
+  // ===== メインHTML組み立て =====
+  const accSections = [
+    accSection('scores', '📊', 'スコア比較', '', true, renderScoreSection()),
+    accSection('basic', '📍', '基本情報', '5項目', false, renderBasicSection()),
+    accSection('check', '⚠️', '重要確認項目', '6項目', false, renderCheckSection()),
+    accSection('build', '🏗️', '建築費シミュレーション', '総額比較', false, renderBuildSection()),
+    accSection('env', '🔍', '周辺環境', '6施設', false, renderEnvSection()),
+    accSection('hazard', '🛡️', 'ハザード・地盤', '4項目', false, renderHazardSection()),
+    accSection('aicomment', '💬', 'AIコメント', '', false, renderAICommentSection()),
+    accSection('memo', '📝', 'メモ', '', false, renderMemoSection()),
+  ].join('');
+
   return `
-    <div class="space-y-4 fade-in">
+    <div class="space-y-3 fade-in">
       <div class="flex items-center gap-3 flex-wrap">
         <h2 class="text-lg font-bold text-gray-800">📊</h2>
         <span id="comp-name-display" class="text-lg font-bold text-gray-800 cursor-pointer hover:text-blue-600 border-b border-dashed border-gray-300" onclick="startCompNameEdit()" title="クリックして名前を変更">${comp.name || '比較表'}</span>
-        <span class="text-xs text-gray-400">（セルをクリックして編集可能）</span>
+        <span class="text-xs text-gray-400">（カードクリックで詳細表示）</span>
         <button onclick="exportComparisonCSV()" class="ml-auto px-3 py-1 text-xs rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">📥 CSV出力</button>
       </div>
 
       ${comp.summary ? `
-        <div class="card p-4 bg-blue-50 border-blue-200">
-          <h3 class="text-sm font-bold text-blue-800 mb-2">💡 AIサマリ</h3>
-          <p class="text-sm text-gray-700 leading-relaxed">${comp.summary}</p>
+        <div style="padding:14px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;">
+          <div style="font-size:12px;font-weight:700;color:#1d4ed8;margin-bottom:4px;">💡 AIサマリ</div>
+          <div style="font-size:13px;color:#374151;line-height:1.7;">${comp.summary}</div>
         </div>
       ` : ''}
 
@@ -1666,158 +2064,12 @@ function renderComparisonTable() {
         </div>
       ` : ''}
 
-      <div class="card overflow-x-auto">
-        <table class="so-compare-table">
-          <thead>
-            <tr>
-              <th class="text-left p-3 bg-gray-50 text-xs text-gray-500 font-medium" style="min-width:80px;"></th>
-              ${props.map((p,i) => `
-                <th class="p-3 bg-gray-50 text-sm font-bold text-gray-800" style="min-width:140px;">
-                  物件${labels[i]}<br><span class="text-xs font-normal text-gray-400">${AREAS.find(a=>a.id===p.area_id)?.name || (p.address ? AREAS.find(a=>p.address.includes(a.name))?.name : '') || ''}</span>
-                  ${p.url ? `<br><a href="${p.url}" target="_blank" rel="noopener" class="text-xs text-blue-500 font-normal hover:underline">🔗 物件ページ</a>` : ''}
-                </th>
-              `).join('')}
-            </tr>
-          </thead>
-          <tbody>
-            ${(() => {
-              if (!props.some(p => p.enrichment_status === 'done')) return '';
-              const allScores = props.map(p => calculateScores(p, state.userProfile));
-              const maxTotal = Math.max(...allScores.map(s => s ? s.score_total : 0));
-              const hasLifestyle = allScores.some(s => s && s.score_lifestyle !== null);
-              const scoreKeys = ['score_safety','score_convenience','score_cost'];
-              if (hasLifestyle) scoreKeys.push('score_lifestyle');
-              const labelMap = {score_safety:'🛡️ 安全', score_convenience:'🏪 利便', score_cost:'💰 コスト', score_lifestyle:'🏡 ライフ'};
-              const scoreRows = scoreKeys.map(key => {
-                const maxCat = Math.max(...allScores.map(s => s && s[key] != null ? s[key] : 0));
-                return '<tr>' +
-                  '<td class="p-2 text-xs font-medium text-gray-500 bg-gray-50">' + labelMap[key] + '</td>' +
-                  props.map((p, i) => {
-                    const s = allScores[i];
-                    if (!s || s[key] == null) return '<td class="p-2 text-center text-xs text-gray-300">—</td>';
-                    const v = s[key];
-                    const color = getScoreColor(v);
-                    const isBest = v === maxCat && maxCat > 0;
-                    return '<td class="p-2 text-center">' +
-                      '<div style="display:inline-flex;align-items:center;gap:4px;">' +
-                      '<div style="width:50px;height:6px;background:#e5e7eb;border-radius:9999px;overflow:hidden;"><div style="height:100%;border-radius:9999px;width:' + v + '%;background:' + color + ';"></div></div>' +
-                      '<span class="text-xs font-semibold" style="color:' + color + ';">' + v + '</span>' +
-                      (isBest ? '<span style="font-size:9px;">★</span>' : '') +
-                      '</div></td>';
-                  }).join('') + '</tr>';
-              }).join('');
-              const lifestyleBadge = hasLifestyle ? '<span class="text-xs text-purple-500 ml-2">🏡 ライフスタイルスコアあり</span>' : '';
-              return '<tr><td colspan="' + (props.length + 1) + '" class="p-2 bg-purple-50"><span class="text-xs font-bold text-purple-700">📈 スコア比較</span>' + lifestyleBadge + '</td></tr>' +
-                '<tr style="border-bottom:2px solid #e5e7eb;">' +
-                '<td class="p-2 text-xs font-bold text-gray-600 bg-gray-50">総合</td>' +
-                props.map((p, i) => {
-                  const s = allScores[i];
-                  if (!s) return '<td class="p-2 text-center text-xs text-gray-300">—</td>';
-                  const isBest = s.score_total === maxTotal && maxTotal > 0;
-                  return '<td class="p-2 text-center">' +
-                    '<div style="text-align:center;font-size:1.5rem;font-weight:900;color:' + getScoreColor(s.score_total) + ';">' + s.score_total +
-                    (isBest ? '<span style="font-size:0.75rem;margin-left:2px;">👑</span>' : '') + '</div></td>';
-                }).join('') + '</tr>' + scoreRows;
-            })()}
-            ${rows.map(r => `
-              <tr>
-                <td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">${r.label}</td>
-                ${props.map(p => editableCell(p, r.key, r.fmt(p[r.key], p), r.editable)).join('')}
-              </tr>
-            `).join('')}
-            ${props.some(p => p.ai_comment) ? `
-            <tr>
-              <td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">💬 AIコメント</td>
-              ${props.map(p => `<td class="p-3 text-xs text-gray-700">${p.ai_comment || '<span class="text-gray-300">—</span>'}</td>`).join('')}
-            </tr>
-            ` : ''}
-            <tr><td colspan="${props.length+1}" class="p-2 bg-amber-50"><span class="text-xs font-bold text-amber-700">⚠️ 重要確認項目（不動産屋に確認）</span></td></tr>
-            ${checkRows.map(r => `
-              <tr>
-                <td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">${r.label}</td>
-                ${props.map(p => {
-                  const val = p[r.key];
-                  const display = val ? val : '🟡 不明';
-                  const cls = val ? 'text-gray-800' : 'text-amber-600';
-                  return `<td class="p-3 text-sm ${cls} hover:bg-blue-50 transition-colors" onclick="startCellEdit(this, '${p.id}', '${r.key}', true)" title="クリックして編集" style="cursor:pointer;border-bottom:1px dashed #cbd5e1;">${display}<span class="text-gray-300 text-xs ml-1">✏️</span></td>`;
-                }).join('')}
-              </tr>
-            `).join('')}
-            <!-- 建築費シミュレーション -->
-            ${(() => {
-              const costs = props.map(p => calcBuildingCost(p));
-              const fmtYen = v => v >= 100000000 ? (v/100000000).toFixed(2) + '億円' : (v/10000).toLocaleString() + '万円';
-              const buildRows = [
-                { label: '最大建築面積', fmt: (c, p) => c ? c.maxBuildingArea.toFixed(1) + ' ㎡' : '—' },
-                { label: '最大延床面積', fmt: (c, p) => c ? c.maxFloorArea.toFixed(1) + ' ㎡（' + c.maxFloorAreaTsubo.toFixed(1) + '坪）' : '—' },
-                { label: '建築費 ローコスト', fmt: (c, p) => c ? fmtYen(c.costLow) : '—' },
-                { label: '建築費 スタンダード', fmt: (c, p) => c ? fmtYen(c.costStd) : '—' },
-                { label: '建築費 ハイグレード', fmt: (c, p) => c ? fmtYen(c.costHigh) : '—' },
-                { label: '諸費用概算(8%)', fmt: (c, p) => c ? fmtYen(c.misc) : '—' },
-              ];
-              return `
-              <tr><td colspan="${props.length+1}" class="p-2 bg-orange-50"><span class="text-xs font-bold text-orange-700">🏗️ 建築費シミュレーション</span><span class="text-xs text-gray-400 ml-2">※建蔽率・容積率から自動算出</span></td></tr>
-              ${buildRows.map(r => '<tr><td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">' + r.label + '</td>' +
-                props.map((p, i) => {
-                  const c = costs[i];
-                  if (c) return '<td class="p-3 text-sm text-gray-800">' + r.fmt(c, p) + '</td>';
-                  return '<td class="p-3 text-sm text-gray-400 hover:bg-blue-50 transition-colors" onclick="startCellEdit(this, \'' + p.id + '\', \'building_coverage\', true)" title="建蔽率・容積率を入力すると算出されます" style="cursor:pointer;border-bottom:1px dashed #cbd5e1;">—<span class="text-gray-300 text-xs ml-1">✏️</span></td>';
-                }).join('') + '</tr>').join('')}
-              <tr style="border-top:2px solid #fed7aa;"><td class="p-3 text-xs font-bold text-orange-800 bg-orange-50">💰 総額目安</td>${
-                props.map((p, i) => {
-                  const c = costs[i];
-                  if (c) return '<td class="p-3 text-sm font-bold text-orange-800" style="background:#fff7ed;"><strong>' + fmtYen(c.totalEstimate) + '</strong><br><span class="text-xs font-normal text-gray-400">（土地代+建築費std+諸費用）</span></td>';
-                  return '<td class="p-3 text-sm text-gray-400" style="background:#fff7ed;">—</td>';
-                }).join('')
-              }</tr>`;
-            })()}
-            <!-- AI詳細情報（enrichment） -->
-            ${props.some(p => p.enrichment_status === 'done') || props.some(p => p.lat && p.lng) ? `
-              <tr><td colspan="${props.length+1}" class="p-2 bg-blue-50"><span class="text-xs font-bold text-blue-700">🔍 AI自動取得情報（周辺環境・ハザード）</span></td></tr>
-              ${[
-                { label: '小学校区', key: 'school_elementary' },
-                { label: '中学校区', key: 'school_junior_high' },
-                { label: '最寄スーパー', key: 'nearest_supermarket' },
-                { label: '最寄病院', key: 'nearest_hospital' },
-                { label: '最寄公園', key: 'nearest_park' },
-                { label: '最寄保育園', key: 'nearest_nursery' },
-                { label: '洪水リスク', key: 'hazard_flood' },
-                { label: '土砂災害', key: 'hazard_sediment' },
-                { label: '津波リスク', key: 'hazard_tsunami' },
-                { label: '地盤', key: 'ground_type' },
-              ].map(r => {
-                return '<tr><td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">' + r.label + '</td>' +
-                  props.map(p => {
-                    const val = p[r.key];
-                    if (p.enrichment_status === 'done') {
-                      return '<td class="p-3 text-xs text-gray-700">' + (val || '<span class="text-gray-300">\u2014</span>') + '</td>';
-                    } else if (p.enrichment_status === 'pending') {
-                      return '<td class="p-3 text-xs text-amber-500">\u23f3 取得中...</td>';
-                    } else if (p.lat && p.lng) {
-                      return '<td class="p-3 text-xs"><button onclick="handleEnrichProperty(' + "'" + p.id + "'" + ')" class="text-blue-500 hover:underline text-xs">\ud83d\udd0d 取得する</button></td>';
-                    } else {
-                      return '<td class="p-3 text-xs text-gray-300">位置情報なし</td>';
-                    }
-                  }).join('') + '</tr>';
-              }).join('')}
-            ` : ''}
-            <!-- メモ行 -->
-            <tr><td colspan="${props.length+1}" class="p-2 bg-green-50"><span class="text-xs font-bold text-green-700">📝 メモ（自由入力）</span></td></tr>
-            <tr>
-              <td class="p-3 text-xs font-medium text-gray-600 bg-gray-50">メモ</td>
-              ${props.map(p => `
-                <td class="p-2">
-                  <textarea class="w-full px-2 py-1 border border-gray-200 rounded text-sm text-gray-700 focus:border-blue-400 focus:ring-1 focus:ring-blue-200 outline-none" rows="3" placeholder="自由にメモを入力..." onblur="handleMemoEdit('${p.id}', this.value)" style="resize:vertical;">${p.user_memo || p.memo || ''}</textarea>
-                </td>
-              `).join('')}
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      ${summaryCards}
+      ${accSections}
 
       ${questions.length > 0 ? `
-        <div class="card p-4">
-          <h3 class="text-sm font-bold text-gray-800 mb-3">📋 確認質問テンプレート</h3>
+        <div class="card" style="padding:14px;">
+          <h3 style="font-size:13px;font-weight:700;margin-bottom:8px;">📋 確認質問テンプレート</h3>
           <div class="space-y-2">
             ${questions.map((q,i) => `
               <label class="flex items-start gap-2 text-sm text-gray-700">
@@ -1830,7 +2082,153 @@ function renderComparisonTable() {
         </div>
       ` : ''}
     </div>
+
+    <!-- 物件詳細モーダル -->
+    <div class="so-comp-modal-overlay" id="so-comp-prop-modal" onclick="if(event.target===this) closePropertyDetailModal();">
+      <div class="so-comp-modal-box" id="so-comp-prop-modal-body" onclick="event.stopPropagation()"></div>
+    </div>
   `;
+}
+
+// ===== 比較表ハイブリッドUI ヘルパー関数 =====
+function toggleCompAccordion(id) {
+  document.getElementById(id)?.classList.toggle('open');
+}
+function toggleCompHzDetail(id) {
+  document.getElementById(id)?.classList.toggle('open');
+}
+function toggleCompExpandRows(cls) {
+  document.querySelectorAll('.' + cls).forEach(e => e.classList.toggle('open'));
+}
+function openPropertyDetailModal(index) {
+  const comp = state.soComparison;
+  if (!comp) return;
+  const props = comp.properties || [];
+  if (index < 0 || index >= props.length) return;
+  const p = props[index];
+  const labels = ['A','B','C','D','E'];
+  const COLORS = ['#2563eb','#16a34a','#9333ea','#f59e0b','#ef4444'];
+  const s = calculateScores(p, state.userProfile);
+  const allScores = props.map(pp => calculateScores(pp, state.userProfile));
+  const maxTotal = Math.max(...allScores.map(ss => ss ? ss.score_total : 0));
+  const isBest = s && s.score_total === maxTotal && maxTotal > 0;
+  const cost = calcBuildingCost(p);
+  const fmtYen = v => v >= 100000000 ? (v/100000000).toFixed(2) + '億円' : (v/10000).toLocaleString() + '万円';
+  function sc(v) { return v >= 80 ? '#16a34a' : v >= 60 ? '#2563eb' : v >= 40 ? '#f59e0b' : '#dc2626'; }
+  function mRiskLevel(text) {
+    if (!text) return 'unknown';
+    const first = text.split(/[。（(]/)[0].trim();
+    if (/^高/.test(first)) return 'high'; if (/^中/.test(first)) return 'mid'; if (/^低/.test(first)) return 'low';
+    if (first.includes('高')) return 'high'; if (first.includes('中')) return 'mid'; return 'low';
+  }
+
+  const areaName = AREAS.find(a=>a.id===p.area_id)?.name || (p.address ? AREAS.find(a=>p.address.includes(a.name))?.name : '') || '';
+  const priceStr = p.price ? (p.price/10000).toLocaleString() + '万円' : '—';
+  const tsubo = p.land_area ? (p.land_area / 3.305785).toFixed(1) : '';
+  const tsuboPrice = p.price && p.land_area ? (p.price/(p.land_area/3.305785)/10000).toFixed(1) + '万/坪' : '';
+
+  const body = document.getElementById('so-comp-prop-modal-body');
+  let html = '';
+  // ヘッダー
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">' +
+    '<div style="display:flex;align-items:center;gap:10px;">' +
+    '<div class="so-comp-label-chip" style="background:' + COLORS[index] + ';width:36px;height:36px;font-size:16px;">' + labels[index] + '</div>' +
+    '<div><div style="font-size:16px;font-weight:700;">' + (p.address || '物件' + labels[index]) + '</div>' +
+    '<div style="font-size:11px;color:#6b7280;">' + [areaName, p.station_distance].filter(Boolean).join(' | ') + '</div></div></div>' +
+    '<button class="so-comp-modal-close" onclick="closePropertyDetailModal()">&times;</button></div>';
+
+  // 物件ページリンク
+  if (p.url) {
+    html += '<div style="margin-bottom:12px;"><a href="' + p.url + '" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;padding:5px 14px;background:#eff6ff;color:#2563eb;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;border:1px solid #bfdbfe;">🔗 物件ページを見る</a></div>';
+  }
+
+  // スコア
+  if (s) {
+    html += '<div style="text-align:center;margin-bottom:12px;">' +
+      '<div style="font-size:40px;font-weight:900;color:' + sc(s.score_total) + ';">' + s.score_total + '<span style="font-size:14px;font-weight:400;color:#9ca3af;">/100</span></div>' +
+      (isBest ? '<div style="margin-top:2px;"><span style="display:inline-block;padding:2px 10px;background:#dcfce7;color:#15803d;border-radius:999px;font-size:11px;font-weight:600;">👑 総合1位</span></div>' : '') + '</div>';
+    const scoreItems = [['🛡️ 安全', s.score_safety], ['🏪 利便', s.score_convenience], ['💰 コスト', s.score_cost]];
+    if (s.score_lifestyle !== null) scoreItems.push(['🏡 ライフ', s.score_lifestyle]);
+    scoreItems.forEach(([l,v]) => {
+      if (v == null) return;
+      html += '<div class="so-comp-m-score-row"><span class="so-comp-m-score-label">' + l + '</span>' +
+        '<div class="so-comp-m-score-bar"><div class="so-comp-m-score-fill" style="width:' + v + '%;background:' + sc(v) + ';"></div></div>' +
+        '<span class="so-comp-m-score-val" style="color:' + sc(v) + ';">' + v + '</span></div>';
+    });
+  }
+
+  // 基本情報
+  html += '<div class="so-comp-info-grid" style="margin-top:12px;">' +
+    '<div class="so-comp-info-cell"><div class="so-comp-info-cell-label">価格</div><div class="so-comp-info-cell-value" style="color:#1e40af;">' + priceStr + '</div></div>' +
+    '<div class="so-comp-info-cell"><div class="so-comp-info-cell-label">土地面積</div><div class="so-comp-info-cell-value">' + (tsubo ? tsubo + '坪' + (p.land_area ? '（' + p.land_area + '㎡）' : '') : '—') + '</div></div>' +
+    '<div class="so-comp-info-cell"><div class="so-comp-info-cell-label">坪単価</div><div class="so-comp-info-cell-value">' + (tsuboPrice || '—') + '</div></div>' +
+    '<div class="so-comp-info-cell"><div class="so-comp-info-cell-label">駅距離</div><div class="so-comp-info-cell-value">' + (p.station_distance || '—') + '</div></div></div>';
+
+  // 重要確認項目
+  html += '<div style="margin-top:14px;"><div style="font-size:12px;font-weight:700;color:#b45309;margin-bottom:6px;">⚠️ 重要確認項目</div><div class="so-comp-info-grid">';
+  [['用途地域', p.zoning], ['建ぺい率/容積率', [p.building_coverage, p.floor_area_ratio].filter(Boolean).join(' / ')], ['接道', p.road_access], ['高低差/造成', p.elevation || '不明'], ['インフラ', p.infrastructure], ['ハザード(物件情報)', p.hazard || '記載なし']].forEach(([l,v]) => {
+    html += '<div class="so-comp-info-cell"><div class="so-comp-info-cell-label">' + l + '</div><div class="so-comp-info-cell-value" style="font-size:11px;">' + (v || '—') + '</div></div>';
+  });
+  html += '</div></div>';
+
+  // ハザード判定詳細
+  if (p.enrichment_status === 'done') {
+    html += '<div class="so-comp-fold-header" onclick="toggleCompModalFold(\'so-comp-modal-hz-' + index + '\')"><h4>🛡️ ハザード判定詳細</h4><span style="font-size:10px;color:#9ca3af;">▼</span></div>' +
+      '<div class="so-comp-fold-body" id="so-comp-modal-hz-' + index + '">';
+    [['洪水リスク', p.hazard_flood], ['土砂災害', p.hazard_sediment], ['津波リスク', p.hazard_tsunami], ['地盤', p.ground_type]].forEach(([l,v]) => {
+      const rl = mRiskLevel(v);
+      const borderColor = rl === 'high' ? '#dc2626' : rl === 'mid' ? '#f59e0b' : '#16a34a';
+      html += '<div style="margin-bottom:8px;"><div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:2px;">' + l + '</div>' +
+        '<div style="font-size:11px;color:#64748b;line-height:1.6;padding:6px 8px;background:#f8fafc;border-radius:6px;border-left:3px solid ' + borderColor + ';">' + (v || '情報なし') + '</div></div>';
+    });
+    html += '</div>';
+  }
+
+  // 建築費
+  if (cost) {
+    html += '<div class="so-comp-fold-header" onclick="toggleCompModalFold(\'so-comp-modal-build-' + index + '\')"><h4>🏗️ 建築費シミュレーション</h4><span style="font-size:10px;color:#9ca3af;">▼</span></div>' +
+      '<div class="so-comp-fold-body" id="so-comp-modal-build-' + index + '">' +
+      '<div class="so-comp-info-grid" style="grid-template-columns:1fr 1fr 1fr;">' +
+      '<div class="so-comp-info-cell" style="text-align:center;"><div class="so-comp-info-cell-label">ローコスト</div><div class="so-comp-info-cell-value">' + fmtYen(cost.costLow) + '</div></div>' +
+      '<div class="so-comp-info-cell" style="text-align:center;"><div class="so-comp-info-cell-label">スタンダード</div><div class="so-comp-info-cell-value" style="color:#1e40af;">' + fmtYen(cost.costStd) + '</div></div>' +
+      '<div class="so-comp-info-cell" style="text-align:center;"><div class="so-comp-info-cell-label">ハイグレード</div><div class="so-comp-info-cell-value">' + fmtYen(cost.costHigh) + '</div></div></div>' +
+      '<div style="margin-top:8px;padding:10px;background:#fff7ed;border-radius:8px;text-align:center;">' +
+      '<div style="font-size:10px;color:#9ca3af;">💰 総額目安</div>' +
+      '<div style="font-size:20px;font-weight:900;color:#c2410c;">' + fmtYen(cost.totalEstimate) + '</div></div></div>';
+  }
+
+  // 周辺環境
+  if (p.enrichment_status === 'done') {
+    html += '<div class="so-comp-fold-header" onclick="toggleCompModalFold(\'so-comp-modal-env-' + index + '\')"><h4>🔍 周辺環境</h4><span style="font-size:10px;color:#9ca3af;">▼</span></div>' +
+      '<div class="so-comp-fold-body" id="so-comp-modal-env-' + index + '">';
+    [['小学校区', p.school_elementary], ['中学校区', p.school_junior_high], ['スーパー', p.nearest_supermarket], ['病院', p.nearest_hospital], ['公園', p.nearest_park], ['保育園', p.nearest_nursery]].forEach(([l,v]) => {
+      html += '<div class="so-comp-kv-row"><span class="so-comp-kv-label">' + l + '</span><span class="so-comp-kv-value">' + (v || '—') + '</span></div>';
+    });
+    html += '</div>';
+  }
+
+  // AIコメント
+  if (p.ai_comment) {
+    html += '<div style="margin-top:12px;padding:10px;background:#f0fdf4;border-radius:8px;">' +
+      '<div style="font-size:11px;font-weight:700;color:#15803d;margin-bottom:3px;">💬 AIコメント</div>' +
+      '<div style="font-size:12px;color:#374151;">' + p.ai_comment + '</div></div>';
+  }
+
+  // メモ
+  html += '<div style="margin-top:12px;"><div style="font-size:11px;font-weight:700;color:#15803d;margin-bottom:4px;">📝 メモ</div>' +
+    '<textarea class="so-comp-memo-area" rows="2" placeholder="メモ..." onblur="handleMemoEdit(\'' + p.id + '\',this.value)">' + (p.user_memo || p.memo || '') + '</textarea></div>';
+
+  // 戻るボタン
+  html += '<div style="margin-top:16px;text-align:center;"><button onclick="closePropertyDetailModal()" style="display:inline-block;padding:8px 24px;background:#f3f4f6;color:#374151;border:1px solid #d1d5db;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">← 物件比較表へ戻る</button></div>';
+
+  body.innerHTML = html;
+  document.getElementById('so-comp-prop-modal').classList.add('open');
+}
+function closePropertyDetailModal() {
+  document.getElementById('so-comp-prop-modal')?.classList.remove('open');
+}
+function toggleCompModalFold(id) {
+  document.getElementById(id)?.classList.toggle('open');
 }
 
 function copyQuestions() {
