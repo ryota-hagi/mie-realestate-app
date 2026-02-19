@@ -1,23 +1,23 @@
-# 三重県北部 不動産推薦アプリ（mie-realestate-app）
+# 三重県北部｜注文住宅の土地探しをラクにする無料ツール集
 
-三重県北部で**注文住宅の土地探し・エリア比較**をするときに使える、軽量なWebツール集です。
+三重県北部で注文住宅の土地探しをしている人向けに、
+**「比較が面倒」**を減らすための軽量Webツールをまとめています。
 
-公開URL:
-- https://ryota-hagi.github.io/mie-realestate-app/
+公開URL（すぐ使えます）:
+- https://research.chuumon-soudan.com/
 
-プレビュー:
+## できること
+- 物件URLを貼るだけで、情報を揃えて**比較表**にする
+- 桑名・四日市・鈴鹿などの**エリア比較**で、次に見る候補を絞る
 
-![mie-realestate-app preview](https://research.chuumon-soudan.com/assets/ogp.png)
+リンク:
+- 物件比較ツール： https://research.chuumon-soudan.com/
+- エリア比較： https://research.chuumon-soudan.com/area.html
 
-主な機能:
-- **物件比較ツール**：物件URLを貼って、項目を揃えて比較
-- **エリア比較**：三重県北部のエリア別に土地相場・取引データを比較
-- **学校住所→座標変換**：学区/学校住所データ整備用（ジオコーダー）
-
-## 露出最大化の方針
-- 検索に拾われやすいページ構造（title/description/canonical/sitemap）
-- SNSシェア時の見え方（OGP）
-- GitHub上の導線（README）
+## 目的（露出最大化の方針）
+- 検索に拾われやすい構造（title/description/canonical/sitemap）
+- シェア時に価値が伝わる見た目（OGP）
+- 初見でも迷わず使える導線
 
 ## 注意
 外部公開前提のため、個人情報・顧客情報などは含めません。
