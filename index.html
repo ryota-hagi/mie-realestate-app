@@ -1269,14 +1269,18 @@ function calcBuildingCost(prop) {
   const maxFloorArea = landArea * farRate;
   const maxFloorAreaTsubo = maxFloorArea / 3.305785;
 
-  const costLow = maxFloorAreaTsubo * 500000;
-  const costStd = maxFloorAreaTsubo * 650000;
-  const costHigh = maxFloorAreaTsubo * 850000;
+  // カスタム建坪が指定されていればそちらで計算
+  const customTsubo = prop.custom_floor_tsubo ? Number(prop.custom_floor_tsubo) : null;
+  const simTsubo = customTsubo || maxFloorAreaTsubo;
+
+  const costLow = simTsubo * 500000;
+  const costStd = simTsubo * 650000;
+  const costHigh = simTsubo * 850000;
 
   const misc = (price + costStd) * 0.08;
   const totalEstimate = price + costStd + misc;
 
-  return { maxBuildingArea, maxFloorArea, maxFloorAreaTsubo, costLow, costStd, costHigh, misc, totalEstimate };
+  return { maxBuildingArea, maxFloorArea, maxFloorAreaTsubo, customTsubo, simTsubo, costLow, costStd, costHigh, misc, totalEstimate };
 }
 
 // ============================================================
@@ -2342,13 +2346,42 @@ function renderComparisonTable() {
       { label: '諸費用(8%)', fmt: c => c ? fmtYen(c.misc) : '—' },
     ];
     let html = '<div style="overflow-x:auto;"><table class="so-comp-t-table">';
-    buildRows.forEach(r => {
+
+    // 最大建築面積・最大延床面積（参考値）
+    html += '<tr><th>' + buildRows[0].label + '</th>' + props.map((p,i) => {
+      const c = costs[i];
+      if (c) return '<td>' + buildRows[0].fmt(c) + '</td>';
+      return '<td class="so-comp-editable-cell" onclick="startCellEdit(this,\'' + p.id + '\',\'building_coverage\',true)" title="建蔽率・容積率を入力すると算出"><span style="color:#d1d5db;">—</span> <span style="color:#d1d5db;font-size:10px;">✏️</span></td>';
+    }).join('') + '</tr>';
+
+    html += '<tr><th>' + buildRows[1].label + '</th>' + props.map((p,i) => {
+      const c = costs[i];
+      if (c) return '<td>' + buildRows[1].fmt(c) + '</td>';
+      return '<td class="so-comp-editable-cell" onclick="startCellEdit(this,\'' + p.id + '\',\'building_coverage\',true)" title="建蔽率・容積率を入力すると算出"><span style="color:#d1d5db;">—</span> <span style="color:#d1d5db;font-size:10px;">✏️</span></td>';
+    }).join('') + '</tr>';
+
+    // 🏠 シミュレーション建坪（編集可能行）
+    html += '<tr style="background:#eff6ff;"><th style="color:#1e40af;font-weight:700;">🏠 シミュレーション建坪</th>' + props.map((p,i) => {
+      const c = costs[i];
+      if (!c) return '<td style="color:#d1d5db;">—</td>';
+      const displayTsubo = c.simTsubo.toFixed(1);
+      const isCustom = !!c.customTsubo;
+      const resetBtn = isCustom ? ' <span onclick="event.stopPropagation();resetCustomTsubo(\'' + p.id + '\')" title="上限に戻す" style="cursor:pointer;font-size:10px;color:#9ca3af;vertical-align:middle;">↩️</span>' : '';
+      return '<td class="so-comp-editable-cell" onclick="startCellEdit(this,\'' + p.id + '\',\'custom_floor_tsubo\',\'tsubo\')" style="cursor:pointer;' + (isCustom ? 'color:#1e40af;font-weight:700;' : '') + '">' +
+        displayTsubo + '坪 <span style="font-size:10px;color:#9ca3af;">✏️</span>' + resetBtn +
+        (isCustom ? '<br><span style="font-size:9px;color:#6b7280;font-weight:400;">変更済</span>' : '') +
+        '</td>';
+    }).join('') + '</tr>';
+
+    // コスト行（ローコスト〜諸費用）
+    buildRows.slice(2).forEach(r => {
       html += '<tr><th>' + r.label + '</th>' + props.map((p,i) => {
         const c = costs[i];
         if (c) return '<td>' + r.fmt(c) + '</td>';
         return '<td class="so-comp-editable-cell" onclick="startCellEdit(this,\'' + p.id + '\',\'building_coverage\',true)" title="建蔽率・容積率を入力すると算出"><span style="color:#d1d5db;">—</span> <span style="color:#d1d5db;font-size:10px;">✏️</span></td>';
       }).join('') + '</tr>';
     });
+
     html += '<tr style="border-top:2px solid #fed7aa;background:#fff7ed;"><th style="color:#c2410c;font-weight:700;">💰 総額目安</th>' +
       props.map((p,i) => {
         const c = costs[i];
@@ -2637,8 +2670,14 @@ function openPropertyDetailModal(index) {
 
   // 建築費
   if (cost) {
+    const isCustom = !!cost.customTsubo;
     html += '<div class="so-comp-fold-header" onclick="toggleCompModalFold(\'so-comp-modal-build-' + index + '\')"><h4>🏗️ 建築費シミュレーション</h4><span style="font-size:10px;color:#9ca3af;">▼</span></div>' +
       '<div class="so-comp-fold-body" id="so-comp-modal-build-' + index + '">' +
+      '<div style="margin-bottom:8px;padding:8px 10px;background:#eff6ff;border-radius:8px;text-align:center;">' +
+      '<div style="font-size:10px;color:#6b7280;">🏠 シミュレーション建坪</div>' +
+      '<div style="font-size:18px;font-weight:700;color:#1e40af;">' + cost.simTsubo.toFixed(1) + '坪</div>' +
+      (isCustom ? '<div style="font-size:9px;color:#6b7280;">変更済（上限: ' + cost.maxFloorAreaTsubo.toFixed(1) + '坪）</div>' : '<div style="font-size:9px;color:#9ca3af;">上限値（比較表で変更可能）</div>') +
+      '</div>' +
       '<div class="so-comp-info-grid" style="grid-template-columns:1fr 1fr 1fr;">' +
       '<div class="so-comp-info-cell" style="text-align:center;"><div class="so-comp-info-cell-label">ローコスト</div><div class="so-comp-info-cell-value">' + fmtYen(cost.costLow) + '</div></div>' +
       '<div class="so-comp-info-cell" style="text-align:center;"><div class="so-comp-info-cell-label">スタンダード</div><div class="so-comp-info-cell-value" style="color:#1e40af;">' + fmtYen(cost.costStd) + '</div></div>' +
@@ -2732,7 +2771,19 @@ function startCellEdit(td, propId, key, editType) {
   const currentVal = prop[key];
   td.innerHTML = '';
 
-  if (editType === 'price') {
+  if (editType === 'tsubo') {
+    // 坪数入力
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.step = '0.1';
+    input.className = 'w-full px-2 py-1 border border-blue-300 rounded text-sm focus:ring-2 focus:ring-blue-200 outline-none';
+    input.value = currentVal || '';
+    input.placeholder = '坪';
+    input.onblur = () => finishCellEdit(propId, key, input.value ? Number(input.value) : null);
+    input.onkeydown = (e) => { if (e.key === 'Enter') input.blur(); if (e.key === 'Escape') { render(); } };
+    td.appendChild(input);
+    setTimeout(() => input.focus(), 0);
+  } else if (editType === 'price') {
     // 万円 → 円で保存されているので万円で表示・入力
     const input = document.createElement('input');
     input.type = 'number';
@@ -2780,6 +2831,10 @@ async function finishCellEdit(propId, key, newVal) {
   }
   await updateProperty(propId, { [key]: newVal });
   render();
+}
+
+async function resetCustomTsubo(propId) {
+  await finishCellEdit(propId, 'custom_floor_tsubo', null);
 }
 
 async function handleMemoEdit(propId, value) {
