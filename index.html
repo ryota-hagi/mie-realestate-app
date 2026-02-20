@@ -2471,15 +2471,46 @@ function renderComparisonTable() {
       ` : ''}
 
       ${comp._unsaved ? `
-        <div class="card p-4 bg-green-50 border-green-200" style="border:1px solid #86efac;">
-          <div class="flex items-center justify-between flex-wrap gap-2">
-            <div>
-              <span class="text-sm font-bold text-green-800">この比較表を保存しますか？</span>
-              <p class="text-xs text-green-600 mt-0.5">ユーザー登録すると、次回以降もこの比較表を確認できます</p>
+        <div style="background:linear-gradient(135deg, #1E40AF 0%, #2563EB 50%, #3B82F6 100%); border-radius:20px; padding:28px 24px; position:relative; overflow:hidden; box-shadow:0 8px 32px rgba(37,99,235,0.3);">
+          <div style="position:absolute; top:-40px; right:-40px; width:140px; height:140px; background:rgba(255,255,255,0.08); border-radius:50%;"></div>
+          <div style="position:absolute; bottom:-30px; left:-10px; width:100px; height:100px; background:rgba(255,255,255,0.05); border-radius:50%;"></div>
+          <div style="position:relative; z-index:1;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+              <div style="width:36px; height:36px; background:rgba(255,255,255,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px;">🔒</div>
+              <div style="font-size:17px; font-weight:800; color:white;">この比較表を保存しませんか？</div>
             </div>
-            <button onclick="openAuthModal(); state._pendingSaveCompId='${comp.id}';" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
-              ユーザー登録して保存
+            <p style="font-size:13px; color:rgba(255,255,255,0.85); margin-bottom:18px; line-height:1.7;">
+              無料ユーザー登録で、比較表の保存やパーソナライズ機能が使えます。
+            </p>
+            <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:22px;">
+              <div style="display:flex; align-items:flex-start; gap:10px;">
+                <span style="font-size:18px; flex-shrink:0;">📊</span>
+                <div>
+                  <div style="font-size:14px; font-weight:700; color:white;">比較表を永久保存</div>
+                  <div style="font-size:12px; color:rgba(255,255,255,0.7); margin-top:2px;">次回アクセス時もすぐに確認できます</div>
+                </div>
+              </div>
+              <div style="display:flex; align-items:flex-start; gap:10px;">
+                <span style="font-size:18px; flex-shrink:0;">🏡</span>
+                <div>
+                  <div style="font-size:14px; font-weight:700; color:white;">ライフスタイルスコア</div>
+                  <div style="font-size:12px; color:rgba(255,255,255,0.7); margin-top:2px;">勤務先や重視条件を登録して、あなた好みのスコアで比較</div>
+                </div>
+              </div>
+              <div style="display:flex; align-items:flex-start; gap:10px;">
+                <span style="font-size:18px; flex-shrink:0;">📱</span>
+                <div>
+                  <div style="font-size:14px; font-weight:700; color:white;">どの端末からでもアクセス</div>
+                  <div style="font-size:12px; color:rgba(255,255,255,0.7); margin-top:2px;">スマホ・PC・タブレットで同じデータを閲覧</div>
+                </div>
+              </div>
+            </div>
+            <button onclick="openAuthModal(); state._pendingSaveCompId='${comp.id}';" style="display:block; width:100%; padding:14px 24px; background:white; color:#1E40AF; border:none; border-radius:12px; font-size:15px; font-weight:800; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,0.15); transition:all 0.2s; text-align:center;" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,0.2)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 14px rgba(0,0,0,0.15)'">
+              無料ユーザー登録（メールアドレスのみ）
             </button>
+            <div style="font-size:11px; color:rgba(255,255,255,0.6); margin-top:10px; text-align:center;">
+              ※ パスワード不要。メールアドレスだけで30秒で登録完了
+            </div>
           </div>
         </div>
       ` : ''}
