@@ -1273,9 +1273,39 @@ function calcBuildingCost(prop) {
   const costHigh = simTsubo * 850000;
 
   const misc = (price + costStd) * 0.08;
-  const totalEstimate = price + costStd + misc;
 
-  return { maxBuildingArea, maxFloorArea, maxFloorAreaTsubo, customTsubo, simTsubo, costLow, costStd, costHigh, misc, totalEstimate };
+  // 土地条件による追加コスト判定（必要額の半額を計上）
+  const extraCosts = [];
+  const el = String(prop.elevation || '');
+  const infra = String(prop.infrastructure || '');
+  const ground = String(prop.ground_type || '');
+  const road = String(prop.road_access || '');
+
+  // 造成費（高低差・傾斜あり） 実際300万前後 → 半額150万
+  if (el && /高低差|傾斜|造成|段差|法面|のり面/.test(el)) {
+    extraCosts.push({ label: '造成費', amount: 1500000 });
+  }
+  // 擁壁工事 実際200〜400万 → 半額150万
+  if (el && /擁壁/.test(el)) {
+    extraCosts.push({ label: '擁壁工事', amount: 1500000 });
+  }
+  // 地盤改良（軟弱地盤） 実際100〜150万 → 半額75万
+  if (ground && /沖積|埋立|軟弱|盛土|液状化|低地/.test(ground)) {
+    extraCosts.push({ label: '地盤改良', amount: 750000 });
+  }
+  // インフラ整備（上下水道未整備等） 実際100〜150万 → 半額75万
+  if (infra && /未整備|引込|浄化槽|プロパン|井戸|未接続|未引込|個別/.test(infra)) {
+    extraCosts.push({ label: 'インフラ整備', amount: 750000 });
+  }
+  // 外構追加（私道・セットバック等） 実際50〜100万 → 半額50万
+  if ((road && /位置指定|私道|セットバック|再建築不可/.test(road)) || (el && /盛土|切土/.test(el))) {
+    extraCosts.push({ label: '外構追加', amount: 500000 });
+  }
+
+  const extraCostTotal = extraCosts.reduce((sum, c) => sum + c.amount, 0);
+  const totalEstimate = price + costStd + misc + extraCostTotal;
+
+  return { maxBuildingArea, maxFloorArea, maxFloorAreaTsubo, customTsubo, simTsubo, costLow, costStd, costHigh, misc, extraCosts, extraCostTotal, totalEstimate };
 }
 
 // ============================================================
@@ -2377,10 +2407,26 @@ function renderComparisonTable() {
       }).join('') + '</tr>';
     });
 
+    // ⚠️ 想定追加費用（土地条件による追加コスト）
+    const hasAnyExtra = costs.some(c => c && c.extraCosts.length > 0);
+    if (hasAnyExtra) {
+      html += '<tr style="background:#fffbeb;"><th style="color:#b45309;font-weight:700;font-size:11px;">⚠️ 想定追加費用</th>' +
+        props.map((p,i) => {
+          const c = costs[i];
+          if (!c) return '<td style="color:#d1d5db;">—</td>';
+          if (c.extraCosts.length === 0) return '<td style="color:#9ca3af;font-size:11px;">—</td>';
+          const reasons = c.extraCosts.map(e => e.label).join('・');
+          return '<td style="color:#b45309;font-weight:700;">' + fmtYen(c.extraCostTotal) +
+            '<br><span style="font-size:9px;font-weight:400;color:#92400e;">' + reasons + '</span></td>';
+        }).join('') + '</tr>';
+    }
+
     html += '<tr style="border-top:2px solid #fed7aa;background:#fff7ed;"><th style="color:#c2410c;font-weight:700;">💰 総額目安</th>' +
       props.map((p,i) => {
         const c = costs[i];
-        return c ? '<td style="font-weight:900;color:#c2410c;font-size:13px;">' + fmtYen(c.totalEstimate) + '<br><span style="font-size:10px;font-weight:400;color:#9ca3af;">（土地代+建築費std+諸費用）</span></td>' : '<td style="color:#d1d5db;">—</td>';
+        if (!c) return '<td style="color:#d1d5db;">—</td>';
+        const breakdown = c.extraCostTotal > 0 ? '（土地+建築std+諸費用+追加費用）' : '（土地代+建築費std+諸費用）';
+        return '<td style="font-weight:900;color:#c2410c;font-size:13px;">' + fmtYen(c.totalEstimate) + '<br><span style="font-size:10px;font-weight:400;color:#9ca3af;">' + breakdown + '</span></td>';
       }).join('') + '</tr></table></div>';
     return html;
   }
@@ -2677,9 +2723,16 @@ function openPropertyDetailModal(index) {
       '<div class="so-comp-info-cell" style="text-align:center;"><div class="so-comp-info-cell-label">ローコスト</div><div class="so-comp-info-cell-value">' + fmtYen(cost.costLow) + '</div></div>' +
       '<div class="so-comp-info-cell" style="text-align:center;"><div class="so-comp-info-cell-label">スタンダード</div><div class="so-comp-info-cell-value" style="color:#1e40af;">' + fmtYen(cost.costStd) + '</div></div>' +
       '<div class="so-comp-info-cell" style="text-align:center;"><div class="so-comp-info-cell-label">ハイグレード</div><div class="so-comp-info-cell-value">' + fmtYen(cost.costHigh) + '</div></div></div>' +
+      (cost.extraCosts.length > 0 ?
+        '<div style="margin-top:8px;padding:8px 10px;background:#fffbeb;border-radius:8px;border-left:3px solid #f59e0b;">' +
+        '<div style="font-size:10px;font-weight:700;color:#b45309;">⚠️ 想定追加費用 ' + fmtYen(cost.extraCostTotal) + '</div>' +
+        '<div style="font-size:9px;color:#92400e;margin-top:2px;">' + cost.extraCosts.map(e => e.label).join('・') + '</div></div>'
+      : '') +
       '<div style="margin-top:8px;padding:10px;background:#fff7ed;border-radius:8px;text-align:center;">' +
       '<div style="font-size:10px;color:#9ca3af;">💰 総額目安</div>' +
-      '<div style="font-size:20px;font-weight:900;color:#c2410c;">' + fmtYen(cost.totalEstimate) + '</div></div></div>';
+      '<div style="font-size:20px;font-weight:900;color:#c2410c;">' + fmtYen(cost.totalEstimate) + '</div>' +
+      (cost.extraCostTotal > 0 ? '<div style="font-size:9px;color:#9ca3af;">追加費用含む</div>' : '') +
+      '</div></div>';
   }
 
   // 周辺環境
