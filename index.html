@@ -1821,6 +1821,57 @@ function renderPropertyView() {
         </div>
       </div>
 
+      ${(savedCount >= 1 && state.savedComparisons.length === 0) ? `
+        <!-- 比較表未作成ユーザー向けガイダンスバナー -->
+        <div style="background:linear-gradient(135deg, #1E40AF 0%, #2563EB 50%, #3B82F6 100%); border-radius:20px; padding:28px 24px; position:relative; overflow:hidden; box-shadow:0 8px 32px rgba(37,99,235,0.3);">
+          <div style="position:absolute; top:-40px; right:-40px; width:160px; height:160px; background:rgba(255,255,255,0.08); border-radius:50%;"></div>
+          <div style="position:absolute; bottom:-50px; left:-20px; width:120px; height:120px; background:rgba(255,255,255,0.05); border-radius:50%;"></div>
+          <div style="position:absolute; top:20px; right:30px; width:60px; height:60px; background:rgba(255,255,255,0.06); border-radius:50%;"></div>
+          <div style="position:relative; z-index:1;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+              <div style="width:36px; height:36px; background:rgba(255,255,255,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px;">📊</div>
+              <div>
+                <div style="font-size:17px; font-weight:800; color:white; letter-spacing:0.02em;">次のステップ：比較表を作ってみよう！</div>
+              </div>
+            </div>
+            <p style="font-size:13px; color:rgba(255,255,255,0.85); margin-bottom:20px; line-height:1.7;">
+              複数の物件を並べてAIが自動で比較表を作成。価格・面積・立地条件を一目で比較できます。
+            </p>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              ${savedCount < 2 ? `
+                <div style="display:flex; align-items:flex-start; gap:12px;">
+                  <div style="width:28px; height:28px; border-radius:50%; background:white; color:#2563EB; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,0.15);">1</div>
+                  <div style="padding-top:2px;">
+                    <div style="font-size:14px; font-weight:700; color:white;">比較したい物件をもう1件追加</div>
+                    <div style="font-size:12px; color:rgba(255,255,255,0.7); margin-top:3px;">下のフォームから別の物件URLを取り込みましょう</div>
+                  </div>
+                </div>
+              ` : ''}
+              <div style="display:flex; align-items:flex-start; gap:12px;">
+                <div style="width:28px; height:28px; border-radius:50%; background:${savedCount < 2 ? 'rgba(255,255,255,0.3)' : 'white'}; color:${savedCount < 2 ? 'white' : '#2563EB'}; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; flex-shrink:0; ${savedCount >= 2 ? 'box-shadow:0 2px 8px rgba(0,0,0,0.15);' : ''}">${savedCount < 2 ? '2' : '1'}</div>
+                <div style="padding-top:2px;">
+                  <div style="font-size:14px; font-weight:700; color:white;">物件カードの「比較に追加」ボタンを押す</div>
+                  <div style="font-size:12px; color:rgba(255,255,255,0.7); margin-top:3px;">比較したい物件を2件以上選びましょう</div>
+                </div>
+              </div>
+              <div style="display:flex; align-items:flex-start; gap:12px;">
+                <div style="width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.3); color:white; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; flex-shrink:0;">${savedCount < 2 ? '3' : '2'}</div>
+                <div style="padding-top:2px;">
+                  <div style="font-size:14px; font-weight:700; color:white;">「比較表を作成」で比較スタート！</div>
+                  <div style="font-size:12px; color:rgba(255,255,255,0.7); margin-top:3px;">AIが項目ごとに整理した比較表を自動作成します</div>
+                </div>
+              </div>
+            </div>
+            ${(savedCount >= 2 && compProps.length >= 2) ? `
+              <div style="margin-top:18px; padding:12px 16px; background:rgba(255,255,255,0.2); border-radius:12px; display:flex; align-items:center; gap:10px; backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,0.25);">
+                <span style="font-size:20px;">🎉</span>
+                <span style="font-size:14px; font-weight:700; color:white;">準備OK！下の「比較表を作成」ボタンを押して比較スタート！</span>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      ` : ''}
+
       <div class="flex items-center justify-between">
         <h2 class="text-lg font-bold text-gray-800">🏠 保存した物件${savedCount > 0 ? `（${savedCount}件）` : ''}</h2>
         ${savedCount > 0 ? `<div class="flex gap-2">
@@ -1839,52 +1890,6 @@ function renderPropertyView() {
           </button>
         </div>
       </div>
-
-      ${(savedCount >= 1 && state.savedComparisons.length === 0) ? `
-        <!-- 比較表未作成ユーザー向けガイダンスバナー -->
-        <div style="background:#EFF6FF; border:1.5px solid #BFDBFE; border-radius:16px; padding:20px 24px; position:relative; overflow:hidden;">
-          <div style="position:absolute; top:-20px; right:-20px; width:80px; height:80px; background:rgba(37,99,235,0.06); border-radius:50%;"></div>
-          <div style="position:absolute; bottom:-30px; right:40px; width:60px; height:60px; background:rgba(37,99,235,0.04); border-radius:50%;"></div>
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-            <span style="font-size:20px;">💡</span>
-            <span style="font-size:14px; font-weight:700; color:#1E40AF;">次のステップ：物件を比較してみよう！</span>
-          </div>
-          <p style="font-size:12px; color:#3B82F6; margin-bottom:16px; line-height:1.6;">
-            複数の物件を並べて比較表を作成すると、価格・面積・立地条件を一目で比較できます。
-          </p>
-          <div class="v3-guidance-steps" style="display:flex; flex-direction:column; gap:10px;">
-            ${savedCount < 2 ? `
-              <div style="display:flex; align-items:flex-start; gap:10px;">
-                <div style="width:24px; height:24px; border-radius:50%; background:#2563EB; color:white; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; margin-top:1px;">1</div>
-                <div>
-                  <div style="font-size:13px; font-weight:600; color:#1E1E1E;">比較したい物件をもう1件追加</div>
-                  <div style="font-size:11px; color:#666; margin-top:2px;">上のフォームから別の物件URLを取り込みましょう</div>
-                </div>
-              </div>
-            ` : ''}
-            <div style="display:flex; align-items:flex-start; gap:10px;">
-              <div style="width:24px; height:24px; border-radius:50%; background:${savedCount < 2 ? '#BFDBFE' : '#2563EB'}; color:${savedCount < 2 ? '#2563EB' : 'white'}; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; margin-top:1px;">${savedCount < 2 ? '2' : '1'}</div>
-              <div>
-                <div style="font-size:13px; font-weight:600; color:#1E1E1E;">物件カードの「比較に追加」ボタンを押す</div>
-                <div style="font-size:11px; color:#666; margin-top:2px;">比較したい物件を2件以上選びましょう</div>
-              </div>
-            </div>
-            <div style="display:flex; align-items:flex-start; gap:10px;">
-              <div style="width:24px; height:24px; border-radius:50%; background:#BFDBFE; color:#2563EB; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; margin-top:1px;">${savedCount < 2 ? '3' : '2'}</div>
-              <div>
-                <div style="font-size:13px; font-weight:600; color:#1E1E1E;">「比較表を作成」ボタンで比較スタート！</div>
-                <div style="font-size:11px; color:#666; margin-top:2px;">AIが項目ごとに整理した比較表を自動作成します</div>
-              </div>
-            </div>
-          </div>
-          ${(savedCount >= 2 && compProps.length >= 2) ? `
-            <div style="margin-top:14px; padding:10px 14px; background:rgba(37,99,235,0.1); border-radius:10px; display:flex; align-items:center; gap:8px;">
-              <span style="font-size:16px;">🎉</span>
-              <span style="font-size:13px; font-weight:600; color:#1E40AF;">準備OK！下の「比較表を作成」ボタンを押して比較スタート！</span>
-            </div>
-          ` : ''}
-        </div>
-      ` : ''}
 
       ${savedCount === 0 ? `
         <div class="card p-8 text-center">
