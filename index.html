@@ -2163,7 +2163,7 @@ function renderComparisonTable() {
 
   // ===== 建築費 =====
   const costs = props.map(p => calcBuildingCost(p));
-  const fmtYen = v => v >= 100000000 ? (v/100000000).toFixed(2) + '億円' : (v/10000).toLocaleString() + '万円';
+  const fmtYen = v => v >= 100000000 ? (v/100000000).toFixed(2) + '億円' : Math.round(v/10000).toLocaleString() + '万円';
 
   // ===== ハザードリスクレベル =====
   function compRiskLevel(text) {
@@ -2559,7 +2559,7 @@ function openPropertyDetailModal(index) {
   const maxTotal = Math.max(...allScores.map(ss => ss ? ss.score_total : 0));
   const isBest = s && s.score_total === maxTotal && maxTotal > 0;
   const cost = calcBuildingCost(p);
-  const fmtYen = v => v >= 100000000 ? (v/100000000).toFixed(2) + '億円' : (v/10000).toLocaleString() + '万円';
+  const fmtYen = v => v >= 100000000 ? (v/100000000).toFixed(2) + '億円' : Math.round(v/10000).toLocaleString() + '万円';
   function sc(v) { return v >= 80 ? '#16a34a' : v >= 60 ? '#2563eb' : v >= 40 ? '#f59e0b' : '#dc2626'; }
   function mRiskLevel(text) {
     if (!text) return 'unknown';
