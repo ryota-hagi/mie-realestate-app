@@ -2525,11 +2525,11 @@ function renderComparisonTable() {
   const accSections = [
     accSection('scores', '📊', 'スコア比較', '', true, renderScoreSection()),
     accSection('basic', '📍', '基本情報', '5項目', false, renderBasicSection()),
+    accSection('aicomment', '💬', 'AIコメント', '', false, renderAICommentSection()),
     accSection('check', '⚠️', '重要確認項目', '6項目', false, renderCheckSection()),
     accSection('build', '🏗️', '建築費シミュレーション', '総額比較', false, renderBuildSection()),
     accSection('env', '🔍', '周辺環境', '6施設', false, renderEnvSection()),
     accSection('hazard', '🛡️', 'ハザード・地盤', '4項目', false, renderHazardSection()),
-    accSection('aicomment', '💬', 'AIコメント', '', false, renderAICommentSection()),
     accSection('memo', '📝', 'メモ', '', false, renderMemoSection()),
   ].join('');
 
