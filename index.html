@@ -85,25 +85,102 @@
     .comp-sidebar-mobile { display: flex !important; }
   }
   .comp-sidebar-mobile {
-    align-items: center; gap: 8px; padding: 8px 12px;
-    background: white; border: 1px solid #e5e7eb; border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 8px;
-    position: sticky; top: 0; z-index: 40;
+    align-items:center; gap:8px; padding:8px 12px;
+    background:rgba(255,255,255,0.92); backdrop-filter:blur(8px);
+    border:1px solid #e5e7eb; border-radius:12px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06),0 2px 8px rgba(0,0,0,0.03);
+    margin-bottom:8px; position:sticky; top:0; z-index:40;
   }
   .comp-sidebar-mobile select {
-    flex: 1; min-width: 0; padding: 6px 10px; border: 1px solid #e5e7eb; border-radius: 8px;
-    font-size: 13px; color: #374151; background: #f9fafb; outline: none; appearance: auto;
+    flex:1; min-width:0; padding:7px 10px; border:1px solid #e5e7eb; border-radius:8px;
+    font-size:12px; font-weight:500; color:#374151; background:#f9fafb; outline:none; appearance:auto; transition:border-color 0.2s;
   }
-  .comp-sidebar-mobile select:focus { border-color: #93c5fd; }
+  .comp-sidebar-mobile select:focus { border-color:#93c5fd; box-shadow:0 0 0 2px rgba(59,130,246,0.08); }
   .comp-mobile-back-btn {
-    flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb;
-    background: #f9fafb; cursor: pointer; font-size: 14px; display: flex; align-items: center;
-    justify-content: center; color: #6b7280; transition: background 0.15s;
+    flex-shrink:0; width:32px; height:32px; border-radius:8px; border:1px solid #e5e7eb;
+    background:#f9fafb; cursor:pointer; font-size:14px; display:flex; align-items:center;
+    justify-content:center; color:#6b7280; transition:all 0.2s;
   }
-  .comp-mobile-back-btn:hover { background: #e5e7eb; }
+  .comp-mobile-back-btn:hover { background:#eff6ff; border-color:#bfdbfe; color:#2563eb; }
   .comp-mobile-count {
-    flex-shrink: 0; font-size: 11px; color: #9ca3af; white-space: nowrap;
+    flex-shrink:0; font-size:10px; font-weight:600; color:#fff; background:#2563eb;
+    padding:2px 8px; border-radius:999px; white-space:nowrap;
   }
+
+  /* === デスクトップサイドバー リデザイン === */
+  .comp-sidebar-card {
+    background:rgba(255,255,255,0.92); backdrop-filter:blur(8px);
+    border-radius:16px; border:1px solid #e5e7eb;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+    overflow:hidden; position:sticky; top:1rem;
+  }
+  .comp-sidebar-header {
+    background:linear-gradient(135deg,#2563eb 0%,#3b82f6 100%);
+    padding:14px 14px 12px; display:flex; align-items:center; justify-content:space-between;
+  }
+  .comp-sidebar-header-title {
+    display:flex; align-items:center; gap:7px;
+    font-size:12px; font-weight:700; color:#fff; letter-spacing:0.04em;
+  }
+  .comp-sidebar-header-icon { width:16px; height:16px; opacity:0.9; }
+  .comp-sidebar-count-badge {
+    font-size:10px; font-weight:700; color:#2563eb; background:rgba(255,255,255,0.95);
+    padding:2px 8px; border-radius:999px; line-height:1.4;
+  }
+  .comp-sidebar-back-btn {
+    display:flex; align-items:center; gap:6px; width:100%; padding:9px 12px; margin:0;
+    font-size:12px; font-weight:500; color:#6b7280; background:#f9fafb;
+    border:none; border-bottom:1px solid #f3f4f6; cursor:pointer; transition:all 0.2s; text-align:left;
+  }
+  .comp-sidebar-back-btn:hover { background:#f3f4f6; color:#374151; }
+  .comp-sidebar-back-btn svg { width:14px; height:14px; flex-shrink:0; }
+  .comp-sidebar-list { padding:6px 8px 8px; max-height:380px; overflow-y:auto; }
+  .comp-sidebar-list::-webkit-scrollbar { width:4px; }
+  .comp-sidebar-list::-webkit-scrollbar-track { background:transparent; }
+  .comp-sidebar-list::-webkit-scrollbar-thumb { background:#d1d5db; border-radius:4px; }
+  .comp-sidebar-item {
+    display:flex; align-items:flex-start; justify-content:space-between; gap:4px;
+    padding:9px 10px; border-radius:10px; cursor:pointer; transition:all 0.2s;
+    border:1px solid transparent; position:relative;
+  }
+  .comp-sidebar-item:hover { background:#f9fafb; border-color:#f3f4f6; }
+  .comp-sidebar-item.active {
+    background:linear-gradient(135deg,#eff6ff 0%,#f0f4ff 100%);
+    border-color:#bfdbfe; box-shadow:0 1px 4px rgba(37,99,235,0.08);
+  }
+  .comp-sidebar-item.active::before {
+    content:''; position:absolute; left:0; top:8px; bottom:8px; width:3px;
+    border-radius:0 3px 3px 0; background:#2563eb;
+  }
+  .comp-sidebar-item-name {
+    font-size:12px; font-weight:600; color:#374151;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .comp-sidebar-item.active .comp-sidebar-item-name { color:#1d4ed8; }
+  .comp-sidebar-item-meta {
+    display:flex; align-items:center; gap:6px; margin-top:2px; font-size:11px; color:#9ca3af;
+  }
+  .comp-sidebar-item-meta-dot {
+    width:3px; height:3px; border-radius:50%; background:#d1d5db; flex-shrink:0;
+  }
+  .comp-sidebar-item-count {
+    display:inline-flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:600; color:#6b7280; background:#f3f4f6;
+    padding:1px 6px; border-radius:4px; line-height:1.4;
+  }
+  .comp-sidebar-item.active .comp-sidebar-item-count { color:#2563eb; background:#dbeafe; }
+  .comp-sidebar-delete-btn {
+    opacity:0; flex-shrink:0; width:22px; height:22px; display:flex; align-items:center;
+    justify-content:center; border-radius:6px; border:none; background:transparent;
+    color:#d1d5db; cursor:pointer; transition:all 0.15s; font-size:11px; margin-top:1px;
+  }
+  .comp-sidebar-item:hover .comp-sidebar-delete-btn { opacity:1; }
+  .comp-sidebar-delete-btn:hover { background:#fee2e2; color:#ef4444; }
+  .comp-sidebar-empty {
+    padding:20px 12px; text-align:center; color:#9ca3af; font-size:11px; line-height:1.6;
+  }
+  .comp-sidebar-empty-icon { display:block; margin:0 auto 8px; width:28px; height:28px; color:#d1d5db; }
+
   /* === 比較表 B+Aハイブリッド CSS === */
   .so-comp-summary-bar { display:flex; gap:10px; overflow-x:auto; padding-top:14px; padding-bottom:4px; margin-bottom:12px; }
   .so-comp-summary-card { flex:1; min-width:145px; background:#fff; border-radius:12px; border:2px solid #e5e7eb; padding:14px 12px; text-align:center; cursor:pointer; transition:all 0.2s; position:relative; scroll-snap-align:start; }
@@ -1668,31 +1745,46 @@ function renderComparisonSidebar() {
   const currentId = state.soComparison?.id;
   const isCompareView = state.soView === 'compare' && state.soComparison;
 
+  const headerIcon = `<svg class="comp-sidebar-header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="5" rx="1"/><rect x="2" y="10" width="20" height="5" rx="1"/><rect x="2" y="17" width="20" height="5" rx="1"/></svg>`;
+  const backArrow = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>`;
+  const emptyIcon = `<svg class="comp-sidebar-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`;
+
   return `
     <div class="flex-shrink-0" style="width:220px;">
       <!-- デスクトップ版サイドバー -->
       <div class="comp-sidebar-desktop">
-        <div class="card p-3 sticky" style="top:1rem;">
-          <h3 class="text-xs font-bold text-gray-500 uppercase mb-3">📂 比較表一覧</h3>
+        <div class="comp-sidebar-card">
+          <div class="comp-sidebar-header">
+            <div class="comp-sidebar-header-title">${headerIcon} 比較表一覧</div>
+            ${comps.length > 0 ? `<span class="comp-sidebar-count-badge">${comps.length}</span>` : ''}
+          </div>
           ${isCompareView ? `
-            <button onclick="state.soView=null; state.soComparison=null; render();" class="w-full mb-3 px-3 py-2 text-xs bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors text-left">
-              ← 物件リストに戻る
+            <button onclick="state.soView=null; state.soComparison=null; render();" class="comp-sidebar-back-btn">
+              ${backArrow} 物件リストに戻る
             </button>
           ` : ''}
-          <div class="space-y-1 max-h-96 overflow-y-auto">
-            ${comps.length === 0 ? `<p class="text-xs text-gray-400 py-2">比較表を作成すると<br>ここに一覧表示されます</p>` : ''}
+          <div class="comp-sidebar-list">
+            ${comps.length === 0 ? `
+              <div class="comp-sidebar-empty">
+                ${emptyIcon}
+                比較表を作成すると<br>ここに一覧表示されます
+              </div>
+            ` : ''}
             ${comps.map(c => {
               const isActive = isCompareView && c.id === currentId;
               const dateStr = c.created_at ? new Date(c.created_at).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' }) : '';
+              const count = (c.property_ids || []).length;
               return `
-                <div class="group rounded-lg p-2 cursor-pointer transition-colors ${isActive ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50 border border-transparent'}" onclick="loadComparisonDetail('${c.id}')">
-                  <div class="flex items-start justify-between gap-1">
-                    <div class="flex-1 min-w-0">
-                      <div class="text-xs font-medium ${isActive ? 'text-blue-700' : 'text-gray-700'} truncate">${c.name || '比較表'}</div>
-                      <div class="text-xs text-gray-400">${dateStr} · ${(c.property_ids||[]).length}件</div>
+                <div class="comp-sidebar-item ${isActive ? 'active' : ''}" onclick="loadComparisonDetail('${c.id}')">
+                  <div class="flex-1 min-w-0">
+                    <div class="comp-sidebar-item-name">${c.name || '比較表'}</div>
+                    <div class="comp-sidebar-item-meta">
+                      <span>${dateStr}</span>
+                      <span class="comp-sidebar-item-meta-dot"></span>
+                      <span class="comp-sidebar-item-count">${count}件</span>
                     </div>
-                    <button onclick="event.stopPropagation(); handleDeleteComparison('${c.id}')" class="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 text-xs transition-opacity" title="削除">✕</button>
                   </div>
+                  <button onclick="event.stopPropagation(); handleDeleteComparison('${c.id}')" class="comp-sidebar-delete-btn" title="削除">✕</button>
                 </div>
               `;
             }).join('')}
