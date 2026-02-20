@@ -1448,7 +1448,7 @@ function renderHeroSection() {
           <p style="font-size:14px; line-height:1.8; color:#666666; margin-bottom:32px;">物件URLを貼るだけで、AIが自動で情報を整理。複数物件をスコア付きで一覧比較できます。</p>
           <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px;" class="v3-hero-form">
             <input type="text" id="hero-url-input" placeholder="物件URLを貼り付け..." style="flex:1; padding:12px 16px; border-radius:12px; font-size:14px; border:1px solid #E8E8E8; outline-color:#2563EB;">
-            <button onclick="document.getElementById('hero-url-input').value && handleImportProperty(document.getElementById('hero-url-input').value)" class="v3-btn-primary" style="padding:12px 24px; border-radius:12px; font-weight:700; font-size:14px; border:none; cursor:pointer;">くらべてみる</button>
+            <button onclick="v3HandleImport('hero-url-input')" class="v3-btn-primary" style="padding:12px 24px; border-radius:12px; font-weight:700; font-size:14px; border:none; cursor:pointer;">くらべてみる</button>
           </div>
           <div style="display:flex; flex-wrap:wrap; gap:8px; font-size:12px; color:#999999;">
             <span style="padding:4px 8px; border-radius:6px; background:#F5F5F5;">SUUMO</span>
@@ -1636,7 +1636,7 @@ function renderHeroSection() {
         <p style="font-size:20px; font-weight:700; color:#1E1E1E; margin-bottom:32px;">さっそく物件を比較してみよう</p>
         <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px;" class="v3-cta-form">
           <input type="text" id="cta-url-input" placeholder="物件URLを貼り付け..." style="flex:1; padding:12px 16px; border-radius:12px; font-size:14px; border:1px solid #E8E8E8; outline-color:#2563EB;">
-          <button onclick="document.getElementById('cta-url-input').value && handleImportProperty(document.getElementById('cta-url-input').value)" class="v3-btn-primary" style="padding:12px 24px; border-radius:12px; font-weight:700; font-size:14px; border:none; cursor:pointer;">くらべてみる</button>
+          <button onclick="v3HandleImport('cta-url-input')" class="v3-btn-primary" style="padding:12px 24px; border-radius:12px; font-weight:700; font-size:14px; border:none; cursor:pointer;">くらべてみる</button>
         </div>
         <div style="display:flex; justify-content:center; gap:16px; font-size:12px; color:#666;">
           <span>✓ 完全無料</span><span>✓ 会員登録不要</span><span>✓ 30秒でスタート</span>
@@ -1656,6 +1656,21 @@ function toggleV3Faq(item) {
     item.classList.add('open');
     item.querySelector('.v3-faq-question').setAttribute('aria-expanded', 'true');
   }
+}
+
+function v3HandleImport(inputId) {
+  const input = document.getElementById(inputId);
+  const url = input ? input.value.trim() : '';
+  if (!url) {
+    // URLが空の場合はアプリ内のインポートフォームまでスクロール
+    const appInput = document.getElementById('url-import-property');
+    if (appInput) { appInput.scrollIntoView({ behavior:'smooth', block:'center' }); appInput.focus(); }
+    return;
+  }
+  // アプリ内のインポートフォームにURLを設定してモーダルを開く
+  const appInput = document.getElementById('url-import-property');
+  if (appInput) appInput.value = url;
+  openImportModal();
 }
 
 // ============================================================
