@@ -1509,6 +1509,8 @@ ${faqJsonLd}
 // ---------------------------------------------------------------------------
 function generateKnowledgeHubPage() {
   const articles = knowledgeData.articles;
+  const categories = knowledgeData.categories || [];
+  const featureCollections = knowledgeData.featureCollections || [];
 
   const breadcrumbItems = [
     { name: 'トップ', url: '/' },
@@ -1516,11 +1518,114 @@ function generateKnowledgeHubPage() {
   ];
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(breadcrumbItems);
 
-  const articleCards = articles.map(a => `
-    <a href="/knowledge/${a.id}/" class="knowledge-hub-card">
-      <h2>${escHtml(a.title.split('｜')[0])}</h2>
-      <p>${escHtml(a.description.substring(0, 100))}...</p>
-    </a>`).join('\n');
+  // CollectionPage structured data
+  const collectionJsonLd = `<script type="application/ld+json">${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: '注文住宅の知識',
+    description: '注文住宅を建てる方に必要な知識を網羅。費用・流れ・土地選び・法規制など分野別にまとめました。',
+    url: `${DOMAIN}/knowledge/`,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: articles.map((a, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `${DOMAIN}/knowledge/${a.id}/`,
+        name: a.title.split('｜')[0]
+      }))
+    }
+  })}</script>`;
+
+  // Difficulty labels
+  const diffLabel = d => ({ beginner: '初心者向け', intermediate: '中級', advanced: '上級' }[d] || '');
+  const diffColor = d => ({ beginner: '#059669', intermediate: '#2563eb', advanced: '#7c3aed' }[d] || '#6b7280');
+  const diffBg = d => ({ beginner: '#ecfdf5', intermediate: '#eff6ff', advanced: '#f5f3ff' }[d] || '#f3f4f6');
+
+  // Aggregate stats
+  const totalReadTime = articles.reduce((s, a) => s + (a.readTimeMinutes || 0), 0);
+
+  // Hero section
+  const heroHtml = `
+  <section class="ka-hub-hero">
+    <div class="ka-hub-hero-inner">
+      <span class="ka-hub-hero-badge">家づくりの基礎知識</span>
+      <h1>注文住宅の知識</h1>
+      <p class="ka-hub-hero-desc">費用・流れ・土地選び・法規制など、注文住宅に必要な知識を<br>分野別にわかりやすくまとめました。</p>
+    </div>
+  </section>`;
+
+  // Feature collections section
+  const featuresHtml = featureCollections.length ? `
+  <section class="ka-hub-features">
+    ${featureCollections.map(fc => {
+      const fcArticles = fc.articleIds.map(id => articles.find(a => a.id === id)).filter(Boolean);
+      return `
+    <div class="ka-hub-feature-card">
+      <div class="ka-hub-feature-head">
+        <div class="ka-hub-feature-icon-wrap" style="background:${fc.bgGradient};">${fc.icon}</div>
+        <div>
+          <h2>${escHtml(fc.label)}</h2>
+          <p>${escHtml(fc.description)}</p>
+        </div>
+      </div>
+      <div class="ka-hub-feature-links">
+        ${fcArticles.map((a, i) => `
+        <a href="/knowledge/${a.id}/" class="ka-hub-feature-link">
+          <span class="ka-hub-fl-num">${i + 1}</span>
+          <span class="ka-hub-fl-title">${escHtml(a.title.split('｜')[0])}</span>
+          <span class="ka-hub-fl-arrow">→</span>
+        </a>`).join('')}
+      </div>
+    </div>`;
+    }).join('')}
+  </section>` : '';
+
+  // Category nav
+  const catNavHtml = `
+  <nav class="ka-hub-cat-nav">
+    ${categories.map(c => `<a href="#cat-${c.id}" class="ka-hub-cat-pill" style="--cc:${c.color};--cb:${c.bgColor};">${c.icon} ${escHtml(c.label)}</a>`).join('')}
+  </nav>`;
+
+  // Category sections with cards
+  const categorySectionsHtml = categories.map(cat => {
+    const catArticles = articles
+      .filter(a => a.category === cat.id)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+    if (!catArticles.length) return '';
+    return `
+  <section id="cat-${cat.id}" class="ka-hub-category">
+    <h2 class="ka-hub-cat-title">${cat.icon} ${escHtml(cat.label)}</h2>
+    <div class="ka-hub-card-grid">
+      ${catArticles.map(a => {
+        const title = a.title.split('｜')[0];
+        const desc = a.description.length > 100 ? a.description.substring(0, 100) + '...' : a.description;
+        return `
+      <a href="/knowledge/${a.id}/" class="ka-hub-card">
+        <div class="ka-hub-card-icon-wrap" style="background:${cat.bgColor};">${a.icon || '📄'}</div>
+        <h3>${escHtml(title)}</h3>
+        <p class="ka-hub-card-desc">${escHtml(desc)}</p>
+        <div class="ka-hub-card-footer">
+          <span class="ka-hub-card-time">${a.readTimeMinutes || '?'}分で読める</span>
+          <span class="ka-hub-card-arrow">→</span>
+        </div>
+      </a>`;
+      }).join('')}
+    </div>
+  </section>`;
+  }).join('');
+
+  // CTA section
+  const ctaHtml = `
+  <section class="ka-hub-cta">
+    <div class="ka-hub-cta-inner">
+      <h2>知識を身につけたら、実際のデータで検討を始めましょう</h2>
+      <p>三重県7エリアの土地相場・費用シミュレーションで理想の家づくりを</p>
+      <div class="ka-hub-cta-btns">
+        <a href="/area/mie/" class="ka-hub-cta-pri">三重県エリア比較 →</a>
+        <a href="/" class="ka-hub-cta-sec">注文住宅比較.com →</a>
+      </div>
+    </div>
+  </section>`;
 
   return `<!DOCTYPE html>
 <html lang="ja">
@@ -1547,36 +1652,99 @@ function generateKnowledgeHubPage() {
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 ${breadcrumbJsonLd}
+${collectionJsonLd}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); color: #374151; line-height: 1.8; min-height: 100vh; }
-  .knowledge-header { background: white; border-bottom: 1px solid #e5e7eb; padding: 10px 16px; }
-  .knowledge-header-inner { max-width: 72rem; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-  .knowledge-header .site-logo img { height: 56px; width: auto; }
-  .knowledge-header-nav { display: flex; align-items: center; gap: 16px; font-size: 13px; }
-  .knowledge-header-nav a { text-decoration: none; color: #6b7280; font-weight: 500; }
-  .knowledge-header-nav .active { color: #2563EB; font-weight: 600; }
-  .knowledge-hamburger { display: none; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; background: #f3f4f6; border: 1px solid #e5e7eb; font-size: 18px; color: #374151; cursor: pointer; }
-  @media (max-width: 768px) {
-    .knowledge-header-nav { display: none !important; }
-    .knowledge-hamburger { display: flex !important; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Noto Sans JP',sans-serif;background:linear-gradient(135deg,#f0f4ff 0%,#e8f0fe 50%,#f5f0ff 100%);color:#374151;line-height:1.8;min-height:100vh;}
+
+  /* Header */
+  .knowledge-header{background:white;border-bottom:1px solid #e5e7eb;padding:10px 16px;}
+  .knowledge-header-inner{max-width:72rem;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+  .knowledge-header .site-logo img{height:56px;width:auto;}
+  .knowledge-header-nav{display:flex;align-items:center;gap:16px;font-size:13px;}
+  .knowledge-header-nav a{text-decoration:none;color:#6b7280;font-weight:500;}
+  .knowledge-header-nav .active{color:#2563EB;font-weight:600;}
+  .knowledge-hamburger{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#f3f4f6;border:1px solid #e5e7eb;font-size:18px;color:#374151;cursor:pointer;}
+  @media(max-width:768px){
+    .knowledge-header-nav{display:none !important;}
+    .knowledge-hamburger{display:flex !important;}
   }
-  .knowledge-hub { max-width: 800px; margin: 0 auto; padding: 24px 16px 48px; }
-  .knowledge-hub h1 { font-size: 1.5rem; font-weight: 700; color: #111827; margin-bottom: 8px; }
-  .knowledge-hub .hub-desc { font-size: 0.9rem; color: #6b7280; margin-bottom: 24px; }
-  .knowledge-hub-card { display: block; background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 16px; text-decoration: none; transition: all 0.2s; }
-  .knowledge-hub-card:hover { border-color: #93c5fd; box-shadow: 0 4px 12px rgba(59,130,246,0.1); transform: translateY(-2px); }
-  .knowledge-hub-card h2 { font-size: 1.05rem; font-weight: 700; color: #1f2937; margin-bottom: 6px; }
-  .knowledge-hub-card p { font-size: 0.85rem; color: #6b7280; margin: 0; }
-  .knowledge-hub-cta { margin: 32px 0; padding: 24px; background: linear-gradient(135deg, #eff6ff, #eef2ff); border: 1px solid #bfdbfe; border-radius: 12px; text-align: center; }
-  .knowledge-hub-cta p { font-size: 0.95rem; color: #374151; margin-bottom: 12px; }
-  .knowledge-hub-cta a { display: inline-block; padding: 10px 24px; background: #3b82f6; color: white; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; margin: 4px; }
-  .knowledge-hub-cta a:hover { background: #2563eb; }
-  .knowledge-footer { max-width: 800px; margin: 0 auto; padding: 24px 16px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #9ca3af; text-align: center; }
-  .knowledge-footer a { color: #3b82f6; text-decoration: none; }
+
+  /* Hero */
+  .ka-hub-hero{padding:48px 16px 40px;text-align:center;max-width:64rem;margin:0 auto;}
+  .ka-hub-hero-inner{max-width:640px;margin:0 auto;}
+  .ka-hub-hero-badge{display:inline-block;font-size:12px;font-weight:700;color:#2563eb;background:#EFF6FF;padding:6px 16px;border-radius:999px;margin-bottom:20px;border:1px solid #BFDBFE;}
+  .ka-hub-hero h1{font-size:1.8rem;font-weight:800;color:#111827;margin-bottom:12px;letter-spacing:-0.02em;}
+  .ka-hub-hero-desc{font-size:0.95rem;color:#6b7280;line-height:1.8;}
+
+  /* Main container */
+  .ka-hub-main{max-width:64rem;margin:0 auto;padding:0 16px 48px;}
+
+  /* Feature collections */
+  .ka-hub-features{padding:40px 0 16px;}
+  .ka-hub-feature-card{background:white;border-radius:16px;padding:28px;border:1px solid #e5e7eb;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+  .ka-hub-feature-head{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+  .ka-hub-feature-icon-wrap{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+  .ka-hub-feature-head h2{font-size:1.1rem;font-weight:700;color:#1f2937;margin-bottom:2px;}
+  .ka-hub-feature-head p{font-size:0.82rem;color:#6b7280;}
+  .ka-hub-feature-links{display:flex;flex-direction:column;gap:0;border-top:1px solid #f3f4f6;}
+  .ka-hub-feature-link{display:flex;align-items:center;gap:12px;padding:14px 8px;text-decoration:none;color:#1f2937;transition:background 0.15s;border-bottom:1px solid #f3f4f6;}
+  .ka-hub-feature-link:hover{background:#f9fafb;}
+  .ka-hub-fl-num{width:24px;height:24px;border-radius:50%;background:#EFF6FF;color:#2563eb;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .ka-hub-fl-title{flex:1;font-size:0.9rem;font-weight:500;}
+  .ka-hub-fl-arrow{color:#9ca3af;font-size:14px;}
+
+  /* Category nav */
+  .ka-hub-cat-nav{display:flex;gap:8px;padding:24px 0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .ka-hub-cat-nav::-webkit-scrollbar{display:none;}
+  .ka-hub-cat-pill{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;text-decoration:none;font-size:0.85rem;font-weight:600;white-space:nowrap;background:var(--cb);color:var(--cc);border:1px solid transparent;transition:all 0.2s;}
+  .ka-hub-cat-pill:hover{border-color:var(--cc);box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+
+  /* Category sections */
+  .ka-hub-category{margin-top:40px;scroll-margin-top:80px;}
+  .ka-hub-cat-title{font-size:1.2rem;font-weight:700;color:#111827;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid #e5e7eb;}
+
+  /* Card grid */
+  .ka-hub-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+
+  /* Article card */
+  .ka-hub-card{display:flex;flex-direction:column;background:white;border:1px solid #e5e7eb;border-radius:16px;padding:24px;text-decoration:none;transition:all 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+  .ka-hub-card:hover{box-shadow:0 8px 24px rgba(0,0,0,0.08);transform:translateY(-2px);border-color:#d1d5db;}
+  .ka-hub-card-icon-wrap{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:16px;}
+  .ka-hub-card h3{font-size:0.95rem;font-weight:700;color:#1f2937;margin-bottom:8px;line-height:1.5;}
+  .ka-hub-card-desc{font-size:0.82rem;color:#6b7280;line-height:1.7;margin-bottom:16px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:1;}
+  .ka-hub-card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid #f3f4f6;}
+  .ka-hub-card-time{font-size:0.75rem;color:#9ca3af;}
+  .ka-hub-card-arrow{color:#2563eb;font-size:14px;font-weight:600;}
+
+  /* CTA */
+  .ka-hub-cta{margin:48px 0 0;padding:32px 24px;background:white;border:1px solid #e5e7eb;border-radius:16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+  .ka-hub-cta-inner h2{font-size:1.1rem;font-weight:700;color:#1f2937;margin-bottom:6px;}
+  .ka-hub-cta-inner p{font-size:0.85rem;color:#6b7280;margin-bottom:20px;}
+  .ka-hub-cta-btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;}
+  .ka-hub-cta-pri{display:inline-block;padding:12px 28px;background:#2563eb;color:white;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.9rem;transition:all 0.2s;box-shadow:0 2px 8px rgba(37,99,235,0.2);}
+  .ka-hub-cta-pri:hover{background:#1D4ED8;transform:translateY(-1px);box-shadow:0 4px 16px rgba(37,99,235,0.3);}
+  .ka-hub-cta-sec{display:inline-block;padding:12px 28px;background:white;color:#374151;border:1px solid #d1d5db;border-radius:10px;text-decoration:none;font-weight:600;font-size:0.9rem;transition:all 0.2s;}
+  .ka-hub-cta-sec:hover{background:#f9fafb;border-color:#9ca3af;}
+
+  /* Footer */
+  .ka-hub-footer{max-width:64rem;margin:0 auto;padding:24px 16px;border-top:1px solid #e5e7eb;font-size:12px;color:#9ca3af;text-align:center;}
+  .ka-hub-footer a{color:#3b82f6;text-decoration:none;}
+
+  /* Responsive */
+  @media(max-width:768px){
+    .ka-hub-hero{padding:32px 16px 28px;}
+    .ka-hub-hero h1{font-size:1.4rem;}
+    .ka-hub-hero-desc{font-size:0.88rem;}
+    .ka-hub-hero-desc br{display:none;}
+    .ka-hub-card-grid{grid-template-columns:1fr;}
+    .ka-hub-cta{padding:24px 16px;}
+    .ka-hub-cta-inner h2{font-size:1rem;}
+    .ka-hub-cat-nav{padding:16px 0 4px;}
+  }
 </style>
 </head>
 <body>
@@ -1615,22 +1783,18 @@ ${breadcrumbJsonLd}
   function closeGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.opacity='0';p.style.transform='translateX(100%)';document.body.style.overflow='';setTimeout(function(){o.style.display='none';p.style.display='none';},300);}
   </script>
 
-  <main class="knowledge-hub">
-    <h1>注文住宅の知識</h1>
-    <p class="hub-desc">注文住宅を建てる方に必要な知識を、費用・流れ・土地選び・法規制など分野別にまとめました。</p>
+  ${heroHtml}
 
-    ${articleCards}
-
-    <div class="knowledge-hub-cta">
-      <p>知識を身につけたら、実際のデータで検討を始めましょう</p>
-      <a href="/area/mie/">三重県エリア比較 →</a>
-      <a href="/" style="background:#10b981;">注文住宅比較.com →</a>
-    </div>
+  <main class="ka-hub-main">
+    ${featuresHtml}
+    ${catNavHtml}
+    ${categorySectionsHtml}
+    ${ctaHtml}
   </main>
 
-  <footer class="knowledge-footer">
-    <p><a href="/">注文住宅比較.com</a> | <a href="/area/mie/">三重県エリア比較</a></p>
-    <p style="margin-top: 8px;">&copy; 注文住宅比較.com</p>
+  <footer class="ka-hub-footer">
+    <p><a href="/">注文住宅比較.com</a> | <a href="/area/mie/">三重県エリア比較</a> | <a href="/knowledge/">注文住宅の知識</a></p>
+    <p style="margin-top:8px;">&copy; 注文住宅比較.com</p>
   </footer>
 </body>
 </html>`;
