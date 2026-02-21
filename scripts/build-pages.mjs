@@ -1262,7 +1262,7 @@ ${JSON.stringify({
   const sectionsHtml = article.sections.map(s => `
   <section>
     <h2>${escHtml(s.heading)}</h2>
-    <p>${escHtml(s.body)}</p>
+    ${s.bodyHtml ? s.bodyHtml : `<p>${escHtml(s.body)}</p>`}
   </section>`).join('\n');
 
   const faqHtml = (article.faqs || []).map(f => `
@@ -1357,6 +1357,57 @@ ${faqJsonLd}
   .knowledge-toc li { font-size: 0.85rem; margin-bottom: 4px; }
   .knowledge-toc a { color: #3b82f6; text-decoration: none; }
   .knowledge-toc a:hover { text-decoration: underline; }
+
+  /* === ka-* リッチコンテンツコンポーネント === */
+
+  /* データ比較テーブル */
+  .ka-table-wrap { overflow-x: auto; margin: 20px 0; -webkit-overflow-scrolling: touch; }
+  .ka-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 480px; }
+  .ka-table th { background: #1e3a5f; color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; white-space: nowrap; }
+  .ka-table td { padding: 10px 14px; border-bottom: 1px solid #e5e7eb; }
+  .ka-table tr:nth-child(even) td { background: #f8fafc; }
+  .ka-table tr:hover td { background: #eff6ff; }
+
+  /* 統計グリッド */
+  .ka-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 20px 0; }
+  .ka-stat { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 20px 16px; text-align: center; }
+  .ka-stat-value { font-size: 28px; font-weight: 800; color: #1e3a5f; line-height: 1.2; }
+  .ka-stat-label { font-size: 13px; color: #64748b; margin-top: 6px; }
+  .ka-stat-note { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+
+  /* 情報ボックス（info / warning / tip） */
+  .ka-info, .ka-warning, .ka-tip { padding: 16px 20px; border-radius: 8px; margin: 20px 0; font-size: 14px; line-height: 1.8; border-left: 4px solid; }
+  .ka-info { background: #eff6ff; border-color: #3b82f6; }
+  .ka-warning { background: #fef3c7; border-color: #f59e0b; }
+  .ka-tip { background: #ecfdf5; border-color: #10b981; }
+  .ka-info strong, .ka-warning strong, .ka-tip strong { display: block; margin-bottom: 4px; }
+
+  /* ステップフロー */
+  .ka-steps { counter-reset: ka-step; margin: 20px 0; }
+  .ka-step { display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; }
+  .ka-step::before { counter-increment: ka-step; content: counter(ka-step); flex-shrink: 0; width: 32px; height: 32px; background: #1e3a5f; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+  .ka-step-content { flex: 1; }
+  .ka-step-content strong { display: block; font-size: 15px; margin-bottom: 4px; color: #1e3a5f; }
+  .ka-step-content p { margin: 0; font-size: 14px; color: #475569; line-height: 1.7; }
+
+  /* メリデメ比較 */
+  .ka-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+  .ka-compare-good, .ka-compare-bad { border-radius: 10px; padding: 20px; }
+  .ka-compare-good { background: #ecfdf5; border: 1px solid #a7f3d0; }
+  .ka-compare-bad { background: #fef2f2; border: 1px solid #fecaca; }
+  .ka-compare-good h4 { color: #059669; margin: 0 0 10px; font-size: 15px; }
+  .ka-compare-bad h4 { color: #dc2626; margin: 0 0 10px; font-size: 15px; }
+  .ka-compare-good ul, .ka-compare-bad ul { margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.8; }
+  @media (max-width: 600px) { .ka-compare { grid-template-columns: 1fr; } }
+
+  /* リスト */
+  .ka-list { margin: 16px 0; padding-left: 0; list-style: none; }
+  .ka-list li { padding: 8px 0 8px 28px; position: relative; font-size: 14px; line-height: 1.7; border-bottom: 1px solid #f1f5f9; }
+  .ka-list li::before { content: "✔"; position: absolute; left: 4px; color: #10b981; font-weight: 700; }
+
+  /* 強調ボックス */
+  .ka-highlight { background: #fefce8; border: 1px solid #fde68a; border-radius: 10px; padding: 20px; margin: 20px 0; font-size: 14px; line-height: 1.8; }
+  .ka-highlight strong { color: #92400e; }
 </style>
 </head>
 <body>
@@ -1409,11 +1460,14 @@ ${faqJsonLd}
       </ol>
     </nav>
 
-    ${article.sections.map((s, i) => `
+    ${article.sections.map((s, i) => {
+      const bodyContent = s.bodyHtml ? s.bodyHtml : `<p>${escHtml(s.body)}</p>`;
+      return `
     <section id="section-${i + 1}">
       <h2>${escHtml(s.heading)}</h2>
-      <p>${escHtml(s.body)}</p>
-    </section>`).join('\n')}
+      ${bodyContent}
+    </section>`;
+    }).join('\n')}
 
     ${article.faqs && article.faqs.length > 0 ? `
     <section id="faq">
