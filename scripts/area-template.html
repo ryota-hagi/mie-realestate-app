@@ -196,6 +196,8 @@
     #mobile-menu-fab, #mobile-drawer-overlay, #mobile-drawer-panel { display: block !important; }
     #mobile-menu-fab { display: flex !important; }
     #pc-nav-bar { display: none !important; }
+    #global-nav-links { display: none !important; }
+    #global-menu-btn { display: flex !important; }
     .cmp-modal-body { max-width: 100%; width: 100%; max-height: 100vh; border-radius: 16px 16px 0 0; height: auto; position: fixed; bottom: 0; left: 0; right: 0; max-height: 90vh; }
   }
 </style>
@@ -982,7 +984,7 @@ function renderHeader() {
   const currentTab = tabs.find(t => t.id === state.view) || tabs[0];
   return `
     <!-- 共通ヘッダー -->
-    <div style="background:white;border-bottom:1px solid #e5e7eb;padding:10px 16px;position:sticky;top:0;z-index:50;">
+    <div style="background:white;border-bottom:1px solid #e5e7eb;padding:10px 16px;">
       <div style="max-width:72rem;margin:0 auto;display:flex;align-items:center;justify-content:space-between;">
         <a href="/" style="text-decoration:none;display:flex;align-items:center;">
           <picture>
@@ -990,12 +992,27 @@ function renderHeader() {
             <img src="/images/header-banner.png" alt="注文住宅比較.com - 絶対に後悔しない家づくり" style="height:56px;width:auto;">
           </picture>
         </a>
-        <div style="display:flex;align-items:center;gap:16px;font-size:13px;">
+        <div id="global-nav-links" style="display:flex;align-items:center;gap:16px;font-size:13px;">
           <a href="/" style="color:#6b7280;text-decoration:none;font-weight:500;">物件比較</a>
           <span style="color:#2563EB;font-weight:600;">エリア比較</span>
           <a href="/knowledge/" style="color:#6b7280;text-decoration:none;font-weight:500;">知識</a>
           <a href="/about/" style="color:#6b7280;text-decoration:none;font-weight:500;">運営者情報</a>
         </div>
+        <button id="global-menu-btn" onclick="openGlobalMenu()" style="display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#f3f4f6;border:1px solid #e5e7eb;font-size:18px;color:#374151;cursor:pointer;" aria-label="メニューを開く">☰</button>
+      </div>
+    </div>
+    <!-- グローバルメニュー ドロワー -->
+    <div id="global-menu-overlay" style="display:none;position:fixed;inset:0;z-index:70;background:rgba(0,0,0,0.4);opacity:0;transition:opacity 0.3s;" onclick="closeGlobalMenu()"></div>
+    <div id="global-menu-panel" style="display:none;position:fixed;top:0;right:0;z-index:80;height:100%;width:260px;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,0.15);transform:translateX(100%);transition:transform 0.3s ease-out;">
+      <div style="padding:16px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:14px;font-weight:700;color:#1f2937;">メニュー</span>
+        <button onclick="closeGlobalMenu()" style="width:32px;height:32px;border-radius:50%;background:#f3f4f6;border:none;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:20px;cursor:pointer;">&times;</button>
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
+        <a href="/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">物件比較</a>
+        <span style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:600;background:#dbeafe;color:#1d4ed8;">エリア比較</span>
+        <a href="/knowledge/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">知識</a>
+        <a href="/about/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">運営者情報</a>
       </div>
     </div>
     <!-- タイトル（スクロールで消える） -->
@@ -1067,6 +1084,28 @@ function closeMobileDrawer() {
   overlay.style.pointerEvents = 'none';
   panel.style.transform = 'translateX(100%)';
   document.body.style.overflow = '';
+}
+
+function openGlobalMenu() {
+  const overlay = document.getElementById('global-menu-overlay');
+  const panel = document.getElementById('global-menu-panel');
+  if (!overlay || !panel) return;
+  overlay.style.display = 'block';
+  panel.style.display = 'block';
+  requestAnimationFrame(() => {
+    overlay.style.opacity = '1';
+    panel.style.transform = 'translateX(0)';
+  });
+  document.body.style.overflow = 'hidden';
+}
+function closeGlobalMenu() {
+  const overlay = document.getElementById('global-menu-overlay');
+  const panel = document.getElementById('global-menu-panel');
+  if (!overlay || !panel) return;
+  overlay.style.opacity = '0';
+  panel.style.transform = 'translateX(100%)';
+  document.body.style.overflow = '';
+  setTimeout(() => { overlay.style.display = 'none'; panel.style.display = 'none'; }, 300);
 }
 
 function renderMCPStatus() {
