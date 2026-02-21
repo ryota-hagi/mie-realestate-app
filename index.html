@@ -1456,19 +1456,21 @@ function renderHeader() {
     : `<button onclick="openAuthModal()" class="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">ログイン</button>`;
 
   return `
-    <header class="sticky top-0 z-50" style="background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); border-bottom:1px solid rgba(0,0,0,0.06);">
-      <div class="max-w-6xl mx-auto px-4 py-3">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <div style="width:32px;height:32px;border-radius:12px;background:#2563EB;display:flex;align-items:center;justify-content:center;">
-              <svg width="16" height="16" fill="none" stroke="white" stroke-width="2"><path d="M2 6l6-4 6 4v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z"/><path d="M6 14V8h4v6"/></svg>
-            </div>
-            <h1 class="font-bold text-sm" style="color:#1E1E1E;">注文住宅比較.com</h1>
-          </div>
-          <div class="flex items-center gap-3">
-            ${authHtml}
-            <a href="/area/mie/" class="hidden sm:block text-xs font-bold px-3 py-1.5 rounded-full v3-badge whitespace-nowrap">三重県エリア比較</a>
-          </div>
+    <header style="background:white;border-bottom:1px solid #e5e7eb;padding:10px 16px;position:sticky;top:0;z-index:50;">
+      <div style="max-width:72rem;margin:0 auto;display:flex;align-items:center;justify-content:space-between;">
+        <a href="/" style="text-decoration:none;display:flex;align-items:center;">
+          <picture>
+            <source srcset="/images/header-banner.webp" type="image/webp">
+            <img src="/images/header-banner.png" alt="注文住宅比較.com - 絶対に後悔しない家づくり" style="height:56px;width:auto;">
+          </picture>
+        </a>
+        <h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">注文住宅比較.com</h1>
+        <div style="display:flex;align-items:center;gap:16px;font-size:13px;">
+          <span style="color:#2563EB;font-weight:600;">物件比較</span>
+          <a href="/area/mie/" style="color:#6b7280;text-decoration:none;font-weight:500;">エリア比較</a>
+          <a href="/knowledge/" style="color:#6b7280;text-decoration:none;font-weight:500;">知識</a>
+          <a href="/about/" style="color:#6b7280;text-decoration:none;font-weight:500;">運営者情報</a>
+          ${authHtml}
         </div>
       </div>
     </header>
@@ -3647,11 +3649,13 @@ function renderFooter() {
     <footer style="margin-top:32px; padding:32px 16px; border-top:1px solid #E8E8E8;">
       <div style="max-width:64rem; margin:0 auto; display:flex; flex-wrap:wrap; justify-content:space-between; gap:32px;">
         <div style="min-width:200px;">
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-            <div style="width:28px;height:28px;border-radius:10px;background:#2563EB;display:flex;align-items:center;justify-content:center;">
-              <svg width="14" height="14" fill="none" stroke="white" stroke-width="2"><path d="M2 5l5-3.5L12 5v6a1 1 0 01-1 1H3a1 1 0 01-1-1V5z"/><path d="M5 12V7h4v5"/></svg>
-            </div>
-            <span style="font-weight:700; font-size:13px; color:#333;">注文住宅比較.com</span>
+          <div style="margin-bottom:8px;">
+            <a href="/" style="text-decoration:none;">
+              <picture>
+                <source srcset="/images/header-banner.webp" type="image/webp">
+                <img src="/images/header-banner.png" alt="注文住宅比較.com" style="height:72px;width:auto;">
+              </picture>
+            </a>
           </div>
           <p style="font-size:12px; color:#999; line-height:1.6;">注文住宅の土地探しをAIがサポート。<br>三重県北部エリアの物件比較に特化した無料ツールです。</p>
         </div>
