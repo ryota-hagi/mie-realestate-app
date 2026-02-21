@@ -94,6 +94,11 @@
   .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
   .fade-in { animation: fadeIn 0.3s ease-in; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .tip-fade { animation: tipFade 0.5s ease-in-out; }
+  @keyframes tipFade { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: translateX(0); } }
+  .step-active { color: #d97706; font-weight: 600; }
+  .step-done { color: #16a34a; }
+  .step-pending { color: #d1d5db; }
   /* === V3 Blue Landing Page Styles === */
   .v3-btn-primary { background:#2563EB; color:white; box-shadow:0 4px 14px rgba(37,99,235,0.25); transition:all 0.2s; }
   .v3-btn-primary:hover { background:#1D4ED8; box-shadow:0 6px 20px rgba(37,99,235,0.35); transform:translateY(-1px); }
@@ -3094,6 +3099,88 @@ function renderDupWarning(parsed) {
     '</div>';
 }
 
+// ===== AI取り込み中のTips & ステップ定義 =====
+const importTips = [
+  { icon: '💡', text: '建ぺい率と容積率で建てられる家の大きさが決まります' },
+  { icon: '🏫', text: '小学校区は資産価値にも影響する重要ポイントです' },
+  { icon: '🛡️', text: 'ハザードマップで洪水・土砂災害リスクを必ず確認しましょう' },
+  { icon: '🚗', text: '接道状況は建て替え可否に直結します（4m道路に2m以上接道が必要）' },
+  { icon: '💰', text: '土地代以外に造成費・地盤改良費・外構費なども考慮が必要です' },
+  { icon: '📐', text: '同じ面積でも間口と奥行きの比率で使い勝手が大きく変わります' },
+  { icon: '🔍', text: '複数物件を比較表で並べると、違いが一目でわかります' },
+  { icon: '📱', text: 'ユーザー登録すると比較表を永久保存＆マルチデバイスで閲覧できます' },
+  { icon: '🏠', text: '建築費シミュレーションで建坪を変更して試算できます' },
+  { icon: '⚠️', text: '高低差のある土地は造成費で100〜300万円かかることがあります' },
+];
+const importSteps = [
+  { icon: '🌐', label: '物件ページを取得中...' },
+  { icon: '🤖', label: 'AIが情報を解析中...' },
+  { icon: '📋', label: 'データを整理中...' },
+];
+let _tipTimer = null;
+let _stepTimer = null;
+let _elapsedTimer = null;
+
+function startImportTimers() {
+  stopImportTimers();
+  state._batchStartTime = Date.now();
+  state._batchStepIndex = 0;
+  state._tipIndex = Math.floor(Math.random() * importTips.length);
+
+  // Tips: 5秒ごとにDOM直接更新
+  _tipTimer = setInterval(() => {
+    state._tipIndex = (state._tipIndex + 1) % importTips.length;
+    const tipEl = document.getElementById('import-tip-content');
+    if (tipEl) {
+      const tip = importTips[state._tipIndex];
+      tipEl.innerHTML = '<span style="font-size:16px;margin-right:6px;">' + tip.icon + '</span>' + tip.text;
+      tipEl.classList.remove('tip-fade');
+      void tipEl.offsetWidth;
+      tipEl.classList.add('tip-fade');
+    }
+  }, 5000);
+
+  // ステップ: 3秒ごとに自動進行
+  _stepTimer = setInterval(() => {
+    if (state._batchStepIndex < importSteps.length - 1) {
+      state._batchStepIndex++;
+      const stepsEl = document.getElementById('import-steps');
+      if (stepsEl) updateStepDisplay(stepsEl);
+    }
+  }, 3000);
+
+  // 経過時間: 1秒ごとに更新
+  _elapsedTimer = setInterval(() => {
+    const el = document.getElementById('import-elapsed');
+    if (el && state._batchStartTime) {
+      const sec = Math.floor((Date.now() - state._batchStartTime) / 1000);
+      el.textContent = Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0');
+    }
+  }, 1000);
+}
+
+function stopImportTimers() {
+  if (_tipTimer) { clearInterval(_tipTimer); _tipTimer = null; }
+  if (_stepTimer) { clearInterval(_stepTimer); _stepTimer = null; }
+  if (_elapsedTimer) { clearInterval(_elapsedTimer); _elapsedTimer = null; }
+}
+
+function resetStepIndex() {
+  state._batchStepIndex = 0;
+  const stepsEl = document.getElementById('import-steps');
+  if (stepsEl) updateStepDisplay(stepsEl);
+}
+
+function updateStepDisplay(container) {
+  const idx = state._batchStepIndex || 0;
+  container.innerHTML = importSteps.map((s, i) => {
+    const cls = i < idx ? 'step-done' : i === idx ? 'step-active' : 'step-pending';
+    const bullet = i < idx ? '✓' : i === idx ? '●' : '○';
+    const pulse = i === idx ? ' animate-pulse' : '';
+    return '<div class="' + cls + pulse + '" style="font-size:11px;line-height:1.8;">' + bullet + ' ' + s.icon + ' ' + s.label + '</div>';
+  }).join('');
+}
+
 // 一括取り込みの進捗表示
 function renderBatchProgress() {
   const batch = state._batchResults;
@@ -3114,12 +3201,25 @@ function renderBatchProgress() {
       <div>
         <div class="flex items-center justify-between text-sm mb-1">
           <span class="font-medium text-gray-700">${processing ? `⏳ 取得中... (${doneCount}/${total})` : allDone ? `✅ 取得完了 (${successCount}件成功${errorCount > 0 ? '、' + errorCount + '件失敗' : ''})` : ''}</span>
-          ${allDone ? `<button onclick="resetBatch()" class="text-xs text-gray-400 hover:text-gray-600">✕ 閉じる</button>` : ''}
+          <span class="text-xs text-gray-400">
+            ${processing ? `<span id="import-elapsed">0:00</span>` : ''}
+            ${allDone ? `<button onclick="resetBatch()" class="text-xs text-gray-400 hover:text-gray-600">✕ 閉じる</button>` : ''}
+          </span>
         </div>
         <div class="w-full bg-gray-200 rounded-full h-2">
           <div class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: ${total > 0 ? (doneCount / total * 100) : 0}%"></div>
         </div>
       </div>
+
+      ${processing ? `
+      <!-- Tips（処理中のみ表示） -->
+      <div style="padding:10px 14px;background:linear-gradient(135deg,#eff6ff,#f0f4ff);border-radius:10px;border:1px solid #dbeafe;">
+        <div style="font-size:10px;color:#6b7280;margin-bottom:4px;">💡 知っていますか？</div>
+        <div id="import-tip-content" class="tip-fade" style="font-size:12px;color:#1e40af;line-height:1.5;">
+          <span style="font-size:16px;margin-right:6px;">${importTips[state._tipIndex || 0].icon}</span>${importTips[state._tipIndex || 0].text}
+        </div>
+      </div>
+      ` : ''}
 
       <!-- 各URL結果一覧 -->
       <div class="space-y-2 max-h-96 overflow-y-auto">
@@ -3140,6 +3240,17 @@ function renderBatchProgress() {
                 <span class="text-xs text-gray-500 truncate flex-1" title="${item.url}">${shortUrl}</span>
                 ${isProcessing ? '<span class="text-xs text-amber-600 animate-pulse">AI解析中...</span>' : ''}
               </div>
+
+              ${isProcessing ? `
+                <div id="import-steps" style="margin-top:6px;padding-left:24px;">
+                  ${importSteps.map((s, si) => {
+                    const cls = si < (state._batchStepIndex||0) ? 'step-done' : si === (state._batchStepIndex||0) ? 'step-active' : 'step-pending';
+                    const bullet = si < (state._batchStepIndex||0) ? '✓' : si === (state._batchStepIndex||0) ? '●' : '○';
+                    const pulse = si === (state._batchStepIndex||0) ? ' animate-pulse' : '';
+                    return '<div class="' + cls + pulse + '" style="font-size:11px;line-height:1.8;">' + bullet + ' ' + s.icon + ' ' + s.label + '</div>';
+                  }).join('')}
+                </div>
+              ` : ''}
 
               ${isDone && item.parsed ? `
                 <div class="mt-2 pl-6">
@@ -3266,11 +3377,13 @@ async function handleBatchFetchUrls() {
   state._batchCurrentIndex = 0;
   state._aiParsedProperty = null;
   render();
+  startImportTimers();
 
   // 順次処理（Edge Function 25秒制限対策 + Jina APIレート制限対策）
   for (let i = 0; i < urls.length; i++) {
     state._batchCurrentIndex = i;
     state._batchResults[i].status = 'processing';
+    resetStepIndex();
     render();
 
     try {
@@ -3290,6 +3403,7 @@ async function handleBatchFetchUrls() {
     }
   }
 
+  stopImportTimers();
   state._batchProcessing = false;
   state._batchCurrentIndex = -1;
   render();
