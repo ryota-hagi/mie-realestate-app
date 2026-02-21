@@ -1114,12 +1114,17 @@ function generateAboutPage() {
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); color: #374151; line-height: 1.8; min-height: 100vh; }
-  .about-header { background: white; border-bottom: 1px solid #e5e7eb; padding: 10px 16px; position: sticky; top: 0; z-index: 50; }
+  .about-header { background: white; border-bottom: 1px solid #e5e7eb; padding: 10px 16px; }
   .about-header-inner { max-width: 72rem; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
   .about-header .site-logo img { height: 56px; width: auto; }
   .about-header-nav { display: flex; align-items: center; gap: 16px; font-size: 13px; }
   .about-header-nav a { text-decoration: none; color: #6b7280; font-weight: 500; }
   .about-header-nav .active { color: #2563EB; font-weight: 600; }
+  .about-hamburger { display: none; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; background: #f3f4f6; border: 1px solid #e5e7eb; font-size: 18px; color: #374151; cursor: pointer; }
+  @media (max-width: 768px) {
+    .about-header-nav { display: none !important; }
+    .about-hamburger { display: flex !important; }
+  }
   .about-main { max-width: 700px; margin: 0 auto; padding: 32px 16px 48px; }
   .about-main h1 { font-size: 1.5rem; font-weight: 700; color: #111827; margin-bottom: 24px; }
   .about-main h2 { font-size: 1.1rem; font-weight: 700; color: #1f2937; margin-top: 32px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #e5e7eb; }
@@ -1149,8 +1154,27 @@ function generateAboutPage() {
         <a href="/knowledge/">知識</a>
         <span class="active">運営者情報</span>
       </div>
+      <button class="about-hamburger" onclick="openGlobalMenu()" aria-label="メニューを開く">☰</button>
     </div>
   </header>
+  <!-- グローバルメニュー ドロワー -->
+  <div id="global-menu-overlay" style="display:none;position:fixed;inset:0;z-index:70;background:rgba(0,0,0,0.4);opacity:0;transition:opacity 0.3s;" onclick="closeGlobalMenu()"></div>
+  <div id="global-menu-panel" style="display:none;position:fixed;top:0;right:0;z-index:80;height:100%;width:260px;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,0.15);transform:translateX(100%);transition:transform 0.3s ease-out;">
+    <div style="padding:16px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-size:14px;font-weight:700;color:#1f2937;">メニュー</span>
+      <button onclick="closeGlobalMenu()" style="width:32px;height:32px;border-radius:50%;background:#f3f4f6;border:none;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:20px;cursor:pointer;">&times;</button>
+    </div>
+    <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
+      <a href="/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">物件比較</a>
+      <a href="/area/mie/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">エリア比較</a>
+      <a href="/knowledge/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">知識</a>
+      <span style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:600;background:#dbeafe;color:#1d4ed8;">運営者情報</span>
+    </div>
+  </div>
+  <script>
+  function openGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.display='block';p.style.display='block';requestAnimationFrame(function(){o.style.opacity='1';p.style.transform='translateX(0)';});document.body.style.overflow='hidden';}
+  function closeGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.opacity='0';p.style.transform='translateX(100%)';document.body.style.overflow='';setTimeout(function(){o.style.display='none';p.style.display='none';},300);}
+  </script>
 
   <main class="about-main">
     <h1>運営者情報</h1>
@@ -1291,12 +1315,17 @@ ${faqJsonLd}
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); color: #374151; line-height: 1.8; min-height: 100vh; }
-  .knowledge-header { background: white; border-bottom: 1px solid #e5e7eb; padding: 10px 16px; position: sticky; top: 0; z-index: 50; }
+  .knowledge-header { background: white; border-bottom: 1px solid #e5e7eb; padding: 10px 16px; }
   .knowledge-header-inner { max-width: 72rem; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
   .knowledge-header .site-logo img { height: 56px; width: auto; }
   .knowledge-header-nav { display: flex; align-items: center; gap: 16px; font-size: 13px; }
   .knowledge-header-nav a { text-decoration: none; color: #6b7280; font-weight: 500; }
   .knowledge-header-nav .active { color: #2563EB; font-weight: 600; }
+  .knowledge-hamburger { display: none; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; background: #f3f4f6; border: 1px solid #e5e7eb; font-size: 18px; color: #374151; cursor: pointer; }
+  @media (max-width: 768px) {
+    .knowledge-header-nav { display: none !important; }
+    .knowledge-hamburger { display: flex !important; }
+  }
   .knowledge-breadcrumb { max-width: 800px; margin: 0 auto; padding: 12px 16px; font-size: 12px; color: #9ca3af; }
   .knowledge-breadcrumb a { color: #3b82f6; text-decoration: none; }
   .knowledge-breadcrumb a:hover { text-decoration: underline; }
@@ -1345,8 +1374,26 @@ ${faqJsonLd}
         <span class="active">知識</span>
         <a href="/about/">運営者情報</a>
       </div>
+      <button class="knowledge-hamburger" onclick="openGlobalMenu()" aria-label="メニューを開く">☰</button>
     </div>
   </header>
+  <div id="global-menu-overlay" style="display:none;position:fixed;inset:0;z-index:70;background:rgba(0,0,0,0.4);opacity:0;transition:opacity 0.3s;" onclick="closeGlobalMenu()"></div>
+  <div id="global-menu-panel" style="display:none;position:fixed;top:0;right:0;z-index:80;height:100%;width:260px;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,0.15);transform:translateX(100%);transition:transform 0.3s ease-out;">
+    <div style="padding:16px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-size:14px;font-weight:700;color:#1f2937;">メニュー</span>
+      <button onclick="closeGlobalMenu()" style="width:32px;height:32px;border-radius:50%;background:#f3f4f6;border:none;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:20px;cursor:pointer;">&times;</button>
+    </div>
+    <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
+      <a href="/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">物件比較</a>
+      <a href="/area/mie/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">エリア比較</a>
+      <span style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:600;background:#dbeafe;color:#1d4ed8;">知識</span>
+      <a href="/about/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">運営者情報</a>
+    </div>
+  </div>
+  <script>
+  function openGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.display='block';p.style.display='block';requestAnimationFrame(function(){o.style.opacity='1';p.style.transform='translateX(0)';});document.body.style.overflow='hidden';}
+  function closeGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.opacity='0';p.style.transform='translateX(100%)';document.body.style.overflow='';setTimeout(function(){o.style.display='none';p.style.display='none';},300);}
+  </script>
 
   ${breadcrumbHtml}
 
@@ -1452,12 +1499,17 @@ ${breadcrumbJsonLd}
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); color: #374151; line-height: 1.8; min-height: 100vh; }
-  .knowledge-header { background: white; border-bottom: 1px solid #e5e7eb; padding: 10px 16px; position: sticky; top: 0; z-index: 50; }
+  .knowledge-header { background: white; border-bottom: 1px solid #e5e7eb; padding: 10px 16px; }
   .knowledge-header-inner { max-width: 72rem; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
   .knowledge-header .site-logo img { height: 56px; width: auto; }
   .knowledge-header-nav { display: flex; align-items: center; gap: 16px; font-size: 13px; }
   .knowledge-header-nav a { text-decoration: none; color: #6b7280; font-weight: 500; }
   .knowledge-header-nav .active { color: #2563EB; font-weight: 600; }
+  .knowledge-hamburger { display: none; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; background: #f3f4f6; border: 1px solid #e5e7eb; font-size: 18px; color: #374151; cursor: pointer; }
+  @media (max-width: 768px) {
+    .knowledge-header-nav { display: none !important; }
+    .knowledge-hamburger { display: flex !important; }
+  }
   .knowledge-hub { max-width: 800px; margin: 0 auto; padding: 24px 16px 48px; }
   .knowledge-hub h1 { font-size: 1.5rem; font-weight: 700; color: #111827; margin-bottom: 8px; }
   .knowledge-hub .hub-desc { font-size: 0.9rem; color: #6b7280; margin-bottom: 24px; }
@@ -1488,8 +1540,26 @@ ${breadcrumbJsonLd}
         <span class="active">知識</span>
         <a href="/about/">運営者情報</a>
       </div>
+      <button class="knowledge-hamburger" onclick="openGlobalMenu()" aria-label="メニューを開く">☰</button>
     </div>
   </header>
+  <div id="global-menu-overlay" style="display:none;position:fixed;inset:0;z-index:70;background:rgba(0,0,0,0.4);opacity:0;transition:opacity 0.3s;" onclick="closeGlobalMenu()"></div>
+  <div id="global-menu-panel" style="display:none;position:fixed;top:0;right:0;z-index:80;height:100%;width:260px;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,0.15);transform:translateX(100%);transition:transform 0.3s ease-out;">
+    <div style="padding:16px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-size:14px;font-weight:700;color:#1f2937;">メニュー</span>
+      <button onclick="closeGlobalMenu()" style="width:32px;height:32px;border-radius:50%;background:#f3f4f6;border:none;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:20px;cursor:pointer;">&times;</button>
+    </div>
+    <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
+      <a href="/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">物件比較</a>
+      <a href="/area/mie/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">エリア比較</a>
+      <span style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:600;background:#dbeafe;color:#1d4ed8;">知識</span>
+      <a href="/about/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">運営者情報</a>
+    </div>
+  </div>
+  <script>
+  function openGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.display='block';p.style.display='block';requestAnimationFrame(function(){o.style.opacity='1';p.style.transform='translateX(0)';});document.body.style.overflow='hidden';}
+  function closeGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.opacity='0';p.style.transform='translateX(100%)';document.body.style.overflow='';setTimeout(function(){o.style.display='none';p.style.display='none';},300);}
+  </script>
 
   <main class="knowledge-hub">
     <h1>注文住宅の知識</h1>
