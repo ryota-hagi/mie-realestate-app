@@ -482,12 +482,12 @@ function buildStaticCityContent(cityId) {
   <section>
     <h2>近隣エリアの注文住宅情報</h2>
     <p>${neighborLinks}</p>
-    <p><a href="/area/mie/">三重県エリア比較に戻る</a> | <a href="/">物件比較ツールを使う</a></p>
+    <p><a href="/area/mie/">三重県エリア比較に戻る</a> | <a href="/">注文住宅比較.comを使う</a></p>
   </section>
 
   <footer>
     <p>データ出典: <a href="https://www.reinfolib.mlit.go.jp/" rel="noopener">国土交通省 不動産情報ライブラリ（REINFOLIB）</a>、<a href="https://www.land.mlit.go.jp/landPrice/AriaServlet?MOD=2&TYP=0" rel="noopener">国土交通省 地価公示</a></p>
-    <p>最終更新: ${TODAY} ｜ 監修: <a href="/about/" rel="noopener">注文相談.com</a> 編集部</p>
+    <p>最終更新: ${TODAY} ｜ 監修: <a href="/about/" rel="noopener">注文住宅比較.com</a> 編集部</p>
   </footer>
 </article>`;
 }
@@ -535,11 +535,11 @@ function buildStaticHubContent() {
   <section>
     <h2>データについて</h2>
     <p>当サイトの土地価格データは<a href="https://www.reinfolib.mlit.go.jp/" rel="noopener">国土交通省 不動産情報ライブラリ（REINFOLIB）</a>の実取引データに基づいています。地価の推移は<a href="https://www.land.mlit.go.jp/landPrice/AriaServlet?MOD=2&TYP=0" rel="noopener">国土交通省 地価公示</a>を参照しています。</p>
-    <p>最終更新: ${TODAY} ｜ 監修: <a href="/about/" rel="noopener">注文相談.com</a> 編集部</p>
+    <p>最終更新: ${TODAY} ｜ 監修: <a href="/about/" rel="noopener">注文住宅比較.com</a> 編集部</p>
   </section>
 
   <footer>
-    <p><a href="/">物件比較ツールを使う</a></p>
+    <p><a href="/">注文住宅比較.comを使う</a></p>
   </footer>
 </article>`;
 }
@@ -570,7 +570,7 @@ function buildCtaHtml() {
       <h3 class="text-base font-bold text-gray-800 mb-2">具体的な物件が見つかったら...</h3>
       <p class="text-sm text-gray-600 mb-4">AIが複数物件を自動比較。SUUMO・ホームズ等のURLを貼るだけで、見やすい比較表を作成します。</p>
       <a href="/" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm">
-        🏠 物件比較ツールを使う →
+        🏠 注文住宅比較.comを使う →
       </a>
     </div>`;
 }
@@ -622,7 +622,7 @@ function generateHubPage() {
   // 1. Update <title>
   html = html.replace(
     /<title>[^<]*<\/title>/,
-    '<title>三重県で注文住宅を建てるなら｜エリア別 土地相場・費用シミュレーター | 注文相談.com</title>'
+    '<title>三重県で注文住宅を建てるなら｜エリア別 土地相場・費用シミュレーター | 注文住宅比較.com</title>'
   );
 
   // 2. Update canonical
@@ -673,8 +673,8 @@ function generateHubPage() {
     `"url": "${DOMAIN}/area/mie/"`
   );
   html = html.replace(
-    '"author": { "@type": "Organization", "name": "注文相談.com" }',
-    '"author": { "@type": "Organization", "name": "注文相談.com", "url": "https://research.chuumon-soudan.com/about/", "description": "注文住宅の土地探し・費用比較をサポートする情報サイト" }, "publisher": { "@type": "Organization", "name": "注文相談.com", "url": "https://research.chuumon-soudan.com/about/" }, "dateModified": "' + TODAY + '"'
+    '"author": { "@type": "Organization", "name": "注文住宅比較.com" }',
+    '"author": { "@type": "Organization", "name": "注文住宅比較.com", "url": "https://research.chuumon-soudan.com/about/", "description": "注文住宅の土地探し・費用比較をサポートする情報サイト" }, "publisher": { "@type": "Organization", "name": "注文住宅比較.com", "url": "https://research.chuumon-soudan.com/about/" }, "dateModified": "' + TODAY + '"'
   );
 
   // 7. Add tooltip CSS + static content CSS before </style>
@@ -728,15 +728,15 @@ function generateHubPage() {
     `<p class="text-sm text-gray-500 mt-1 mobile-subtitle-text">三重県北部の土地相場・取引データを比較して、注文住宅に最適なエリアを見つけよう</p>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
           <span style="font-size:11px;color:#6b7280;background:#f3f4f6;padding:2px 8px;border-radius:4px;">📊 データ出典: <a href="https://www.reinfolib.mlit.go.jp/" style="color:#3b82f6;text-decoration:none;" rel="noopener">国土交通省 不動産情報ライブラリ</a></span>
-          <span style="font-size:11px;color:#6b7280;background:#f3f4f6;padding:2px 8px;border-radius:4px;">✏️ 監修: <a href="/about/" style="color:#3b82f6;text-decoration:none;" rel="noopener">注文相談.com</a> 編集部</span>
+          <span style="font-size:11px;color:#6b7280;background:#f3f4f6;padding:2px 8px;border-radius:4px;">✏️ 監修: <a href="/about/" style="color:#3b82f6;text-decoration:none;" rel="noopener">注文住宅比較.com</a> 編集部</span>
           <span style="font-size:11px;color:#6b7280;background:#f3f4f6;padding:2px 8px;border-radius:4px;">🕐 最終更新: ${TODAY}</span>
         </div>`
   );
 
   // Update the link in header from index.html to /
   html = html.replace(
-    '<a href="index.html" style="display:inline-block;margin-top:6px;font-size:13px;color:#3b82f6;font-weight:500;text-decoration:none;">🏠 物件比較ツールはこちら →</a>',
-    '<a href="/" style="display:inline-block;margin-top:6px;font-size:13px;color:#3b82f6;font-weight:500;text-decoration:none;">🏠 物件比較ツールはこちら →</a>'
+    '<a href="index.html" style="display:inline-block;margin-top:6px;font-size:13px;color:#3b82f6;font-weight:500;text-decoration:none;">🏠 注文住宅比較.comはこちら →</a>',
+    '<a href="/" style="display:inline-block;margin-top:6px;font-size:13px;color:#3b82f6;font-weight:500;text-decoration:none;">🏠 注文住宅比較.comはこちら →</a>'
   );
 
   // Inject cost simulator + city links + FAQ + CTA before the footer in the render function
@@ -796,7 +796,7 @@ function generateHubPage() {
       <div class="text-center space-y-2">
         <div class="flex justify-center flex-wrap gap-2 mb-3">${hubFooterLinks}</div>
         <div class="flex justify-center flex-wrap gap-2 mb-3">${knowledgeFooterLinks}</div>
-        <div class="mb-2"><a href="/" class="text-sm text-blue-600 hover:underline">🏠 物件比較ツール</a></div>`
+        <div class="mb-2"><a href="/" class="text-sm text-blue-600 hover:underline">🏠 注文住宅比較.com</a></div>`
   );
 
   // 12. Add drawer menu city links
@@ -839,11 +839,11 @@ document.addEventListener('DOMContentLoaded', function() { var el = document.get
 
   // 15. Enhance footer with operator info (E-E-A-T)
   html = html.replace(
-    '<p class="text-xs text-gray-300 mt-3">© 注文相談.com — Powered by 国土交通省 不動産情報ライブラリ + 行政オープンデータ</p>',
+    '<p class="text-xs text-gray-300 mt-3">© 注文住宅比較.com — Powered by 国土交通省 不動産情報ライブラリ + 行政オープンデータ</p>',
     `<div style="margin-top:12px;padding-top:12px;border-top:1px solid #f3f4f6;">
-          <p class="text-xs text-gray-400" style="margin-bottom:4px;"><strong>運営</strong>: <a href="/about/" style="color:#6b7280;text-decoration:underline;" rel="noopener">注文相談.com</a>（注文住宅の土地探し・費用比較をサポート）</p>
+          <p class="text-xs text-gray-400" style="margin-bottom:4px;"><strong>運営</strong>: <a href="/about/" style="color:#6b7280;text-decoration:underline;" rel="noopener">注文住宅比較.com</a>（注文住宅の土地探し・費用比較をサポート）</p>
           <p class="text-xs text-gray-400" style="margin-bottom:4px;"><strong>データ更新</strong>: ${TODAY} ｜ 国土交通省 不動産情報ライブラリAPI・地価公示データを定期取得</p>
-          <p class="text-xs text-gray-300">© 注文相談.com — 本ツールの利用は無料です。不動産購入の最終判断は専門家にご相談ください。</p>
+          <p class="text-xs text-gray-300">© 注文住宅比較.com — 本ツールの利用は無料です。不動産購入の最終判断は専門家にご相談ください。</p>
         </div>`
   );
 
@@ -871,7 +871,7 @@ function generateCityPage(cityId) {
   // 1. Update <title>
   html = html.replace(
     /<title>[^<]*<\/title>/,
-    `<title>${cityName}で注文住宅｜土地相場・費用シミュレーション・取引データ | 注文相談.com</title>`
+    `<title>${cityName}で注文住宅｜土地相場・費用シミュレーション・取引データ | 注文住宅比較.com</title>`
   );
 
   // 2. Update meta description
@@ -934,8 +934,8 @@ function generateCityPage(cityId) {
     `"name": "${cityName} 注文住宅 土地相場・費用シミュレーター"`
   );
   html = html.replace(
-    '"author": { "@type": "Organization", "name": "注文相談.com" }',
-    '"author": { "@type": "Organization", "name": "注文相談.com", "url": "https://research.chuumon-soudan.com/about/", "description": "注文住宅の土地探し・費用比較をサポートする情報サイト" }, "publisher": { "@type": "Organization", "name": "注文相談.com", "url": "https://research.chuumon-soudan.com/about/" }, "dateModified": "' + TODAY + '"'
+    '"author": { "@type": "Organization", "name": "注文住宅比較.com" }',
+    '"author": { "@type": "Organization", "name": "注文住宅比較.com", "url": "https://research.chuumon-soudan.com/about/", "description": "注文住宅の土地探し・費用比較をサポートする情報サイト" }, "publisher": { "@type": "Organization", "name": "注文住宅比較.com", "url": "https://research.chuumon-soudan.com/about/" }, "dateModified": "' + TODAY + '"'
   );
 
   // 7. Add tooltip CSS + static content CSS
@@ -977,14 +977,14 @@ function generateCityPage(cityId) {
     `<p class="text-sm text-gray-500 mt-1 mobile-subtitle-text">土地相場・費用シミュレーション・取引データで${cityName}の注文住宅をサポート</p>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
           <span style="font-size:11px;color:#6b7280;background:#f3f4f6;padding:2px 8px;border-radius:4px;">📊 データ出典: <a href="https://www.reinfolib.mlit.go.jp/" style="color:#3b82f6;text-decoration:none;" rel="noopener">国土交通省 不動産情報ライブラリ</a></span>
-          <span style="font-size:11px;color:#6b7280;background:#f3f4f6;padding:2px 8px;border-radius:4px;">✏️ 監修: <a href="/about/" style="color:#3b82f6;text-decoration:none;" rel="noopener">注文相談.com</a> 編集部</span>
+          <span style="font-size:11px;color:#6b7280;background:#f3f4f6;padding:2px 8px;border-radius:4px;">✏️ 監修: <a href="/about/" style="color:#3b82f6;text-decoration:none;" rel="noopener">注文住宅比較.com</a> 編集部</span>
           <span style="font-size:11px;color:#6b7280;background:#f3f4f6;padding:2px 8px;border-radius:4px;">🕐 最終更新: ${TODAY}</span>
         </div>`
   );
 
   // 12. Update link in header
   html = html.replace(
-    '<a href="index.html" style="display:inline-block;margin-top:6px;font-size:13px;color:#3b82f6;font-weight:500;text-decoration:none;">🏠 物件比較ツールはこちら →</a>',
+    '<a href="index.html" style="display:inline-block;margin-top:6px;font-size:13px;color:#3b82f6;font-weight:500;text-decoration:none;">🏠 注文住宅比較.comはこちら →</a>',
     '<a href="/area/mie/" style="display:inline-block;margin-top:6px;font-size:13px;color:#3b82f6;font-weight:500;text-decoration:none;">← 三重県エリア比較に戻る</a>'
   );
 
@@ -1014,7 +1014,7 @@ function generateCityPage(cityId) {
       const nc = cityData[nId];
       return nc ? `<a href="/area/mie/${nId}/" class="text-xs text-blue-600 hover:underline">${nc.nameJa}</a>` : '';
     }).filter(Boolean),
-    `<a href="/" class="text-xs text-blue-600 hover:underline">物件比較ツール</a>`
+    `<a href="/" class="text-xs text-blue-600 hover:underline">注文住宅比較.com</a>`
   ].join(' | ');
 
   const cityKnowledgeLinks = knowledgeData.articles.map(a =>
@@ -1067,11 +1067,11 @@ function openMobileDrawer`
 
   // 18. Enhance footer with operator info (E-E-A-T)
   html = html.replace(
-    '<p class="text-xs text-gray-300 mt-3">© 注文相談.com — Powered by 国土交通省 不動産情報ライブラリ + 行政オープンデータ</p>',
+    '<p class="text-xs text-gray-300 mt-3">© 注文住宅比較.com — Powered by 国土交通省 不動産情報ライブラリ + 行政オープンデータ</p>',
     `<div style="margin-top:12px;padding-top:12px;border-top:1px solid #f3f4f6;">
-          <p class="text-xs text-gray-400" style="margin-bottom:4px;"><strong>運営</strong>: <a href="/about/" style="color:#6b7280;text-decoration:underline;" rel="noopener">注文相談.com</a>（注文住宅の土地探し・費用比較をサポート）</p>
+          <p class="text-xs text-gray-400" style="margin-bottom:4px;"><strong>運営</strong>: <a href="/about/" style="color:#6b7280;text-decoration:underline;" rel="noopener">注文住宅比較.com</a>（注文住宅の土地探し・費用比較をサポート）</p>
           <p class="text-xs text-gray-400" style="margin-bottom:4px;"><strong>データ更新</strong>: ${TODAY} ｜ 国土交通省 不動産情報ライブラリAPI・地価公示データを定期取得</p>
-          <p class="text-xs text-gray-300">© 注文相談.com — 本ツールの利用は無料です。不動産購入の最終判断は専門家にご相談ください。</p>
+          <p class="text-xs text-gray-300">© 注文住宅比較.com — 本ツールの利用は無料です。不動産購入の最終判断は専門家にご相談ください。</p>
         </div>`
   );
 
@@ -1101,13 +1101,13 @@ function generateAboutPage() {
   gtag('js', new Date());
   gtag('config', 'G-SZV3XF0W0G');
 </script>
-<title>運営者情報 | 注文相談.com</title>
-<meta name="description" content="注文相談.comの運営者情報・サイト概要・データ出典についてご説明します。">
+<title>運営者情報 | 注文住宅比較.com</title>
+<meta name="description" content="注文住宅比較.comの運営者情報・サイト概要・データ出典についてご説明します。">
 <link rel="canonical" href="${DOMAIN}/about/">
-<meta property="og:title" content="運営者情報 | 注文相談.com">
+<meta property="og:title" content="運営者情報 | 注文住宅比較.com">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${DOMAIN}/about/">
-<meta property="og:site_name" content="注文相談.com">
+<meta property="og:site_name" content="注文住宅比較.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1135,13 +1135,13 @@ function generateAboutPage() {
 <body>
   <header class="about-header">
     <div class="about-header-inner">
-      <span class="site-name">注文相談.com</span>
+      <span class="site-name">注文住宅比較.com</span>
       <div>
         <a href="/area/mie/">エリア比較</a>
         <span style="margin: 0 6px; color: #d1d5db;">|</span>
         <a href="/knowledge/">知識</a>
         <span style="margin: 0 6px; color: #d1d5db;">|</span>
-        <a href="/">物件比較ツール</a>
+        <a href="/">注文住宅比較.com</a>
       </div>
     </div>
   </header>
@@ -1151,7 +1151,7 @@ function generateAboutPage() {
 
     <h2>サイト概要</h2>
     <table>
-      <tr><th>サイト名</th><td>注文相談.com</td></tr>
+      <tr><th>サイト名</th><td>注文住宅比較.com</td></tr>
       <tr><th>URL</th><td>${DOMAIN}/</td></tr>
       <tr><th>サービス内容</th><td>注文住宅の土地探し・費用比較をサポートする無料Webツール</td></tr>
       <tr><th>対象エリア</th><td>三重県北部（四日市市・桑名市・鈴鹿市・いなべ市・亀山市・菰野町・東員町）</td></tr>
@@ -1160,7 +1160,7 @@ function generateAboutPage() {
     <h2>提供ツール</h2>
     <ul>
       <li><a href="/area/mie/">エリア比較ツール</a> — 三重県北部7エリアの土地相場・取引データ・子育て環境をリアルタイム比較</li>
-      <li><a href="/">物件比較ツール</a> — SUUMO・ホームズ等のURLを貼るだけで、AIが物件情報を自動取得・比較表を作成</li>
+      <li><a href="/">注文住宅比較.com</a> — SUUMO・ホームズ等のURLを貼るだけで、AIが物件情報を自動取得・比較表を作成</li>
       <li>費用シミュレーター — 土地面積・建物面積・建築グレードから注文住宅の総費用を即時試算</li>
     </ul>
 
@@ -1184,8 +1184,8 @@ function generateAboutPage() {
   </main>
 
   <footer class="about-footer">
-    <p><a href="/">物件比較ツール</a> | <a href="/area/mie/">三重県エリア比較</a> | <a href="/knowledge/">注文住宅の知識</a></p>
-    <p style="margin-top: 8px;">&copy; 注文相談.com</p>
+    <p><a href="/">注文住宅比較.com</a> | <a href="/area/mie/">三重県エリア比較</a> | <a href="/knowledge/">注文住宅の知識</a></p>
+    <p style="margin-top: 8px;">&copy; 注文住宅比較.com</p>
   </footer>
 </body>
 </html>`;
@@ -1222,8 +1222,8 @@ ${JSON.stringify({
   '@type': 'Article',
   headline: article.title,
   description: article.description,
-  author: { '@type': 'Organization', name: '注文相談.com', url: DOMAIN + '/about/' },
-  publisher: { '@type': 'Organization', name: '注文相談.com', url: DOMAIN + '/about/' },
+  author: { '@type': 'Organization', name: '注文住宅比較.com', url: DOMAIN + '/about/' },
+  publisher: { '@type': 'Organization', name: '注文住宅比較.com', url: DOMAIN + '/about/' },
   datePublished: TODAY,
   dateModified: TODAY,
   mainEntityOfPage: { '@type': 'WebPage', '@id': `${DOMAIN}/knowledge/${article.id}/` }
@@ -1263,7 +1263,7 @@ ${JSON.stringify({
   gtag('js', new Date());
   gtag('config', 'G-SZV3XF0W0G');
 </script>
-<title>${escHtml(article.title)} | 注文相談.com</title>
+<title>${escHtml(article.title)} | 注文住宅比較.com</title>
 <meta name="description" content="${escHtml(article.description)}">
 <meta name="keywords" content="${escHtml(article.keywords)}">
 <link rel="canonical" href="${DOMAIN}/knowledge/${article.id}/">
@@ -1271,7 +1271,7 @@ ${JSON.stringify({
 <meta property="og:description" content="${escHtml(article.description)}">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${DOMAIN}/knowledge/${article.id}/">
-<meta property="og:site_name" content="注文相談.com">
+<meta property="og:site_name" content="注文住宅比較.com">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${escHtml(article.title)}">
@@ -1325,13 +1325,13 @@ ${faqJsonLd}
 <body>
   <header class="knowledge-header">
     <div class="knowledge-header-inner">
-      <span class="site-name">注文相談.com</span>
+      <span class="site-name">注文住宅比較.com</span>
       <div>
         <a href="/knowledge/">知識一覧</a>
         <span style="margin: 0 6px; color: #d1d5db;">|</span>
         <a href="/area/mie/">エリア比較</a>
         <span style="margin: 0 6px; color: #d1d5db;">|</span>
-        <a href="/">物件比較ツール</a>
+        <a href="/">注文住宅比較.com</a>
       </div>
     </div>
   </header>
@@ -1340,7 +1340,7 @@ ${faqJsonLd}
 
   <article class="knowledge-article">
     <h1>${escHtml(article.title)}</h1>
-    <div class="article-meta">最終更新: ${TODAY} ｜ 監修: <a href="/about/" style="color:#3b82f6;text-decoration:none;">注文相談.com</a> 編集部</div>
+    <div class="article-meta">最終更新: ${TODAY} ｜ 監修: <a href="/about/" style="color:#3b82f6;text-decoration:none;">注文住宅比較.com</a> 編集部</div>
 
     <nav class="knowledge-toc">
       <h2>目次</h2>
@@ -1383,9 +1383,9 @@ ${faqJsonLd}
   </article>
 
   <footer class="knowledge-footer">
-    <p><a href="/">物件比較ツール</a> | <a href="/area/mie/">三重県エリア比較</a> | <a href="/knowledge/">注文住宅の知識</a></p>
+    <p><a href="/">注文住宅比較.com</a> | <a href="/area/mie/">三重県エリア比較</a> | <a href="/knowledge/">注文住宅の知識</a></p>
     <p style="margin-top: 8px;">データ出典: <a href="https://www.reinfolib.mlit.go.jp/" rel="noopener">国土交通省 不動産情報ライブラリ</a></p>
-    <p style="margin-top: 4px;">&copy; 注文相談.com</p>
+    <p style="margin-top: 4px;">&copy; 注文住宅比較.com</p>
   </footer>
 </body>
 </html>`;
@@ -1422,7 +1422,7 @@ function generateKnowledgeHubPage() {
   gtag('js', new Date());
   gtag('config', 'G-SZV3XF0W0G');
 </script>
-<title>注文住宅の知識｜費用・流れ・土地選び・建蔽率容積率 | 注文相談.com</title>
+<title>注文住宅の知識｜費用・流れ・土地選び・建蔽率容積率 | 注文住宅比較.com</title>
 <meta name="description" content="注文住宅を建てる方に必要な知識を網羅。費用の内訳、家づくりの流れ、土地探しのコツ、建蔽率・容積率の基礎知識、三重県の住みやすい街ランキングなど、専門的な情報をわかりやすく解説します。">
 <meta name="keywords" content="注文住宅,知識,費用,流れ,土地探し,建蔽率,容積率,三重県">
 <link rel="canonical" href="${DOMAIN}/knowledge/">
@@ -1430,7 +1430,7 @@ function generateKnowledgeHubPage() {
 <meta property="og:description" content="注文住宅を建てる方に必要な知識を網羅。費用の内訳、家づくりの流れ、土地探しのコツ、建蔽率・容積率の基礎知識など。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${DOMAIN}/knowledge/">
-<meta property="og:site_name" content="注文相談.com">
+<meta property="og:site_name" content="注文住宅比較.com">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 ${breadcrumbJsonLd}
@@ -1462,11 +1462,11 @@ ${breadcrumbJsonLd}
 <body>
   <header class="knowledge-header">
     <div class="knowledge-header-inner">
-      <span class="site-name">注文相談.com</span>
+      <span class="site-name">注文住宅比較.com</span>
       <div>
         <a href="/area/mie/">エリア比較</a>
         <span style="margin: 0 6px; color: #d1d5db;">|</span>
-        <a href="/">物件比較ツール</a>
+        <a href="/">注文住宅比較.com</a>
       </div>
     </div>
   </header>
@@ -1480,13 +1480,13 @@ ${breadcrumbJsonLd}
     <div class="knowledge-hub-cta">
       <p>知識を身につけたら、実際のデータで検討を始めましょう</p>
       <a href="/area/mie/">三重県エリア比較 →</a>
-      <a href="/" style="background:#10b981;">物件比較ツール →</a>
+      <a href="/" style="background:#10b981;">注文住宅比較.com →</a>
     </div>
   </main>
 
   <footer class="knowledge-footer">
-    <p><a href="/">物件比較ツール</a> | <a href="/area/mie/">三重県エリア比較</a></p>
-    <p style="margin-top: 8px;">&copy; 注文相談.com</p>
+    <p><a href="/">注文住宅比較.com</a> | <a href="/area/mie/">三重県エリア比較</a></p>
+    <p style="margin-top: 8px;">&copy; 注文住宅比較.com</p>
   </footer>
 </body>
 </html>`;
