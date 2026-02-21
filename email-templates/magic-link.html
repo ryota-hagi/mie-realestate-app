@@ -1,0 +1,32 @@
+<html>
+<head>
+  <style>
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
+    .container { max-width: 480px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }
+    .header { background: linear-gradient(135deg, #2563eb, #1d4ed8); padding: 28px 24px; text-align: center; }
+    .header h1 { color: #fff; font-size: 20px; margin: 0; font-weight: 600; }
+    .body { padding: 32px 24px; }
+    .body p { color: #374151; font-size: 15px; line-height: 1.7; margin: 0 0 16px; }
+    .otp-code { display: block; text-align: center; font-size: 36px; font-weight: 700; letter-spacing: 8px; color: #1d4ed8; background: #eff6ff; border-radius: 8px; padding: 20px; margin: 24px 0; }
+    .note { font-size: 13px; color: #9ca3af; text-align: center; margin-top: 24px; }
+    .footer { background: #f9fafb; padding: 16px 24px; text-align: center; border-top: 1px solid #e5e7eb; }
+    .footer p { color: #9ca3af; font-size: 12px; margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>注文住宅比較.com</h1>
+    </div>
+    <div class="body">
+      <p>ログインのための認証コードをお送りします。</p>
+      <p>以下のコードをアプリの入力欄に入力してください：</p>
+      <div class="otp-code">{{ .Token }}</div>
+      <p class="note">このコードは10分間有効です。<br>心当たりのない場合は、このメールを無視してください。</p>
+    </div>
+    <div class="footer">
+      <p>注文住宅比較.com ― 三重県の不動産比較サービス</p>
+    </div>
+  </div>
+</body>
+</html>
