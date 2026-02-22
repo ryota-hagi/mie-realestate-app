@@ -59,6 +59,17 @@ function selectCategory(trendAvailable) {
 }
 
 // ============================================================
+// 投稿の長さをランダムに決める（人間はいつも同じ長さで書かない）
+// ============================================================
+
+function getRandomLength() {
+  const r = Math.random();
+  if (r < 0.25) return '超短く。10〜30文字。単語か一言で終われ。文章にするな。';
+  if (r < 0.55) return '短く。50〜100文字。1〜2文で終われ。';
+  return '普通の長さ。100〜200文字。2〜3文。';
+}
+
+// ============================================================
 // プロンプト構築
 // ============================================================
 
@@ -79,7 +90,9 @@ function buildPrompt(category, dataSources, trendResult) {
 
 ネタ: ${topic.tip?.title || '住宅事情'} - ${topic.tip?.body || 'この地域で家を建てた経験'}
 
-良いことだけ書くな。不満とかモヤモヤも混ぜろ。2〜3文で。`,
+良いことだけ書くな。不満とかモヤモヤも混ぜろ。
+
+長さ: ${getRandomLength()}`,
         topicKey: topic.topicKey,
       };
     }
@@ -92,7 +105,9 @@ function buildPrompt(category, dataSources, trendResult) {
 
 ネタ: ${topic.section?.heading || '住宅の豆知識'} - ${(topic.section?.body || '注文住宅に関する知識').slice(0, 200)}
 
-「知らなかった」「え、マジ？」くらいの温度感で。説明しすぎるな。2〜3文で終われ。`,
+「知らなかった」「え、マジ？」くらいの温度感で。説明しすぎるな。
+
+長さ: ${getRandomLength()}`,
         topicKey: topic.topicKey,
       };
     }
@@ -105,7 +120,9 @@ function buildPrompt(category, dataSources, trendResult) {
 
 データ: ${topic.insight.text}
 
-数字は1個だけ使え。「調べてたらさ」くらいの軽さで。分析するな。感想だけ言え。`,
+数字は1個だけ使え。「調べてたらさ」くらいの軽さで。分析するな。感想だけ言え。
+
+長さ: ${getRandomLength()}`,
         topicKey: topic.topicKey,
       };
     }
@@ -119,7 +136,9 @@ function buildPrompt(category, dataSources, trendResult) {
 記事: ${topic.article.title} - ${topic.article.description || ''}
 URL: ${topic.url}
 
-「これ読んだんだけど」くらいの軽さ。記事の要約はするな。自分の感想だけ。`,
+「これ読んだんだけど」くらいの軽さ。記事の要約はするな。自分の感想だけ。
+
+長さ: ${getRandomLength()}`,
         topicKey: topic.topicKey,
         isArticle: true,
       };
@@ -134,7 +153,9 @@ URL: ${topic.url}
 
 参考: ${overview.slice(0, 200)}
 
-エリアの宣伝するな。不便なとこや微妙なとこも正直に言え。良いこと1個言うなら悪いことも1個言え。`,
+エリアの宣伝するな。不便なとこや微妙なとこも正直に言え。良いこと1個言うなら悪いことも1個言え。
+
+長さ: ${getRandomLength()}`,
         topicKey: topic.topicKey,
       };
     }
@@ -147,7 +168,9 @@ URL: ${topic.url}
 
 ネタ: ${(topic.mistakes || '間取りの失敗、収納不足、日当たりの問題など').slice(0, 300)}
 
-愚痴っぽくていい。解決策とか注意喚起とかいらない。後悔を吐き出すだけ。`,
+愚痴っぽくていい。解決策とか注意喚起とかいらない。後悔を吐き出すだけ。
+
+長さ: ${getRandomLength()}`,
         topicKey: topic.topicKey,
       };
     }
@@ -162,7 +185,9 @@ URL: ${topic.url}
 
 ネタ: ${sectionHeading} - ${sectionBody.slice(0, 200)}
 
-金額はリアルに。月々の支払いとか、予想外の出費とか。不安やストレスも正直に。`,
+金額はリアルに。月々の支払いとか、予想外の出費とか。不安やストレスも正直に。
+
+長さ: ${getRandomLength()}`,
         topicKey: topic.topicKey,
       };
     }
@@ -172,6 +197,7 @@ URL: ${topic.url}
       const topics = SEASONAL_TOPICS[month] || SEASONAL_TOPICS[1];
       const topicText = randomChoice(topics);
       const topicKey = `kisetsu:${month}:${topics.indexOf(topicText)}`;
+      const lengthInstruction = getRandomLength();
       if (isTopicCoolingDown(topicKey)) {
         const altText = topics.find((t, i) => !isTopicCoolingDown(`kisetsu:${month}:${i}`)) || topicText;
         return {
@@ -179,7 +205,9 @@ URL: ${topic.url}
 
 ネタ: ${altText}
 
-季節感を出しつつ、自分の家の話を。良いことだけ書くな。`,
+季節感を出しつつ、自分の家の話を。良いことだけ書くな。
+
+長さ: ${lengthInstruction}`,
           topicKey: `kisetsu:${month}:${topics.indexOf(altText)}`,
         };
       }
@@ -188,7 +216,9 @@ URL: ${topic.url}
 
 ネタ: ${topicText}
 
-季節感を出しつつ、自分の家の話を。良いことだけ書くな。`,
+季節感を出しつつ、自分の家の話を。良いことだけ書くな。
+
+長さ: ${lengthInstruction}`,
         topicKey,
       };
     }
@@ -238,6 +268,9 @@ async function main() {
   // プロンプト構築
   const { userPrompt, topicKey, isArticle } = buildPrompt(category, dataSources, trendResult);
   console.log(`🔑 トピックキー: ${topicKey}`);
+  // 長さ指示をログに出力（デバッグ用）
+  const lengthMatch = userPrompt.match(/長さ: (.+)/);
+  if (lengthMatch) console.log(`📏 長さ指示: ${lengthMatch[1]}`);
 
   // AI生成
   console.log('🤖 投稿文生成中...');
