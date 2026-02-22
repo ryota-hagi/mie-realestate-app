@@ -3,7 +3,7 @@
  * AI による投稿文・返信文の生成を担当
  */
 
-import { SYSTEM_PROMPT, SYSTEM_PROMPT_REPLY, CORPORATE_BLOCKLIST, PR_BLOCKLIST } from './config.mjs';
+import { SYSTEM_PROMPT, SYSTEM_PROMPT_REPLY, CORPORATE_BLOCKLIST, PR_BLOCKLIST, JARGON_BLOCKLIST } from './config.mjs';
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const MODEL = 'claude-haiku-4-5-20251001';
@@ -97,6 +97,14 @@ function validatePost(text) {
     }
   }
 
+  // 専門用語チェック
+  for (const word of JARGON_BLOCKLIST) {
+    if (text.includes(word)) {
+      errors.push(`専門用語検出: "${word}" → わかりやすい言葉に置き換えて`);
+      break;
+    }
+  }
+
   // 改行が多すぎる（段落を作りすぎ）= 記事っぽい
   const paragraphs = text.split(/\n\n+/).filter(p => p.trim());
   if (paragraphs.length > 3) {
@@ -127,6 +135,14 @@ function validateReply(text) {
     }
   }
 
+  // 専門用語チェック
+  for (const word of JARGON_BLOCKLIST) {
+    if (text.includes(word)) {
+      errors.push(`専門用語検出: "${word}"`);
+      break;
+    }
+  }
+
   // URLが含まれていたらNG（宣伝防止）
   if (/https?:\/\//.test(text)) {
     errors.push('返信にURLが含まれています');
@@ -150,10 +166,10 @@ export async function generatePost(userPrompt) {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     let prompt = userPrompt;
     if (attempt === 2) {
-      prompt += `\n\n【やり直し】前回の文章がPR臭かった。もっと短く、1つだけ言って終わり。メリット並べるな。愚痴っぽくていい。ハッシュタグは1〜2個だけ。`;
+      prompt += `\n\n【やり直し】前回ダメだった。もっと短く、1つだけ言って終わり。専門用語使うな。普通の人がわかる言葉だけ使え。愚痴っぽくていい。ハッシュタグは1〜2個だけ。`;
     }
     if (attempt === 3) {
-      prompt += `\n\n【最終やり直し】2〜3文で終わらせて。「〜なんだよね」で終わるくらい雑でいい。良いことばかり書くな。ハッシュタグ1個。`;
+      prompt += `\n\n【最終やり直し】2〜3文で終わらせて。「〜なんだよね」で終わるくらい雑でいい。難しい言葉は全部やめろ。ハッシュタグ1個。`;
     }
 
     const text = await callClaude(SYSTEM_PROMPT, prompt);
@@ -183,10 +199,10 @@ export async function generateArticlePost(userPrompt) {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     let prompt = userPrompt;
     if (attempt === 2) {
-      prompt += `\n\n【やり直し】PR臭い。もっと短く雑に。「これ読んだんだけど」くらいの軽さで。ハッシュタグ1〜2個。`;
+      prompt += `\n\n【やり直し】PR臭い。もっと短く雑に。専門用語使うな。「これ読んだんだけど」くらいの軽さで。ハッシュタグ1〜2個。`;
     }
     if (attempt === 3) {
-      prompt += `\n\n【最終やり直し】2〜3文だけ。URL貼って終わり。`;
+      prompt += `\n\n【最終やり直し】2〜3文だけ。難しい言葉全部やめろ。URL貼って終わり。`;
     }
 
     const text = await callClaude(SYSTEM_PROMPT, prompt);
@@ -203,6 +219,9 @@ export async function generateArticlePost(userPrompt) {
     }
     for (const word of PR_BLOCKLIST) {
       if (trimmed.includes(word)) { errors.push(`PR臭検出: "${word}"`); break; }
+    }
+    for (const word of JARGON_BLOCKLIST) {
+      if (trimmed.includes(word)) { errors.push(`専門用語検出: "${word}"`); break; }
     }
 
     if (errors.length === 0) return trimmed;
