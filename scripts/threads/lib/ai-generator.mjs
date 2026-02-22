@@ -12,7 +12,7 @@ const MODEL = 'claude-haiku-4-5-20251001';
 // リトライヘルパー
 // ============================================================
 
-async function withRetry(fn, maxRetries = 3, label = 'API call') {
+async function withRetry(fn, maxRetries = 3, label = 'API呼出') {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       return await fn();
@@ -58,7 +58,7 @@ async function callClaude(systemPrompt, userPrompt, maxTokens = 1024) {
 
     const data = await res.json();
     return data.content?.[0]?.text || '';
-  }, 3, 'Claude API');
+  }, 3, 'Claude API呼出');
 }
 
 // ============================================================

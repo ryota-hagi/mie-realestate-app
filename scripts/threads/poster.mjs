@@ -13,7 +13,7 @@
 
 import { publishPost, checkAndRefreshToken, getInsights } from './lib/threads-api.mjs';
 import { generatePost, generateArticlePost } from './lib/ai-generator.mjs';
-import { loadAllData, randomChoice, getTaikenTopic, getMameTopic, getKijiTopic, getLoanTopic, getAruaruTopic, getMomegotoTopic, getKoukaiTopic } from './lib/data-loader.mjs';
+import { loadAllData, randomChoice, getTaikenTopic, getMameTopic, getKijiTopic, getLoanTopic, getAruaruTopic, getMomegotoTopic, getKoukaiTopic, getNewsTopic } from './lib/data-loader.mjs';
 import { scanTrends, buildTrendPrompt } from './lib/trend-scanner.mjs';
 import { loadHistory, saveHistory, isCategoryCoolingDown, isTopicCoolingDown, getPostsNeedingEngagement, updatePostEngagement, getAdjustedWeights, getPerformanceHint } from './lib/history.mjs';
 import { CATEGORIES, SEASONAL_TOPICS, HASHTAGS, SITE_URL } from './lib/config.mjs';
@@ -151,6 +151,16 @@ function buildPrompt(category, dataSources, trendResult) {
       return buildMomegotoPrompt(topic, performanceHint);
     }
 
+    case 'news': {
+      const topic = getNewsTopic();
+      if (isTopicCoolingDown(topic.topicKey)) {
+        const alt = getNewsTopic();
+        if (isTopicCoolingDown(alt.topicKey)) return buildPrompt({ id: 'aruaru', label: 'あるあるネタ' }, dataSources, trendResult);
+        return buildNewsPrompt(alt, performanceHint);
+      }
+      return buildNewsPrompt(topic, performanceHint);
+    }
+
     case 'taiken': {
       const topic = getTaikenTopic(cityData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'aruaru', label: 'あるあるネタ' }, dataSources, trendResult);
@@ -283,6 +293,21 @@ function buildKoukaiPrompt(topic, performanceHint) {
   };
 }
 
+function buildNewsPrompt(topic, performanceHint) {
+  return {
+    userPrompt: `住宅・不動産関連のニュースや話題について、自分の感想を1つ投稿して。
+
+ネタ: ${topic.text}
+
+ニュースを見て感じたこと・不安・驚きを、家を建てた当事者の目線で。
+「このニュース見てさ〜」みたいな日常会話のテンションで。
+専門用語は使わない。自分の家づくり経験と絡めて共感を呼ぶように。
+
+長さ: ${getRandomLength()}${performanceHint}`,
+    topicKey: topic.topicKey,
+  };
+}
+
 function buildMomegotoPrompt(topic, performanceHint) {
   return {
     userPrompt: `家づくりでの揉め事・トラブルについて1つ投稿して。
@@ -388,6 +413,6 @@ async function main() {
 }
 
 main().catch(e => {
-  console.error('💥 Fatal error:', e);
+  console.error('💥 致命的エラー:', e);
   process.exit(1);
 });

@@ -53,7 +53,7 @@ async function waitForContainerReady(containerId, maxRetries = 10, intervalMs = 
         `${BASE_URL}/${containerId}?fields=status,error_message&access_token=${accessToken}`
       );
 
-      console.log(`   📦 コンテナステータス (${i + 1}/${maxRetries}): ${data.status || 'UNKNOWN'}`);
+      console.log(`   📦 コンテナステータス (${i + 1}/${maxRetries}): ${data.status || '不明'}`);
 
       if (data.status === 'FINISHED') {
         return 'FINISHED';

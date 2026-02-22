@@ -7,7 +7,7 @@
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { ARUARU_TOPICS, MOMEGOTO_TOPICS, KOUKAI_TOPICS } from './config.mjs';
+import { ARUARU_TOPICS, MOMEGOTO_TOPICS, KOUKAI_TOPICS, NEWS_TOPICS } from './config.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..', '..');
@@ -231,6 +231,22 @@ export function getLoanTopic(knowledgeData) {
     article: { id: article.id, title: article.title },
     section: article.sections[sectionIndex],
     topicKey: `loan:${article.id}:section:${sectionIndex}`,
+  };
+}
+
+// ============================================================
+// ニュース引用ネタ抽出
+// ============================================================
+
+/**
+ * ニュース引用ネタをランダムに取得
+ * @returns {{ text: string, topicKey: string }}
+ */
+export function getNewsTopic() {
+  const index = Math.floor(Math.random() * NEWS_TOPICS.length);
+  return {
+    text: NEWS_TOPICS[index],
+    topicKey: `news:${index}`,
   };
 }
 
