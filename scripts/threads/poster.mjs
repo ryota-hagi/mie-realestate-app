@@ -86,11 +86,11 @@ function buildPrompt(category, dataSources, trendResult) {
       const topic = getTaikenTopic(cityData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'mame', label: '豆知識' }, dataSources, trendResult);
       return {
-        userPrompt: `${topic.city}で家建てた時のこと1つだけ投稿して。
+        userPrompt: `${topic.city}で自分が家建てた時の経験を1つ投稿して。
 
 ネタ: ${topic.tip?.title || '住宅事情'} - ${topic.tip?.body || 'この地域で家を建てた経験'}
 
-良いことだけ書くな。不満とかモヤモヤも混ぜろ。
+詳しい人として、具体的な数字や仕様を交えて語れ。良かったことも後悔も正直に。
 
 長さ: ${getRandomLength()}`,
         topicKey: topic.topicKey,
@@ -101,11 +101,11 @@ function buildPrompt(category, dataSources, trendResult) {
       const topic = getMameTopic(knowledgeData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'taiken', label: '体験談' }, dataSources, trendResult);
       return {
-        userPrompt: `家建てる時に知って驚いたこと1つだけ投稿して。
+        userPrompt: `家づくりで意外と知られてないことを1つ投稿して。
 
 ネタ: ${topic.section?.heading || '住宅の豆知識'} - ${(topic.section?.body || '注文住宅に関する知識').slice(0, 200)}
 
-「知らなかった」「え、マジ？」くらいの温度感で。説明しすぎるな。
+「これ知らない人多いけど」「意外と見落とされがちだけど」くらいの切り口で。詳しい人として語れ。
 
 長さ: ${getRandomLength()}`,
         topicKey: topic.topicKey,
@@ -116,11 +116,11 @@ function buildPrompt(category, dataSources, trendResult) {
       const topic = getDataTopic(liveData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'mame', label: '豆知識' }, dataSources, trendResult);
       return {
-        userPrompt: `土地のデータ調べてて気づいたこと1つだけ投稿して。
+        userPrompt: `土地や不動産のデータから気づいたことを1つ投稿して。
 
 データ: ${topic.insight.text}
 
-数字は1個だけ使え。「調べてたらさ」くらいの軽さで。分析するな。感想だけ言え。
+数字を使って具体的に。詳しい人がデータを見て思ったこと・気づきとして。長い分析はするな。
 
 長さ: ${getRandomLength()}`,
         topicKey: topic.topicKey,
@@ -131,12 +131,12 @@ function buildPrompt(category, dataSources, trendResult) {
       const topic = getKijiTopic(knowledgeData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'mame', label: '豆知識' }, dataSources, trendResult);
       return {
-        userPrompt: `この記事読んで思ったこと1つだけ投稿して。URLも貼れ。
+        userPrompt: `この記事について自分の意見を1つ投稿して。URLも貼れ。
 
 記事: ${topic.article.title} - ${topic.article.description || ''}
 URL: ${topic.url}
 
-「これ読んだんだけど」くらいの軽さ。記事の要約はするな。自分の感想だけ。
+詳しい人として「これ読んだけど、実際は〜」のように自分の経験と絡めた感想を。記事の要約はするな。
 
 長さ: ${getRandomLength()}`,
         topicKey: topic.topicKey,
@@ -149,11 +149,11 @@ URL: ${topic.url}
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'taiken', label: '体験談' }, dataSources, trendResult);
       const overview = topic.city.seo_sections?.overview || '';
       return {
-        userPrompt: `${topic.city.nameJa}に住んでて思うこと1つだけ投稿して。
+        userPrompt: `${topic.city.nameJa}の土地事情や住環境について1つ投稿して。
 
 参考: ${overview.slice(0, 200)}
 
-エリアの宣伝するな。不便なとこや微妙なとこも正直に言え。良いこと1個言うなら悪いことも1個言え。
+坪単価、利便性、ハザードマップ等の具体的な情報を交えろ。良いことも微妙なことも正直に。
 
 長さ: ${getRandomLength()}`,
         topicKey: topic.topicKey,
@@ -164,11 +164,11 @@ URL: ${topic.url}
       const topic = getShippaiTopic(cityData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'taiken', label: '体験談' }, dataSources, trendResult);
       return {
-        userPrompt: `家建てて後悔してること1つだけ投稿して。
+        userPrompt: `あれだけ調べたのに失敗したことを1つ投稿して。
 
 ネタ: ${(topic.mistakes || '間取りの失敗、収納不足、日当たりの問題など').slice(0, 300)}
 
-愚痴っぽくていい。解決策とか注意喚起とかいらない。後悔を吐き出すだけ。
+詳しい人でも見落とす盲点として語れ。「調べまくったのに」「わかってたはずなのに」的な悔しさを出せ。
 
 長さ: ${getRandomLength()}`,
         topicKey: topic.topicKey,
@@ -181,11 +181,11 @@ URL: ${topic.url}
       const sectionHeading = topic.section?.heading || '住宅ローン・資金計画';
       const sectionBody = topic.section?.body || '注文住宅を建てるときの費用や住宅ローンの選び方について';
       return {
-        userPrompt: `住宅ローンや金のことで思ってること1つだけ投稿して。
+        userPrompt: `住宅ローンや資金計画について1つ投稿して。
 
 ネタ: ${sectionHeading} - ${sectionBody.slice(0, 200)}
 
-金額はリアルに。月々の支払いとか、予想外の出費とか。不安やストレスも正直に。
+金利、月々の返済額、繰上げ返済計画など具体的な数字を使え。詳しい人として自分の判断や計算を語れ。
 
 長さ: ${getRandomLength()}`,
         topicKey: topic.topicKey,
@@ -201,22 +201,22 @@ URL: ${topic.url}
       if (isTopicCoolingDown(topicKey)) {
         const altText = topics.find((t, i) => !isTopicCoolingDown(`kisetsu:${month}:${i}`)) || topicText;
         return {
-          userPrompt: `今の時期に思う家のこと1つだけ投稿して。
+          userPrompt: `この時期の家づくり・住まいについて1つ投稿して。
 
 ネタ: ${altText}
 
-季節感を出しつつ、自分の家の話を。良いことだけ書くな。
+季節と住宅性能（断熱、気密、換気等）を絡めて、詳しい人として具体的に。
 
 長さ: ${lengthInstruction}`,
           topicKey: `kisetsu:${month}:${topics.indexOf(altText)}`,
         };
       }
       return {
-        userPrompt: `今の時期に思う家のこと1つだけ投稿して。
+        userPrompt: `この時期の家づくり・住まいについて1つ投稿して。
 
 ネタ: ${topicText}
 
-季節感を出しつつ、自分の家の話を。良いことだけ書くな。
+季節と住宅性能（断熱、気密、換気等）を絡めて、詳しい人として具体的に。
 
 長さ: ${lengthInstruction}`,
         topicKey,
