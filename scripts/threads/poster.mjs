@@ -78,7 +78,7 @@ function buildPrompt(category, dataSources, trendResult) {
         userPrompt: `以下の情報をもとに、自分の体験談のようなThreads投稿を書いてください。
 まるで自分が実際にその土地で家を建てた人のように語ってください。
 
-情報: ${topic.city}の${topic.tip.title} - ${topic.tip.body}
+情報: ${topic.city}の${topic.tip?.title || '住宅事情'} - ${topic.tip?.body || 'この地域で家を建てた経験'}
 
 投稿には「${topic.city}」を含めてください。`,
         topicKey: topic.topicKey,
@@ -92,7 +92,7 @@ function buildPrompt(category, dataSources, trendResult) {
         userPrompt: `以下の情報から、「へぇ〜知らなかった！」と思わせる豆知識投稿を書いてください。
 友達に教えるように、驚きや発見を共有する感じで。
 
-情報: ${topic.section.heading} - ${topic.section.body.slice(0, 300)}
+情報: ${topic.section?.heading || '住宅の豆知識'} - ${(topic.section?.body || '注文住宅に関する知識').slice(0, 300)}
 
 「〜って知ってた？」「マジでこれ知らなかった」のような切り出しがおすすめ。`,
         topicKey: topic.topicKey,
@@ -153,7 +153,7 @@ URLは投稿の後半に自然に入れてください。
         userPrompt: `以下の失敗事例から1つ選んで、自分が実際に体験したかのような失敗談投稿を書いてください。
 
 エリア: ${topic.city}
-よくある失敗: ${topic.mistakes.slice(0, 400)}
+よくある失敗: ${(topic.mistakes || '間取りの失敗、収納不足、日当たりの問題など').slice(0, 400)}
 
 「こうしておけばよかった…」「これはマジで後悔」のような切り口で。
 最後に読者への注意喚起を自然に入れてください。`,
@@ -164,10 +164,12 @@ URLは投稿の後半に自然に入れてください。
     case 'loan': {
       const topic = getLoanTopic(knowledgeData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'mame', label: '豆知識' }, dataSources, trendResult);
+      const sectionHeading = topic.section?.heading || '住宅ローン・資金計画';
+      const sectionBody = topic.section?.body || '注文住宅を建てるときの費用や住宅ローンの選び方について';
       return {
         userPrompt: `以下の住宅費用・ローン情報をもとに、自分の体験として語る投稿を書いてください。
 
-情報: ${topic.section.heading} - ${topic.section.body.slice(0, 300)}
+情報: ${sectionHeading} - ${sectionBody.slice(0, 300)}
 
 「住宅ローンがこうだった」「資金計画でこう考えた」のような切り口で。
 具体的な金額を自然に交えてリアリティを出してください。`,
