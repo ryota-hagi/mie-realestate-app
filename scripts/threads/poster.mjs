@@ -75,12 +75,11 @@ function buildPrompt(category, dataSources, trendResult) {
       const topic = getTaikenTopic(cityData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'mame', label: '豆知識' }, dataSources, trendResult);
       return {
-        userPrompt: `以下の情報をもとに、自分の体験談のようなThreads投稿を書いてください。
-まるで自分が実際にその土地で家を建てた人のように語ってください。
+        userPrompt: `${topic.city}で家建てた時のこと1つだけ投稿して。
 
-情報: ${topic.city}の${topic.tip?.title || '住宅事情'} - ${topic.tip?.body || 'この地域で家を建てた経験'}
+ネタ: ${topic.tip?.title || '住宅事情'} - ${topic.tip?.body || 'この地域で家を建てた経験'}
 
-投稿には「${topic.city}」を含めてください。`,
+良いことだけ書くな。不満とかモヤモヤも混ぜろ。2〜3文で。`,
         topicKey: topic.topicKey,
       };
     }
@@ -89,12 +88,11 @@ function buildPrompt(category, dataSources, trendResult) {
       const topic = getMameTopic(knowledgeData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'taiken', label: '体験談' }, dataSources, trendResult);
       return {
-        userPrompt: `以下の情報から、「へぇ〜知らなかった！」と思わせる豆知識投稿を書いてください。
-友達に教えるように、驚きや発見を共有する感じで。
+        userPrompt: `家建てる時に知って驚いたこと1つだけ投稿して。
 
-情報: ${topic.section?.heading || '住宅の豆知識'} - ${(topic.section?.body || '注文住宅に関する知識').slice(0, 300)}
+ネタ: ${topic.section?.heading || '住宅の豆知識'} - ${(topic.section?.body || '注文住宅に関する知識').slice(0, 200)}
 
-「〜って知ってた？」「マジでこれ知らなかった」のような切り出しがおすすめ。`,
+「知らなかった」「え、マジ？」くらいの温度感で。説明しすぎるな。2〜3文で終われ。`,
         topicKey: topic.topicKey,
       };
     }
@@ -103,12 +101,11 @@ function buildPrompt(category, dataSources, trendResult) {
       const topic = getDataTopic(liveData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'mame', label: '豆知識' }, dataSources, trendResult);
       return {
-        userPrompt: `以下の実際の取引データを元に、「へぇ〜そうなんだ」と思わせるThreads投稿を書いてください。
+        userPrompt: `土地のデータ調べてて気づいたこと1つだけ投稿して。
 
 データ: ${topic.insight.text}
 
-数字を自然に会話に織り込んでください。出典は「国交省の取引データ」とさりげなく触れてOK。
-「調べてみたらこうだった」「先輩からこんな話聞いた」のような切り口で。`,
+数字は1個だけ使え。「調べてたらさ」くらいの軽さで。分析するな。感想だけ言え。`,
         topicKey: topic.topicKey,
       };
     }
@@ -117,15 +114,12 @@ function buildPrompt(category, dataSources, trendResult) {
       const topic = getKijiTopic(knowledgeData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'mame', label: '豆知識' }, dataSources, trendResult);
       return {
-        userPrompt: `以下のナレッジ記事を、友達に「これ読んでみて」とすすめるような投稿を書いてください。
+        userPrompt: `この記事読んで思ったこと1つだけ投稿して。URLも貼れ。
 
-記事タイトル: ${topic.article.title}
-記事概要: ${topic.article.description}
+記事: ${topic.article.title} - ${topic.article.description || ''}
 URL: ${topic.url}
 
-URLは投稿の後半に自然に入れてください。
-「詳しくはこちら」のような企業っぽい誘導はNG。
-「まとめた記事あるから見てみて」くらいのカジュアルさで。`,
+「これ読んだんだけど」くらいの軽さ。記事の要約はするな。自分の感想だけ。`,
         topicKey: topic.topicKey,
         isArticle: true,
       };
@@ -136,12 +130,11 @@ URLは投稿の後半に自然に入れてください。
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'taiken', label: '体験談' }, dataSources, trendResult);
       const overview = topic.city.seo_sections?.overview || '';
       return {
-        userPrompt: `以下のエリア情報をもとに、「このエリア、実は穴場かも」と思わせるThreads投稿を書いてください。
+        userPrompt: `${topic.city.nameJa}に住んでて思うこと1つだけ投稿して。
 
-エリア: ${topic.city.nameJa}
-概要: ${overview.slice(0, 300)}
+参考: ${overview.slice(0, 200)}
 
-実際に住んでいる人の目線で、具体的なエピソードを交えて。`,
+エリアの宣伝するな。不便なとこや微妙なとこも正直に言え。良いこと1個言うなら悪いことも1個言え。`,
         topicKey: topic.topicKey,
       };
     }
@@ -150,13 +143,11 @@ URLは投稿の後半に自然に入れてください。
       const topic = getShippaiTopic(cityData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'taiken', label: '体験談' }, dataSources, trendResult);
       return {
-        userPrompt: `以下の失敗事例から1つ選んで、自分が実際に体験したかのような失敗談投稿を書いてください。
+        userPrompt: `家建てて後悔してること1つだけ投稿して。
 
-エリア: ${topic.city}
-よくある失敗: ${(topic.mistakes || '間取りの失敗、収納不足、日当たりの問題など').slice(0, 400)}
+ネタ: ${(topic.mistakes || '間取りの失敗、収納不足、日当たりの問題など').slice(0, 300)}
 
-「こうしておけばよかった…」「これはマジで後悔」のような切り口で。
-最後に読者への注意喚起を自然に入れてください。`,
+愚痴っぽくていい。解決策とか注意喚起とかいらない。後悔を吐き出すだけ。`,
         topicKey: topic.topicKey,
       };
     }
@@ -167,12 +158,11 @@ URLは投稿の後半に自然に入れてください。
       const sectionHeading = topic.section?.heading || '住宅ローン・資金計画';
       const sectionBody = topic.section?.body || '注文住宅を建てるときの費用や住宅ローンの選び方について';
       return {
-        userPrompt: `以下の住宅費用・ローン情報をもとに、自分の体験として語る投稿を書いてください。
+        userPrompt: `住宅ローンや金のことで思ってること1つだけ投稿して。
 
-情報: ${sectionHeading} - ${sectionBody.slice(0, 300)}
+ネタ: ${sectionHeading} - ${sectionBody.slice(0, 200)}
 
-「住宅ローンがこうだった」「資金計画でこう考えた」のような切り口で。
-具体的な金額を自然に交えてリアリティを出してください。`,
+金額はリアルに。月々の支払いとか、予想外の出費とか。不安やストレスも正直に。`,
         topicKey: topic.topicKey,
       };
     }
@@ -185,20 +175,20 @@ URLは投稿の後半に自然に入れてください。
       if (isTopicCoolingDown(topicKey)) {
         const altText = topics.find((t, i) => !isTopicCoolingDown(`kisetsu:${month}:${i}`)) || topicText;
         return {
-          userPrompt: `以下のテーマでThreads投稿を書いてください。
+          userPrompt: `今の時期に思う家のこと1つだけ投稿して。
 
-テーマ: ${altText}
+ネタ: ${altText}
 
-今の時期ならではの住宅ネタとして、自分の体験を交えて語ってください。`,
+季節感を出しつつ、自分の家の話を。良いことだけ書くな。`,
           topicKey: `kisetsu:${month}:${topics.indexOf(altText)}`,
         };
       }
       return {
-        userPrompt: `以下のテーマでThreads投稿を書いてください。
+        userPrompt: `今の時期に思う家のこと1つだけ投稿して。
 
-テーマ: ${topicText}
+ネタ: ${topicText}
 
-今の時期ならではの住宅ネタとして、自分の体験を交えて語ってください。`,
+季節感を出しつつ、自分の家の話を。良いことだけ書くな。`,
         topicKey,
       };
     }
