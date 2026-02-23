@@ -7,6 +7,7 @@
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { ARUARU_TOPICS, MOMEGOTO_TOPICS, KOUKAI_TOPICS, NEWS_TOPICS, SITE_PR_TOPICS, HIKAKU_TOPICS } from './config.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..', '..');
@@ -230,5 +231,101 @@ export function getLoanTopic(knowledgeData) {
     article: { id: article.id, title: article.title },
     section: article.sections[sectionIndex],
     topicKey: `loan:${article.id}:section:${sectionIndex}`,
+  };
+}
+
+// ============================================================
+// ニュース引用ネタ抽出
+// ============================================================
+
+/**
+ * ニュース引用ネタをランダムに取得
+ * @returns {{ text: string, topicKey: string }}
+ */
+export function getNewsTopic() {
+  const index = Math.floor(Math.random() * NEWS_TOPICS.length);
+  return {
+    text: NEWS_TOPICS[index],
+    topicKey: `news:${index}`,
+  };
+}
+
+// ============================================================
+// あるあるネタ抽出
+// ============================================================
+
+/**
+ * あるあるネタをランダムに取得
+ * @returns {{ text: string, topicKey: string }}
+ */
+export function getAruaruTopic() {
+  const index = Math.floor(Math.random() * ARUARU_TOPICS.length);
+  return {
+    text: ARUARU_TOPICS[index],
+    topicKey: `aruaru:${index}`,
+  };
+}
+
+// ============================================================
+// よくある揉め事ネタ抽出
+// ============================================================
+
+/**
+ * よくある揉め事ネタをランダムに取得
+ * @returns {{ text: string, topicKey: string }}
+ */
+export function getMomegotoTopic() {
+  const index = Math.floor(Math.random() * MOMEGOTO_TOPICS.length);
+  return {
+    text: MOMEGOTO_TOPICS[index],
+    topicKey: `momegoto:${index}`,
+  };
+}
+
+// ============================================================
+// 後悔パターン抽出
+// ============================================================
+
+/**
+ * 後悔パターンをランダムに取得
+ * @returns {{ text: string, topicKey: string }}
+ */
+export function getKoukaiTopic() {
+  const index = Math.floor(Math.random() * KOUKAI_TOPICS.length);
+  return {
+    text: KOUKAI_TOPICS[index],
+    topicKey: `koukai:${index}`,
+  };
+}
+
+// ============================================================
+// 比較・二択ネタ抽出
+// ============================================================
+
+/**
+ * 比較・二択ネタをランダムに取得
+ * @returns {{ text: string, topicKey: string }}
+ */
+export function getHikakuTopic() {
+  const index = Math.floor(Math.random() * HIKAKU_TOPICS.length);
+  return {
+    text: HIKAKU_TOPICS[index],
+    topicKey: `hikaku:${index}`,
+  };
+}
+
+// ============================================================
+// サイト紹介ネタ抽出
+// ============================================================
+
+/**
+ * サイト紹介ネタをランダムに取得
+ * @returns {{ text: string, topicKey: string }}
+ */
+export function getSitePrTopic() {
+  const index = Math.floor(Math.random() * SITE_PR_TOPICS.length);
+  return {
+    text: SITE_PR_TOPICS[index],
+    topicKey: `site:${index}`,
   };
 }

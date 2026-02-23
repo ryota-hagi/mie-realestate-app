@@ -3,7 +3,7 @@
  * AI による投稿文・返信文の生成を担当
  */
 
-import { SYSTEM_PROMPT, SYSTEM_PROMPT_REPLY, CORPORATE_BLOCKLIST } from './config.mjs';
+import { SYSTEM_PROMPT, SYSTEM_PROMPT_REPLY, CORPORATE_BLOCKLIST, PR_BLOCKLIST, JARGON_BLOCKLIST } from './config.mjs';
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const MODEL = 'claude-haiku-4-5-20251001';
@@ -12,7 +12,7 @@ const MODEL = 'claude-haiku-4-5-20251001';
 // リトライヘルパー
 // ============================================================
 
-async function withRetry(fn, maxRetries = 3, label = 'API call') {
+async function withRetry(fn, maxRetries = 3, label = 'API呼出') {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       return await fn();
@@ -58,7 +58,7 @@ async function callClaude(systemPrompt, userPrompt, maxTokens = 1024) {
 
     const data = await res.json();
     return data.content?.[0]?.text || '';
-  }, 3, 'Claude API');
+  }, 3, 'Claude API呼出');
 }
 
 // ============================================================
@@ -72,8 +72,11 @@ function validatePost(text) {
     errors.push(`文字数超過 (${text.length}/500)`);
   }
 
-  if (!text.includes('#')) {
-    errors.push('ハッシュタグなし');
+  // ハッシュタグは任意（Threadsではタグなしの方がインプレが伸びる）
+  // ただし2個以上は企業っぽいのでNG
+  const hashtagCount = (text.match(/#/g) || []).length;
+  if (hashtagCount > 2) {
+    errors.push(`ハッシュタグ多すぎ (${hashtagCount}個 → 1個以下に)`);
   }
 
   for (const word of CORPORATE_BLOCKLIST) {
@@ -83,19 +86,56 @@ function validatePost(text) {
     }
   }
 
+  // PR臭チェック
+  for (const word of PR_BLOCKLIST) {
+    if (text.includes(word)) {
+      errors.push(`PR臭検出: "${word}"`);
+      break;
+    }
+  }
+
+  // 専門用語チェック
+  for (const word of JARGON_BLOCKLIST) {
+    if (text.includes(word)) {
+      errors.push(`専門用語検出: "${word}" → わかりやすい言葉に置き換えて`);
+      break;
+    }
+  }
+
+  // 段落チェック（空行で区切る読みやすさは推奨するが、多すぎは記事っぽい）
+  const paragraphs = text.split(/\n\n+/).filter(p => p.trim());
+  if (paragraphs.length > 5) {
+    errors.push(`段落多すぎ (${paragraphs.length}段落 → 5以下に)`);
+  }
+
   return errors;
 }
 
 function validateReply(text) {
   const errors = [];
 
-  if (text.length > 200) {
-    errors.push(`文字数超過 (${text.length}/200)`);
+  if (text.length > 150) {
+    errors.push(`文字数超過 (${text.length}/150)`);
   }
 
   for (const word of CORPORATE_BLOCKLIST) {
     if (text.includes(word)) {
       errors.push(`企業トーン検出: "${word}"`);
+      break;
+    }
+  }
+
+  for (const word of PR_BLOCKLIST) {
+    if (text.includes(word)) {
+      errors.push(`PR臭検出: "${word}"`);
+      break;
+    }
+  }
+
+  // 専門用語チェック
+  for (const word of JARGON_BLOCKLIST) {
+    if (text.includes(word)) {
+      errors.push(`専門用語検出: "${word}"`);
       break;
     }
   }
@@ -122,8 +162,11 @@ export async function generatePost(userPrompt) {
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     let prompt = userPrompt;
-    if (attempt > 1) {
-      prompt += `\n\n【再生成指示】前回の生成結果にバリデーションエラーがありました。500文字以内に収め、ハッシュタグを2-3個つけ、企業っぽい表現を避けてください。`;
+    if (attempt === 2) {
+      prompt += `\n\n【やり直し】前回ダメだった。もっと短く、1つだけ言って終わり。専門用語使うな。普通の人がわかる言葉だけ使え。愚痴っぽくていい。ハッシュタグはつけなくていい。空行で区切って読みやすくしろ。`;
+    }
+    if (attempt === 3) {
+      prompt += `\n\n【最終やり直し】2〜3文で終わらせて。「〜なんだよね」で終わるくらい雑でいい。難しい言葉は全部やめろ。ハッシュタグなし。`;
     }
 
     const text = await callClaude(SYSTEM_PROMPT, prompt);
@@ -136,7 +179,6 @@ export async function generatePost(userPrompt) {
 
     console.warn(`⚠️ バリデーション失敗 (${attempt}/${maxAttempts}):`, errors.join(', '));
     if (attempt === maxAttempts) {
-      // 最終手段: 500文字でカットしてそのまま返す
       console.warn('⚠️ バリデーション再試行上限。カットして使用します。');
       return trimmed.slice(0, 497) + '...';
     }
@@ -153,8 +195,11 @@ export async function generateArticlePost(userPrompt) {
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     let prompt = userPrompt;
-    if (attempt > 1) {
-      prompt += `\n\n【再生成指示】500文字以内に収めてください。企業っぽい表現を避けてください。`;
+    if (attempt === 2) {
+      prompt += `\n\n【やり直し】PR臭い。もっと短く雑に。専門用語使うな。「これ読んだんだけど」くらいの軽さで。ハッシュタグなし。空行で区切れ。`;
+    }
+    if (attempt === 3) {
+      prompt += `\n\n【最終やり直し】2〜3文だけ。難しい言葉全部やめろ。URL貼って終わり。ハッシュタグなし。`;
     }
 
     const text = await callClaude(SYSTEM_PROMPT, prompt);
@@ -163,9 +208,17 @@ export async function generateArticlePost(userPrompt) {
     // 記事紹介はURL許可なので、URLチェックを除外したバリデーション
     const errors = [];
     if (trimmed.length > 500) errors.push(`文字数超過 (${trimmed.length}/500)`);
-    if (!trimmed.includes('#')) errors.push('ハッシュタグなし');
+    // ハッシュタグは任意（タグなしOK）
+    const hashtagCount = (trimmed.match(/#/g) || []).length;
+    if (hashtagCount > 2) errors.push(`ハッシュタグ多すぎ (${hashtagCount}個)`);
     for (const word of CORPORATE_BLOCKLIST) {
       if (trimmed.includes(word)) { errors.push(`企業トーン検出: "${word}"`); break; }
+    }
+    for (const word of PR_BLOCKLIST) {
+      if (trimmed.includes(word)) { errors.push(`PR臭検出: "${word}"`); break; }
+    }
+    for (const word of JARGON_BLOCKLIST) {
+      if (trimmed.includes(word)) { errors.push(`専門用語検出: "${word}"`); break; }
     }
 
     if (errors.length === 0) return trimmed;
@@ -184,17 +237,10 @@ export async function generateArticlePost(userPrompt) {
  * @returns {string}
  */
 export async function generateReply(originalText, context = '') {
-  const userPrompt = `以下のThreads投稿に対して、自然なコメントを書いてください。
+  const userPrompt = `以下のThreads投稿に返信して。1〜2文で短く。自分の体験を1個だけ。
 
-投稿内容: 「${originalText}」
-${context ? `\n追加情報: ${context}` : ''}
-
-【ルール】
-- 共感、体験の共有、役立つ情報提供のいずれかの切り口で
-- 宣伝・URL貼りは絶対NG
-- 「いいですね！」だけの薄いコメントもNG
-- 自分の具体的な体験やエピソードを交える
-- 200文字以内で簡潔に`;
+投稿: 「${originalText}」
+${context ? `\n背景: ${context}` : ''}`;
 
   const maxAttempts = 3;
 
@@ -207,7 +253,7 @@ ${context ? `\n追加情報: ${context}` : ''}
 
     console.warn(`⚠️ 返信バリデーション失敗 (${attempt}/${maxAttempts}):`, errors.join(', '));
     if (attempt === maxAttempts) {
-      return trimmed.slice(0, 200);
+      return trimmed.slice(0, 150);
     }
   }
 }

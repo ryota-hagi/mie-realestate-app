@@ -31,7 +31,55 @@ async function apiCall(url, options = {}) {
 }
 
 // ============================================================
-// 投稿 (2ステップ: コンテナ作成 → 公開)
+// コンテナステータス確認（作成後、公開前に必要）
+// ============================================================
+
+/**
+ * メディアコンテナのステータスを確認する
+ * Threads APIではコンテナ作成後、FINISHED状態になるまで待つ必要がある
+ * @param {string} containerId - コンテナID
+ * @param {number} maxRetries - 最大リトライ回数 (デフォルト 10)
+ * @param {number} intervalMs - チェック間隔ミリ秒 (デフォルト 2000)
+ * @returns {string} ステータス ('FINISHED', 'ERROR', etc.)
+ */
+async function waitForContainerReady(containerId, maxRetries = 10, intervalMs = 2000) {
+  const { accessToken } = getCredentials();
+
+  for (let i = 0; i < maxRetries; i++) {
+    await new Promise(r => setTimeout(r, intervalMs));
+
+    try {
+      const data = await apiCall(
+        `${BASE_URL}/${containerId}?fields=status,error_message&access_token=${accessToken}`
+      );
+
+      console.log(`   📦 コンテナステータス (${i + 1}/${maxRetries}): ${data.status || '不明'}`);
+
+      if (data.status === 'FINISHED') {
+        return 'FINISHED';
+      }
+
+      if (data.status === 'ERROR') {
+        throw new Error(`コンテナエラー: ${data.error_message || '不明なエラー'}`);
+      }
+
+      // IN_PROGRESS の場合は続行
+    } catch (e) {
+      // ステータス確認自体が失敗した場合（404等）
+      // コンテナがまだ準備中の可能性があるので続行
+      if (e.status === 404 || e.message?.includes('does not exist')) {
+        console.log(`   ⏳ コンテナ準備中... (${i + 1}/${maxRetries})`);
+        continue;
+      }
+      throw e;
+    }
+  }
+
+  throw new Error(`コンテナが${maxRetries * intervalMs / 1000}秒以内にFINISHEDになりませんでした`);
+}
+
+// ============================================================
+// 投稿 (2ステップ: コンテナ作成 → ステータス確認 → 公開)
 // ============================================================
 
 /**
@@ -43,6 +91,7 @@ export async function publishPost(text) {
   const { accessToken, userId } = getCredentials();
 
   // Step 1: メディアコンテナ作成
+  console.log('   📦 メディアコンテナ作成中...');
   const container = await apiCall(`${BASE_URL}/${userId}/threads`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -52,8 +101,14 @@ export async function publishPost(text) {
       access_token: accessToken,
     }),
   });
+  console.log(`   📦 コンテナID: ${container.id}`);
 
-  // Step 2: 公開
+  // Step 2: コンテナがFINISHEDになるまで待機
+  console.log('   ⏳ コンテナ処理待機中...');
+  await waitForContainerReady(container.id);
+
+  // Step 3: 公開
+  console.log('   🚀 公開中...');
   const result = await apiCall(`${BASE_URL}/${userId}/threads_publish`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -79,6 +134,7 @@ export async function publishPost(text) {
 export async function publishReply(replyToId, text) {
   const { accessToken, userId } = getCredentials();
 
+  // Step 1: 返信コンテナ作成
   const container = await apiCall(`${BASE_URL}/${userId}/threads`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -90,6 +146,10 @@ export async function publishReply(replyToId, text) {
     }),
   });
 
+  // Step 2: コンテナがFINISHEDになるまで待機
+  await waitForContainerReady(container.id);
+
+  // Step 3: 公開
   const result = await apiCall(`${BASE_URL}/${userId}/threads_publish`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
