@@ -14,7 +14,7 @@
 
 import { publishPost, checkAndRefreshToken, getInsights } from './lib/threads-api.mjs';
 import { generatePost, generateArticlePost } from './lib/ai-generator.mjs';
-import { loadAllData, randomChoice, getTaikenTopic, getMameTopic, getKijiTopic, getLoanTopic, getAruaruTopic, getMomegotoTopic, getKoukaiTopic, getNewsTopic, getSitePrTopic, getHikakuTopic } from './lib/data-loader.mjs';
+import { loadAllData, randomChoice, getTaikenTopic, getMameTopic, getKijiTopic, getLoanTopic, getAruaruTopic, getMomegotoTopic, getKoukaiTopic, getNewsTopic, getSitePrTopic, getHikakuTopic, getKinshiTopic, getGyakusetsuTopic } from './lib/data-loader.mjs';
 import { scanTrends, buildTrendPrompt } from './lib/trend-scanner.mjs';
 import { loadHistory, saveHistory, isCategoryCoolingDown, isTopicCoolingDown, getPostsNeedingEngagement, updatePostEngagement, getAdjustedWeights, getPerformanceHint } from './lib/history.mjs';
 import { CATEGORIES, SEASONAL_TOPICS, HASHTAGS, SITE_URL } from './lib/config.mjs';
@@ -100,9 +100,9 @@ function selectCategory(trendAvailable) {
 
 function getRandomLength() {
   const r = Math.random();
-  if (r < 0.25) return '超短く。10〜30文字。一言で終われ。';
-  if (r < 0.55) return '短く。50〜100文字。1〜2文で終われ。';
-  return '普通の長さ。100〜200文字。2〜3文。';
+  if (r < 0.15) return '超短く。10〜30文字。一言で終われ。';
+  if (r < 0.35) return '短く。50〜100文字。1〜2文で終われ。';
+  return '普通の長さ。100〜200文字。2〜4文。バズの再現性が最も高い長さ。';
 }
 
 // ============================================================
@@ -172,6 +172,26 @@ function buildPrompt(category, dataSources, trendResult) {
       return buildHikakuPrompt(topic, performanceHint);
     }
 
+    case 'kinshi': {
+      const topic = getKinshiTopic();
+      if (isTopicCoolingDown(topic.topicKey)) {
+        const alt = getKinshiTopic();
+        if (isTopicCoolingDown(alt.topicKey)) return buildPrompt({ id: 'koukai', label: '後悔パターン' }, dataSources, trendResult);
+        return buildKinshiPrompt(alt, performanceHint);
+      }
+      return buildKinshiPrompt(topic, performanceHint);
+    }
+
+    case 'gyakusetsu': {
+      const topic = getGyakusetsuTopic();
+      if (isTopicCoolingDown(topic.topicKey)) {
+        const alt = getGyakusetsuTopic();
+        if (isTopicCoolingDown(alt.topicKey)) return buildPrompt({ id: 'aruaru', label: 'あるあるネタ' }, dataSources, trendResult);
+        return buildGyakusetsuPrompt(alt, performanceHint);
+      }
+      return buildGyakusetsuPrompt(topic, performanceHint);
+    }
+
     case 'taiken': {
       const topic = getTaikenTopic(cityData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'aruaru', label: 'あるあるネタ' }, dataSources, trendResult);
@@ -210,18 +230,17 @@ function buildPrompt(category, dataSources, trendResult) {
       const topic = getKijiTopic(knowledgeData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'mame', label: '豆知識・役立ち' }, dataSources, trendResult);
       return {
-        userPrompt: `この記事について自分の感想を1つ。URLも貼って。
+        userPrompt: `この記事のテーマについて自分の感想を1つ。
 
-記事: ${topic.article.title} - ${topic.article.description || ''}
-URL: ${topic.url}
+テーマ: ${topic.article.title} - ${topic.article.description || ''}
 
 専門用語は使わない。「これ読んだけど、実際は〜だった」みたいに自分の体験と絡めた感想。共感されるように。
+URLは本文に貼るな（リーチが激減するから）。記事の内容に触れるだけでいい。
 1行目はフックにして、その後に空行を入れろ。文章が詰まらないように空行で区切って読みやすくしろ。
 ハッシュタグはつけるな。
 
 長さ: ${getRandomLength()}${performanceHint}`,
         topicKey: topic.topicKey,
-        isArticle: true,
       };
     }
 
@@ -361,14 +380,50 @@ function buildSitePrompt(topic, performanceHint) {
 - 「自分が作ったサイト」「うちのサイト」として普通に紹介
 - テンションは普段の投稿と同じタメ口。宣伝っぽい丁寧語はNG
 - 嬉しかった、作ってよかった、使ってほしい、みたいな素直な感情で
-- 投稿の最後にURL（${SITE_URL}）を貼って
+- URLは本文に貼るな（外部リンクはリーチが激減する）。「プロフィールにリンクあるよ」と誘導しろ
 - 1行目はフックにして、その後に空行を入れろ
 - 文章が詰まらないように空行で区切って読みやすくしろ
 - ハッシュタグはつけるな
 
 長さ: 普通の長さ。100〜200文字。2〜3文。${performanceHint}`,
     topicKey: topic.topicKey,
-    isArticle: true,
+  };
+}
+
+function buildKinshiPrompt(topic, performanceHint) {
+  return {
+    userPrompt: `家づくりで「絶対やっちゃダメなこと」を1つ投稿して。読んだ人が保存したくなるやつ。
+
+ネタ: ${topic.text}
+
+自分がやらかした or 周りでやらかした人を見た体験として語って。
+「マジでこれはやめとけ」っていう切実さを出せ。
+でも上から目線にならないように。自分も失敗した側として。
+読んだ人が「自分も気をつけよう」って思って保存したくなるように。
+1行目はフック（禁止 or 断言）にして、その後に空行を入れろ。
+文章が詰まらないように空行で区切って読みやすくしろ。
+ハッシュタグはつけるな。
+
+長さ: ${getRandomLength()}${performanceHint}`,
+    topicKey: topic.topicKey,
+  };
+}
+
+function buildGyakusetsuPrompt(topic, performanceHint) {
+  return {
+    userPrompt: `家づくりの「常識の逆」「意外な真実」を1つ投稿して。読んだ人が「えっ？」ってなってコメントしたくなるやつ。
+
+ネタ: ${topic.text}
+
+自分の体験として語って。「みんなこう思ってるけど、実際は違った」っていう意外性を出せ。
+でも完全に否定するんじゃなくて、「〜だと思ってたけど、実は〜だった」くらいの温度感で。
+読んだ人が「確かに」「いや、そうかな？」って意見を言いたくなるように。
+1行目はフック（常識を覆す一文）にして、その後に空行を入れろ。
+文章が詰まらないように空行で区切って読みやすくしろ。
+ハッシュタグはつけるな。
+
+長さ: ${getRandomLength()}${performanceHint}`,
+    topicKey: topic.topicKey,
   };
 }
 

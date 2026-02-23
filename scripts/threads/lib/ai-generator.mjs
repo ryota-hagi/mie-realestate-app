@@ -72,11 +72,10 @@ function validatePost(text) {
     errors.push(`文字数超過 (${text.length}/500)`);
   }
 
-  // ハッシュタグは任意（Threadsではタグなしの方がインプレが伸びる）
-  // ただし2個以上は企業っぽいのでNG
+  // ハッシュタグはNG（Threadsではタグでインプレがガタ落ちする報告多数）
   const hashtagCount = (text.match(/#/g) || []).length;
-  if (hashtagCount > 2) {
-    errors.push(`ハッシュタグ多すぎ (${hashtagCount}個 → 1個以下に)`);
+  if (hashtagCount > 0) {
+    errors.push(`ハッシュタグ検出 (${hashtagCount}個 → タグなしにしろ。インプレが下がる)`);
   }
 
   for (const word of CORPORATE_BLOCKLIST) {
@@ -208,9 +207,9 @@ export async function generateArticlePost(userPrompt) {
     // 記事紹介はURL許可なので、URLチェックを除外したバリデーション
     const errors = [];
     if (trimmed.length > 500) errors.push(`文字数超過 (${trimmed.length}/500)`);
-    // ハッシュタグは任意（タグなしOK）
+    // ハッシュタグはNG（インプレが下がる）
     const hashtagCount = (trimmed.match(/#/g) || []).length;
-    if (hashtagCount > 2) errors.push(`ハッシュタグ多すぎ (${hashtagCount}個)`);
+    if (hashtagCount > 0) errors.push(`ハッシュタグ検出 (${hashtagCount}個 → タグなしにしろ)`);
     for (const word of CORPORATE_BLOCKLIST) {
       if (trimmed.includes(word)) { errors.push(`企業トーン検出: "${word}"`); break; }
     }
