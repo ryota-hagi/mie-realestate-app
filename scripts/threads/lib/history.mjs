@@ -1,5 +1,5 @@
 /**
- * 投稿履歴の読み書き・重複防止
+ * 投稿履歴の読み書き・重複防止・エンゲージメント分析
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
@@ -14,6 +14,7 @@ const TRENDS_PATH = join(ROOT, 'data', 'threads-trends.json');
 const HISTORY_RETENTION_DAYS = 90;
 const TOPIC_COOLDOWN_DAYS = 14;
 const CATEGORY_COOLDOWN_DAYS = 1;
+const LEARNING_WINDOW_DAYS = 30;
 
 // ============================================================
 // 履歴読み書き
@@ -128,4 +129,171 @@ export function saveTrends(trends) {
 export function hasRepliedTo(threadId) {
   const history = loadHistory();
   return history.posts.some(p => p.repliedTo === threadId);
+}
+
+// ============================================================
+// エンゲージメント追跡・自己学習
+// ============================================================
+
+/**
+ * 投稿のエンゲージメントデータを更新
+ * @param {string} threadId - 投稿ID
+ * @param {object} engagement - { views, likes, replies, reposts, quotes }
+ */
+export function updatePostEngagement(threadId, engagement) {
+  const history = loadHistory();
+  const post = history.posts.find(p => p.threadId === threadId);
+  if (post) {
+    post.engagement = engagement;
+    post.engagementScore = calcEngagementScore(engagement);
+    post.engagementUpdatedAt = new Date().toISOString();
+    writeFileSync(HISTORY_PATH, JSON.stringify(history, null, 2), 'utf-8');
+  }
+}
+
+/**
+ * エンゲージメントスコアを計算
+ */
+function calcEngagementScore(engagement) {
+  return (
+    (engagement.replies || 0) * 4 +
+    (engagement.reposts || 0) * 2 +
+    (engagement.quotes || 0) * 3 +
+    (engagement.likes || 0) * 1
+  );
+}
+
+/**
+ * エンゲージメント未取得の投稿一覧（24時間以上前の投稿）
+ * @returns {Array} エンゲージメント未取得の投稿
+ */
+export function getPostsNeedingEngagement() {
+  const history = loadHistory();
+  const oneDayAgo = new Date();
+  oneDayAgo.setHours(oneDayAgo.getHours() - 24);
+
+  return history.posts.filter(p =>
+    p.threadId &&
+    p.threadId !== 'dry-run' &&
+    !p.repliedTo &&
+    !p.engagement &&
+    new Date(p.date) < oneDayAgo
+  );
+}
+
+/**
+ * カテゴリ別のエンゲージメント分析
+ * 直近30日のデータから、各カテゴリの平均エンゲージメントスコアを算出
+ * @returns {object} { categoryId: { avgScore, postCount, topPatterns } }
+ */
+export function analyzeCategoryPerformance() {
+  const history = loadHistory();
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - LEARNING_WINDOW_DAYS);
+
+  // エンゲージメントデータがある投稿のみ対象
+  const recentWithEngagement = history.posts.filter(p =>
+    new Date(p.date) > cutoff &&
+    p.engagement &&
+    !p.repliedTo
+  );
+
+  if (recentWithEngagement.length === 0) {
+    return null;
+  }
+
+  const categoryStats = {};
+
+  for (const post of recentWithEngagement) {
+    if (!categoryStats[post.category]) {
+      categoryStats[post.category] = {
+        totalScore: 0,
+        postCount: 0,
+        posts: [],
+      };
+    }
+    const stat = categoryStats[post.category];
+    stat.totalScore += post.engagementScore || 0;
+    stat.postCount++;
+    stat.posts.push({
+      text: post.text,
+      score: post.engagementScore || 0,
+      charCount: post.charCount,
+    });
+  }
+
+  // 平均スコアを算出し、上位投稿パターンを抽出
+  const result = {};
+  for (const [catId, stat] of Object.entries(categoryStats)) {
+    stat.posts.sort((a, b) => b.score - a.score);
+    result[catId] = {
+      avgScore: stat.postCount > 0 ? stat.totalScore / stat.postCount : 0,
+      postCount: stat.postCount,
+      topPosts: stat.posts.slice(0, 3),
+    };
+  }
+
+  return result;
+}
+
+/**
+ * エンゲージメント分析に基づくカテゴリ重みボーナスを算出
+ * 平均以上のカテゴリはボーナスを得て、平均以下はペナルティ
+ * @param {object} baseCategories - 基本カテゴリ配列
+ * @returns {Array} 重み調整済みカテゴリ配列
+ */
+export function getAdjustedWeights(baseCategories) {
+  const perf = analyzeCategoryPerformance();
+  if (!perf) return baseCategories;
+
+  // 全体平均を算出
+  const allScores = Object.values(perf);
+  if (allScores.length < 3) return baseCategories; // データ不足
+
+  const totalAvg = allScores.reduce((sum, s) => sum + s.avgScore, 0) / allScores.length;
+  if (totalAvg === 0) return baseCategories;
+
+  return baseCategories.map(cat => {
+    const catPerf = perf[cat.id];
+    if (!catPerf || catPerf.postCount < 2) return cat; // データ不足のカテゴリは変更なし
+
+    // 平均比で重みを調整（±50%の範囲内）
+    const ratio = catPerf.avgScore / totalAvg;
+    const multiplier = Math.max(0.5, Math.min(1.5, ratio));
+    const adjustedWeight = Math.round(cat.weight * multiplier);
+
+    if (multiplier !== 1) {
+      console.log(`   📊 ${cat.id}: 重み ${cat.weight} → ${adjustedWeight} (平均スコア: ${catPerf.avgScore.toFixed(1)}, 全体平均: ${totalAvg.toFixed(1)})`);
+    }
+
+    return { ...cat, weight: adjustedWeight };
+  });
+}
+
+/**
+ * 高パフォーマンス投稿のパターンをプロンプトに反映するためのヒントを生成
+ * @param {string} categoryId - カテゴリID
+ * @returns {string|null} パフォーマンスヒント文字列
+ */
+export function getPerformanceHint(categoryId) {
+  const perf = analyzeCategoryPerformance();
+  if (!perf || !perf[categoryId]) return null;
+
+  const topPosts = perf[categoryId].topPosts;
+  if (!topPosts || topPosts.length === 0) return null;
+
+  // スコアが高い投稿のみ（スコア5以上）
+  const goodPosts = topPosts.filter(p => p.score >= 5);
+  if (goodPosts.length === 0) return null;
+
+  const examples = goodPosts
+    .slice(0, 2)
+    .map(p => `「${p.text.replace(/\n.*$/s, '').slice(0, 60)}」(スコア${p.score})`)
+    .join('\n');
+
+  // 長さパターン分析
+  const avgCharCount = goodPosts.reduce((sum, p) => sum + p.charCount, 0) / goodPosts.length;
+  const lengthHint = avgCharCount < 50 ? '短い投稿' : avgCharCount < 120 ? '中くらいの長さ' : '少し長めの投稿';
+
+  return `\n\n【学習データ】このカテゴリで反応が良かった投稿:\n${examples}\n→ ${lengthHint}が反応良い傾向。同じような構造・トーンで書いて。`;
 }
