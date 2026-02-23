@@ -8,19 +8,19 @@
  * 5. Claude Haiku で投稿文生成
  * 6. Threads API で投稿
  *
- * GitHub Actions で毎日 06:00 JST に実行
+ * GitHub Actions で1日10回、時間をずらして実行
+ * 1回の実行で必ず1件だけ投稿する
  */
 
 import { publishPost, checkAndRefreshToken, getInsights } from './lib/threads-api.mjs';
 import { generatePost, generateArticlePost } from './lib/ai-generator.mjs';
-import { loadAllData, randomChoice, getTaikenTopic, getMameTopic, getKijiTopic, getLoanTopic, getAruaruTopic, getMomegotoTopic, getKoukaiTopic, getNewsTopic } from './lib/data-loader.mjs';
+import { loadAllData, randomChoice, getTaikenTopic, getMameTopic, getKijiTopic, getLoanTopic, getAruaruTopic, getMomegotoTopic, getKoukaiTopic, getNewsTopic, getSitePrTopic, getHikakuTopic } from './lib/data-loader.mjs';
 import { scanTrends, buildTrendPrompt } from './lib/trend-scanner.mjs';
 import { loadHistory, saveHistory, isCategoryCoolingDown, isTopicCoolingDown, getPostsNeedingEngagement, updatePostEngagement, getAdjustedWeights, getPerformanceHint } from './lib/history.mjs';
 import { CATEGORIES, SEASONAL_TOPICS, HASHTAGS, SITE_URL } from './lib/config.mjs';
 
 const DRY_RUN = process.env.DRY_RUN === 'true';
 const FORCE_CATEGORY = process.env.FORCE_CATEGORY || null;
-const POST_COUNT = parseInt(process.env.POST_COUNT || '10', 10);
 
 // ============================================================
 // エンゲージメント回収（自己学習用）
@@ -162,6 +162,16 @@ function buildPrompt(category, dataSources, trendResult) {
       return buildNewsPrompt(topic, performanceHint);
     }
 
+    case 'hikaku': {
+      const topic = getHikakuTopic();
+      if (isTopicCoolingDown(topic.topicKey)) {
+        const alt = getHikakuTopic();
+        if (isTopicCoolingDown(alt.topicKey)) return buildPrompt({ id: 'koukai', label: '後悔パターン' }, dataSources, trendResult);
+        return buildHikakuPrompt(alt, performanceHint);
+      }
+      return buildHikakuPrompt(topic, performanceHint);
+    }
+
     case 'taiken': {
       const topic = getTaikenTopic(cityData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'aruaru', label: 'あるあるネタ' }, dataSources, trendResult);
@@ -171,6 +181,8 @@ function buildPrompt(category, dataSources, trendResult) {
 ネタ: ${topic.tip?.title || '住宅事情'} - ${topic.tip?.body || 'この地域で家を建てた経験'}
 
 読んだ人が「あー、わかる」って思えるように。自分の気持ちや感情を入れて。専門用語は使わない。難しい言葉は日常の言葉に置き換えて。
+1行目はフックにして、その後に空行を入れろ。文章が詰まらないように空行で区切って読みやすくしろ。
+ハッシュタグはつけるな。
 
 長さ: ${getRandomLength()}${performanceHint}`,
         topicKey: topic.topicKey,
@@ -186,6 +198,8 @@ function buildPrompt(category, dataSources, trendResult) {
 ネタ: ${topic.section?.heading || '住宅の豆知識'} - ${(topic.section?.body || '注文住宅に関する知識').slice(0, 200)}
 
 専門用語は使うな。難しいことを簡単な言葉で、自分の経験と絡めて。「自分もこれで助かった」「知らなくて焦った」みたいな体験ベースで。
+1行目はフックにして、その後に空行を入れろ。文章が詰まらないように空行で区切って読みやすくしろ。
+ハッシュタグはつけるな。
 
 長さ: ${getRandomLength()}${performanceHint}`,
         topicKey: topic.topicKey,
@@ -202,6 +216,8 @@ function buildPrompt(category, dataSources, trendResult) {
 URL: ${topic.url}
 
 専門用語は使わない。「これ読んだけど、実際は〜だった」みたいに自分の体験と絡めた感想。共感されるように。
+1行目はフックにして、その後に空行を入れろ。文章が詰まらないように空行で区切って読みやすくしろ。
+ハッシュタグはつけるな。
 
 長さ: ${getRandomLength()}${performanceHint}`,
         topicKey: topic.topicKey,
@@ -220,6 +236,8 @@ URL: ${topic.url}
 ネタ: ${sectionHeading} - ${sectionBody.slice(0, 200)}
 
 専門用語は使わない。月々いくらとか、見積もりでびっくりしたとか、みんなが共感できる「お金の不安・驚き・リアル」を。
+1行目はフックにして、その後に空行を入れろ。文章が詰まらないように空行で区切って読みやすくしろ。
+ハッシュタグはつけるな。
 
 長さ: ${getRandomLength()}${performanceHint}`,
         topicKey: topic.topicKey,
@@ -240,6 +258,8 @@ URL: ${topic.url}
 ネタ: ${altText}
 
 専門用語は使わない。この季節に感じること、困ったこと、嬉しかったこと。共感されるように。
+1行目はフックにして、その後に空行を入れろ。文章が詰まらないように空行で区切って読みやすくしろ。
+ハッシュタグはつけるな。
 
 長さ: ${lengthInstruction}${performanceHint}`,
           topicKey: `kisetsu:${month}:${topics.indexOf(altText)}`,
@@ -251,10 +271,22 @@ URL: ${topic.url}
 ネタ: ${topicText}
 
 専門用語は使わない。この季節に感じること、困ったこと、嬉しかったこと。共感されるように。
+1行目はフックにして、その後に空行を入れろ。文章が詰まらないように空行で区切って読みやすくしろ。
+ハッシュタグはつけるな。
 
 長さ: ${lengthInstruction}${performanceHint}`,
         topicKey,
       };
+    }
+
+    case 'site': {
+      const topic = getSitePrTopic();
+      if (isTopicCoolingDown(topic.topicKey)) {
+        const alt = getSitePrTopic();
+        if (isTopicCoolingDown(alt.topicKey)) return buildPrompt({ id: 'aruaru', label: 'あるあるネタ' }, dataSources, trendResult);
+        return buildSitePrompt(alt, performanceHint);
+      }
+      return buildSitePrompt(topic, performanceHint);
     }
 
     default:
@@ -274,6 +306,9 @@ function buildAruaruPrompt(topic, performanceHint) {
 
 このネタをベースに、自分の体験として語って。「〜だったわ」「〜なんだよね」みたいな雑な感じで。
 情報を伝えるんじゃなくて、共感を得るのが目的。
+1行目はフック（感情を動かす短い一文）にして、その後に空行を入れろ。
+文章が詰まらないように、話題の切れ目で空行を入れて読みやすくしろ。
+ハッシュタグはつけるな。
 
 長さ: ${getRandomLength()}${performanceHint}`,
     topicKey: topic.topicKey,
@@ -288,6 +323,9 @@ function buildKoukaiPrompt(topic, performanceHint) {
 
 自分もこれやらかしたっていう体験として。「あの時こうしてれば」みたいな悔しさや切なさを出して。
 読んだ人が「わかる…」「自分も気をつけよう」って思えるように。完璧じゃない自分を見せて。
+1行目はフック（断言 or 告白）にして、その後に空行を入れろ。
+文章が詰まらないように、話題の切れ目で空行を入れて読みやすくしろ。
+ハッシュタグはつけるな。
 
 長さ: ${getRandomLength()}${performanceHint}`,
     topicKey: topic.topicKey,
@@ -303,9 +341,34 @@ function buildNewsPrompt(topic, performanceHint) {
 ニュースを見て感じたこと・不安・驚きを、家を建てた当事者の目線で。
 「このニュース見てさ〜」みたいな日常会話のテンションで。
 専門用語は使わない。自分の家づくり経験と絡めて共感を呼ぶように。
+1行目はフックにして、その後に空行を入れろ。
+文章が詰まらないように空行で区切って読みやすくしろ。
+ハッシュタグはつけるな。
 
 長さ: ${getRandomLength()}${performanceHint}`,
     topicKey: topic.topicKey,
+  };
+}
+
+function buildSitePrompt(topic, performanceHint) {
+  return {
+    userPrompt: `三重県の注文住宅情報サイトを自分で運営してる立場として投稿して。
+
+ネタ: ${topic.text}
+
+■ 重要
+- ステマじゃない。サイト運営者として堂々とPRしていい
+- 「自分が作ったサイト」「うちのサイト」として普通に紹介
+- テンションは普段の投稿と同じタメ口。宣伝っぽい丁寧語はNG
+- 嬉しかった、作ってよかった、使ってほしい、みたいな素直な感情で
+- 投稿の最後にURL（${SITE_URL}）を貼って
+- 1行目はフックにして、その後に空行を入れろ
+- 文章が詰まらないように空行で区切って読みやすくしろ
+- ハッシュタグはつけるな
+
+長さ: 普通の長さ。100〜200文字。2〜3文。${performanceHint}`,
+    topicKey: topic.topicKey,
+    isArticle: true,
   };
 }
 
@@ -318,6 +381,28 @@ function buildMomegotoPrompt(topic, performanceHint) {
 自分もこういう揉め事あったっていう体験として。夫婦、業者、親、どれでも。
 ドロドロしすぎず、「あるよね〜」って思えるくらいの温度感で。
 結局どうなったかも一言あるといい。
+1行目はフックにして、その後に空行を入れろ。
+文章が詰まらないように空行で区切って読みやすくしろ。
+ハッシュタグはつけるな。
+
+長さ: ${getRandomLength()}${performanceHint}`,
+    topicKey: topic.topicKey,
+  };
+}
+
+function buildHikakuPrompt(topic, performanceHint) {
+  return {
+    userPrompt: `家づくりの「比較・どっちがいい？」系を1つ投稿して。読んだ人がコメントしたくなるやつ。
+
+ネタ: ${topic.text}
+
+自分の体験として語って。どっちを選んだか、選んでみてどうだったか。
+でも「こっちが正解」って断言しすぎるな。「正直どっちもあり」くらいの温度感で。
+読んだ人が「うちはこっちだった」「自分も迷った」ってコメントしたくなるように。
+最後に「みんなはどうした？」「どっち派？」みたいな問いかけで締めろ。
+1行目はフック（比較の核心 or 意外な結論）にして、その後に空行を入れろ。
+文章が詰まらないように空行で区切って読みやすくしろ。
+ハッシュタグはつけるな。
 
 長さ: ${getRandomLength()}${performanceHint}`,
     topicKey: topic.topicKey,
@@ -365,72 +450,51 @@ async function main() {
     }
   }
 
-  // 投稿ループ
-  console.log(`📢 ${POST_COUNT}件の投稿を生成・投稿します`);
-  let successCount = 0;
+  // カテゴリ選択（学習データで重み調整済み）
+  const trendAvailable = trendResult.trending.length > 0;
+  const category = selectCategory(trendAvailable);
+  console.log(`📝 カテゴリ: ${category.id} (${category.label})`);
 
-  for (let i = 0; i < POST_COUNT; i++) {
-    console.log(`\n========== 投稿 ${i + 1}/${POST_COUNT} ==========`);
+  // プロンプト構築
+  const { userPrompt, topicKey, isArticle } = buildPrompt(category, dataSources, trendResult);
+  console.log(`🔑 トピックキー: ${topicKey}`);
+  const lengthMatch = userPrompt.match(/長さ: (.+)/);
+  if (lengthMatch) console.log(`📏 長さ指示: ${lengthMatch[1]}`);
 
-    try {
-      // カテゴリ選択（学習データで重み調整済み）
-      const trendAvailable = trendResult.trending.length > 0;
-      const category = selectCategory(trendAvailable);
-      console.log(`📝 カテゴリ: ${category.id} (${category.label})`);
+  // AI生成
+  console.log('🤖 投稿文生成中...');
+  const postText = isArticle
+    ? await generateArticlePost(userPrompt)
+    : await generatePost(userPrompt);
 
-      // プロンプト構築
-      const { userPrompt, topicKey, isArticle } = buildPrompt(category, dataSources, trendResult);
-      console.log(`🔑 トピックキー: ${topicKey}`);
-      const lengthMatch = userPrompt.match(/長さ: (.+)/);
-      if (lengthMatch) console.log(`📏 長さ指示: ${lengthMatch[1]}`);
+  console.log(`✅ 生成テキスト (${postText.length}文字):`);
+  console.log('---');
+  console.log(postText);
+  console.log('---');
 
-      // AI生成
-      console.log('🤖 投稿文生成中...');
-      const postText = isArticle
-        ? await generateArticlePost(userPrompt)
-        : await generatePost(userPrompt);
-
-      console.log(`✅ 生成テキスト (${postText.length}文字):`);
-      console.log('---');
-      console.log(postText);
-      console.log('---');
-
-      // 投稿
-      let threadId = 'dry-run';
-      if (!DRY_RUN) {
-        console.log('📤 Threads投稿中...');
-        const result = await publishPost(postText);
-        threadId = result.id;
-        console.log(`🧵 投稿完了: ID=${threadId}`);
-      } else {
-        console.log('🏃 DRY RUN: 投稿スキップ');
-      }
-
-      // 履歴保存
-      saveHistory({
-        date: new Date().toISOString(),
-        category: category.id,
-        topicKey,
-        text: postText,
-        threadId,
-        charCount: postText.length,
-      });
-      console.log('💾 履歴保存完了');
-      successCount++;
-
-      // 投稿間隔（スパム防止: 30秒〜90秒のランダム間隔）
-      if (i < POST_COUNT - 1 && !DRY_RUN) {
-        const delay = 30000 + Math.random() * 60000;
-        console.log(`⏳ 次の投稿まで ${Math.round(delay / 1000)}秒待機...`);
-        await new Promise(r => setTimeout(r, delay));
-      }
-    } catch (e) {
-      console.warn(`⚠️ 投稿 ${i + 1} 失敗: ${e.message}`);
-      // 1件失敗しても残りは続行
-    }
+  // 投稿
+  let threadId = 'dry-run';
+  if (!DRY_RUN) {
+    console.log('📤 Threads投稿中...');
+    const result = await publishPost(postText);
+    threadId = result.id;
+    console.log(`🧵 投稿完了: ID=${threadId}`);
+  } else {
+    console.log('🏃 DRY RUN: 投稿スキップ');
   }
 
-  console.log(`\n✅ 完了: ${successCount}/${POST_COUNT}件 投稿成功`);
+  // 履歴保存
+  saveHistory({
+    date: new Date().toISOString(),
+    category: category.id,
+    topicKey,
+    text: postText,
+    threadId,
+    charCount: postText.length,
+  });
+  console.log('💾 履歴保存完了');
+
+  console.log('\n✅ 完了: 1件投稿成功');
 }
 
 main().catch(e => {

@@ -72,14 +72,11 @@ function validatePost(text) {
     errors.push(`文字数超過 (${text.length}/500)`);
   }
 
-  if (!text.includes('#')) {
-    errors.push('ハッシュタグなし');
-  }
-
-  // ハッシュタグ3個以上は企業っぽい
+  // ハッシュタグは任意（Threadsではタグなしの方がインプレが伸びる）
+  // ただし2個以上は企業っぽいのでNG
   const hashtagCount = (text.match(/#/g) || []).length;
   if (hashtagCount > 2) {
-    errors.push(`ハッシュタグ多すぎ (${hashtagCount}個 → 2個以下に)`);
+    errors.push(`ハッシュタグ多すぎ (${hashtagCount}個 → 1個以下に)`);
   }
 
   for (const word of CORPORATE_BLOCKLIST) {
@@ -105,10 +102,10 @@ function validatePost(text) {
     }
   }
 
-  // 改行が多すぎる（段落を作りすぎ）= 記事っぽい
+  // 段落チェック（空行で区切る読みやすさは推奨するが、多すぎは記事っぽい）
   const paragraphs = text.split(/\n\n+/).filter(p => p.trim());
-  if (paragraphs.length > 3) {
-    errors.push(`段落多すぎ (${paragraphs.length}段落 → 3以下に)`);
+  if (paragraphs.length > 5) {
+    errors.push(`段落多すぎ (${paragraphs.length}段落 → 5以下に)`);
   }
 
   return errors;
@@ -166,10 +163,10 @@ export async function generatePost(userPrompt) {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     let prompt = userPrompt;
     if (attempt === 2) {
-      prompt += `\n\n【やり直し】前回ダメだった。もっと短く、1つだけ言って終わり。専門用語使うな。普通の人がわかる言葉だけ使え。愚痴っぽくていい。ハッシュタグは1〜2個だけ。`;
+      prompt += `\n\n【やり直し】前回ダメだった。もっと短く、1つだけ言って終わり。専門用語使うな。普通の人がわかる言葉だけ使え。愚痴っぽくていい。ハッシュタグはつけなくていい。空行で区切って読みやすくしろ。`;
     }
     if (attempt === 3) {
-      prompt += `\n\n【最終やり直し】2〜3文で終わらせて。「〜なんだよね」で終わるくらい雑でいい。難しい言葉は全部やめろ。ハッシュタグ1個。`;
+      prompt += `\n\n【最終やり直し】2〜3文で終わらせて。「〜なんだよね」で終わるくらい雑でいい。難しい言葉は全部やめろ。ハッシュタグなし。`;
     }
 
     const text = await callClaude(SYSTEM_PROMPT, prompt);
@@ -199,10 +196,10 @@ export async function generateArticlePost(userPrompt) {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     let prompt = userPrompt;
     if (attempt === 2) {
-      prompt += `\n\n【やり直し】PR臭い。もっと短く雑に。専門用語使うな。「これ読んだんだけど」くらいの軽さで。ハッシュタグ1〜2個。`;
+      prompt += `\n\n【やり直し】PR臭い。もっと短く雑に。専門用語使うな。「これ読んだんだけど」くらいの軽さで。ハッシュタグなし。空行で区切れ。`;
     }
     if (attempt === 3) {
-      prompt += `\n\n【最終やり直し】2〜3文だけ。難しい言葉全部やめろ。URL貼って終わり。`;
+      prompt += `\n\n【最終やり直し】2〜3文だけ。難しい言葉全部やめろ。URL貼って終わり。ハッシュタグなし。`;
     }
 
     const text = await callClaude(SYSTEM_PROMPT, prompt);
@@ -211,7 +208,7 @@ export async function generateArticlePost(userPrompt) {
     // 記事紹介はURL許可なので、URLチェックを除外したバリデーション
     const errors = [];
     if (trimmed.length > 500) errors.push(`文字数超過 (${trimmed.length}/500)`);
-    if (!trimmed.includes('#')) errors.push('ハッシュタグなし');
+    // ハッシュタグは任意（タグなしOK）
     const hashtagCount = (trimmed.match(/#/g) || []).length;
     if (hashtagCount > 2) errors.push(`ハッシュタグ多すぎ (${hashtagCount}個)`);
     for (const word of CORPORATE_BLOCKLIST) {
