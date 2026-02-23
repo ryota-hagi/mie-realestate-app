@@ -8,7 +8,8 @@
  * 5. Claude Haiku で投稿文生成
  * 6. Threads API で投稿
  *
- * GitHub Actions で毎日 21:00 JST に実行（ゴールデンタイム）
+ * GitHub Actions で1日10回、時間をずらして実行
+ * 1回の実行で必ず1件だけ投稿する
  */
 
 import { publishPost, checkAndRefreshToken, getInsights } from './lib/threads-api.mjs';
@@ -20,7 +21,6 @@ import { CATEGORIES, SEASONAL_TOPICS, HASHTAGS, SITE_URL } from './lib/config.mj
 
 const DRY_RUN = process.env.DRY_RUN === 'true';
 const FORCE_CATEGORY = process.env.FORCE_CATEGORY || null;
-const POST_COUNT = parseInt(process.env.POST_COUNT || '1', 10);
 
 // ============================================================
 // エンゲージメント回収（自己学習用）
@@ -450,72 +450,51 @@ async function main() {
     }
   }
 
-  // 投稿ループ
-  console.log(`📢 ${POST_COUNT}件の投稿を生成・投稿します`);
-  let successCount = 0;
+  // カテゴリ選択（学習データで重み調整済み）
+  const trendAvailable = trendResult.trending.length > 0;
+  const category = selectCategory(trendAvailable);
+  console.log(`📝 カテゴリ: ${category.id} (${category.label})`);
 
-  for (let i = 0; i < POST_COUNT; i++) {
-    console.log(`\n========== 投稿 ${i + 1}/${POST_COUNT} ==========`);
+  // プロンプト構築
+  const { userPrompt, topicKey, isArticle } = buildPrompt(category, dataSources, trendResult);
+  console.log(`🔑 トピックキー: ${topicKey}`);
+  const lengthMatch = userPrompt.match(/長さ: (.+)/);
+  if (lengthMatch) console.log(`📏 長さ指示: ${lengthMatch[1]}`);
 
-    try {
-      // カテゴリ選択（学習データで重み調整済み）
-      const trendAvailable = trendResult.trending.length > 0;
-      const category = selectCategory(trendAvailable);
-      console.log(`📝 カテゴリ: ${category.id} (${category.label})`);
+  // AI生成
+  console.log('🤖 投稿文生成中...');
+  const postText = isArticle
+    ? await generateArticlePost(userPrompt)
+    : await generatePost(userPrompt);
 
-      // プロンプト構築
-      const { userPrompt, topicKey, isArticle } = buildPrompt(category, dataSources, trendResult);
-      console.log(`🔑 トピックキー: ${topicKey}`);
-      const lengthMatch = userPrompt.match(/長さ: (.+)/);
-      if (lengthMatch) console.log(`📏 長さ指示: ${lengthMatch[1]}`);
+  console.log(`✅ 生成テキスト (${postText.length}文字):`);
+  console.log('---');
+  console.log(postText);
+  console.log('---');
 
-      // AI生成
-      console.log('🤖 投稿文生成中...');
-      const postText = isArticle
-        ? await generateArticlePost(userPrompt)
-        : await generatePost(userPrompt);
-
-      console.log(`✅ 生成テキスト (${postText.length}文字):`);
-      console.log('---');
-      console.log(postText);
-      console.log('---');
-
-      // 投稿
-      let threadId = 'dry-run';
-      if (!DRY_RUN) {
-        console.log('📤 Threads投稿中...');
-        const result = await publishPost(postText);
-        threadId = result.id;
-        console.log(`🧵 投稿完了: ID=${threadId}`);
-      } else {
-        console.log('🏃 DRY RUN: 投稿スキップ');
-      }
-
-      // 履歴保存
-      saveHistory({
-        date: new Date().toISOString(),
-        category: category.id,
-        topicKey,
-        text: postText,
-        threadId,
-        charCount: postText.length,
-      });
-      console.log('💾 履歴保存完了');
-      successCount++;
-
-      // 投稿間隔（スパム防止: 30秒〜90秒のランダム間隔）
-      if (i < POST_COUNT - 1 && !DRY_RUN) {
-        const delay = 30000 + Math.random() * 60000;
-        console.log(`⏳ 次の投稿まで ${Math.round(delay / 1000)}秒待機...`);
-        await new Promise(r => setTimeout(r, delay));
-      }
-    } catch (e) {
-      console.warn(`⚠️ 投稿 ${i + 1} 失敗: ${e.message}`);
-      // 1件失敗しても残りは続行
-    }
+  // 投稿
+  let threadId = 'dry-run';
+  if (!DRY_RUN) {
+    console.log('📤 Threads投稿中...');
+    const result = await publishPost(postText);
+    threadId = result.id;
+    console.log(`🧵 投稿完了: ID=${threadId}`);
+  } else {
+    console.log('🏃 DRY RUN: 投稿スキップ');
   }
 
-  console.log(`\n✅ 完了: ${successCount}/${POST_COUNT}件 投稿成功`);
+  // 履歴保存
+  saveHistory({
+    date: new Date().toISOString(),
+    category: category.id,
+    topicKey,
+    text: postText,
+    threadId,
+    charCount: postText.length,
+  });
+  console.log('💾 履歴保存完了');
+
+  console.log('\n✅ 完了: 1件投稿成功');
 }
 
 main().catch(e => {
