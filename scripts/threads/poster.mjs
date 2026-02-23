@@ -20,7 +20,7 @@ import { CATEGORIES, SEASONAL_TOPICS, HASHTAGS, SITE_URL } from './lib/config.mj
 
 const DRY_RUN = process.env.DRY_RUN === 'true';
 const FORCE_CATEGORY = process.env.FORCE_CATEGORY || null;
-const POST_COUNT = parseInt(process.env.POST_COUNT || '10', 10);
+const POST_COUNT = parseInt(process.env.POST_COUNT || '1', 10);
 
 // ============================================================
 // エンゲージメント回収（自己学習用）
