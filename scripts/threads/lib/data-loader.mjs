@@ -7,7 +7,7 @@
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { ARUARU_TOPICS, MOMEGOTO_TOPICS, KOUKAI_TOPICS, NEWS_TOPICS, SITE_PR_TOPICS, HIKAKU_TOPICS } from './config.mjs';
+import { ARUARU_TOPICS, MOMEGOTO_TOPICS, KOUKAI_TOPICS, NEWS_TOPICS, SITE_PR_TOPICS, HIKAKU_TOPICS, KINSHI_TOPICS, GYAKUSETSU_TOPICS } from './config.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..', '..');
@@ -311,6 +311,38 @@ export function getHikakuTopic() {
   return {
     text: HIKAKU_TOPICS[index],
     topicKey: `hikaku:${index}`,
+  };
+}
+
+// ============================================================
+// 禁止・やっちゃダメネタ抽出
+// ============================================================
+
+/**
+ * 禁止・やっちゃダメネタをランダムに取得
+ * @returns {{ text: string, topicKey: string }}
+ */
+export function getKinshiTopic() {
+  const index = Math.floor(Math.random() * KINSHI_TOPICS.length);
+  return {
+    text: KINSHI_TOPICS[index],
+    topicKey: `kinshi:${index}`,
+  };
+}
+
+// ============================================================
+// 逆説・意外性ネタ抽出
+// ============================================================
+
+/**
+ * 逆説・意外性ネタをランダムに取得
+ * @returns {{ text: string, topicKey: string }}
+ */
+export function getGyakusetsuTopic() {
+  const index = Math.floor(Math.random() * GYAKUSETSU_TOPICS.length);
+  return {
+    text: GYAKUSETSU_TOPICS[index],
+    topicKey: `gyakusetsu:${index}`,
   };
 }
 
