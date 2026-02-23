@@ -13,7 +13,7 @@
 
 import { publishPost, checkAndRefreshToken, getInsights } from './lib/threads-api.mjs';
 import { generatePost, generateArticlePost } from './lib/ai-generator.mjs';
-import { loadAllData, randomChoice, getTaikenTopic, getMameTopic, getKijiTopic, getLoanTopic, getAruaruTopic, getMomegotoTopic, getKoukaiTopic, getNewsTopic } from './lib/data-loader.mjs';
+import { loadAllData, randomChoice, getTaikenTopic, getMameTopic, getKijiTopic, getLoanTopic, getAruaruTopic, getMomegotoTopic, getKoukaiTopic, getNewsTopic, getSitePrTopic } from './lib/data-loader.mjs';
 import { scanTrends, buildTrendPrompt } from './lib/trend-scanner.mjs';
 import { loadHistory, saveHistory, isCategoryCoolingDown, isTopicCoolingDown, getPostsNeedingEngagement, updatePostEngagement, getAdjustedWeights, getPerformanceHint } from './lib/history.mjs';
 import { CATEGORIES, SEASONAL_TOPICS, HASHTAGS, SITE_URL } from './lib/config.mjs';
@@ -257,6 +257,16 @@ URL: ${topic.url}
       };
     }
 
+    case 'site': {
+      const topic = getSitePrTopic();
+      if (isTopicCoolingDown(topic.topicKey)) {
+        const alt = getSitePrTopic();
+        if (isTopicCoolingDown(alt.topicKey)) return buildPrompt({ id: 'aruaru', label: 'あるあるネタ' }, dataSources, trendResult);
+        return buildSitePrompt(alt, performanceHint);
+      }
+      return buildSitePrompt(topic, performanceHint);
+    }
+
     default:
       throw new Error(`未知のカテゴリ: ${category.id}`);
   }
@@ -306,6 +316,23 @@ function buildNewsPrompt(topic, performanceHint) {
 
 長さ: ${getRandomLength()}${performanceHint}`,
     topicKey: topic.topicKey,
+  };
+}
+
+function buildSitePrompt(topic, performanceHint) {
+  return {
+    userPrompt: `家づくりの情報収集で困ったこと・助かったことを1つ投稿して。
+
+ネタ: ${topic.text}
+
+このネタをベースに、自分の実体験として語って。
+投稿の最後にさらっとサイトURL（${SITE_URL}）を貼って。
+「宣伝」じゃなくて「自分が使って助かった」スタンスで。URLの前に「ここ→」「これ→」みたいに軽く一言添えるだけでいい。
+「おすすめ」「参考になれば」「チェックしてみて」系のPR言葉は絶対使うな。
+
+長さ: 普通の長さ。100〜200文字。2〜3文。${performanceHint}`,
+    topicKey: topic.topicKey,
+    isArticle: true,
   };
 }
 

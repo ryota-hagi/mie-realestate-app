@@ -7,7 +7,7 @@
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { ARUARU_TOPICS, MOMEGOTO_TOPICS, KOUKAI_TOPICS, NEWS_TOPICS } from './config.mjs';
+import { ARUARU_TOPICS, MOMEGOTO_TOPICS, KOUKAI_TOPICS, NEWS_TOPICS, SITE_PR_TOPICS } from './config.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..', '..');
@@ -295,5 +295,21 @@ export function getKoukaiTopic() {
   return {
     text: KOUKAI_TOPICS[index],
     topicKey: `koukai:${index}`,
+  };
+}
+
+// ============================================================
+// サイト紹介ネタ抽出
+// ============================================================
+
+/**
+ * サイト紹介ネタをランダムに取得
+ * @returns {{ text: string, topicKey: string }}
+ */
+export function getSitePrTopic() {
+  const index = Math.floor(Math.random() * SITE_PR_TOPICS.length);
+  return {
+    text: SITE_PR_TOPICS[index],
+    topicKey: `site:${index}`,
   };
 }
