@@ -6,7 +6,7 @@
 import { SYSTEM_PROMPT, SYSTEM_PROMPT_REPLY, CORPORATE_BLOCKLIST, PR_BLOCKLIST, JARGON_BLOCKLIST } from './config.mjs';
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
-const MODEL = 'claude-haiku-4-5-20251001';
+const MODEL = 'claude-sonnet-4-6';
 
 // ============================================================
 // リトライヘルパー
