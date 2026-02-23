@@ -321,14 +321,16 @@ function buildNewsPrompt(topic, performanceHint) {
 
 function buildSitePrompt(topic, performanceHint) {
   return {
-    userPrompt: `家づくりの情報収集で困ったこと・助かったことを1つ投稿して。
+    userPrompt: `三重県の注文住宅情報サイトを自分で運営してる立場として投稿して。
 
 ネタ: ${topic.text}
 
-このネタをベースに、自分の実体験として語って。
-投稿の最後にさらっとサイトURL（${SITE_URL}）を貼って。
-「宣伝」じゃなくて「自分が使って助かった」スタンスで。URLの前に「ここ→」「これ→」みたいに軽く一言添えるだけでいい。
-「おすすめ」「参考になれば」「チェックしてみて」系のPR言葉は絶対使うな。
+■ 重要
+- ステマじゃない。サイト運営者として堂々とPRしていい
+- 「自分が作ったサイト」「うちのサイト」として普通に紹介
+- テンションは普段の投稿と同じタメ口。宣伝っぽい丁寧語はNG
+- 嬉しかった、作ってよかった、使ってほしい、みたいな素直な感情で
+- 投稿の最後にURL（${SITE_URL}）を貼って
 
 長さ: 普通の長さ。100〜200文字。2〜3文。${performanceHint}`,
     topicKey: topic.topicKey,
