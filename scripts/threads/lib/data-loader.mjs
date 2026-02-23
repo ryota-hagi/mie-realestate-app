@@ -7,7 +7,7 @@
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { ARUARU_TOPICS, MOMEGOTO_TOPICS, KOUKAI_TOPICS, NEWS_TOPICS, SITE_PR_TOPICS } from './config.mjs';
+import { ARUARU_TOPICS, MOMEGOTO_TOPICS, KOUKAI_TOPICS, NEWS_TOPICS, SITE_PR_TOPICS, HIKAKU_TOPICS } from './config.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..', '..');
@@ -295,6 +295,22 @@ export function getKoukaiTopic() {
   return {
     text: KOUKAI_TOPICS[index],
     topicKey: `koukai:${index}`,
+  };
+}
+
+// ============================================================
+// 比較・二択ネタ抽出
+// ============================================================
+
+/**
+ * 比較・二択ネタをランダムに取得
+ * @returns {{ text: string, topicKey: string }}
+ */
+export function getHikakuTopic() {
+  const index = Math.floor(Math.random() * HIKAKU_TOPICS.length);
+  return {
+    text: HIKAKU_TOPICS[index],
+    topicKey: `hikaku:${index}`,
   };
 }
 
