@@ -1,18 +1,18 @@
 name: Threads Daily Post
 
 on:
-  schedule:
-    # 1日10回、時間をずらして1件ずつ投稿（UTC → JST = +9h）
-    - cron: '0 22 * * *'   # JST 07:00 朝
-    - cron: '30 23 * * *'  # JST 08:30 朝
-    - cron: '0 1 * * *'    # JST 10:00 午前
-    - cron: '30 2 * * *'   # JST 11:30 昼前
-    - cron: '0 4 * * *'    # JST 13:00 昼
-    - cron: '0 6 * * *'    # JST 15:00 午後
-    - cron: '0 8 * * *'    # JST 17:00 夕方
-    - cron: '0 10 * * *'   # JST 19:00 夜
-    - cron: '30 11 * * *'  # JST 20:30 夜
-    - cron: '0 13 * * *'   # JST 22:00 夜
+schedule:
+  # ゴールデンタイム（夜20-22時台）を重点配分
+  - cron: '0 22 * * *'   # JST 07:00 朝
+  - cron: '30 23 * * *'  # JST 08:30 朝
+  - cron: '0 3 * * *'    # JST 12:00 昼
+  - cron: '30 4 * * *'   # JST 13:30 昼
+  - cron: '0 8 * * *'    # JST 17:00 夕方
+  - cron: '0 10 * * *'   # JST 19:00 夜
+  - cron: '0 11 * * *'   # JST 20:00 夜（ゴールデンタイム）
+  - cron: '0 12 * * *'   # JST 21:00 夜（ベスト）
+  - cron: '30 12 * * *'  # JST 21:30 夜（ベスト）
+  - cron: '30 13 * * *'  # JST 22:30 夜
   workflow_dispatch: {}  # 手動実行ボタン
 
 permissions:
