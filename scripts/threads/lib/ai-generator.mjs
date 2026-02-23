@@ -6,7 +6,8 @@
 import { SYSTEM_PROMPT, SYSTEM_PROMPT_REPLY, CORPORATE_BLOCKLIST, PR_BLOCKLIST, JARGON_BLOCKLIST } from './config.mjs';
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
-const MODEL = 'claude-sonnet-4-6';
+const MODEL_POST = 'claude-sonnet-4-6';       // 投稿生成: Sonnet（ストーリー性・感情表現が優れる）
+const MODEL_REPLY = 'claude-haiku-4-5-20251001'; // 返信生成: Haiku（短文で十分・コスト効率）
 
 // ============================================================
 // リトライヘルパー
@@ -29,7 +30,7 @@ async function withRetry(fn, maxRetries = 3, label = 'API呼出') {
 // Claude API 呼出
 // ============================================================
 
-async function callClaude(systemPrompt, userPrompt, maxTokens = 1024) {
+async function callClaude(systemPrompt, userPrompt, { maxTokens = 1024, model = MODEL_POST } = {}) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) throw new Error('ANTHROPIC_API_KEY が設定されていません');
 
@@ -42,7 +43,7 @@ async function callClaude(systemPrompt, userPrompt, maxTokens = 1024) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: MODEL,
+        model,
         max_tokens: maxTokens,
         system: systemPrompt,
         messages: [{ role: 'user', content: userPrompt }],
@@ -244,7 +245,7 @@ ${context ? `\n背景: ${context}` : ''}`;
   const maxAttempts = 3;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    const text = await callClaude(SYSTEM_PROMPT_REPLY, userPrompt);
+    const text = await callClaude(SYSTEM_PROMPT_REPLY, userPrompt, { model: MODEL_REPLY });
     const trimmed = text.trim();
     const errors = validateReply(trimmed);
 
