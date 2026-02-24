@@ -12,7 +12,11 @@ on:
     - cron: '0 12 * * *'    # JST 21:00 夜
     - cron: '30 12 * * *'   # JST 21:30 夜
     - cron: '30 13 * * *'   # JST 22:30 夜
-  workflow_dispatch: {}  # 手動実行ボタン
+  workflow_dispatch: {}
+
+concurrency:
+  group: threads-post
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -20,7 +24,7 @@ permissions:
 jobs:
   post:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
