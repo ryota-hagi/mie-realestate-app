@@ -1,13 +1,19 @@
 {
-  "scannedAt": "2026-02-24T07:52:26.045Z",
+  "scannedAt": "2026-02-24T08:34:41.256Z",
   "keywords": {
-    "ハウスメーカー": {
+    "注文住宅": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "マイホーム": {
+    "新築": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "家づくり": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -19,19 +25,19 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "住宅補助金": {
+    "マイホーム": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "住宅ローン": {
+    "土地探し": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "注文住宅": {
+    "四日市": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -43,19 +49,13 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "いなべ": {
+    "引っ越し 新築": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
     "確定申告 住宅ローン": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "引っ越し 新築": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
