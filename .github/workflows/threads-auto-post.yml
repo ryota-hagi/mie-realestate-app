@@ -1,4 +1,4 @@
-name: Threads Daily Post
+name: Threads Auto Post
 
 on:
   schedule:
