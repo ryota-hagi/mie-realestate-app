@@ -502,46 +502,129 @@ function buildStaticHubContent() {
     { q: '三重県で注文住宅の土地相場はいくらですか？', a: '三重県北部7エリアの住宅地平均地価は約22,000〜53,700円/m²（坪単価8〜19万円）です。最も高いのは桑名市（坪18.4万円）、最も手頃なのはいなべ市（坪8.1万円）。名古屋通勤圏でも手頃な土地が見つかります。' },
     { q: '三重県から名古屋への通勤は可能ですか？', a: '可能です。桑名市から名古屋駅まで近鉄急行で最短25分、四日市市から約35分。車でも東名阪自動車道で40分〜1時間程度。三重県北部は名古屋通勤圏として人気があります。' },
     { q: '三重県で注文住宅を建てる総費用の目安は？', a: '土地50坪＋建物35坪のスタンダードプラン（65万円/坪）の場合、エリアにより総額2,800〜4,200万円程度。いなべ市なら2,800万円台、桑名駅近なら4,000万円超も。当サイトの費用シミュレーターで詳細な試算が可能です。' },
+    { q: '三重県で注文住宅を建てるメリットは？', a: '最大のメリットは土地代の安さです。全国平均の坪26万円に対し、三重県北部は坪8〜19万円。同じ予算なら広い土地を確保でき、建物のグレードアップや住宅性能の向上に資金を回せます。名古屋通勤圏でありながらゆとりある暮らしが実現します。' },
+    { q: '三重県の注文住宅で使える補助金はありますか？', a: '2026年はみらいエコ住宅2026事業（最大125万円）、住宅ローン控除（最大455万円）、給湯省エネ2026事業（最大17万円）などが利用可能。桑名市の移住補助金（最大100万円）など自治体独自の制度もあります。' },
   ];
   const hubFaqHtml = hubFaqs.map(faq =>
     `<div class="seo-faq-item"><h3>${escHtml(faq.q)}</h3><p>${escHtml(faq.a)}</p></div>`
   ).join('');
 
-  return `
+  // エリア別の簡潔な一覧（details用）
+  const cityBriefHtml = CITIES.map(c => {
+    const cd2 = cityData[c.id];
+    if (!cd2) return '';
+    const prices = { yokkaichi: '坪18.8万円', kuwana: '坪18.4万円', suzuka: '坪13.6万円', inabe: '坪8.1万円', kameyama: '坪9.8万円', komono: '坪10.3万円', toin: '坪11.7万円' };
+    return `<li><a href="/area/mie/${c.id}/">${escHtml(cd2.nameJa)}</a>（${prices[c.id] || ''}）</li>`;
+  }).filter(Boolean).join('');
+
+  // --- #seo-static: H1+導入文（JS後非表示） ---
+  const seoStatic = `
 <article id="seo-static" class="seo-static-content">
   <h1>三重県で注文住宅を建てるなら｜エリア別 土地相場・費用シミュレーター</h1>
-
-  <section>
-    <h2>三重県北部の注文住宅エリアガイド</h2>
-    <p>三重県北部で注文住宅を検討中の方へ。四日市・桑名・鈴鹿・いなべ・亀山・菰野・東員の7エリアの土地価格相場、費用シミュレーション、国土交通省の実取引データを比較して、理想の土地を見つけましょう。</p>
-    <p>三重県は全国平均と比べて土地取得費用が約586万円安く、名古屋通勤圏でありながら広い敷地を確保しやすい地域です。坪単価8万円台のいなべ市から、名古屋25分の桑名市まで、ライフスタイルに合ったエリアが見つかります。</p>
-  </section>
-
+  <p>三重県北部で注文住宅を検討中の方へ。四日市・桑名・鈴鹿・いなべ・亀山・菰野・東員の7エリアの土地価格相場、費用シミュレーション、国土交通省の実取引データを比較して、理想の土地を見つけましょう。</p>
   <section>
     <h2>エリア別 注文住宅ガイド</h2>
     <ul>${cityLinksHtml}</ul>
   </section>
-
-  <section>
-    <h2>注文住宅 費用シミュレーター</h2>
-    <p>土地面積・建物面積・建築グレード・頭金・金利・ローン期間を設定して、注文住宅の総費用と月々の返済額を即時シミュレーション。各エリアの実取引データに基づく坪単価を使用した、信頼性の高い試算が可能です。</p>
-  </section>
-
-  <section>
-    <h2>よくある質問（三重県の注文住宅）</h2>
-    ${hubFaqHtml}
-  </section>
-
-  <section>
-    <h2>データについて</h2>
-    <p>当サイトの土地価格データは<a href="https://www.reinfolib.mlit.go.jp/" rel="noopener">国土交通省 不動産情報ライブラリ（REINFOLIB）</a>の実取引データに基づいています。地価の推移は<a href="https://www.land.mlit.go.jp/landPrice/AriaServlet?MOD=2&TYP=0" rel="noopener">国土交通省 地価公示</a>を参照しています。</p>
-    <p>最終更新: ${TODAY} ｜ 監修: <a href="/about/" rel="noopener">注文住宅比較.com</a> 編集部</p>
-  </section>
-
-  <footer>
-    <p><a href="/">注文住宅比較.comを使う</a></p>
-  </footer>
 </article>`;
+
+  // --- #area-guide: 折りたたみガイド（常に表示） ---
+  const areaGuide = `
+<section id="area-guide" class="area-guide">
+  <h2 class="area-guide-title">三重県の注文住宅ガイド</h2>
+
+  <details>
+    <summary><h3>三重県が注文住宅に選ばれる理由</h3></summary>
+    <div class="guide-body">
+      <p>三重県北部は名古屋まで電車25〜50分の通勤圏でありながら、土地の坪単価は8〜19万円と全国平均（坪26万円）の1/3〜2/3。同じ4,000万円の予算でも、名古屋市内より300〜600万円分のゆとりが生まれます。</p>
+      <p>鈴鹿山脈から伊勢湾まで自然環境に恵まれ、子育て支援も充実。各市町村の医療費助成は15〜18歳までカバーされています。</p>
+      <p class="guide-links">詳しく: <a href="/knowledge/mie-livability/">三重県の住みやすい街ランキング</a> / <a href="/knowledge/cost/">注文住宅の費用内訳ガイド</a></p>
+    </div>
+  </details>
+
+  <details>
+    <summary><h3>エリア別の特徴と土地相場</h3></summary>
+    <div class="guide-body">
+      <ul class="guide-city-list">${cityBriefHtml}</ul>
+      <p>各エリアの詳細な取引データ・費用シミュレーションは、上のツールまたは各エリアページでご確認いただけます。</p>
+    </div>
+  </details>
+
+  <details>
+    <summary><h3>注文住宅の費用相場（三重県の場合）</h3></summary>
+    <div class="guide-body">
+      <p>三重県で注文住宅を建てる場合、土地50坪＋建物35坪で総額2,800〜4,200万円が目安です。全国平均（約4,903万円）より700〜2,100万円安く建てられます。</p>
+      <p>住宅ローンは変動金利0.3〜0.5%台が主流。つなぎ融資の手配も忘れずに。2026年は補助金・減税制度も充実しています。</p>
+      <p class="guide-links">詳しく: <a href="/knowledge/cost/">費用の内訳</a> / <a href="/knowledge/housing-loan/">住宅ローンガイド</a> / <a href="/knowledge/subsidy-2026/">2026年の補助金</a></p>
+    </div>
+  </details>
+
+  <details>
+    <summary><h3>名古屋通勤・子育て環境</h3></summary>
+    <div class="guide-body">
+      <p>桑名から名古屋25分、四日市35分、鈴鹿50分（近鉄利用）。定期代は月1.5〜3万円程度です。テレワーク併用なら、いなべ市や菰野町の自然豊かなエリアも選択肢に入ります。</p>
+      <p>四日市市は小中学校58校・医療費助成18歳まで。桑名市は「子育て支援日本一」を掲げ、教育環境の充実に力を入れています。</p>
+      <p class="guide-links">詳しく: <a href="/knowledge/mie-commute/">名古屋通勤ガイド</a> / <a href="/knowledge/mie-school-district/">学区ガイド</a></p>
+    </div>
+  </details>
+
+  <details>
+    <summary><h3>家づくりの進め方</h3></summary>
+    <div class="guide-body">
+      <p>注文住宅は情報収集から入居まで12〜18ヶ月。まず予算を決め、土地探し・建築会社選びを並行して進めます。見積もりは必ず3社以上で比較しましょう。</p>
+      <p>設計打ち合わせは平均5〜10回。間取りは生活動線と収納計画が最重要ポイントです。</p>
+      <p class="guide-links">詳しく: <a href="/knowledge/flow/">家づくりの流れ</a> / <a href="/knowledge/builder-comparison/">建築会社の選び方</a> / <a href="/knowledge/design-meeting/">設計打ち合わせのコツ</a></p>
+    </div>
+  </details>
+
+  <details>
+    <summary><h3>住宅性能の選び方</h3></summary>
+    <div class="guide-body">
+      <p>三重県は温暖な5〜6地域ですが、夏の猛暑対策に断熱等級5以上（UA値0.60以下）が推奨されます。ZEH水準にすると補助金35〜110万円の対象に。</p>
+      <p>南海トラフ地震に備え、耐震等級3の取得も検討しましょう。許容応力度計算による構造計算が最も信頼性が高い方法です。</p>
+      <p class="guide-links">詳しく: <a href="/knowledge/energy-efficiency/">断熱性能ガイド</a> / <a href="/knowledge/earthquake-resistance/">耐震性能ガイド</a></p>
+    </div>
+  </details>
+
+  <details>
+    <summary><h3>よくある質問（三重県の注文住宅）</h3></summary>
+    <div class="guide-body">
+      ${hubFaqHtml}
+    </div>
+  </details>
+
+  <details>
+    <summary><h3>関連ガイド記事</h3></summary>
+    <div class="guide-body">
+      <ul class="guide-article-list">
+        <li><a href="/knowledge/cost/">注文住宅の費用内訳ガイド</a></li>
+        <li><a href="/knowledge/flow/">注文住宅の流れ・スケジュール</a></li>
+        <li><a href="/knowledge/housing-loan/">住宅ローン完全ガイド</a></li>
+        <li><a href="/knowledge/land-selection/">土地探しで失敗しない10のポイント</a></li>
+        <li><a href="/knowledge/builder-comparison/">ハウスメーカー・工務店の選び方</a></li>
+        <li><a href="/knowledge/energy-efficiency/">断熱性能・省エネ基準ガイド</a></li>
+        <li><a href="/knowledge/earthquake-resistance/">耐震性能ガイド</a></li>
+        <li><a href="/knowledge/floor-plan/">間取り実例集</a></li>
+        <li><a href="/knowledge/subsidy-2026/">2026年の住宅補助金</a></li>
+        <li><a href="/knowledge/mie-livability/">三重県の住みやすい街ランキング</a></li>
+      </ul>
+      <p><a href="/knowledge/">全19記事を見る →</a></p>
+    </div>
+  </details>
+
+  <p class="area-guide-footer">データ出典: <a href="https://www.reinfolib.mlit.go.jp/" rel="noopener">国土交通省 不動産情報ライブラリ</a> ｜ 最終更新: ${TODAY}</p>
+</section>`;
+
+  // Guide modal (popup, always in DOM)
+  const guideModal = `
+<div id="guide-modal" class="guide-modal-overlay" onclick="if(event.target===this)closeGuideModal()">
+  <div class="guide-modal-body">
+    <button class="guide-modal-close" onclick="closeGuideModal()">&times;</button>
+    <div id="guide-modal-content"></div>
+  </div>
+</div>`;
+
+  return seoStatic + areaGuide + guideModal;
 }
 
 // CSS for static SEO content (hidden when JS loads, visible for crawlers)
@@ -558,6 +641,46 @@ function buildStaticContentCss() {
   .seo-static-content footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #e5e7eb; font-size: 0.8rem; color: #6b7280; }
   .seo-faq-item { margin-bottom: 16px; padding: 12px 16px; background: #f9fafb; border-radius: 8px; }
   .seo-tip { margin-bottom: 12px; padding: 12px 16px; background: #eff6ff; border-radius: 8px; border-left: 4px solid #3b82f6; }
+
+  /* --- Area Guide (SEO static version, hidden by JS) --- */
+  .area-guide { max-width: 800px; margin: 32px auto 0; padding: 0 16px 32px; font-family: 'Noto Sans JP', sans-serif; color: #374151; line-height: 1.8; }
+  .area-guide-title { font-size: 1.3rem; font-weight: 700; color: #111827; margin-bottom: 16px; }
+  .area-guide details { margin-bottom: 8px; }
+  .area-guide summary { cursor: pointer; font-weight: 600; }
+  .guide-body p { margin-bottom: 10px; font-size: 0.93rem; }
+  .guide-links a, .guide-city-list a, .guide-article-list a { color: #2563eb; }
+  .guide-city-list, .guide-article-list { list-style: none; padding: 0; }
+  .area-guide-footer { margin-top: 16px; font-size: 0.78rem; color: #9ca3af; }
+
+  /* --- Guide Cards (JS-rendered) --- */
+  .guide-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 18px 12px 14px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: all 0.2s; }
+  .guide-card:hover { border-color: #93c5fd; box-shadow: 0 4px 12px rgba(59,130,246,0.12); transform: translateY(-2px); }
+  .guide-card-icon { font-size: 1.6rem; line-height: 1; }
+  .guide-card-title { font-size: 0.82rem; font-weight: 600; color: #1f2937; line-height: 1.3; }
+  .guide-card-desc { font-size: 0.7rem; color: #6b7280; line-height: 1.3; }
+
+  /* --- Guide Modal (popup) --- */
+  .guide-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 9999; display: none; align-items: flex-end; justify-content: center; }
+  .guide-modal-overlay.open { display: flex; }
+  .guide-modal-body { background: #fff; border-radius: 20px 20px 0 0; width: 100%; max-width: 600px; max-height: 80vh; overflow-y: auto; padding: 28px 22px 32px; position: relative; box-shadow: 0 -4px 30px rgba(0,0,0,0.15); animation: guideSlideUp 0.25s ease-out; }
+  @keyframes guideSlideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .guide-modal-close { position: absolute; top: 14px; right: 18px; background: #f3f4f6; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; color: #6b7280; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .guide-modal-close:hover { background: #e5e7eb; color: #374151; }
+  #guide-modal-content h3 { font-size: 1.15rem; font-weight: 700; color: #111827; margin-bottom: 14px; padding-right: 30px; }
+  #guide-modal-content p { font-size: 0.93rem; color: #374151; line-height: 1.8; margin-bottom: 10px; }
+  #guide-modal-content p:last-child { margin-bottom: 0; }
+  #guide-modal-content a { color: #2563eb; text-decoration: none; }
+  #guide-modal-content a:hover { text-decoration: underline; }
+  #guide-modal-content ul { list-style: none; padding: 0; margin: 0 0 10px; }
+  #guide-modal-content li { padding: 5px 0; border-bottom: 1px solid #f3f4f6; font-size: 0.9rem; }
+  #guide-modal-content li:last-child { border-bottom: none; }
+  #guide-modal-content li a { font-weight: 500; }
+  .guide-modal-links { font-size: 0.88rem; color: #4b5563; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f3f4f6; }
+  @media (min-width: 641px) {
+    .guide-modal-overlay { align-items: center; }
+    .guide-modal-body { border-radius: 16px; max-height: 70vh; }
+    @keyframes guideSlideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  }
   `;
 }
 
@@ -646,7 +769,7 @@ function generateHubPage() {
   // 5. Update meta description
   html = html.replace(
     /<meta name="description" content="[^"]*">/,
-    '<meta name="description" content="三重県北部で注文住宅を検討中の方へ。四日市・桑名・鈴鹿・いなべ・亀山・菰野・東員の7エリアの土地価格相場、費用シミュレーション、実取引データを比較。国土交通省データに基づく信頼性の高い情報で理想の土地探しをサポートします。">'
+    '<meta name="description" content="三重県で注文住宅を建てるなら、まずエリア別の土地相場を比較。四日市・桑名・鈴鹿・いなべ・亀山・菰野・東員の7エリアの費用シミュレーション、国土交通省の実取引データで理想の土地探しをサポートします。">'
   );
 
   // 5b. Add og:image and update Twitter Card
@@ -697,9 +820,9 @@ function generateHubPage() {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: [
-      { '@type': 'Question', name: '三重県で注文住宅の土地相場はいくらですか？', acceptedAnswer: { '@type': 'Answer', text: '三重県北部7エリアの住宅地平均地価は約22,000〜53,700円/m²（坪単価8〜19万円）です。最も高いのは桑名市（坪18.4万円）、最も手頃なのはいなべ市（坪8.1万円）。名古屋通勤圏でも手頃な土地が見つかります。' }},
-      { '@type': 'Question', name: '三重県から名古屋への通勤は可能ですか？', acceptedAnswer: { '@type': 'Answer', text: '可能です。桑名市から名古屋駅まで近鉄急行で最短25分、四日市市から約35分。車でも東名阪自動車道で40分〜1時間程度。三重県北部は名古屋通勤圏として人気があります。' }},
-      { '@type': 'Question', name: '三重県で注文住宅を建てる総費用の目安は？', acceptedAnswer: { '@type': 'Answer', text: '土地50坪＋建物35坪のスタンダードプラン（65万円/坪）の場合、エリアにより総額2,800〜4,200万円程度。いなべ市なら2,800万円台、桑名駅近なら4,000万円超も。当サイトの費用シミュレーターで詳細な試算が可能です。' }}
+      { '@type': 'Question', name: '注文住宅と建売住宅、どちらが向いている？', acceptedAnswer: { '@type': 'Answer', text: '間取り・外観・性能を自由に決めたい方は注文住宅がおすすめ。三重県は土地が安いため、注文住宅でも建売と同程度の総額に抑えやすいのが特徴です。一方、すぐ入居したい・手間を省きたい方には建売住宅が向いています。' }},
+      { '@type': 'Question', name: '三重県で使える住宅補助金はありますか？', acceptedAnswer: { '@type': 'Answer', text: '2026年はみらいエコ住宅2026事業（最大125万円）、住宅ローン控除（最大455万円）、給湯省エネ2026事業（最大17万円）等が利用可能。桑名市の移住補助金（最大100万円）など自治体独自の制度もあります。' }},
+      { '@type': 'Question', name: 'ハウスメーカーと工務店、どちらを選ぶべき？', acceptedAnswer: { '@type': 'Answer', text: 'ハウスメーカーは品質の安定感と保証が強み、工務店は自由度と価格の柔軟性が特徴。三重県では地元工務店の坪単価50〜65万円に対し、大手ハウスメーカーは70〜90万円が相場。必ず3社以上の相見積もりで比較しましょう。' }}
     ]
   };
 
@@ -744,29 +867,50 @@ function generateHubPage() {
       ${buildCostSimulatorHtml(null)}
       ${buildCityLinksSection()}
       ${buildTipsHtml('yokkaichi').split('\n').slice(0, 1).join('')}
+      <div class="card p-5 mb-6">
+        <h2 class="text-base font-bold text-gray-800 mb-3">📖 三重県の注文住宅ガイド</h2>
+        <p class="text-xs text-gray-400 mb-3">タップで詳しく見る</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
+          <button class="guide-card" onclick="openGuideModal(0)"><span class="guide-card-icon">🏡</span><span class="guide-card-title">三重県が選ばれる理由</span><span class="guide-card-desc">名古屋通勤圏で土地が安い</span></button>
+          <button class="guide-card" onclick="openGuideModal(1)"><span class="guide-card-icon">📍</span><span class="guide-card-title">エリア別の土地相場</span><span class="guide-card-desc">7エリアの特徴を比較</span></button>
+          <button class="guide-card" onclick="openGuideModal(2)"><span class="guide-card-icon">💰</span><span class="guide-card-title">費用相場とローン</span><span class="guide-card-desc">総額2,800〜4,200万円</span></button>
+          <button class="guide-card" onclick="openGuideModal(3)"><span class="guide-card-icon">🚃</span><span class="guide-card-title">通勤・子育て環境</span><span class="guide-card-desc">名古屋25〜50分</span></button>
+          <button class="guide-card" onclick="openGuideModal(4)"><span class="guide-card-icon">📋</span><span class="guide-card-title">家づくりの進め方</span><span class="guide-card-desc">12〜18ヶ月の流れ</span></button>
+          <button class="guide-card" onclick="openGuideModal(5)"><span class="guide-card-icon">🔧</span><span class="guide-card-title">住宅性能の選び方</span><span class="guide-card-desc">断熱・耐震のポイント</span></button>
+        </div>
+        <div style="text-align:center;padding-top:10px;border-top:1px solid #f3f4f6;line-height:1.8;">
+          <span style="font-size:0.78rem;color:#9ca3af;">関連記事: </span>
+          <a href="/knowledge/cost/" class="text-xs text-blue-600 hover:underline">費用内訳</a> <span style="color:#e5e7eb;">|</span>
+          <a href="/knowledge/flow/" class="text-xs text-blue-600 hover:underline">家づくりの流れ</a> <span style="color:#e5e7eb;">|</span>
+          <a href="/knowledge/housing-loan/" class="text-xs text-blue-600 hover:underline">住宅ローン</a> <span style="color:#e5e7eb;">|</span>
+          <a href="/knowledge/land-selection/" class="text-xs text-blue-600 hover:underline">土地探し</a> <span style="color:#e5e7eb;">|</span>
+          <a href="/knowledge/builder-comparison/" class="text-xs text-blue-600 hover:underline">建築会社選び</a> <span style="color:#e5e7eb;">|</span>
+          <a href="/knowledge/" class="text-xs text-blue-600 hover:underline font-medium">全19記事 →</a>
+        </div>
+      </div>
       <div class="card p-6 mb-6">
-        <h2 class="text-lg font-bold text-gray-800 mb-4">❓ よくある質問（三重県の注文住宅）</h2>
+        <h2 class="text-lg font-bold text-gray-800 mb-4">❓ よくある質問</h2>
         <div class="space-y-2">
           <div class="border border-gray-200 rounded-lg overflow-hidden">
             <button class="w-full text-left px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors" onclick="this.parentElement.classList.toggle('faq-open')">
-              <span class="text-sm font-medium text-gray-800">三重県で注文住宅の土地相場はいくらですか？</span>
+              <span class="text-sm font-medium text-gray-800">注文住宅と建売住宅、どちらが向いている？</span>
               <svg class="w-5 h-5 text-gray-400 faq-chevron transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
-            <div class="faq-answer px-4 py-3 text-sm text-gray-600 leading-relaxed border-t border-gray-100">三重県北部7エリアの住宅地平均地価は約22,000〜53,700円/m\u00B2（坪単価8〜19万円）です。最も高いのは桑名市（坪18.4万円）、最も手頃なのはいなべ市（坪8.1万円）。名古屋通勤圏でも手頃な土地が見つかります。</div>
+            <div class="faq-answer px-4 py-3 text-sm text-gray-600 leading-relaxed border-t border-gray-100">間取り・外観・性能を自由に決めたい方は注文住宅がおすすめ。三重県は土地が安いため、注文住宅でも建売と同程度の総額に抑えやすいのが特徴です。一方、すぐ入居したい・手間を省きたい方には建売住宅が向いています。</div>
           </div>
           <div class="border border-gray-200 rounded-lg overflow-hidden">
             <button class="w-full text-left px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors" onclick="this.parentElement.classList.toggle('faq-open')">
-              <span class="text-sm font-medium text-gray-800">三重県から名古屋への通勤は可能ですか？</span>
+              <span class="text-sm font-medium text-gray-800">三重県で使える住宅補助金はありますか？</span>
               <svg class="w-5 h-5 text-gray-400 faq-chevron transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
-            <div class="faq-answer px-4 py-3 text-sm text-gray-600 leading-relaxed border-t border-gray-100">可能です。桑名市から名古屋駅まで近鉄急行で最短25分、四日市市から約35分。車でも東名阪自動車道で40分〜1時間程度。三重県北部は名古屋通勤圏として人気があります。</div>
+            <div class="faq-answer px-4 py-3 text-sm text-gray-600 leading-relaxed border-t border-gray-100">2026年はみらいエコ住宅2026事業（最大125万円）、住宅ローン控除（最大455万円）、給湯省エネ2026事業（最大17万円）等が利用可能。桑名市の移住補助金（最大100万円）など自治体独自の制度もあります。<a href="/knowledge/subsidy-2026/" style="color:#2563eb;">詳しくはこちら →</a></div>
           </div>
           <div class="border border-gray-200 rounded-lg overflow-hidden">
             <button class="w-full text-left px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors" onclick="this.parentElement.classList.toggle('faq-open')">
-              <span class="text-sm font-medium text-gray-800">三重県で注文住宅を建てる総費用の目安は？</span>
+              <span class="text-sm font-medium text-gray-800">ハウスメーカーと工務店、どちらを選ぶべき？</span>
               <svg class="w-5 h-5 text-gray-400 faq-chevron transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
-            <div class="faq-answer px-4 py-3 text-sm text-gray-600 leading-relaxed border-t border-gray-100">土地50坪＋建物35坪のスタンダードプラン（65万円/坪）の場合、エリアにより総額2,800〜4,200万円程度。いなべ市なら2,800万円台、桑名駅近なら4,000万円超も。当サイトの費用シミュレーターで詳細な試算が可能です。</div>
+            <div class="faq-answer px-4 py-3 text-sm text-gray-600 leading-relaxed border-t border-gray-100">ハウスメーカーは品質の安定感と保証が強み、工務店は自由度と価格の柔軟性が特徴。三重県では地元工務店の坪単価50〜65万円に対し、大手ハウスメーカーは70〜90万円が相場。必ず3社以上の相見積もりで比較しましょう。<a href="/knowledge/builder-comparison/" style="color:#2563eb;">詳しくはこちら →</a></div>
           </div>
         </div>
       </div>
@@ -779,24 +923,27 @@ function generateHubPage() {
     hubExtraSections.replace(/\$/g, '$$$$') + '\n      ${renderFooter()}'
   );
 
-  // 11. Update footer with city links + knowledge links
+  // 11. Update footer with clean layout
   const hubFooterLinks = CITIES.map(c =>
-    `<a href="/area/mie/${c.id}/" class="text-xs text-blue-600 hover:underline">${c.name}</a>`
-  ).join(' | ');
-
-  const knowledgeFooterLinks = knowledgeData.articles.map(a =>
-    `<a href="/knowledge/${a.id}/" class="text-xs text-blue-600 hover:underline">${a.title.split('｜')[0]}</a>`
-  ).join(' | ');
+    `<a href="/area/mie/${c.id}/" style="color:#6b7280;text-decoration:none;font-size:12px;">${c.name}</a>`
+  ).join(' <span style="color:#d1d5db;">·</span> ');
 
   html = html.replace(
     "function renderFooter() {\n  return `\n    <footer class=\"mt-8 py-6 border-t border-gray-200\">\n      <div class=\"text-center space-y-2\">",
     `function renderFooter() {
   return \`
-    <footer class="mt-8 py-6 border-t border-gray-200">
-      <div class="text-center space-y-2">
-        <div class="flex justify-center flex-wrap gap-2 mb-3">${hubFooterLinks}</div>
-        <div class="flex justify-center flex-wrap gap-2 mb-3">${knowledgeFooterLinks}</div>
-        <div class="mb-2"><a href="/" class="text-sm text-blue-600 hover:underline">🏠 注文住宅比較.com</a></div>`
+    <footer style="margin-top:32px;padding:24px 16px;border-top:1px solid #e5e7eb;max-width:640px;margin-left:auto;margin-right:auto;">
+      <div style="text-align:center;">
+        <div style="margin-bottom:16px;">
+          <div style="font-size:11px;color:#9ca3af;margin-bottom:6px;">エリア</div>
+          <div>${hubFooterLinks}</div>
+        </div>
+        <div style="margin-bottom:16px;">
+          <div style="font-size:11px;color:#9ca3af;margin-bottom:6px;">コンテンツ</div>
+          <a href="/knowledge/" style="color:#6b7280;text-decoration:none;font-size:12px;">知識記事</a>
+          <span style="color:#d1d5db;">·</span>
+          <a href="/about/" style="color:#6b7280;text-decoration:none;font-size:12px;">運営者情報</a>
+        </div>`
   );
 
   // 12. Add drawer menu city links
@@ -825,7 +972,30 @@ function openMobileDrawer`
 
 ${buildCostSimulatorScript()}
 // Hide static SEO content after JS renders
-document.addEventListener('DOMContentLoaded', function() { var el = document.getElementById('seo-static'); if (el) el.style.display = 'none'; });
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('seo-static'); if (el) el.style.display = 'none';
+  var g = document.getElementById('area-guide'); if (g) g.style.display = 'none';
+});
+
+// Guide modal
+var GUIDE_ITEMS = [
+  { title: '\\u{1F3E1} 三重県が注文住宅に選ばれる理由', content: '<p>三重県北部は名古屋まで電車25〜50分の通勤圏でありながら、土地の坪単価は8〜19万円と全国平均（坪26万円）の1/3〜2/3。同じ4,000万円の予算でも、名古屋市内より300〜600万円分のゆとりが生まれます。</p><p>鈴鹿山脈から伊勢湾まで自然環境に恵まれ、子育て支援も充実。各市町村の医療費助成は15〜18歳までカバーされています。</p><p class="guide-modal-links">関連: <a href="/knowledge/mie-livability/">住みやすい街ランキング</a> / <a href="/knowledge/cost/">費用内訳ガイド</a></p>' },
+  { title: '\\u{1F4CD} エリア別の特徴と土地相場', content: '<ul><li><a href="/area/mie/yokkaichi/">四日市市</a>（坪18.8万円）\\u2014 県最大の商業都市、名古屋35分</li><li><a href="/area/mie/kuwana/">桑名市</a>（坪18.4万円）\\u2014 名古屋25分の好アクセス</li><li><a href="/area/mie/suzuka/">鈴鹿市</a>（坪13.6万円）\\u2014 手頃で広い家が建てやすい</li><li><a href="/area/mie/inabe/">いなべ市</a>（坪8.1万円）\\u2014 県北部最安、自然豊か</li><li><a href="/area/mie/kameyama/">亀山市</a>（坪9.8万円）\\u2014 交通の要衝、車通勤に便利</li><li><a href="/area/mie/komono/">菰野町</a>（坪10.3万円）\\u2014 温泉と自然の人気エリア</li><li><a href="/area/mie/toin/">東員町</a>（坪11.7万円）\\u2014 人口増加中の子育ての街</li></ul>' },
+  { title: '\\u{1F4B0} 注文住宅の費用相場（三重県）', content: '<p>三重県で注文住宅を建てる場合、土地50坪＋建物35坪で総額2,800〜4,200万円が目安。全国平均（約4,903万円）より700〜2,100万円安く建てられます。</p><p>住宅ローンは変動金利0.3〜0.5%台が主流。つなぎ融資の手配も忘れずに。2026年は補助金・減税制度も充実しています。</p><p class="guide-modal-links">関連: <a href="/knowledge/cost/">費用の内訳</a> / <a href="/knowledge/housing-loan/">住宅ローンガイド</a> / <a href="/knowledge/subsidy-2026/">2026年の補助金</a></p>' },
+  { title: '\\u{1F683} 名古屋通勤・子育て環境', content: '<p>桑名から名古屋25分、四日市35分、鈴鹿50分（近鉄利用）。定期代は月1.5〜3万円程度。テレワーク併用なら、いなべ市や菰野町の自然豊かなエリアも選択肢に。</p><p>四日市市は小中学校58校・医療費助成18歳まで。桑名市は「子育て支援日本一」を掲げ、教育環境の充実に力を入れています。</p><p class="guide-modal-links">関連: <a href="/knowledge/mie-commute/">名古屋通勤ガイド</a> / <a href="/knowledge/mie-school-district/">学区ガイド</a></p>' },
+  { title: '\\u{1F4CB} 家づくりの進め方', content: '<p>注文住宅は情報収集から入居まで12〜18ヶ月。まず予算を決め、土地探し・建築会社選びを並行して進めます。見積もりは必ず3社以上で比較しましょう。</p><p>設計打ち合わせは平均5〜10回。間取りは生活動線と収納計画が最重要ポイントです。</p><p class="guide-modal-links">関連: <a href="/knowledge/flow/">家づくりの流れ</a> / <a href="/knowledge/builder-comparison/">建築会社の選び方</a> / <a href="/knowledge/design-meeting/">設計打ち合わせのコツ</a></p>' },
+  { title: '\\u{1F527} 住宅性能の選び方', content: '<p>三重県は温暖な5〜6地域ですが、夏の猛暑対策に断熱等級5以上（UA値0.60以下）が推奨されます。ZEH水準にすると補助金35〜110万円の対象に。</p><p>南海トラフ地震に備え、耐震等級3の取得も検討しましょう。許容応力度計算による構造計算が最も信頼性が高い方法です。</p><p class="guide-modal-links">関連: <a href="/knowledge/energy-efficiency/">断熱性能ガイド</a> / <a href="/knowledge/earthquake-resistance/">耐震性能ガイド</a></p>' }
+];
+function openGuideModal(idx) {
+  var d = GUIDE_ITEMS[idx]; if (!d) return;
+  document.getElementById('guide-modal-content').innerHTML = '<h3>' + d.title + '</h3>' + d.content;
+  document.getElementById('guide-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeGuideModal() {
+  document.getElementById('guide-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
 </script>`
   );
 
@@ -837,13 +1007,12 @@ document.addEventListener('DOMContentLoaded', function() { var el = document.get
               <a href="/area/mie/\${a.id}/" class="inline-block text-xs text-blue-600 hover:underline mb-2">📄 \${a.name}の詳細ガイド →</a>`
   );
 
-  // 15. Enhance footer with operator info (E-E-A-T)
+  // 15. Replace footer bottom section (clean layout)
   html = html.replace(
-    '<p class="text-xs text-gray-300 mt-3">© 注文住宅比較.com — Powered by 国土交通省 不動産情報ライブラリ + 行政オープンデータ</p>',
-    `<div style="margin-top:12px;padding-top:12px;border-top:1px solid #f3f4f6;">
-          <p class="text-xs text-gray-400" style="margin-bottom:4px;"><strong>運営</strong>: <a href="/about/" style="color:#6b7280;text-decoration:underline;" rel="noopener">注文住宅比較.com</a>（注文住宅の土地探し・費用比較をサポート）</p>
-          <p class="text-xs text-gray-400" style="margin-bottom:4px;"><strong>データ更新</strong>: ${TODAY} ｜ 国土交通省 不動産情報ライブラリAPI・地価公示データを定期取得</p>
-          <p class="text-xs text-gray-300">© 注文住宅比較.com — 本ツールの利用は無料です。不動産購入の最終判断は専門家にご相談ください。</p>
+    /<p class="text-xs text-gray-400">\s*データ出典:[\s\S]*?<\/p>\s*<p class="text-xs text-gray-400">\s*MCP接続先:[\s\S]*?<\/p>\s*<p class="text-xs text-gray-400">\s*※[\s\S]*?<\/p>\s*<p class="text-xs text-gray-300 mt-3">[\s\S]*?<\/p>/,
+    `<div style="margin-top:16px;padding-top:12px;border-top:1px solid #f3f4f6;">
+          <p style="font-size:11px;color:#9ca3af;margin:0 0 4px;">データ出典: <a href="https://www.reinfolib.mlit.go.jp/" style="color:#9ca3af;" rel="noopener">国土交通省 不動産情報ライブラリ</a> ｜ 更新: ${TODAY}</p>
+          <p style="font-size:11px;color:#b0b0b0;margin:0;">© 2025 <a href="/about/" style="color:#b0b0b0;text-decoration:none;">注文住宅比較.com</a></p>
         </div>`
   );
 
@@ -1271,10 +1440,24 @@ ${JSON.stringify({
       <p>${escHtml(f.answer)}</p>
     </div>`).join('');
 
-  const otherArticles = knowledgeData.articles
-    .filter(a => a.id !== article.id)
+  // 関連記事: relatedArticlesがあれば厳選表示、なければ全件表示
+  const relatedList = article.relatedArticles
+    ? knowledgeData.articles.filter(a => article.relatedArticles.includes(a.id))
+    : knowledgeData.articles.filter(a => a.id !== article.id);
+  const otherArticles = relatedList
     .map(a => `<li><a href="/knowledge/${a.id}/">${escHtml(a.title.split('｜')[0])}</a></li>`)
     .join('\n        ');
+
+  // 「次に読む」ナビゲーション
+  const nextArticleData = article.nextArticle
+    ? knowledgeData.articles.find(a => a.id === article.nextArticle.id)
+    : null;
+  const nextArticleHtml = nextArticleData ? `
+    <div style="margin-top:32px;padding:20px 24px;background:linear-gradient(135deg,#eff6ff 0%,#e0f2fe 100%);border-radius:12px;border:1px solid #bae6fd;">
+      <div style="font-size:12px;font-weight:700;color:#0369a1;letter-spacing:0.05em;margin-bottom:8px;">📖 次に読む</div>
+      <p style="font-size:14px;color:#475569;margin:0 0 10px;line-height:1.6;">${escHtml(article.nextArticle.reason)}</p>
+      <a href="/knowledge/${nextArticleData.id}/" style="display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:600;color:#1d4ed8;text-decoration:none;">${escHtml(nextArticleData.title.split('｜')[0])} →</a>
+    </div>` : '';
 
   const breadcrumbHtml = `<nav class="knowledge-breadcrumb" aria-label="パンくずリスト">
     <a href="/">トップ</a> / <a href="/knowledge/">注文住宅の知識</a> / <span>${escHtml(article.title.split('｜')[0])}</span>
@@ -1487,6 +1670,8 @@ ${faqJsonLd}
       <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(DOMAIN + '/knowledge/' + article.id + '/')}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;padding:6px 14px;background:#1877f2;color:white;border-radius:6px;font-size:12px;font-weight:500;text-decoration:none;">Facebook</a>
     </div>
 
+    ${nextArticleHtml}
+
     <div class="knowledge-related">
       <h2>関連記事</h2>
       <ul>
@@ -1640,12 +1825,12 @@ function generateKnowledgeHubPage() {
   gtag('js', new Date());
   gtag('config', 'G-SZV3XF0W0G');
 </script>
-<title>注文住宅の知識｜費用・流れ・土地選び・建蔽率容積率 | 注文住宅比較.com</title>
-<meta name="description" content="注文住宅を建てる方に必要な知識を網羅。費用の内訳、家づくりの流れ、土地探しのコツ、建蔽率・容積率の基礎知識、三重県の住みやすい街ランキングなど、専門的な情報をわかりやすく解説します。">
-<meta name="keywords" content="注文住宅,知識,費用,流れ,土地探し,建蔽率,容積率,三重県">
+<title>注文住宅の基礎知識19選｜費用・性能・土地・流れを徹底解説 | 注文住宅比較.com</title>
+<meta name="description" content="注文住宅の費用・住宅ローン・間取り・断熱性能・耐震・土地選び・補助金など19テーマを三重県のデータとともに解説。初心者から上級者まで、家づくりに必要な知識が全てわかります。">
+<meta name="keywords" content="注文住宅,基礎知識,費用,住宅ローン,間取り,断熱,耐震,土地選び,三重県,補助金,ハウスメーカー,建蔽率">
 <link rel="canonical" href="${DOMAIN}/knowledge/">
-<meta property="og:title" content="注文住宅の知識｜費用・流れ・土地選び・建蔽率容積率">
-<meta property="og:description" content="注文住宅を建てる方に必要な知識を網羅。費用の内訳、家づくりの流れ、土地探しのコツ、建蔽率・容積率の基礎知識など。">
+<meta property="og:title" content="注文住宅の基礎知識19選｜費用・性能・土地・流れを徹底解説">
+<meta property="og:description" content="注文住宅の費用・住宅ローン・間取り・断熱性能・耐震・土地選び・補助金など19テーマを三重県のデータとともに解説。家づくりに必要な知識が全てわかります。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${DOMAIN}/knowledge/">
 <meta property="og:site_name" content="注文住宅比較.com">
