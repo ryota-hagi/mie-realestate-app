@@ -1,13 +1,7 @@
 {
-  "scannedAt": "2026-02-24T11:33:22.446Z",
+  "scannedAt": "2026-02-24T12:39:40.660Z",
   "keywords": {
-    "住宅補助金": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "工務店": {
+    "新築": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -19,13 +13,13 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "新築": {
+    "注文住宅": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "間取り": {
+    "土地探し": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -37,25 +31,31 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "亀山": {
+    "ハウスメーカー": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "桑名": {
+    "鈴鹿": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "確定申告 住宅ローン": {
+    "いなべ": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
     "引っ越し 新築": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "確定申告 住宅ローン": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
