@@ -266,7 +266,16 @@
       "topicKey": "koukai:15",
       "text": "火災保険、適当に選んだ。\n\n工務店に「これでいいですよ」って言われた保険、よくわからないまま即決した。\n\n水害補償が薄かったことに後から気づいて、四日市って海も川も近いのに自分何やってたんだろって。\n\nみんなはちゃんと比較した？",
       "threadId": "17865484617588393",
-      "charCount": 114
+      "charCount": 114,
+      "engagement": {
+        "views": 756,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-02-25T08:36:16.391Z"
     },
     {
       "date": "2026-02-24T08:34:51.822Z",
@@ -274,7 +283,16 @@
       "topicKey": "kisetsu:2:0",
       "text": "「3月に間に合わせたい」って気持ち、めちゃくちゃわかる。\n\nでも焦って決めた土地が1番後悔のもとになるって、あとから知った。\n\n自分は逆に春を諦めて夏に引っ越したんだけど、正直それで良かったと思ってる。\n\n焦りで動いた人、どうだった？",
       "threadId": "18175611664376797",
-      "charCount": 117
+      "charCount": 117,
+      "engagement": {
+        "views": 846,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-02-25T08:36:17.070Z"
     },
     {
       "date": "2026-02-24T10:38:12.824Z",
@@ -323,6 +341,14 @@
       "text": "1社で決めるな。",
       "threadId": "18407115442135456",
       "charCount": 8
+    },
+    {
+      "date": "2026-02-25T08:36:27.064Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:0",
+      "text": "注文住宅にして後悔はないけど、建売の友達の方が楽しそうに暮らしてる。",
+      "threadId": "17934678636184978",
+      "charCount": 34
     }
   ]
 }
