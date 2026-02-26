@@ -1,19 +1,7 @@
 {
-  "scannedAt": "2026-02-25T23:20:27.477Z",
+  "scannedAt": "2026-02-26T05:50:49.813Z",
   "keywords": {
-    "マイホーム": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "家づくり": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "住宅ローン": {
+    "ハウスメーカー": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -25,25 +13,37 @@
       "avgScore": 0,
       "topPosts": []
     },
+    "住宅補助金": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
     "土地探し": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "注文住宅": {
+    "工務店": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "いなべ": {
+    "間取り": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "四日市": {
+    "鈴鹿": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "三重県": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
