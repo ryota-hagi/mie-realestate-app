@@ -270,6 +270,56 @@ export function getAdjustedWeights(baseCategories) {
   });
 }
 
+// ============================================================
+// 投稿履歴コンテキスト（AI生成時に渡す）
+// ============================================================
+
+/**
+ * 直近の投稿履歴をAIコンテキスト用に整形して返す
+ * - 直近7日の投稿（最大20件）を時系列で取得
+ * - エンゲージメントスコアが高い投稿に★マーク
+ * @returns {string} コンテキスト文字列（投稿がなければ空文字）
+ */
+export function getRecentPostsContext() {
+  const history = loadHistory();
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 7);
+
+  const recentPosts = history.posts
+    .filter(p => !p.repliedTo && new Date(p.date) > cutoff)
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 20);
+
+  if (recentPosts.length === 0) return '';
+
+  const lines = recentPosts.map(p => {
+    const d = new Date(p.date);
+    const dateStr = `${d.getMonth() + 1}/${d.getDate()}`;
+    const firstLine = (p.text || '').split('\n')[0].slice(0, 60);
+    const score = p.engagementScore || 0;
+    const star = score >= 30 ? ` ★反応良(スコア${score})` : '';
+    return `[${dateStr} ${p.category}] ${firstLine}${star}`;
+  });
+
+  return `\n\n【直近の投稿履歴】同じ話を繰り返すな。矛盾した発言をするな。★マークの投稿は反応が良かったので「前も言ったけど」等で触れてもOK。\n${lines.join('\n')}`;
+}
+
+/**
+ * 直近30日でエンゲージメントスコア上位の投稿を返す
+ * @param {number} limit - 取得件数（デフォルト5）
+ * @returns {Array} 上位投稿の配列
+ */
+export function getHighEngagementPosts(limit = 5) {
+  const history = loadHistory();
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 30);
+
+  return history.posts
+    .filter(p => !p.repliedTo && p.engagementScore > 0 && new Date(p.date) > cutoff)
+    .sort((a, b) => (b.engagementScore || 0) - (a.engagementScore || 0))
+    .slice(0, limit);
+}
+
 /**
  * 高パフォーマンス投稿のパターンをプロンプトに反映するためのヒントを生成
  * @param {string} categoryId - カテゴリID

@@ -16,7 +16,7 @@ import { publishPost, checkAndRefreshToken, getInsights } from './lib/threads-ap
 import { generatePost, generateArticlePost } from './lib/ai-generator.mjs';
 import { loadAllData, randomChoice, getTaikenTopic, getMameTopic, getKijiTopic, getLoanTopic, getAruaruTopic, getMomegotoTopic, getKoukaiTopic, getNewsTopic, getSitePrTopic, getHikakuTopic, getKinshiTopic, getGyakusetsuTopic } from './lib/data-loader.mjs';
 import { scanTrends, buildTrendPrompt } from './lib/trend-scanner.mjs';
-import { loadHistory, saveHistory, isCategoryCoolingDown, isTopicCoolingDown, getPostsNeedingEngagement, updatePostEngagement, getAdjustedWeights, getPerformanceHint } from './lib/history.mjs';
+import { loadHistory, saveHistory, isCategoryCoolingDown, isTopicCoolingDown, getPostsNeedingEngagement, updatePostEngagement, getAdjustedWeights, getPerformanceHint, getRecentPostsContext } from './lib/history.mjs';
 import { CATEGORIES, SEASONAL_TOPICS, HASHTAGS, SITE_URL } from './lib/config.mjs';
 
 const DRY_RUN = process.env.DRY_RUN === 'true';
@@ -112,12 +112,13 @@ function getRandomLength() {
 function buildPrompt(category, dataSources, trendResult) {
   const { cityData, knowledgeData, liveData } = dataSources;
   const performanceHint = getPerformanceHint(category.id) || '';
+  const recentContext = getRecentPostsContext();
 
   switch (category.id) {
     case 'trend': {
       const trend = trendResult.trending[0];
       const result = buildTrendPrompt(trend);
-      result.userPrompt += performanceHint;
+      result.userPrompt += performanceHint + recentContext;
       return result;
     }
 
@@ -127,9 +128,9 @@ function buildPrompt(category, dataSources, trendResult) {
         // 別のあるあるを試す
         const alt = getAruaruTopic();
         if (isTopicCoolingDown(alt.topicKey)) return buildPrompt({ id: 'koukai', label: '後悔パターン' }, dataSources, trendResult);
-        return buildAruaruPrompt(alt, performanceHint);
+        return buildAruaruPrompt(alt, performanceHint, recentContext);
       }
-      return buildAruaruPrompt(topic, performanceHint);
+      return buildAruaruPrompt(topic, performanceHint, recentContext);
     }
 
     case 'koukai': {
@@ -137,9 +138,9 @@ function buildPrompt(category, dataSources, trendResult) {
       if (isTopicCoolingDown(topic.topicKey)) {
         const alt = getKoukaiTopic();
         if (isTopicCoolingDown(alt.topicKey)) return buildPrompt({ id: 'aruaru', label: 'あるあるネタ' }, dataSources, trendResult);
-        return buildKoukaiPrompt(alt, performanceHint);
+        return buildKoukaiPrompt(alt, performanceHint, recentContext);
       }
-      return buildKoukaiPrompt(topic, performanceHint);
+      return buildKoukaiPrompt(topic, performanceHint, recentContext);
     }
 
     case 'momegoto': {
@@ -147,9 +148,9 @@ function buildPrompt(category, dataSources, trendResult) {
       if (isTopicCoolingDown(topic.topicKey)) {
         const alt = getMomegotoTopic();
         if (isTopicCoolingDown(alt.topicKey)) return buildPrompt({ id: 'aruaru', label: 'あるあるネタ' }, dataSources, trendResult);
-        return buildMomegotoPrompt(alt, performanceHint);
+        return buildMomegotoPrompt(alt, performanceHint, recentContext);
       }
-      return buildMomegotoPrompt(topic, performanceHint);
+      return buildMomegotoPrompt(topic, performanceHint, recentContext);
     }
 
     case 'news': {
@@ -157,9 +158,9 @@ function buildPrompt(category, dataSources, trendResult) {
       if (isTopicCoolingDown(topic.topicKey)) {
         const alt = getNewsTopic();
         if (isTopicCoolingDown(alt.topicKey)) return buildPrompt({ id: 'aruaru', label: 'あるあるネタ' }, dataSources, trendResult);
-        return buildNewsPrompt(alt, performanceHint);
+        return buildNewsPrompt(alt, performanceHint, recentContext);
       }
-      return buildNewsPrompt(topic, performanceHint);
+      return buildNewsPrompt(topic, performanceHint, recentContext);
     }
 
     case 'hikaku': {
@@ -167,9 +168,9 @@ function buildPrompt(category, dataSources, trendResult) {
       if (isTopicCoolingDown(topic.topicKey)) {
         const alt = getHikakuTopic();
         if (isTopicCoolingDown(alt.topicKey)) return buildPrompt({ id: 'koukai', label: '後悔パターン' }, dataSources, trendResult);
-        return buildHikakuPrompt(alt, performanceHint);
+        return buildHikakuPrompt(alt, performanceHint, recentContext);
       }
-      return buildHikakuPrompt(topic, performanceHint);
+      return buildHikakuPrompt(topic, performanceHint, recentContext);
     }
 
     case 'kinshi': {
@@ -177,9 +178,9 @@ function buildPrompt(category, dataSources, trendResult) {
       if (isTopicCoolingDown(topic.topicKey)) {
         const alt = getKinshiTopic();
         if (isTopicCoolingDown(alt.topicKey)) return buildPrompt({ id: 'koukai', label: '後悔パターン' }, dataSources, trendResult);
-        return buildKinshiPrompt(alt, performanceHint);
+        return buildKinshiPrompt(alt, performanceHint, recentContext);
       }
-      return buildKinshiPrompt(topic, performanceHint);
+      return buildKinshiPrompt(topic, performanceHint, recentContext);
     }
 
     case 'gyakusetsu': {
@@ -187,24 +188,24 @@ function buildPrompt(category, dataSources, trendResult) {
       if (isTopicCoolingDown(topic.topicKey)) {
         const alt = getGyakusetsuTopic();
         if (isTopicCoolingDown(alt.topicKey)) return buildPrompt({ id: 'aruaru', label: 'あるあるネタ' }, dataSources, trendResult);
-        return buildGyakusetsuPrompt(alt, performanceHint);
+        return buildGyakusetsuPrompt(alt, performanceHint, recentContext);
       }
-      return buildGyakusetsuPrompt(topic, performanceHint);
+      return buildGyakusetsuPrompt(topic, performanceHint, recentContext);
     }
 
     case 'taiken': {
       const topic = getTaikenTopic(cityData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'aruaru', label: 'あるあるネタ' }, dataSources, trendResult);
       return {
-        userPrompt: `${topic.city}で家建てた時の経験を1つ。
+        userPrompt: `${topic.city}で家を建てた人から聞いた話を1つ。
 
-ネタ: ${topic.tip?.title || '住宅事情'} - ${topic.tip?.body || 'この地域で家を建てた経験'}
+ネタ: ${topic.tip?.title || '住宅事情'} - ${topic.tip?.body || 'この地域の住宅事情'}
 
-読んだ人が「あー、わかる」って思えるように。自分の気持ちや感情を入れて。専門用語は使わない。難しい言葉は日常の言葉に置き換えて。
+「この地域で建てた人の声で多いのは〜」「相談で聞くのは〜」という立場で。専門用語は使わない。
 1行目はフックにして、その後に空行を入れろ。文章が詰まらないように空行で区切って読みやすくしろ。
 ハッシュタグはつけるな。
 
-長さ: ${getRandomLength()}${performanceHint}`,
+長さ: ${getRandomLength()}${performanceHint}${recentContext}`,
         topicKey: topic.topicKey,
       };
     }
@@ -217,11 +218,11 @@ function buildPrompt(category, dataSources, trendResult) {
 
 ネタ: ${topic.section?.heading || '住宅の豆知識'} - ${(topic.section?.body || '注文住宅に関する知識').slice(0, 200)}
 
-専門用語は使うな。難しいことを簡単な言葉で、自分の経験と絡めて。「自分もこれで助かった」「知らなくて焦った」みたいな体験ベースで。
+専門用語は使うな。難しいことを簡単な言葉で。「相談で多い質問」「知らなくて焦る人多い」みたいに、みんなの声として伝えて。
 1行目はフックにして、その後に空行を入れろ。文章が詰まらないように空行で区切って読みやすくしろ。
 ハッシュタグはつけるな。
 
-長さ: ${getRandomLength()}${performanceHint}`,
+長さ: ${getRandomLength()}${performanceHint}${recentContext}`,
         topicKey: topic.topicKey,
       };
     }
@@ -230,16 +231,16 @@ function buildPrompt(category, dataSources, trendResult) {
       const topic = getKijiTopic(knowledgeData);
       if (isTopicCoolingDown(topic.topicKey)) return buildPrompt({ id: 'mame', label: '豆知識・役立ち' }, dataSources, trendResult);
       return {
-        userPrompt: `この記事のテーマについて自分の感想を1つ。
+        userPrompt: `この記事のテーマについて、情報を集めてる立場からの感想を1つ。
 
 テーマ: ${topic.article.title} - ${topic.article.description || ''}
 
-専門用語は使わない。「これ読んだけど、実際は〜だった」みたいに自分の体験と絡めた感想。共感されるように。
+専門用語は使わない。「この話題、相談者にもよく共有してる」「これ知らない人多いんだよね」みたいに。
 URLは本文に貼るな（リーチが激減するから）。記事の内容に触れるだけでいい。
 1行目はフックにして、その後に空行を入れろ。文章が詰まらないように空行で区切って読みやすくしろ。
 ハッシュタグはつけるな。
 
-長さ: ${getRandomLength()}${performanceHint}`,
+長さ: ${getRandomLength()}${performanceHint}${recentContext}`,
         topicKey: topic.topicKey,
       };
     }
@@ -250,15 +251,15 @@ URLは本文に貼るな（リーチが激減するから）。記事の内容�
       const sectionHeading = topic.section?.heading || '住宅ローン・資金計画';
       const sectionBody = topic.section?.body || '注文住宅を建てるときの費用や住宅ローンの選び方について';
       return {
-        userPrompt: `住宅ローンやお金のことで感じたことを1つ。
+        userPrompt: `住宅ローンやお金の相談で多い声を1つ。
 
 ネタ: ${sectionHeading} - ${sectionBody.slice(0, 200)}
 
-専門用語は使わない。月々いくらとか、見積もりでびっくりしたとか、みんなが共感できる「お金の不安・驚き・リアル」を。
+専門用語は使わない。「お金の相談で一番多いのは〜」「見積もりでびっくりする人多い」みたいに、みんなの声として伝えて。
 1行目はフックにして、その後に空行を入れろ。文章が詰まらないように空行で区切って読みやすくしろ。
 ハッシュタグはつけるな。
 
-長さ: ${getRandomLength()}${performanceHint}`,
+長さ: ${getRandomLength()}${performanceHint}${recentContext}`,
         topicKey: topic.topicKey,
       };
     }
@@ -272,28 +273,28 @@ URLは本文に貼るな（リーチが激減するから）。記事の内容�
       if (isTopicCoolingDown(topicKey)) {
         const altText = topics.find((t, i) => !isTopicCoolingDown(`kisetsu:${month}:${i}`)) || topicText;
         return {
-          userPrompt: `この時期の家づくり・暮らしについて1つ。
+          userPrompt: `この時期の家づくり・暮らしで相談が増える話題を1つ。
 
 ネタ: ${altText}
 
-専門用語は使わない。この季節に感じること、困ったこと、嬉しかったこと。共感されるように。
+専門用語は使わない。「この時期の相談で増えるのは〜」「この季節に困る人多いんだよね」みたいに。
 1行目はフックにして、その後に空行を入れろ。文章が詰まらないように空行で区切って読みやすくしろ。
 ハッシュタグはつけるな。
 
-長さ: ${lengthInstruction}${performanceHint}`,
+長さ: ${lengthInstruction}${performanceHint}${recentContext}`,
           topicKey: `kisetsu:${month}:${topics.indexOf(altText)}`,
         };
       }
       return {
-        userPrompt: `この時期の家づくり・暮らしについて1つ。
+        userPrompt: `この時期の家づくり・暮らしで相談が増える話題を1つ。
 
 ネタ: ${topicText}
 
-専門用語は使わない。この季節に感じること、困ったこと、嬉しかったこと。共感されるように。
+専門用語は使わない。「この時期の相談で増えるのは〜」「この季節に困る人多いんだよね」みたいに。
 1行目はフックにして、その後に空行を入れろ。文章が詰まらないように空行で区切って読みやすくしろ。
 ハッシュタグはつけるな。
 
-長さ: ${lengthInstruction}${performanceHint}`,
+長さ: ${lengthInstruction}${performanceHint}${recentContext}`,
         topicKey,
       };
     }
@@ -303,9 +304,9 @@ URLは本文に貼るな（リーチが激減するから）。記事の内容�
       if (isTopicCoolingDown(topic.topicKey)) {
         const alt = getSitePrTopic();
         if (isTopicCoolingDown(alt.topicKey)) return buildPrompt({ id: 'aruaru', label: 'あるあるネタ' }, dataSources, trendResult);
-        return buildSitePrompt(alt, performanceHint);
+        return buildSitePrompt(alt, performanceHint, recentContext);
       }
-      return buildSitePrompt(topic, performanceHint);
+      return buildSitePrompt(topic, performanceHint, recentContext);
     }
 
     default:
@@ -317,67 +318,66 @@ URLは本文に貼るな（リーチが激減するから）。記事の内容�
 // 新カテゴリ用プロンプトビルダー
 // ============================================================
 
-function buildAruaruPrompt(topic, performanceHint) {
+function buildAruaruPrompt(topic, performanceHint, recentContext = '') {
   return {
     userPrompt: `家づくりの「あるある」を1つ投稿して。みんなが「わかる！」って思えるやつ。
 
 ネタ: ${topic.text}
 
-このネタをベースに、自分の体験として語って。「〜だったわ」「〜なんだよね」みたいな雑な感じで。
+「〜って人多いんだよね」「相談で聞く声で多いのは〜」みたいに、みんなの声として伝えて。
 情報を伝えるんじゃなくて、共感を得るのが目的。
 1行目はフック（感情を動かす短い一文）にして、その後に空行を入れろ。
 文章が詰まらないように、話題の切れ目で空行を入れて読みやすくしろ。
 ハッシュタグはつけるな。
 
-長さ: ${getRandomLength()}${performanceHint}`,
+長さ: ${getRandomLength()}${performanceHint}${recentContext}`,
     topicKey: topic.topicKey,
   };
 }
 
-function buildKoukaiPrompt(topic, performanceHint) {
+function buildKoukaiPrompt(topic, performanceHint, recentContext = '') {
   return {
-    userPrompt: `家づくりで後悔してることを1つ投稿して。
+    userPrompt: `家づくりで後悔してる人の声を1つ投稿して。
 
 ネタ: ${topic.text}
 
-自分もこれやらかしたっていう体験として。「あの時こうしてれば」みたいな悔しさや切なさを出して。
-読んだ人が「わかる…」「自分も気をつけよう」って思えるように。完璧じゃない自分を見せて。
-1行目はフック（断言 or 告白）にして、その後に空行を入れろ。
+「後悔してるって声がめちゃ多い」「相談で一番聞くのは〜」みたいに、みんなの後悔を代弁して。
+読んだ人が「わかる…」「自分も気をつけよう」って思えるように。
+1行目はフック（断言 or 驚き）にして、その後に空行を入れろ。
 文章が詰まらないように、話題の切れ目で空行を入れて読みやすくしろ。
 ハッシュタグはつけるな。
 
-長さ: ${getRandomLength()}${performanceHint}`,
+長さ: ${getRandomLength()}${performanceHint}${recentContext}`,
     topicKey: topic.topicKey,
   };
 }
 
-function buildNewsPrompt(topic, performanceHint) {
+function buildNewsPrompt(topic, performanceHint, recentContext = '') {
   return {
-    userPrompt: `住宅・不動産関連のニュースや話題について、自分の感想を1つ投稿して。
+    userPrompt: `住宅・不動産関連のニュースや話題について、情報を集めてる立場から感想を1つ投稿して。
 
 ネタ: ${topic.text}
 
-ニュースを見て感じたこと・不安・驚きを、家を建てた当事者の目線で。
-「このニュース見てさ〜」みたいな日常会話のテンションで。
-専門用語は使わない。自分の家づくり経験と絡めて共感を呼ぶように。
+「家づくり情報集めてる立場で気になったのは〜」「これ、影響受ける人多そう」みたいに。
+専門用語は使わない。共感を呼ぶように。
 1行目はフックにして、その後に空行を入れろ。
 文章が詰まらないように空行で区切って読みやすくしろ。
 ハッシュタグはつけるな。
 
-長さ: ${getRandomLength()}${performanceHint}`,
+長さ: ${getRandomLength()}${performanceHint}${recentContext}`,
     topicKey: topic.topicKey,
   };
 }
 
-function buildSitePrompt(topic, performanceHint) {
+function buildSitePrompt(topic, performanceHint, recentContext = '') {
   return {
-    userPrompt: `三重県の注文住宅情報サイトを自分で運営してる立場として投稿して。
+    userPrompt: `三重県の注文住宅情報サイトを運営してる立場として投稿して。
 
 ネタ: ${topic.text}
 
 ■ 重要
-- ステマじゃない。サイト運営者として堂々とPRしていい
-- 「自分が作ったサイト」「うちのサイト」として普通に紹介
+- サイト運営者として堂々とPRしていい
+- 「うちのサイト」として普通に紹介
 - テンションは普段の投稿と同じタメ口。宣伝っぽい丁寧語はNG
 - 嬉しかった、作ってよかった、使ってほしい、みたいな素直な感情で
 - URLは本文に貼るな（外部リンクはリーチが激減する）。「プロフィールにリンクあるよ」と誘導しろ
@@ -385,81 +385,80 @@ function buildSitePrompt(topic, performanceHint) {
 - 文章が詰まらないように空行で区切って読みやすくしろ
 - ハッシュタグはつけるな
 
-長さ: 普通の長さ。100〜200文字。2〜3文。${performanceHint}`,
+長さ: 普通の長さ。100〜200文字。2〜3文。${performanceHint}${recentContext}`,
     topicKey: topic.topicKey,
   };
 }
 
-function buildKinshiPrompt(topic, performanceHint) {
+function buildKinshiPrompt(topic, performanceHint, recentContext = '') {
   return {
     userPrompt: `家づくりで「絶対やっちゃダメなこと」を1つ投稿して。読んだ人が保存したくなるやつ。
 
 ネタ: ${topic.text}
 
-自分がやらかした or 周りでやらかした人を見た体験として語って。
+「情報集めてて本当に多い失敗は〜」「相談でやらかした人めちゃ見る」みたいに。
 「マジでこれはやめとけ」っていう切実さを出せ。
-でも上から目線にならないように。自分も失敗した側として。
+でも上から目線にならないように。寄り添う感じで。
 読んだ人が「自分も気をつけよう」って思って保存したくなるように。
 1行目はフック（禁止 or 断言）にして、その後に空行を入れろ。
 文章が詰まらないように空行で区切って読みやすくしろ。
 ハッシュタグはつけるな。
 
-長さ: ${getRandomLength()}${performanceHint}`,
+長さ: ${getRandomLength()}${performanceHint}${recentContext}`,
     topicKey: topic.topicKey,
   };
 }
 
-function buildGyakusetsuPrompt(topic, performanceHint) {
+function buildGyakusetsuPrompt(topic, performanceHint, recentContext = '') {
   return {
     userPrompt: `家づくりの「常識の逆」「意外な真実」を1つ投稿して。読んだ人が「えっ？」ってなってコメントしたくなるやつ。
 
 ネタ: ${topic.text}
 
-自分の体験として語って。「みんなこう思ってるけど、実際は違った」っていう意外性を出せ。
-でも完全に否定するんじゃなくて、「〜だと思ってたけど、実は〜だった」くらいの温度感で。
+「色んな人の話聞いてきたけど、実は〜」「みんなこう思ってるけど、実際は違う」みたいな意外性を出せ。
+でも完全に否定するんじゃなくて、「〜だと思われがちだけど、実は〜」くらいの温度感で。
 読んだ人が「確かに」「いや、そうかな？」って意見を言いたくなるように。
 1行目はフック（常識を覆す一文）にして、その後に空行を入れろ。
 文章が詰まらないように空行で区切って読みやすくしろ。
 ハッシュタグはつけるな。
 
-長さ: ${getRandomLength()}${performanceHint}`,
+長さ: ${getRandomLength()}${performanceHint}${recentContext}`,
     topicKey: topic.topicKey,
   };
 }
 
-function buildMomegotoPrompt(topic, performanceHint) {
+function buildMomegotoPrompt(topic, performanceHint, recentContext = '') {
   return {
     userPrompt: `家づくりでの揉め事・トラブルについて1つ投稿して。
 
 ネタ: ${topic.text}
 
-自分もこういう揉め事あったっていう体験として。夫婦、業者、親、どれでも。
+「相談で聞くトラブルで多いのは〜」「夫婦で揉める人めちゃ多い」みたいに。
 ドロドロしすぎず、「あるよね〜」って思えるくらいの温度感で。
-結局どうなったかも一言あるといい。
 1行目はフックにして、その後に空行を入れろ。
 文章が詰まらないように空行で区切って読みやすくしろ。
 ハッシュタグはつけるな。
 
-長さ: ${getRandomLength()}${performanceHint}`,
+長さ: ${getRandomLength()}${performanceHint}${recentContext}`,
     topicKey: topic.topicKey,
   };
 }
 
-function buildHikakuPrompt(topic, performanceHint) {
+function buildHikakuPrompt(topic, performanceHint, recentContext = '') {
   return {
     userPrompt: `家づくりの「比較・どっちがいい？」系を1つ投稿して。読んだ人がコメントしたくなるやつ。
 
 ネタ: ${topic.text}
 
-自分の体験として語って。どっちを選んだか、選んでみてどうだったか。
-でも「こっちが正解」って断言しすぎるな。「正直どっちもあり」くらいの温度感で。
+「比較サイト運営してて一番聞かれるのは〜」「どっちがいいって聞かれるけど正直〜」みたいに。
+「こっちが正解」って断言しすぎるな。「正直どっちもあり」くらいの温度感で。
 読んだ人が「うちはこっちだった」「自分も迷った」ってコメントしたくなるように。
 最後に「みんなはどうした？」「どっち派？」みたいな問いかけで締めろ。
 1行目はフック（比較の核心 or 意外な結論）にして、その後に空行を入れろ。
 文章が詰まらないように空行で区切って読みやすくしろ。
 ハッシュタグはつけるな。
 
-長さ: ${getRandomLength()}${performanceHint}`,
+長さ: ${getRandomLength()}${performanceHint}${recentContext}`,
     topicKey: topic.topicKey,
   };
 }

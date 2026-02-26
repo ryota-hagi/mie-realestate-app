@@ -237,7 +237,7 @@ export async function generateArticlePost(userPrompt) {
  * @returns {string}
  */
 export async function generateReply(originalText, context = '') {
-  const userPrompt = `以下のThreads投稿に返信して。1〜2文で短く。自分の体験を1個だけ。
+  const userPrompt = `以下のThreads投稿に返信して。1〜2文で短く。注文住宅の情報を集めてる立場で共感して。
 
 投稿: 「${originalText}」
 ${context ? `\n背景: ${context}` : ''}`;
