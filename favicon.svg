@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <!-- House: compact, upper area -->
+  <path d="M256 72 L400 200 L380 200 L380 330 L132 330 L132 200 L112 200 Z" fill="white"/>
+  <!-- Window left -->
+  <rect x="170" y="225" width="52" height="46" rx="6" fill="url(#bg)" opacity="0.85"/>
+  <!-- Window right -->
+  <rect x="290" y="225" width="52" height="46" rx="6" fill="url(#bg)" opacity="0.85"/>
+  <!-- Door -->
+  <rect x="228" y="260" width="56" height="70" rx="6" fill="url(#bg)" opacity="0.85"/>
+  <!-- Comparison arrows ⇔ -->
+  <!-- Left arrow -->
+  <line x1="130" y1="400" x2="250" y2="400" stroke="white" stroke-width="28" stroke-linecap="round"/>
+  <polyline points="160,370 130,400 160,430" fill="none" stroke="white" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Right arrow -->
+  <line x1="262" y1="400" x2="382" y2="400" stroke="white" stroke-width="28" stroke-linecap="round"/>
+  <polyline points="352,370 382,400 352,430" fill="none" stroke="white" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
