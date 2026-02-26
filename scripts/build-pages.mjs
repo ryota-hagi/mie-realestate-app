@@ -25,6 +25,12 @@ const cityData = JSON.parse(readFileSync(join(ROOT, 'scripts/city-data.json'), '
 const knowledgeData = JSON.parse(readFileSync(join(ROOT, 'scripts/knowledge-data.json'), 'utf-8'));
 const areaHtml = readFileSync(join(ROOT, 'scripts/area-template.html'), 'utf-8');
 
+// MLIT hazard data (optional — skip gracefully if not yet generated)
+const mlitHazardPath = join(ROOT, 'data/mlit-hazard.json');
+const mlitHazard = existsSync(mlitHazardPath)
+  ? JSON.parse(readFileSync(mlitHazardPath, 'utf-8'))
+  : null;
+
 const DOMAIN = 'https://research.chuumon-soudan.com';
 const TODAY = new Date().toISOString().split('T')[0];
 
@@ -413,6 +419,54 @@ function buildCitySeoDataJs() {
 // ---------------------------------------------------------------------------
 // Static SEO content for city pages (visible to crawlers, hidden after JS loads)
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Disaster / safety section from MLIT DPF data
+// ---------------------------------------------------------------------------
+function buildDisasterSection(cityId) {
+  if (!mlitHazard) return '';
+  const d = mlitHazard.facilitiesByCity?.[cityId];
+  if (!d) return '';
+  const cityName = d.name;
+
+  // Flood rivers
+  const rivers = (d.floodRivers || []);
+  const riverHtml = rivers.length > 0
+    ? rivers.map(r => `<li>${escHtml(r)}</li>`).join('')
+    : '<li>データプラットフォーム上に登録なし（各市町村のハザードマップで確認してください）</li>';
+
+  // Flood risk badge
+  const riskLevel = d.floodRiskLevel || 'データなし';
+  const riskColor = riskLevel === '高' ? '#dc2626' : riskLevel === '中' ? '#f59e0b' : '#6b7280';
+
+  // Shelter count
+  const shelterCount = d.evacuationShelterCount || 0;
+  const schoolCount = d.schoolCount || 0;
+  const parkCount = d.parkCount || 0;
+
+  return `
+  <section class="seo-disaster-section">
+    <h2>🛡️ ${escHtml(cityName)}の防災・安全情報</h2>
+    <p>国土交通省データプラットフォーム（DPF）のオープンデータに基づく、${escHtml(cityName)}の防災・公共施設情報です。注文住宅の土地選びでは、災害リスクと避難施設の充実度も重要な判断基準になります。</p>
+
+    <h3>洪水浸水想定河川</h3>
+    <p>洪水リスクレベル: <span style="display:inline-block;padding:2px 10px;border-radius:4px;font-size:13px;font-weight:600;color:#fff;background:${riskColor};">${escHtml(riskLevel)}</span></p>
+    <ul>${riverHtml}</ul>
+
+    <h3>公共施設数</h3>
+    <table class="seo-disaster-table">
+      <thead><tr><th>施設種別</th><th>件数</th></tr></thead>
+      <tbody>
+        <tr><td>避難施設</td><td>${shelterCount}</td></tr>
+        <tr><td>学校</td><td>${schoolCount}</td></tr>
+        <tr><td>都市公園</td><td>${parkCount}</td></tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:12px;color:#9ca3af;margin-top:12px;">出典: <a href="https://www.mlit-data.jp/" rel="noopener" style="color:#9ca3af;">国土交通省データプラットフォーム</a>（CC BY 4.0）洪水浸水想定区域（A31）・避難施設（P20）・学校（P02）・都市公園（P29）</p>
+    <p style="font-size:12px;color:#9ca3af;">詳しくは<a href="/knowledge/hazard-map/" style="color:#3b82f6;">ハザードマップの見方と活用法</a>をご覧ください。</p>
+  </section>`;
+}
+
 function buildStaticCityContent(cityId) {
   const cd = cityData[cityId];
   if (!cd) return '';
@@ -468,6 +522,8 @@ function buildStaticCityContent(cityId) {
     ${seo.common_mistakes ? `<p>${escHtml(seo.common_mistakes)}</p>` : ''}
   </section>
 
+  ${buildDisasterSection(cityId)}
+
   <section>
     <h2>土地購入前チェックリスト</h2>
     ${cd.checklist_notes ? `<p>${escHtml(cd.checklist_notes)}</p>` : ''}
@@ -487,6 +543,7 @@ function buildStaticCityContent(cityId) {
 
   <footer>
     <p>データ出典: <a href="https://www.reinfolib.mlit.go.jp/" rel="noopener">国土交通省 不動産情報ライブラリ（REINFOLIB）</a>、<a href="https://www.land.mlit.go.jp/landPrice/AriaServlet?MOD=2&TYP=0" rel="noopener">国土交通省 地価公示</a></p>
+    <p>防災・施設データ: <a href="https://www.mlit-data.jp/" rel="noopener">国土交通省データプラットフォーム</a>（CC BY 4.0）</p>
     <p>最終更新: ${TODAY} ｜ 監修: <a href="/about/" rel="noopener">注文住宅比較.com</a> 編集部</p>
   </footer>
 </article>`;
@@ -641,6 +698,15 @@ function buildStaticContentCss() {
   .seo-static-content footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid #e5e7eb; font-size: 0.8rem; color: #6b7280; }
   .seo-faq-item { margin-bottom: 16px; padding: 12px 16px; background: #f9fafb; border-radius: 8px; }
   .seo-tip { margin-bottom: 12px; padding: 12px 16px; background: #eff6ff; border-radius: 8px; border-left: 4px solid #3b82f6; }
+
+  /* --- Disaster / Safety Section --- */
+  .seo-disaster-section { margin-top: 32px; padding: 20px; background: #fefce8; border: 1px solid #fde68a; border-radius: 12px; }
+  .seo-disaster-section h2 { border-bottom: 2px solid #fbbf24; color: #92400e; }
+  .seo-disaster-section h3 { font-size: 0.95rem; font-weight: 600; color: #78350f; margin-top: 16px; margin-bottom: 8px; }
+  .seo-disaster-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .seo-disaster-table th, .seo-disaster-table td { padding: 8px 12px; border: 1px solid #fde68a; font-size: 0.9rem; }
+  .seo-disaster-table th { background: #fef3c7; font-weight: 600; text-align: left; }
+  .seo-disaster-table td { background: #fffbeb; }
 
   /* --- Area Guide (SEO static version, hidden by JS) --- */
   .area-guide { max-width: 800px; margin: 32px auto 0; padding: 0 16px 32px; font-family: 'Noto Sans JP', sans-serif; color: #374151; line-height: 1.8; }

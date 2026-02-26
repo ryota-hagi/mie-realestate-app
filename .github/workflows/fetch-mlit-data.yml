@@ -1,0 +1,40 @@
+name: Fetch MLIT Data
+
+on:
+  schedule:
+    - cron: '0 18 1 * *'  # 毎月1日 AM3:00 JST (UTC 18:00)
+  workflow_dispatch: {}  # 手動実行ボタン
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fetch MLIT DPF data
+        run: node scripts/fetch-mlit-data.mjs
+        env:
+          MLIT_API_KEY: ${{ secrets.MLIT_API_KEY }}
+
+      - name: Rebuild pages with updated data
+        run: node scripts/build-pages.mjs
+
+      - name: Commit and push updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/mlit-hazard.json area/ knowledge/ about/ sitemap.xml
+          git diff --staged --quiet || git commit -m "chore: update MLIT data [$(date -u +%Y-%m-%d)]"
+          git push
