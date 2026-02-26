@@ -1,19 +1,25 @@
 {
-  "scannedAt": "2026-02-26T10:35:42.600Z",
+  "scannedAt": "2026-02-26T11:32:44.872Z",
   "keywords": {
+    "マイホーム": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
     "工務店": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "注文住宅": {
+    "間取り": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "家づくり": {
+    "住宅補助金": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -25,13 +31,7 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "マイホーム": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "土地探し": {
+    "新築": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -43,7 +43,7 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "三重県": {
+    "亀山": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
