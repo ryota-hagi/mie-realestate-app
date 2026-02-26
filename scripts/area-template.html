@@ -179,7 +179,10 @@
   .cmp-add-col-btn:hover { border-color: #3b82f6; color: #3b82f6; }
   .cmp-preset-btn { padding: 5px 13px; border-radius: 16px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: 1px solid #e5e7eb; background: white; color: #6b7280; }
   .cmp-preset-btn:hover { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; }
-  .cmp-row { background: white; border-radius: 10px; padding: 13px 14px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; border: 1px solid #f3f4f6; display: flex; align-items: center; gap: 10px; }
+  .cmp-row { background: white; border-radius: 10px; padding: 10px 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; border: 1px solid #f3f4f6; display: flex; align-items: center; gap: 6px; }
+  @media (min-width: 640px) { .cmp-row { padding: 13px 14px; gap: 10px; } }
+  .cmp-col-label-text { display: none; }
+  @media (min-width: 640px) { .cmp-col-label-text { display: inline; } }
   .cmp-row:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-color: #bfdbfe; }
   .cmp-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
   .cmp-modal-overlay.open { opacity: 1; pointer-events: auto; }
@@ -362,6 +365,7 @@ const AREAS = [
     landPriceAvg: 57020, residentialPrice: 48385, commercialPrice: 89007, pricePerTsubo: 188498,
     yoyChange: 1.33, population: 311000, popGrowthRate: -0.3, accessToNagoya: 35,
     hospitals: 42, schools: 58, parks: 35, shopping: 120, safetyScore: 78, childcareScore: 82, naturalScore: 55,
+    dpfShelterCount: 0, dpfSchoolCount: 0, dpfParkCount: 0, dpfFloodRiskLevel: '', dpfFloodRivers: [],
     description: "三重県最大の都市。石油化学コンビナートと港湾を擁する産業都市。近鉄・JR両線で名古屋へ直通。大型商業施設が充実し、医療・教育インフラも県内トップクラス。",
     highlights: ["県内最大の商業集積", "名古屋へ35分", "医療施設充実", "東名阪・新名神IC"],
     risks: ["一部地域の大気環境", "中心部の地価上昇"],
@@ -373,6 +377,7 @@ const AREAS = [
     landPriceAvg: 55543, residentialPrice: 53686, commercialPrice: 86714, pricePerTsubo: 183614,
     yoyChange: 0.82, population: 140000, popGrowthRate: -0.5, accessToNagoya: 25,
     hospitals: 18, schools: 28, parks: 22, shopping: 55, safetyScore: 82, childcareScore: 85, naturalScore: 68,
+    dpfShelterCount: 0, dpfSchoolCount: 0, dpfParkCount: 0, dpfFloodRiskLevel: '', dpfFloodRivers: [],
     description: "名古屋への通勤圏として人気。桑名駅から名古屋まで最短25分。ナガシマスパーランドやなばなの里など観光資源も豊富。歴史的な城下町の風情が残る。",
     highlights: ["名古屋へ最短25分","子育て環境◎","観光資源豊富","住環境の良さ"],
     risks: ["揖斐川・長良川の洪水リスク","人口減少傾向"],
@@ -384,6 +389,7 @@ const AREAS = [
     landPriceAvg: 41015, residentialPrice: 38000, commercialPrice: 62000, pricePerTsubo: 135587,
     yoyChange: 1.11, population: 195000, popGrowthRate: -0.2, accessToNagoya: 55,
     hospitals: 25, schools: 42, parks: 28, shopping: 72, safetyScore: 80, childcareScore: 80, naturalScore: 65,
+    dpfShelterCount: 0, dpfSchoolCount: 0, dpfParkCount: 0, dpfFloodRiskLevel: '', dpfFloodRivers: [],
     description: "鈴鹿サーキットとHonda技研の企業城下町。名古屋圏と比べ地価が手頃で、広い土地を確保しやすい。新名神鈴鹿スマートICの開通で交通利便性が向上。",
     highlights: ["地価が手頃で広い家が建てやすい","Honda関連の雇用安定","新名神スマートIC","中勢バイパス整備"],
     risks: ["名古屋通勤にはやや遠い","沿岸部の津波リスク"],
@@ -395,6 +401,7 @@ const AREAS = [
     landPriceAvg: 24500, residentialPrice: 22000, commercialPrice: 35000, pricePerTsubo: 81000,
     yoyChange: 0.45, population: 44000, popGrowthRate: -0.8, accessToNagoya: 65,
     hospitals: 6, schools: 14, parks: 18, shopping: 15, safetyScore: 88, childcareScore: 75, naturalScore: 95,
+    dpfShelterCount: 0, dpfSchoolCount: 0, dpfParkCount: 0, dpfFloodRiskLevel: '', dpfFloodRivers: [],
     description: "鈴鹿山脈の麓に広がる自然豊かなまち。アウトドアレジャーが充実し、移住先として注目度上昇中。地価は県北部で最も手頃な水準。",
     highlights: ["圧倒的な自然環境","地価が非常に手頃","移住支援制度充実","アウトドア天国"],
     risks: ["商業施設が少ない","公共交通が不便","人口減少"],
@@ -406,6 +413,7 @@ const AREAS = [
     landPriceAvg: 29500, residentialPrice: 27000, commercialPrice: 42000, pricePerTsubo: 97500,
     yoyChange: 0.68, population: 49000, popGrowthRate: -0.6, accessToNagoya: 60,
     hospitals: 8, schools: 16, parks: 15, shopping: 22, safetyScore: 85, childcareScore: 76, naturalScore: 80,
+    dpfShelterCount: 0, dpfSchoolCount: 0, dpfParkCount: 0, dpfFloodRiskLevel: '', dpfFloodRivers: [],
     description: "東名阪と新名神が交差する交通の要衝。旧東海道の宿場町の歴史を持つ。Sharp亀山工場をはじめ製造業が集積。",
     highlights: ["高速道路の結節点","製造業の雇用","歴史的な街並み","割安な地価"],
     risks: ["JRの本数が少ない","商業施設が限定的"],
@@ -417,6 +425,7 @@ const AREAS = [
     landPriceAvg: 31000, residentialPrice: 29000, commercialPrice: 45000, pricePerTsubo: 102500,
     yoyChange: 0.55, population: 41000, popGrowthRate: -0.1, accessToNagoya: 50,
     hospitals: 7, schools: 12, parks: 20, shopping: 25, safetyScore: 86, childcareScore: 83, naturalScore: 92,
+    dpfShelterCount: 0, dpfSchoolCount: 0, dpfParkCount: 0, dpfFloodRiskLevel: '', dpfFloodRivers: [],
     description: "御在所岳と湯の山温泉を抱える観光と自然のまち。近鉄湯の山線で四日市へ直通。人口減少率が低く、移住先として人気が高い。",
     highlights: ["温泉と自然環境","人口減少率が低い","四日市へのアクセス良好","移住人気上昇中"],
     risks: ["鉄道は湯の山線のみ","大型商業施設が少ない"],
@@ -428,6 +437,7 @@ const AREAS = [
     landPriceAvg: 35500, residentialPrice: 33000, commercialPrice: 48000, pricePerTsubo: 117400,
     yoyChange: 0.72, population: 26000, popGrowthRate: 0.1, accessToNagoya: 40,
     hospitals: 5, schools: 8, parks: 12, shopping: 18, safetyScore: 87, childcareScore: 88, naturalScore: 72,
+    dpfShelterCount: 0, dpfSchoolCount: 0, dpfParkCount: 0, dpfFloodRiskLevel: '', dpfFloodRivers: [],
     description: "イオンモール東員を中心に商業施設が充実したコンパクトシティ。人口が微増傾向でファミリー層に人気。",
     highlights: ["人口増加傾向","イオンモール東員","子育て世代に人気","コンパクトで住みやすい"],
     risks: ["鉄道アクセスが限定的","町域が狭い"],
@@ -435,6 +445,9 @@ const AREAS = [
     recAreas: ["東員駅周辺（駅近）","笹尾エリア（ファミリー向け）","城山エリア（新興住宅地）"]
   }
 ];
+
+// DPF Shelter coordinate data (injected by build-pages.mjs)
+const SHELTER_DATA = {};
 
 const COLORS = ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4'];
 
@@ -448,7 +461,7 @@ const state = {
   mcpStatus: 'disconnected', // disconnected | connecting | connected | error
   mcpMessage: '',
   mcpLiveData: null,
-  weights: { price: 25, access: 20, growth: 15, living: 15, family: 15, nature: 10 },
+  weights: { price: 20, access: 18, growth: 13, living: 13, family: 13, nature: 10, safety: 13 },
   charts: {},
   mapSelectedDistrict: null,  // { cityId, districtName } or null
   cmpSelectedColumns: ['pricePerTsubo','accessToNagoya','total'],
@@ -460,9 +473,10 @@ const state = {
 // Weight Presets (for collapsible weights box)
 // ============================================================
 const WEIGHT_PRESETS = {
-  kosodate: { label: '🍼 子育て重視', weights: { price: 10, access: 10, growth: 5, living: 20, family: 35, nature: 20 } },
-  tsuukin:  { label: '🚃 通勤重視',  weights: { price: 15, access: 35, growth: 20, living: 15, family: 10, nature: 5 } },
-  kakaku:   { label: '💰 価格重視',  weights: { price: 35, access: 10, growth: 25, living: 15, family: 10, nature: 5 } },
+  kosodate: { label: '🍼 子育て重視', weights: { price: 10, access: 10, growth: 5, living: 15, family: 30, nature: 10, safety: 20 } },
+  tsuukin:  { label: '🚃 通勤重視',  weights: { price: 15, access: 30, growth: 18, living: 12, family: 10, nature: 5, safety: 10 } },
+  kakaku:   { label: '💰 価格重視',  weights: { price: 30, access: 10, growth: 22, living: 13, family: 10, nature: 5, safety: 10 } },
+  bousai:   { label: '🛡️ 防災重視',  weights: { price: 10, access: 5, growth: 5, living: 10, family: 15, nature: 10, safety: 45 } },
 };
 
 // ============================================================
@@ -478,7 +492,7 @@ const CMP_COLUMNS = [
   { key: 'yoyChange', label: '地価変動率', icon: '📉', format: v => `+${v}%` },
   { key: 'hospitals', label: '医療施設', icon: '🏥', format: v => `${v}件` },
   { key: 'schools', label: '学校数', icon: '🏫', format: v => `${v}校` },
-  { key: 'parks', label: '公園数', icon: '🌳', format: v => `${v}箇所` },
+  { key: 'parks', label: '公園数', icon: '🌳', format: v => `${v}件` },
   { key: 'shopping', label: '商業施設', icon: '🛒', format: v => `${v}件` },
   { key: 'price', label: '価格スコア', icon: '💎', format: v => `${v}pt`, isScore: true },
   { key: 'access', label: '交通スコア', icon: '🚄', format: v => `${v}pt`, isScore: true },
@@ -486,14 +500,19 @@ const CMP_COLUMNS = [
   { key: 'living', label: '利便スコア', icon: '🏪', format: v => `${v}pt`, isScore: true },
   { key: 'family', label: '子育スコア', icon: '👶', format: v => `${v}pt`, isScore: true },
   { key: 'nature', label: '自然スコア', icon: '🍃', format: v => `${v}pt`, isScore: true },
+  { key: 'safety', label: '防災スコア', icon: '🛡️', format: v => `${v}pt`, isScore: true },
+  { key: 'dpfShelterCount', label: '避難施設', icon: '🏠', format: v => `${v}件` },
+  { key: 'dpfFloodRiskLevel', label: '洪水リスク', icon: '🌊', format: v => (v && v !== 'データなし') ? v : '—' },
+  { key: 'dpfParkCount', label: '公園', icon: '🌳', format: v => `${v}件` },
 ];
 const CMP_PRESETS = {
   kosodate: { label: '🍼 子育て重視', cols: ['pricePerTsubo','family','schools','parks','hospitals'] },
   tsuukin: { label: '🚃 通勤重視', cols: ['accessToNagoya','access','pricePerTsubo','total'] },
   kakaku: { label: '💰 価格重視', cols: ['pricePerTsubo','residentialPrice','yoyChange','price'] },
+  bousai: { label: '🛡️ 防災重視', cols: ['safety','dpfShelterCount','dpfFloodRiskLevel','dpfParkCount','total'] },
 };
 function getCmpVal(area, key) {
-  if (['price','access','growth','living','family','nature','total'].includes(key)) return area.scores[key];
+  if (['price','access','growth','living','family','nature','safety','total'].includes(key)) return area.scores[key];
   return area[key];
 }
 
@@ -507,6 +526,8 @@ let schoolDistrictData = null; // cached GeoJSON data
 let showSchoolDistricts = false; // toggle state
 let districtAreaLayer = null; // LayerGroup for district area circles
 let showDistrictAreas = false; // toggle state
+let shelterMarkerLayer = null; // LayerGroup for DPF shelter markers
+let showShelters = false; // toggle state
 
 // ============================================================
 // Score Calculation
@@ -518,8 +539,12 @@ function calcScores(area, w) {
   const livingScore = (area.hospitals/45)*25 + (area.schools/60)*25 + (area.shopping/120)*25 + (area.safetyScore/100)*25;
   const familyScore = (area.childcareScore + area.safetyScore + Math.min(100,(area.parks/35)*100)) / 3;
   const natureScore = area.naturalScore;
-  const total = priceScore*(w.price/100) + accessScore*(w.access/100) + growthScore*(w.growth/100) + livingScore*(w.living/100) + familyScore*(w.family/100) + natureScore*(w.nature/100);
-  return { price: Math.round(priceScore), access: Math.round(accessScore), growth: Math.round(growthScore), living: Math.round(livingScore), family: Math.round(familyScore), nature: Math.round(natureScore), total: Math.round(total) };
+  // Safety score: blend base safetyScore with DPF shelter density and flood risk
+  const shelterDensity = Math.min(100, (area.dpfShelterCount / 400) * 100);
+  const floodPenalty = area.dpfFloodRiskLevel === '高' ? -15 : area.dpfFloodRiskLevel === '中' ? -5 : 0;
+  const safetyScore = Math.min(100, Math.max(0, area.safetyScore * 0.5 + shelterDensity * 0.5 + floodPenalty));
+  const total = priceScore*(w.price/100) + accessScore*(w.access/100) + growthScore*(w.growth/100) + livingScore*(w.living/100) + familyScore*(w.family/100) + natureScore*(w.nature/100) + safetyScore*(w.safety/100);
+  return { price: Math.round(priceScore), access: Math.round(accessScore), growth: Math.round(growthScore), living: Math.round(livingScore), family: Math.round(familyScore), nature: Math.round(natureScore), safety: Math.round(safetyScore), total: Math.round(total) };
 }
 
 function getRankedAreas() {
@@ -1126,7 +1151,8 @@ function renderWeights() {
     { key: 'growth', label: '資産価値上昇', icon: '📈' },
     { key: 'living', label: '生活利便性', icon: '🏪' },
     { key: 'family', label: '子育て環境', icon: '👨‍👩‍👧‍👦' },
-    { key: 'nature', label: '自然環境', icon: '🌿' }
+    { key: 'nature', label: '自然環境', icon: '🌿' },
+    { key: 'safety', label: '防災安全', icon: '🛡️' }
   ];
 
   // Determine active preset
@@ -1150,8 +1176,8 @@ function renderWeights() {
           <svg style="width:12px;height:12px;transition:transform 0.3s;${state.weightsExpanded ? 'transform:rotate(180deg);' : ''}" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
         </button>
       </div>
-      <div id="weights-sliders" style="overflow:hidden;max-height:${state.weightsExpanded ? '300px' : '0'};opacity:${state.weightsExpanded ? '1' : '0'};transition:max-height 0.35s ease, opacity 0.3s ease;margin-top:${state.weightsExpanded ? '16px' : '0'};">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div id="weights-sliders" style="overflow:hidden;max-height:${state.weightsExpanded ? '500px' : '0'};opacity:${state.weightsExpanded ? '1' : '0'};transition:max-height 0.35s ease, opacity 0.3s ease;margin-top:${state.weightsExpanded ? '16px' : '0'};">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           ${items.map(i => `
             <div class="flex items-center gap-3">
               <span class="text-xl w-8 text-center">${i.icon}</span>
@@ -1267,17 +1293,17 @@ function renderCompare(ranked) {
           const medalBg = idx < 3 ? '#3b82f6' : '#94a3b8';
           return `
           <div class="cmp-row" data-cmp-open-detail="${a.id}">
-            <span style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;flex-shrink:0;background:${medalBg}">${idx+1}</span>
-            <span style="font-weight:600;color:#111827;width:5em;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;">${a.name}</span>
+            <span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700;flex-shrink:0;background:${medalBg}">${idx+1}</span>
+            <span style="font-weight:600;color:#111827;width:4em;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;">${a.name}</span>
             ${cols.map(c => {
               const val = getCmpVal(a, c.key);
               const scoreColor = c.isScore ? (val >= 80 ? '#2563eb' : val >= 70 ? '#16a34a' : '#4b5563') : '#1f2937';
               return `<div style="flex:1;text-align:center;min-width:0;">
-                <div style="font-size:11px;color:#9ca3af;margin-bottom:2px;" class="hidden sm:block">${c.label}</div>
-                <div style="font-size:13px;font-weight:700;color:${scoreColor}">${c.format(val)}</div>
+                <div style="font-size:10px;color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.icon}<span class="cmp-col-label-text"> ${c.label}</span></div>
+                <div style="font-size:12px;font-weight:700;color:${scoreColor};white-space:nowrap;">${c.format(val)}</div>
               </div>`;
             }).join('')}
-            <svg style="width:16px;height:16px;flex-shrink:0;color:#d1d5db;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <svg style="width:14px;height:14px;flex-shrink:0;color:#d1d5db;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </div>
           `;
         }).join('')}
@@ -1294,7 +1320,8 @@ function renderDetail(area, ranked) {
     { key: 'growth', label: '資産価値上昇', color: '#f59e0b' },
     { key: 'living', label: '生活利便性', color: '#ef4444' },
     { key: 'family', label: '子育て環境', color: '#8b5cf6' },
-    { key: 'nature', label: '自然環境', color: '#06b6d4' }
+    { key: 'nature', label: '自然環境', color: '#06b6d4' },
+    { key: 'safety', label: '防災安全', color: '#f97316' }
   ];
 
   return `
@@ -1322,7 +1349,7 @@ function renderDetail(area, ranked) {
             <span class="text-4xl font-bold text-blue-600">${area.scores.total}</span>
             <span class="text-sm text-gray-400 ml-1">/ 100点</span>
           </div>
-          <div class="grid grid-cols-3 gap-2 mt-4">
+          <div class="grid grid-cols-4 gap-2 mt-4">
             ${scoreItems.map(s => `
               <div class="text-center">
                 <div class="text-xs text-gray-500">${s.label}</div>
@@ -1345,6 +1372,7 @@ function renderDetail(area, ranked) {
               ['🏥 医療施設', `${area.hospitals}施設`],
               ['🏫 教育施設', `${area.schools}施設`],
               ['🛍 商業施設', `${area.shopping}施設`],
+              ['🛡️ 防災スコア', `${area.scores.safety}点`],
             ].map(([l,v]) => `
               <div class="flex justify-between items-center py-2 border-b border-gray-50">
                 <span class="text-sm text-gray-600">${l}</span>
@@ -1387,6 +1415,33 @@ function renderDetail(area, ranked) {
         </div>
       </div>
 
+      <!-- 防災・安全情報 -->
+      <div class="card p-5">
+        <h3 class="text-base font-bold text-gray-700 mb-3">🛡️ 防災・安全情報</h3>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+          <span style="display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:6px;font-size:13px;font-weight:600;color:#fff;background:${area.dpfFloodRiskLevel === '高' ? '#dc2626' : area.dpfFloodRiskLevel === '中' ? '#d97706' : '#6b7280'};">🌊 洪水リスク: ${area.dpfFloodRiskLevel || 'データなし'}</span>
+          ${area.dpfFloodRivers.length > 0 ? area.dpfFloodRivers.map(r => '<span style="padding:3px 10px;border-radius:6px;font-size:12px;background:#eff6ff;color:#2563eb;font-weight:500;">🏞️ ' + r + '</span>').join('') : ''}
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 8px;text-align:center;">
+            <div style="font-size:20px;margin-bottom:2px;">🏠</div>
+            <div style="font-size:20px;font-weight:700;color:#1e293b;">${area.dpfShelterCount}<span style="font-size:11px;font-weight:400;color:#94a3b8;margin-left:2px;">件</span></div>
+            <div style="font-size:11px;color:#64748b;margin-top:2px;">避難施設</div>
+          </div>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 8px;text-align:center;">
+            <div style="font-size:20px;margin-bottom:2px;">🏫</div>
+            <div style="font-size:20px;font-weight:700;color:#1e293b;">${area.dpfSchoolCount}<span style="font-size:11px;font-weight:400;color:#94a3b8;margin-left:2px;">校</span></div>
+            <div style="font-size:11px;color:#64748b;margin-top:2px;">教育施設</div>
+          </div>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 8px;text-align:center;">
+            <div style="font-size:20px;margin-bottom:2px;">🌳</div>
+            <div style="font-size:20px;font-weight:700;color:#1e293b;">${area.dpfParkCount}<span style="font-size:11px;font-weight:400;color:#94a3b8;margin-left:2px;">箇所</span></div>
+            <div style="font-size:11px;color:#64748b;margin-top:2px;">公園・緑地</div>
+          </div>
+        </div>
+        <p style="font-size:10px;color:#a1a1aa;margin-top:10px;">出典: <a href="https://www.mlit-data.jp/" target="_blank" rel="noopener" style="color:#a1a1aa;text-decoration:underline;">国土交通省データプラットフォーム</a>（CC BY 4.0）</p>
+      </div>
+
       <!-- おすすめエリア -->
       <div class="rounded-xl p-6 bg-blue-50 border border-blue-200">
         <h3 class="text-base font-bold text-blue-700 mb-3">🎯 ${area.name}のおすすめ物件エリア</h3>
@@ -1420,6 +1475,9 @@ function renderMap(ranked) {
           <button id="btn-school-toggle" class="school-toggle ${showSchoolDistricts ? 'active' : ''}" onclick="toggleSchoolDistricts()">
             <span>${showSchoolDistricts ? '🏫 学区 ON' : '🏫 学区'}</span>
           </button>
+          <button id="btn-shelter-toggle" class="school-toggle ${showShelters ? 'active' : ''}" onclick="toggleShelters()">
+            <span>${showShelters ? '🏠 避難施設 ON' : '🏠 避難施設'}</span>
+          </button>
           <button id="btn-fullscreen-toggle" class="map-fullscreen-btn" onclick="toggleMapFullscreen()">
             <span id="fullscreen-icon">⛶</span> <span id="fullscreen-label">拡大</span>
           </button>
@@ -1433,6 +1491,9 @@ function renderMap(ranked) {
         </button>
         <button class="school-toggle ${showSchoolDistricts ? 'active' : ''}" onclick="toggleSchoolDistricts()">
           <span>${showSchoolDistricts ? '🏫 学区 ON' : '🏫 学区'}</span>
+        </button>
+        <button class="school-toggle ${showShelters ? 'active' : ''}" onclick="toggleShelters()">
+          <span>${showShelters ? '🏠 避難施設 ON' : '🏠 避難施設'}</span>
         </button>
         <button class="map-fullscreen-btn active" onclick="toggleMapFullscreen()">
           <span>✕</span> <span>閉じる</span>
@@ -1677,6 +1738,47 @@ function toggleSchoolDistricts() {
   }
 }
 
+// ============================================================
+// Shelter Markers (DPF data)
+// ============================================================
+function toggleShelters() {
+  showShelters = !showShelters;
+  const btn = document.getElementById('btn-shelter-toggle');
+  if (btn) {
+    btn.classList.toggle('active', showShelters);
+    btn.querySelector('span').textContent = showShelters ? '🏠 避難施設 ON' : '🏠 避難施設';
+  }
+  if (showShelters) {
+    renderShelterMarkers();
+  } else {
+    if (shelterMarkerLayer && mapInstance) {
+      mapInstance.removeLayer(shelterMarkerLayer);
+      shelterMarkerLayer = null;
+    }
+  }
+}
+
+function renderShelterMarkers() {
+  if (!mapInstance) return;
+  // Remove existing
+  if (shelterMarkerLayer) { mapInstance.removeLayer(shelterMarkerLayer); shelterMarkerLayer = null; }
+
+  // Only show for selected city, or all at overview zoom
+  const cityId = state.mapSelectedAreaId;
+  const shelters = cityId && SHELTER_DATA[cityId] ? SHELTER_DATA[cityId] : [];
+
+  if (shelters.length === 0) return;
+
+  shelterMarkerLayer = L.layerGroup();
+  shelters.forEach(s => {
+    L.circleMarker([s.lat, s.lon], {
+      radius: 5, fillColor: '#16a34a', color: '#15803d', weight: 1, opacity: 0.8, fillOpacity: 0.6
+    }).bindTooltip(s.name, { direction: 'top', offset: [0, -6], className: 'map-tooltip' })
+      .addTo(shelterMarkerLayer);
+  });
+  shelterMarkerLayer.addTo(mapInstance);
+}
+
 async function renderSchoolDistricts() {
   if (!mapInstance) return;
   const data = await loadSchoolDistrictData();
@@ -1790,6 +1892,7 @@ function initializeMap(ranked) {
       // Geocode districts before showing pins
       await geocodeAreaDistricts(area);
       showTransactionPins(area);
+      if (showShelters) renderShelterMarkers();
       mapInstance.flyTo([area.lat, area.lng], 13, { duration: 0.8 });
 
       // 未取得エリアなら優先指定（自動取得中→次に処理、停止中→直接取得）
@@ -1817,6 +1920,9 @@ function initializeMap(ranked) {
   }
   if (showDistrictAreas) {
     renderDistrictAreas();
+  }
+  if (showShelters) {
+    renderShelterMarkers();
   }
 
   // If area already selected, zoom to it and auto-fetch full data
@@ -2881,9 +2987,9 @@ function openCmpDetailModal(areaId) {
   const area = ranked.find(a => a.id === areaId);
   if (!area) return;
 
-  const scoreKeys = ['price','access','growth','living','family','nature'];
-  const SCORE_LABELS_LONG = { price:'価格の手頃さ', access:'名古屋アクセス', growth:'資産価値上昇', living:'生活利便性', family:'子育て環境', nature:'自然環境' };
-  const SCORE_COLORS = { price:'#3b82f6', access:'#10b981', growth:'#f59e0b', living:'#ef4444', family:'#8b5cf6', nature:'#06b6d4' };
+  const scoreKeys = ['price','access','growth','living','family','nature','safety'];
+  const SCORE_LABELS_LONG = { price:'価格の手頃さ', access:'名古屋アクセス', growth:'資産価値上昇', living:'生活利便性', family:'子育て環境', nature:'自然環境', safety:'防災安全' };
+  const SCORE_COLORS = { price:'#3b82f6', access:'#10b981', growth:'#f59e0b', living:'#ef4444', family:'#8b5cf6', nature:'#06b6d4', safety:'#f97316' };
 
   const body = document.getElementById('cmp-detail-modal-body');
   body.innerHTML = `
@@ -2899,7 +3005,7 @@ function openCmpDetailModal(areaId) {
     <div style="position:relative; height:240px; margin-bottom:16px;">
       <canvas id="cmp-radar-modal"></canvas>
     </div>
-    <div class="grid grid-cols-3 gap-2 mb-4">
+    <div class="grid grid-cols-4 gap-2 mb-4">
       ${scoreKeys.map(k => `
         <div class="text-center">
           <div class="text-xs text-gray-400">${SCORE_LABELS_LONG[k]}</div>
@@ -2946,6 +3052,31 @@ function openCmpDetailModal(areaId) {
       </div>
     </div>
     ` : ''}
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:16px;">
+      <div style="font-size:14px;font-weight:700;color:#374151;margin-bottom:10px;">🛡️ 防災・安全情報</div>
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+        <span style="display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#fff;background:${area.dpfFloodRiskLevel === '高' ? '#dc2626' : area.dpfFloodRiskLevel === '中' ? '#d97706' : '#6b7280'};">🌊 洪水リスク: ${area.dpfFloodRiskLevel || 'データなし'}</span>
+        ${(area.dpfFloodRivers || []).map(r => '<span style="padding:2px 8px;border-radius:6px;font-size:11px;background:#eff6ff;color:#2563eb;font-weight:500;">🏞️ ' + r + '</span>').join('')}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 6px;text-align:center;">
+          <div style="font-size:16px;margin-bottom:1px;">🏠</div>
+          <div style="font-size:18px;font-weight:700;color:#1e293b;">${area.dpfShelterCount}<span style="font-size:10px;font-weight:400;color:#94a3b8;margin-left:1px;">件</span></div>
+          <div style="font-size:10px;color:#64748b;margin-top:1px;">避難施設</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 6px;text-align:center;">
+          <div style="font-size:16px;margin-bottom:1px;">🏫</div>
+          <div style="font-size:18px;font-weight:700;color:#1e293b;">${area.dpfSchoolCount}<span style="font-size:10px;font-weight:400;color:#94a3b8;margin-left:1px;">校</span></div>
+          <div style="font-size:10px;color:#64748b;margin-top:1px;">教育施設</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 6px;text-align:center;">
+          <div style="font-size:16px;margin-bottom:1px;">🌳</div>
+          <div style="font-size:18px;font-weight:700;color:#1e293b;">${area.dpfParkCount}<span style="font-size:10px;font-weight:400;color:#94a3b8;margin-left:1px;">箇所</span></div>
+          <div style="font-size:10px;color:#64748b;margin-top:1px;">公園・緑地</div>
+        </div>
+      </div>
+      <p style="font-size:10px;color:#a1a1aa;margin-top:8px;">出典: <a href="https://www.mlit-data.jp/" target="_blank" rel="noopener" style="color:#a1a1aa;text-decoration:underline;">国土交通省データプラットフォーム</a>（CC BY 4.0）</p>
+    </div>
     <div class="bg-gray-50 rounded-xl p-4">
       <div class="text-xs font-semibold text-gray-500 mb-2">地価推移（2020-2025）</div>
       <div style="position:relative; height:180px;">
@@ -3081,10 +3212,10 @@ function drawDetailCharts(area) {
     state.charts.radar = new Chart(radarCtx, {
       type: 'radar',
       data: {
-        labels: ['価格', '交通', '成長性', '利便性', '子育て', '自然'],
+        labels: ['価格', '交通', '成長性', '利便性', '子育て', '自然', '防災'],
         datasets: [{
           label: area.name,
-          data: [area.scores.price, area.scores.access, area.scores.growth, area.scores.living, area.scores.family, area.scores.nature],
+          data: [area.scores.price, area.scores.access, area.scores.growth, area.scores.living, area.scores.family, area.scores.nature, area.scores.safety],
           backgroundColor: '#3b82f6' + '30',
           borderColor: '#3b82f6',
           borderWidth: 2,
@@ -3203,7 +3334,7 @@ function bindEvents(ranked) {
       const sliders = document.getElementById('weights-sliders');
       if (sliders) {
         if (state.weightsExpanded) {
-          sliders.style.maxHeight = '300px';
+          sliders.style.maxHeight = '500px';
           sliders.style.opacity = '1';
           sliders.style.marginTop = '16px';
         } else {

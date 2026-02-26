@@ -56,6 +56,51 @@ function escHtml(s) {
 }
 
 // ---------------------------------------------------------------------------
+// DPF data injection into AREAS array and SHELTER_DATA constant
+// ---------------------------------------------------------------------------
+function injectDpfData(html) {
+  if (!mlitHazard) return html;
+
+  const fbc = mlitHazard.facilitiesByCity || {};
+
+  // Inject DPF fields into each AREAS entry
+  for (const city of CITIES) {
+    const d = fbc[city.id];
+    if (!d) continue;
+
+    const rivers = (d.floodRivers || []).map(r => `'${r.replace(/'/g, "\\'")}'`).join(',');
+    const riskLevel = (d.floodRiskLevel || '').replace(/'/g, "\\'");
+
+    // Replace the placeholder DPF fields for this city
+    html = html.replace(
+      new RegExp(
+        `(id:\\s*"${city.id}"[^}]*?)dpfShelterCount:\\s*0,\\s*dpfSchoolCount:\\s*0,\\s*dpfParkCount:\\s*0,\\s*dpfFloodRiskLevel:\\s*'',\\s*dpfFloodRivers:\\s*\\[\\]`
+      ),
+      `$1dpfShelterCount: ${d.evacuationShelterCount || 0}, dpfSchoolCount: ${d.schoolCount || 0}, dpfParkCount: ${d.parkCount || 0}, dpfFloodRiskLevel: '${riskLevel}', dpfFloodRivers: [${rivers}]`
+    );
+  }
+
+  // Inject SHELTER_DATA constant
+  const shelterObj = {};
+  for (const city of CITIES) {
+    const d = fbc[city.id];
+    if (!d || !d.shelterList) { shelterObj[city.id] = []; continue; }
+    shelterObj[city.id] = d.shelterList.map(s => ({
+      name: s.name,
+      lat: Math.round(s.lat * 10000) / 10000,
+      lon: Math.round(s.lon * 10000) / 10000
+    }));
+  }
+  const shelterJson = JSON.stringify(shelterObj);
+  html = html.replace(
+    'const SHELTER_DATA = {};',
+    `const SHELTER_DATA = ${shelterJson};`
+  );
+
+  return html;
+}
+
+// ---------------------------------------------------------------------------
 // Cost Simulator HTML (rendered as a section)
 // ---------------------------------------------------------------------------
 function buildCostSimulatorHtml(cityId) {
@@ -806,7 +851,7 @@ function buildCityLinksSection() {
 // Generate Hub Page (area/mie/index.html)
 // ---------------------------------------------------------------------------
 function generateHubPage() {
-  let html = areaHtml;
+  let html = injectDpfData(areaHtml);
 
   // 1. Update <title>
   html = html.replace(
@@ -1101,7 +1146,7 @@ function generateCityPage(cityId) {
   const cityObj = CITIES.find(c => c.id === cityId);
   const cityName = cityObj.name;
 
-  let html = areaHtml;
+  let html = injectDpfData(areaHtml);
 
   // 1. Update <title>
   html = html.replace(
