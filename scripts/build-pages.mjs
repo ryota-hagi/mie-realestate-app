@@ -1673,7 +1673,7 @@ ${faqJsonLd}
   /* データ比較テーブル */
   .ka-table-wrap { overflow-x: auto; margin: 20px 0; -webkit-overflow-scrolling: touch; }
   .ka-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 480px; }
-  .ka-table th { background: #1e3a5f; color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; white-space: nowrap; }
+  .ka-table th { background: #2563EB; color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; white-space: nowrap; }
   .ka-table td { padding: 10px 14px; border-bottom: 1px solid #e5e7eb; }
   .ka-table tr:nth-child(even) td { background: #f8fafc; }
   .ka-table tr:hover td { background: #eff6ff; }
@@ -1681,7 +1681,7 @@ ${faqJsonLd}
   /* 統計グリッド */
   .ka-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 20px 0; }
   .ka-stat { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 20px 16px; text-align: center; }
-  .ka-stat-value { font-size: 28px; font-weight: 800; color: #1e3a5f; line-height: 1.2; }
+  .ka-stat-value { font-size: 28px; font-weight: 800; color: #1E40AF; line-height: 1.2; }
   .ka-stat-label { font-size: 13px; color: #64748b; margin-top: 6px; }
   .ka-stat-note { font-size: 11px; color: #94a3b8; margin-top: 4px; }
 
@@ -1695,9 +1695,9 @@ ${faqJsonLd}
   /* ステップフロー */
   .ka-steps { counter-reset: ka-step; margin: 20px 0; }
   .ka-step { display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; }
-  .ka-step::before { counter-increment: ka-step; content: counter(ka-step); flex-shrink: 0; width: 32px; height: 32px; background: #1e3a5f; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+  .ka-step::before { counter-increment: ka-step; content: counter(ka-step); flex-shrink: 0; width: 32px; height: 32px; background: #2563EB; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
   .ka-step-content { flex: 1; }
-  .ka-step-content strong { display: block; font-size: 15px; margin-bottom: 4px; color: #1e3a5f; }
+  .ka-step-content strong { display: block; font-size: 15px; margin-bottom: 4px; color: #1E40AF; }
   .ka-step-content p { margin: 0; font-size: 14px; color: #475569; line-height: 1.7; }
 
   /* メリデメ比較 */
@@ -1718,6 +1718,11 @@ ${faqJsonLd}
   /* 強調ボックス */
   .ka-highlight { background: #fefce8; border: 1px solid #fde68a; border-radius: 10px; padding: 20px; margin: 20px 0; font-size: 14px; line-height: 1.8; }
   .ka-highlight strong { color: #92400e; }
+
+  /* 記事画像 */
+  .ka-figure { margin: 24px 0; text-align: center; }
+  .ka-figure img { max-width: 100%; height: auto; border-radius: 10px; border: 1px solid #e5e7eb; }
+  .ka-figure figcaption { font-size: 12px; color: #6b7280; margin-top: 8px; line-height: 1.5; }
 </style>
 </head>
 <body>
