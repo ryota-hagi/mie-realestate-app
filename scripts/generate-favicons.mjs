@@ -16,6 +16,8 @@ const svgBuffer = readFileSync(svgPath);
 const sizes = [
   { name: 'favicon-16x16.png', size: 16 },
   { name: 'favicon-32x32.png', size: 32 },
+  { name: 'favicon-48x48.png', size: 48 },
+  { name: 'favicon-96x96.png', size: 96 },
   { name: 'apple-touch-icon.png', size: 180 },
   { name: 'android-chrome-192x192.png', size: 192 },
   { name: 'android-chrome-512x512.png', size: 512 },
@@ -32,12 +34,13 @@ async function generatePngs() {
 }
 
 async function generateIco() {
-  // ICO format: simple BMP-in-ICO for 16x16 and 32x32
   const png16 = await sharp(svgBuffer, { density: 150 }).resize(16, 16).png().toBuffer();
   const png32 = await sharp(svgBuffer, { density: 300 }).resize(32, 32).png().toBuffer();
+  const png48 = await sharp(svgBuffer, { density: 300 }).resize(48, 48).png().toBuffer();
 
   // Build ICO file (PNG-in-ICO format, supported by all modern browsers)
-  const images = [png16, png32];
+  const images = [png16, png32, png48];
+  const imageSizes = [16, 32, 48];
   const headerSize = 6;
   const entrySize = 16;
   const numImages = images.length;
@@ -46,8 +49,7 @@ async function generateIco() {
   let offset = dirSize;
   const entries = [];
   for (let i = 0; i < numImages; i++) {
-    const size = i === 0 ? 16 : 32;
-    entries.push({ size, offset, data: images[i] });
+    entries.push({ size: imageSizes[i], offset, data: images[i] });
     offset += images[i].length;
   }
 
@@ -79,7 +81,7 @@ async function generateIco() {
   }
 
   writeFileSync(join(ROOT, 'favicon.ico'), buf);
-  console.log('Generated favicon.ico (16x16 + 32x32)');
+  console.log('Generated favicon.ico (16x16 + 32x32 + 48x48)');
 }
 
 await generatePngs();
