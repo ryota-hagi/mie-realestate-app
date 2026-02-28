@@ -9,11 +9,22 @@ const BASE_URL = 'https://graph.threads.net/v1.0';
 // ヘルパー
 // ============================================================
 
-function getCredentials() {
-  const accessToken = process.env.THREADS_ACCESS_TOKEN;
-  const userId = process.env.THREADS_USER_ID;
-  if (!accessToken) throw new Error('THREADS_ACCESS_TOKEN が設定されていません');
-  if (!userId) throw new Error('THREADS_USER_ID が設定されていません');
+function getCredentials(account = null) {
+  let accessToken, userId;
+
+  if (account && account !== 'business') {
+    const suffix = `_${account.toUpperCase()}`; // _A1, _A2, _A3
+    accessToken = process.env[`THREADS_ACCESS_TOKEN${suffix}`];
+    userId = process.env[`THREADS_USER_ID${suffix}`];
+    if (!accessToken) throw new Error(`THREADS_ACCESS_TOKEN${suffix} が設定されていません`);
+    if (!userId) throw new Error(`THREADS_USER_ID${suffix} が設定されていません`);
+  } else {
+    accessToken = process.env.THREADS_ACCESS_TOKEN;
+    userId = process.env.THREADS_USER_ID;
+    if (!accessToken) throw new Error('THREADS_ACCESS_TOKEN が設定されていません');
+    if (!userId) throw new Error('THREADS_USER_ID が設定されていません');
+  }
+
   return { accessToken, userId };
 }
 
@@ -42,8 +53,8 @@ async function apiCall(url, options = {}) {
  * @param {number} intervalMs - チェック間隔ミリ秒 (デフォルト 2000)
  * @returns {string} ステータス ('FINISHED', 'ERROR', etc.)
  */
-async function waitForContainerReady(containerId, maxRetries = 10, intervalMs = 2000) {
-  const { accessToken } = getCredentials();
+async function waitForContainerReady(containerId, account = null, maxRetries = 10, intervalMs = 2000) {
+  const { accessToken } = getCredentials(account);
 
   for (let i = 0; i < maxRetries; i++) {
     await new Promise(r => setTimeout(r, intervalMs));
@@ -87,8 +98,8 @@ async function waitForContainerReady(containerId, maxRetries = 10, intervalMs = 
  * @param {string} text - 投稿テキスト (500文字以内)
  * @returns {{ id: string }} 公開された投稿のID
  */
-export async function publishPost(text) {
-  const { accessToken, userId } = getCredentials();
+export async function publishPost(text, account = null) {
+  const { accessToken, userId } = getCredentials(account);
 
   // Step 1: メディアコンテナ作成
   console.log('   📦 メディアコンテナ作成中...');
@@ -105,7 +116,7 @@ export async function publishPost(text) {
 
   // Step 2: コンテナがFINISHEDになるまで待機
   console.log('   ⏳ コンテナ処理待機中...');
-  await waitForContainerReady(container.id);
+  await waitForContainerReady(container.id, account);
 
   // Step 3: 公開
   console.log('   🚀 公開中...');
@@ -129,10 +140,11 @@ export async function publishPost(text) {
  * 特定の投稿に返信する
  * @param {string} replyToId - 返信先の投稿ID
  * @param {string} text - 返信テキスト (500文字以内)
+ * @param {string|null} account - アカウント ('a1','a2','a3','business',null)
  * @returns {{ id: string }}
  */
-export async function publishReply(replyToId, text) {
-  const { accessToken, userId } = getCredentials();
+export async function publishReply(replyToId, text, account = null) {
+  const { accessToken, userId } = getCredentials(account);
 
   // Step 1: 返信コンテナ作成
   const container = await apiCall(`${BASE_URL}/${userId}/threads`, {
@@ -147,7 +159,7 @@ export async function publishReply(replyToId, text) {
   });
 
   // Step 2: コンテナがFINISHEDになるまで待機
-  await waitForContainerReady(container.id);
+  await waitForContainerReady(container.id, account);
 
   // Step 3: 公開
   const result = await apiCall(`${BASE_URL}/${userId}/threads_publish`, {
@@ -162,6 +174,9 @@ export async function publishReply(replyToId, text) {
   return result;
 }
 
+/** publishReply のエイリアス（仕様書命名に合わせる） */
+export const replyToPost = publishReply;
+
 // ============================================================
 // 読み取り
 // ============================================================
@@ -171,8 +186,8 @@ export async function publishReply(replyToId, text) {
  * @param {number} limit - 取得件数 (デフォルト 25)
  * @returns {Array} 投稿一覧
  */
-export async function getMyThreads(limit = 25) {
-  const { accessToken } = getCredentials();
+export async function getMyThreads(limit = 25, account = null) {
+  const { accessToken } = getCredentials(account);
   const fields = 'id,text,timestamp,permalink';
   const url = `${BASE_URL}/me/threads?fields=${fields}&limit=${limit}&access_token=${accessToken}`;
   const data = await apiCall(url);
@@ -184,8 +199,8 @@ export async function getMyThreads(limit = 25) {
  * @param {string} threadId - 投稿ID
  * @returns {Array} 返信一覧
  */
-export async function getReplies(threadId) {
-  const { accessToken } = getCredentials();
+export async function getReplies(threadId, account = null) {
+  const { accessToken } = getCredentials(account);
   const fields = 'id,text,username,timestamp';
   const url = `${BASE_URL}/${threadId}/replies?fields=${fields}&access_token=${accessToken}`;
   const data = await apiCall(url);
@@ -197,8 +212,8 @@ export async function getReplies(threadId) {
  * @param {string} mediaId - 投稿ID
  * @returns {{ views: number, likes: number, replies: number, reposts: number, quotes: number }}
  */
-export async function getInsights(mediaId) {
-  const { accessToken } = getCredentials();
+export async function getInsights(mediaId, account = null) {
+  const { accessToken } = getCredentials(account);
   const metrics = 'views,likes,replies,reposts,quotes';
   const url = `${BASE_URL}/${mediaId}/insights?metric=${metrics}&access_token=${accessToken}`;
   try {
@@ -225,8 +240,8 @@ export async function getInsights(mediaId) {
  * @param {object} options - { since, until, limit }
  * @returns {Array} 検索結果の投稿一覧
  */
-export async function keywordSearch(query, options = {}) {
-  const { accessToken } = getCredentials();
+export async function keywordSearch(query, options = {}, account = null) {
+  const { accessToken } = getCredentials(account);
   const fields = 'id,text,username,timestamp,permalink';
   let url = `${BASE_URL}/keyword_search?q=${encodeURIComponent(query)}&fields=${fields}&access_token=${accessToken}`;
 
@@ -246,8 +261,8 @@ export async function keywordSearch(query, options = {}) {
  * トークンの有効性を確認し、必要に応じてリフレッシュ
  * @returns {{ valid: boolean, refreshed: boolean, newToken?: string }}
  */
-export async function checkAndRefreshToken() {
-  const { accessToken } = getCredentials();
+export async function checkAndRefreshToken(account = null) {
+  const { accessToken } = getCredentials(account);
 
   // まず現在のトークンが有効か確認
   try {
@@ -281,8 +296,8 @@ export async function checkAndRefreshToken() {
  * 現在の投稿クォータ使用量を取得
  * @returns {{ quota_usage: number, reply_quota_usage: number }}
  */
-export async function getPublishingLimit() {
-  const { accessToken } = getCredentials();
+export async function getPublishingLimit(account = null) {
+  const { accessToken } = getCredentials(account);
   const fields = 'quota_usage,reply_quota_usage,config,reply_config';
   const url = `${BASE_URL}/me/threads_publishing_limit?fields=${fields}&access_token=${accessToken}`;
   try {

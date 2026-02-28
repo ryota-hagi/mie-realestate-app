@@ -1,0 +1,52 @@
+name: Threads Auto Reply (業者→ステマ導線)
+
+on:
+  schedule:
+    # JST 13:00, 19:00, 01:00
+    - cron: '0 4 * * *'    # JST 13:00
+    - cron: '0 10 * * *'   # JST 19:00
+    - cron: '0 16 * * *'   # JST 01:00
+  workflow_dispatch: {}
+
+concurrency:
+  group: threads-auto-reply
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  reply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30  # ランダム遅延を考慮
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Auto reply to buzz posts
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # 業者アカウント（返信投稿用）
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+          # ステマアカウント（インサイト読取用）
+          THREADS_ACCESS_TOKEN_A1: ${{ secrets.THREADS_ACCESS_TOKEN_A1 }}
+          THREADS_USER_ID_A1: ${{ secrets.THREADS_USER_ID_A1 }}
+          THREADS_ACCESS_TOKEN_A2: ${{ secrets.THREADS_ACCESS_TOKEN_A2 }}
+          THREADS_USER_ID_A2: ${{ secrets.THREADS_USER_ID_A2 }}
+          THREADS_ACCESS_TOKEN_A3: ${{ secrets.THREADS_ACCESS_TOKEN_A3 }}
+          THREADS_USER_ID_A3: ${{ secrets.THREADS_USER_ID_A3 }}
+        run: node scripts/threads/auto-replier.mjs
+
+      - name: Commit reply history
+        run: |
+          git pull --rebase || true
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/threads-reply-history.json
+          git diff --staged --quiet || git commit -m "chore: threads auto-reply [$(date -u +%Y-%m-%d)]"
+          git push || (git pull --rebase && git push)

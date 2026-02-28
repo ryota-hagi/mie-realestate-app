@@ -1,5 +1,6 @@
 /**
  * 投稿履歴の読み書き・重複防止・エンゲージメント分析
+ * マルチアカウント対応: account パラメータで履歴ファイルを切替
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
@@ -8,8 +9,8 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..', '..');
-const HISTORY_PATH = join(ROOT, 'data', 'threads-history.json');
 const TRENDS_PATH = join(ROOT, 'data', 'threads-trends.json');
+const REPLY_HISTORY_PATH = join(ROOT, 'data', 'threads-reply-history.json');
 
 const HISTORY_RETENTION_DAYS = 90;
 const TOPIC_COOLDOWN_DAYS = 14;
@@ -17,19 +18,32 @@ const CATEGORY_COOLDOWN_DAYS = 1;
 const LEARNING_WINDOW_DAYS = 30;
 
 // ============================================================
+// アカウント別ファイルパス
+// ============================================================
+
+function getHistoryPath(account = null) {
+  if (account && account !== 'business') {
+    return join(ROOT, 'data', `threads-history-${account}.json`);
+  }
+  return join(ROOT, 'data', 'threads-history.json');
+}
+
+// ============================================================
 // 履歴読み書き
 // ============================================================
 
 /**
  * 投稿履歴を読み込む
+ * @param {string|null} account - アカウント ('a1','a2','a3','business',null)
  * @returns {{ posts: Array }}
  */
-export function loadHistory() {
-  if (!existsSync(HISTORY_PATH)) {
+export function loadHistory(account = null) {
+  const path = getHistoryPath(account);
+  if (!existsSync(path)) {
     return { posts: [] };
   }
   try {
-    return JSON.parse(readFileSync(HISTORY_PATH, 'utf-8'));
+    return JSON.parse(readFileSync(path, 'utf-8'));
   } catch {
     return { posts: [] };
   }
@@ -38,9 +52,10 @@ export function loadHistory() {
 /**
  * 投稿履歴に追記して保存
  * @param {object} entry - { date, category, topicKey, text, threadId, charCount }
+ * @param {string|null} account
  */
-export function saveHistory(entry) {
-  const history = loadHistory();
+export function saveHistory(entry, account = null) {
+  const history = loadHistory(account);
   history.posts.push(entry);
 
   // 古い履歴を削除（90日以前）
@@ -48,7 +63,7 @@ export function saveHistory(entry) {
   cutoff.setDate(cutoff.getDate() - HISTORY_RETENTION_DAYS);
   history.posts = history.posts.filter(p => new Date(p.date) > cutoff);
 
-  writeFileSync(HISTORY_PATH, JSON.stringify(history, null, 2), 'utf-8');
+  writeFileSync(getHistoryPath(account), JSON.stringify(history, null, 2), 'utf-8');
 }
 
 // ============================================================
@@ -58,13 +73,14 @@ export function saveHistory(entry) {
 /**
  * 指定カテゴリが直近で使われたかチェック
  * @param {string} categoryId
+ * @param {string|null} account
  * @returns {boolean} true = クールダウン中（使用不可）
  */
-export function isCategoryCoolingDown(categoryId) {
+export function isCategoryCoolingDown(categoryId, account = null) {
   // トレンドカテゴリは連続OK（別トピックなので）
   if (categoryId === 'trend') return false;
 
-  const history = loadHistory();
+  const history = loadHistory(account);
   if (history.posts.length === 0) return false;
 
   const cutoff = new Date();
@@ -78,10 +94,11 @@ export function isCategoryCoolingDown(categoryId) {
 /**
  * 指定トピックキーが直近14日以内に使われたかチェック
  * @param {string} topicKey
+ * @param {string|null} account
  * @returns {boolean} true = クールダウン中（使用不可）
  */
-export function isTopicCoolingDown(topicKey) {
-  const history = loadHistory();
+export function isTopicCoolingDown(topicKey, account = null) {
+  const history = loadHistory(account);
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - TOPIC_COOLDOWN_DAYS);
 
@@ -91,7 +108,7 @@ export function isTopicCoolingDown(topicKey) {
 }
 
 // ============================================================
-// トレンドデータ読み書き
+// トレンドデータ読み書き（共有・アカウント非依存）
 // ============================================================
 
 /**
@@ -122,13 +139,71 @@ export function saveTrends(trends) {
 // ============================================================
 
 /**
- * 指定投稿IDに既に返信済みかチェック
+ * 指定投稿IDに既に返信済みかチェック（投稿履歴ベース）
  * @param {string} threadId - 返信先の投稿ID
+ * @param {string|null} account
  * @returns {boolean}
  */
-export function hasRepliedTo(threadId) {
-  const history = loadHistory();
+export function hasRepliedTo(threadId, account = null) {
+  const history = loadHistory(account);
   return history.posts.some(p => p.repliedTo === threadId);
+}
+
+// ============================================================
+// 業者アカウント自動リプライ履歴
+// ============================================================
+
+/**
+ * リプライ履歴を読み込む（業者→ステマ投稿への返信記録）
+ * @returns {{ replies: Array }}
+ */
+export function loadReplyHistory() {
+  if (!existsSync(REPLY_HISTORY_PATH)) {
+    return { replies: [] };
+  }
+  try {
+    return JSON.parse(readFileSync(REPLY_HISTORY_PATH, 'utf-8'));
+  } catch {
+    return { replies: [] };
+  }
+}
+
+/**
+ * リプライ履歴に追記して保存
+ * @param {object} entry - { date, targetThreadId, targetAccount, replyThreadId, replyText, buzzLevel }
+ */
+export function saveReplyHistory(entry) {
+  const history = loadReplyHistory();
+  history.replies.push(entry);
+
+  // 90日以前の履歴を削除
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - HISTORY_RETENTION_DAYS);
+  history.replies = history.replies.filter(r => new Date(r.date) > cutoff);
+
+  writeFileSync(REPLY_HISTORY_PATH, JSON.stringify(history, null, 2), 'utf-8');
+}
+
+/**
+ * 指定投稿IDに業者アカウントから既にリプライ済みかチェック
+ * @param {string} threadId
+ * @returns {boolean}
+ */
+export function hasRepliedToPost(threadId) {
+  const history = loadReplyHistory();
+  return history.replies.some(r => r.targetThreadId === threadId);
+}
+
+/**
+ * 今日の業者リプライ件数を取得（1日上限チェック用）
+ * @returns {number}
+ */
+export function getTodayReplyCount() {
+  const history = loadReplyHistory();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return history.replies.filter(r => new Date(r.date) >= today).length;
 }
 
 // ============================================================
@@ -139,15 +214,16 @@ export function hasRepliedTo(threadId) {
  * 投稿のエンゲージメントデータを更新
  * @param {string} threadId - 投稿ID
  * @param {object} engagement - { views, likes, replies, reposts, quotes }
+ * @param {string|null} account
  */
-export function updatePostEngagement(threadId, engagement) {
-  const history = loadHistory();
+export function updatePostEngagement(threadId, engagement, account = null) {
+  const history = loadHistory(account);
   const post = history.posts.find(p => p.threadId === threadId);
   if (post) {
     post.engagement = engagement;
     post.engagementScore = calcEngagementScore(engagement);
     post.engagementUpdatedAt = new Date().toISOString();
-    writeFileSync(HISTORY_PATH, JSON.stringify(history, null, 2), 'utf-8');
+    writeFileSync(getHistoryPath(account), JSON.stringify(history, null, 2), 'utf-8');
   }
 }
 
@@ -165,10 +241,11 @@ function calcEngagementScore(engagement) {
 
 /**
  * エンゲージメント未取得の投稿一覧（24時間以上前の投稿）
+ * @param {string|null} account
  * @returns {Array} エンゲージメント未取得の投稿
  */
-export function getPostsNeedingEngagement() {
-  const history = loadHistory();
+export function getPostsNeedingEngagement(account = null) {
+  const history = loadHistory(account);
   const oneDayAgo = new Date();
   oneDayAgo.setHours(oneDayAgo.getHours() - 24);
 
@@ -184,10 +261,11 @@ export function getPostsNeedingEngagement() {
 /**
  * カテゴリ別のエンゲージメント分析
  * 直近30日のデータから、各カテゴリの平均エンゲージメントスコアを算出
+ * @param {string|null} account
  * @returns {object} { categoryId: { avgScore, postCount, topPatterns } }
  */
-export function analyzeCategoryPerformance() {
-  const history = loadHistory();
+export function analyzeCategoryPerformance(account = null) {
+  const history = loadHistory(account);
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - LEARNING_WINDOW_DAYS);
 
@@ -238,26 +316,24 @@ export function analyzeCategoryPerformance() {
 
 /**
  * エンゲージメント分析に基づくカテゴリ重みボーナスを算出
- * 平均以上のカテゴリはボーナスを得て、平均以下はペナルティ
  * @param {object} baseCategories - 基本カテゴリ配列
+ * @param {string|null} account
  * @returns {Array} 重み調整済みカテゴリ配列
  */
-export function getAdjustedWeights(baseCategories) {
-  const perf = analyzeCategoryPerformance();
+export function getAdjustedWeights(baseCategories, account = null) {
+  const perf = analyzeCategoryPerformance(account);
   if (!perf) return baseCategories;
 
-  // 全体平均を算出
   const allScores = Object.values(perf);
-  if (allScores.length < 3) return baseCategories; // データ不足
+  if (allScores.length < 3) return baseCategories;
 
   const totalAvg = allScores.reduce((sum, s) => sum + s.avgScore, 0) / allScores.length;
   if (totalAvg === 0) return baseCategories;
 
   return baseCategories.map(cat => {
     const catPerf = perf[cat.id];
-    if (!catPerf || catPerf.postCount < 2) return cat; // データ不足のカテゴリは変更なし
+    if (!catPerf || catPerf.postCount < 2) return cat;
 
-    // 平均比で重みを調整（±50%の範囲内）
     const ratio = catPerf.avgScore / totalAvg;
     const multiplier = Math.max(0.5, Math.min(1.5, ratio));
     const adjustedWeight = Math.round(cat.weight * multiplier);
@@ -276,12 +352,11 @@ export function getAdjustedWeights(baseCategories) {
 
 /**
  * 直近の投稿履歴をAIコンテキスト用に整形して返す
- * - 直近7日の投稿（最大20件）を時系列で取得
- * - エンゲージメントスコアが高い投稿に★マーク
+ * @param {string|null} account
  * @returns {string} コンテキスト文字列（投稿がなければ空文字）
  */
-export function getRecentPostsContext() {
-  const history = loadHistory();
+export function getRecentPostsContext(account = null) {
+  const history = loadHistory(account);
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - 7);
 
@@ -306,11 +381,12 @@ export function getRecentPostsContext() {
 
 /**
  * 直近30日でエンゲージメントスコア上位の投稿を返す
- * @param {number} limit - 取得件数（デフォルト5）
- * @returns {Array} 上位投稿の配列
+ * @param {number} limit
+ * @param {string|null} account
+ * @returns {Array}
  */
-export function getHighEngagementPosts(limit = 5) {
-  const history = loadHistory();
+export function getHighEngagementPosts(limit = 5, account = null) {
+  const history = loadHistory(account);
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - 30);
 
@@ -321,18 +397,18 @@ export function getHighEngagementPosts(limit = 5) {
 }
 
 /**
- * 高パフォーマンス投稿のパターンをプロンプトに反映するためのヒントを生成
- * @param {string} categoryId - カテゴリID
- * @returns {string|null} パフォーマンスヒント文字列
+ * 高パフォーマンス投稿のパターンヒントを生成
+ * @param {string} categoryId
+ * @param {string|null} account
+ * @returns {string|null}
  */
-export function getPerformanceHint(categoryId) {
-  const perf = analyzeCategoryPerformance();
+export function getPerformanceHint(categoryId, account = null) {
+  const perf = analyzeCategoryPerformance(account);
   if (!perf || !perf[categoryId]) return null;
 
   const topPosts = perf[categoryId].topPosts;
   if (!topPosts || topPosts.length === 0) return null;
 
-  // スコアが高い投稿のみ（スコア5以上）
   const goodPosts = topPosts.filter(p => p.score >= 5);
   if (goodPosts.length === 0) return null;
 
@@ -341,7 +417,6 @@ export function getPerformanceHint(categoryId) {
     .map(p => `「${p.text.replace(/\n.*$/s, '').slice(0, 60)}」(スコア${p.score})`)
     .join('\n');
 
-  // 長さパターン分析
   const avgCharCount = goodPosts.reduce((sum, p) => sum + p.charCount, 0) / goodPosts.length;
   const lengthHint = avgCharCount < 50 ? '短い投稿' : avgCharCount < 120 ? '中くらいの長さ' : '少し長めの投稿';
 

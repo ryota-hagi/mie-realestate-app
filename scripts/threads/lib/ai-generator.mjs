@@ -1,9 +1,10 @@
 /**
  * Claude API ラッパー
  * AI による投稿文・返信文の生成を担当
+ * マルチアカウント対応: カスタムシステムプロンプト + ステルスバリデーション
  */
 
-import { SYSTEM_PROMPT, SYSTEM_PROMPT_REPLY, CORPORATE_BLOCKLIST, PR_BLOCKLIST, JARGON_BLOCKLIST } from './config.mjs';
+import { SYSTEM_PROMPT, SYSTEM_PROMPT_REPLY, SYSTEM_PROMPT_BUSINESS_REPLY, CORPORATE_BLOCKLIST, PR_BLOCKLIST, JARGON_BLOCKLIST, STEALTH_BLOCKLIST } from './config.mjs';
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const MODEL_POST = 'claude-sonnet-4-6';       // 投稿生成: Sonnet（ストーリー性・感情表現が優れる）
@@ -73,7 +74,6 @@ function validatePost(text) {
     errors.push(`文字数超過 (${text.length}/500)`);
   }
 
-  // ハッシュタグはNG（Threadsではタグでインプレがガタ落ちする報告多数）
   const hashtagCount = (text.match(/#/g) || []).length;
   if (hashtagCount > 0) {
     errors.push(`ハッシュタグ検出 (${hashtagCount}個 → タグなしにしろ。インプレが下がる)`);
@@ -86,7 +86,6 @@ function validatePost(text) {
     }
   }
 
-  // PR臭チェック
   for (const word of PR_BLOCKLIST) {
     if (text.includes(word)) {
       errors.push(`PR臭検出: "${word}"`);
@@ -94,7 +93,6 @@ function validatePost(text) {
     }
   }
 
-  // 専門用語チェック
   for (const word of JARGON_BLOCKLIST) {
     if (text.includes(word)) {
       errors.push(`専門用語検出: "${word}" → わかりやすい言葉に置き換えて`);
@@ -102,10 +100,25 @@ function validatePost(text) {
     }
   }
 
-  // 段落チェック（空行で区切る読みやすさは推奨するが、多すぎは記事っぽい）
   const paragraphs = text.split(/\n\n+/).filter(p => p.trim());
   if (paragraphs.length > 5) {
     errors.push(`段落多すぎ (${paragraphs.length}段落 → 5以下に)`);
+  }
+
+  return errors;
+}
+
+/**
+ * ステルスアカウント用追加バリデーション（業者感チェック）
+ */
+function validateStealthPost(text) {
+  const errors = validatePost(text);
+
+  for (const word of STEALTH_BLOCKLIST) {
+    if (text.includes(word)) {
+      errors.push(`業者感検出: "${word}" → 個人の体験として語れ`);
+      break;
+    }
   }
 
   return errors;
@@ -132,7 +145,6 @@ function validateReply(text) {
     }
   }
 
-  // 専門用語チェック
   for (const word of JARGON_BLOCKLIST) {
     if (text.includes(word)) {
       errors.push(`専門用語検出: "${word}"`);
@@ -140,7 +152,6 @@ function validateReply(text) {
     }
   }
 
-  // URLが含まれていたらNG（宣伝防止）
   if (/https?:\/\//.test(text)) {
     errors.push('返信にURLが含まれています');
   }
@@ -155,9 +166,12 @@ function validateReply(text) {
 /**
  * Threads投稿文を生成する
  * @param {string} userPrompt - カテゴリ別に構築したプロンプト
+ * @param {object} options - { systemPrompt, isStealth }
  * @returns {string} 生成された投稿文
  */
-export async function generatePost(userPrompt) {
+export async function generatePost(userPrompt, options = {}) {
+  const systemPrompt = options.systemPrompt || SYSTEM_PROMPT;
+  const isStealth = options.isStealth || false;
   const maxAttempts = 3;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -169,9 +183,9 @@ export async function generatePost(userPrompt) {
       prompt += `\n\n【最終やり直し】2〜3文で終わらせて。「〜なんだよね」で終わるくらい雑でいい。難しい言葉は全部やめろ。ハッシュタグなし。`;
     }
 
-    const text = await callClaude(SYSTEM_PROMPT, prompt);
+    const text = await callClaude(systemPrompt, prompt);
     const trimmed = text.trim();
-    const errors = validatePost(trimmed);
+    const errors = isStealth ? validateStealthPost(trimmed) : validatePost(trimmed);
 
     if (errors.length === 0) {
       return trimmed;
@@ -179,6 +193,11 @@ export async function generatePost(userPrompt) {
 
     console.warn(`⚠️ バリデーション失敗 (${attempt}/${maxAttempts}):`, errors.join(', '));
     if (attempt === maxAttempts) {
+      if (isStealth) {
+        // ステルスアカウントで3回失敗したらスキップ（投稿しない）
+        console.warn('⚠️ ステルスバリデーション3回失敗。この投稿はスキップします。');
+        return null;
+      }
       console.warn('⚠️ バリデーション再試行上限。カットして使用します。');
       return trimmed.slice(0, 497) + '...';
     }
@@ -188,9 +207,11 @@ export async function generatePost(userPrompt) {
 /**
  * 記事紹介投稿文を生成する（URLを含む）
  * @param {string} userPrompt
+ * @param {object} options - { systemPrompt }
  * @returns {string}
  */
-export async function generateArticlePost(userPrompt) {
+export async function generateArticlePost(userPrompt, options = {}) {
+  const systemPrompt = options.systemPrompt || SYSTEM_PROMPT;
   const maxAttempts = 3;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -202,13 +223,11 @@ export async function generateArticlePost(userPrompt) {
       prompt += `\n\n【最終やり直し】2〜3文だけ。難しい言葉全部やめろ。URL貼って終わり。ハッシュタグなし。`;
     }
 
-    const text = await callClaude(SYSTEM_PROMPT, prompt);
+    const text = await callClaude(systemPrompt, prompt);
     const trimmed = text.trim();
 
-    // 記事紹介はURL許可なので、URLチェックを除外したバリデーション
     const errors = [];
     if (trimmed.length > 500) errors.push(`文字数超過 (${trimmed.length}/500)`);
-    // ハッシュタグはNG（インプレが下がる）
     const hashtagCount = (trimmed.match(/#/g) || []).length;
     if (hashtagCount > 0) errors.push(`ハッシュタグ検出 (${hashtagCount}個 → タグなしにしろ)`);
     for (const word of CORPORATE_BLOCKLIST) {
@@ -231,7 +250,7 @@ export async function generateArticlePost(userPrompt) {
 }
 
 /**
- * 返信文を生成する
+ * 返信文を生成する（既存の replier.mjs 用）
  * @param {string} originalText - 返信先の投稿テキスト
  * @param {string} context - 追加コンテキスト（任意）
  * @returns {string}
@@ -252,6 +271,37 @@ ${context ? `\n背景: ${context}` : ''}`;
     if (errors.length === 0) return trimmed;
 
     console.warn(`⚠️ 返信バリデーション失敗 (${attempt}/${maxAttempts}):`, errors.join(', '));
+    if (attempt === maxAttempts) {
+      return trimmed.slice(0, 150);
+    }
+  }
+}
+
+/**
+ * 業者アカウントからステマ投稿への返信文を生成する
+ * @param {string} originalText - ステマ投稿のテキスト
+ * @param {string} posterAccount - 投稿者アカウント ('a1','a2','a3')
+ * @param {string} context - 追加コンテキスト（任意）
+ * @returns {string}
+ */
+export async function generateBusinessReply(originalText, posterAccount = '', context = '') {
+  const userPrompt = `以下のThreads投稿に、注文住宅比較.comの中の人として返信して。
+50〜100文字で短く。共感ベースで。宣伝っぽくならないこと。URLは貼らない。
+
+投稿: 「${originalText}」
+投稿者: ${posterAccount}のアカウント（一般ユーザーとして振る舞っている）
+${context ? `\n背景: ${context}` : ''}`;
+
+  const maxAttempts = 3;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const text = await callClaude(SYSTEM_PROMPT_BUSINESS_REPLY, userPrompt, { model: MODEL_REPLY });
+    const trimmed = text.trim();
+    const errors = validateReply(trimmed);
+
+    if (errors.length === 0) return trimmed;
+
+    console.warn(`⚠️ 業者返信バリデーション失敗 (${attempt}/${maxAttempts}):`, errors.join(', '));
     if (attempt === maxAttempts) {
       return trimmed.slice(0, 150);
     }

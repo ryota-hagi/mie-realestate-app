@@ -1,0 +1,46 @@
+name: Threads A2 (ミニマル家づくり記録)
+
+on:
+  schedule:
+    # JST 08:00, 12:00, 15:00, 19:00, 22:00
+    - cron: '0 23 * * *'   # JST 08:00
+    - cron: '0 3 * * *'    # JST 12:00
+    - cron: '0 6 * * *'    # JST 15:00
+    - cron: '0 10 * * *'   # JST 19:00
+    - cron: '0 13 * * *'   # JST 22:00
+  workflow_dispatch: {}
+
+concurrency:
+  group: threads-a2
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Post to Threads (A2)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          THREADS_ACCESS_TOKEN_A2: ${{ secrets.THREADS_ACCESS_TOKEN_A2 }}
+          THREADS_USER_ID_A2: ${{ secrets.THREADS_USER_ID_A2 }}
+        run: node scripts/threads/poster.mjs --account=a2
+
+      - name: Commit posting history
+        run: |
+          git pull --rebase || true
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/threads-history-a2.json
+          git diff --staged --quiet || git commit -m "chore: threads post a2 [$(date -u +%Y-%m-%d)]"
+          git push || (git pull --rebase && git push)

@@ -1,4 +1,4 @@
-name: Threads Engagement
+name: Threads Business (投稿 + エンゲージメント)
 
 on:
   schedule:
@@ -13,6 +13,10 @@ on:
           - auto
           - post
           - engage
+
+concurrency:
+  group: threads-business
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -32,7 +36,7 @@ jobs:
           if [ "$FORCE" = "post" ] || [ "$FORCE" = "auto" ]; then
             echo "✅ 強制実行: post"
             echo "should_run=true" >> $GITHUB_OUTPUT
-          elif echo "07 08 12 14 17 19 20 21 22" | grep -qw "$HOUR"; then
+          elif echo "14 19" | grep -qw "$HOUR"; then
             echo "✅ 投稿対象の時間帯です"
             echo "should_run=true" >> $GITHUB_OUTPUT
           else
@@ -48,22 +52,23 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Post to Threads
+      - name: Post to Threads (Business)
         if: steps.check.outputs.should_run == 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
-        run: node scripts/threads/poster.mjs
+        run: node scripts/threads/poster.mjs --account=business
 
       - name: Commit posting history
         if: steps.check.outputs.should_run == 'true'
         run: |
+          git pull --rebase || true
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/threads-history.json data/threads-trends.json
           git diff --staged --quiet || git commit -m "chore: threads post [$(date -u +%Y-%m-%d)]"
-          git push
+          git push || (git pull --rebase && git push)
 
   engage:
     runs-on: ubuntu-latest
@@ -108,8 +113,9 @@ jobs:
       - name: Commit engagement history
         if: steps.check.outputs.should_run == 'true'
         run: |
+          git pull --rebase || true
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/threads-history.json
           git diff --staged --quiet || git commit -m "chore: threads engage [$(date -u +%Y-%m-%d)]"
-          git push
+          git push || (git pull --rebase && git push)
