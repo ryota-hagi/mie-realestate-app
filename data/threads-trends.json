@@ -1,13 +1,7 @@
 {
-  "scannedAt": "2026-02-28T08:17:23.599Z",
+  "scannedAt": "2026-02-28T10:13:36.618Z",
   "keywords": {
-    "住宅補助金": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "新築": {
+    "住宅ローン": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -19,13 +13,19 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "家づくり": {
+    "新築": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "工務店": {
+    "ハウスメーカー": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "土地探し": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -37,25 +37,25 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "三重県": {
+    "いなべ": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "鈴鹿": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "引っ越し 新築": {
+    "四日市": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
     "確定申告 住宅ローン": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "引っ越し 新築": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
