@@ -1,0 +1,28 @@
+name: Threads Token Diagnosis (一時的)
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run token diagnosis
+        env:
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+          THREADS_ACCESS_TOKEN_A1: ${{ secrets.THREADS_ACCESS_TOKEN_A1 }}
+          THREADS_USER_ID_A1: ${{ secrets.THREADS_USER_ID_A1 }}
+          THREADS_ACCESS_TOKEN_A2: ${{ secrets.THREADS_ACCESS_TOKEN_A2 }}
+          THREADS_USER_ID_A2: ${{ secrets.THREADS_USER_ID_A2 }}
+          THREADS_ACCESS_TOKEN_A3: ${{ secrets.THREADS_ACCESS_TOKEN_A3 }}
+          THREADS_USER_ID_A3: ${{ secrets.THREADS_USER_ID_A3 }}
+        run: node scripts/threads/diagnose-token.mjs
