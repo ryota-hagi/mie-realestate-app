@@ -1,6 +1,30 @@
 {
-  "scannedAt": "2026-03-01T05:44:07.964Z",
+  "scannedAt": "2026-03-01T10:14:56.073Z",
   "keywords": {
+    "新築": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "土地探し": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "家づくり": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "ハウスメーカー": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
     "マイホーム": {
       "resultCount": 0,
       "totalScore": 0,
@@ -13,37 +37,13 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "住宅補助金": {
+    "亀山": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "間取り": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "土地探し": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "ハウスメーカー": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "鈴鹿": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "桑名": {
+    "三重県": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
