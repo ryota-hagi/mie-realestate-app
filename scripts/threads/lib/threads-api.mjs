@@ -109,6 +109,7 @@ export async function publishPost(text, account = null) {
     body: JSON.stringify({
       media_type: 'TEXT',
       text,
+      reply_control: 'everyone', // 誰でも返信可能（業者アカウントからの返信導線を確保）
       access_token: accessToken,
     }),
   });

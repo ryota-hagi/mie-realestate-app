@@ -225,6 +225,15 @@ function validateReply(text) {
     errors.push(`文字数超過 (${text.length}/150)`);
   }
 
+  // AI臭い定型書き出しを禁止
+  const bannedOpeners = ['わかる', 'それ', '確かに', 'ほんとそれ'];
+  for (const opener of bannedOpeners) {
+    if (text.startsWith(opener)) {
+      errors.push(`禁止書き出し検出: "${opener}"で始まっている`);
+      break;
+    }
+  }
+
   for (const word of CORPORATE_BLOCKLIST) {
     if (text.includes(word)) {
       errors.push(`企業トーン検出: "${word}"`);
@@ -392,11 +401,22 @@ ${context ? `\n背景: ${context}` : ''}`;
  * @returns {string}
  */
 export async function generateBusinessReply(originalText, posterAccount = '', context = '') {
-  const userPrompt = `以下のThreads投稿に、注文住宅比較.comの中の人として返信して。
-50〜100文字で短く。共感ベースで。宣伝っぽくならないこと。URLは貼らない。
+  // 返信スタイルをランダムに選択（毎回違うトーンにする）
+  const replyStyles = [
+    '投稿の具体的な話題に触れて共感しろ',
+    '体感の数字（○割、○人に○人）を入れて返せ',
+    '投稿の話題に関連する別の後悔・あるあるを1つ足せ',
+    '質問で返せ。相手に聞き返す形で',
+    '軽くツッコむ感じで返せ',
+    'サイトに届いた声として共感しろ',
+  ];
+  const style = replyStyles[Math.floor(Math.random() * replyStyles.length)];
+
+  const userPrompt = `以下のThreads投稿に返信して。
+スタイル指定: ${style}
+30〜80文字で短く。「わかる」「確かに」「それ」で始めるな。
 
 投稿: 「${originalText}」
-投稿者: ${posterAccount}のアカウント（一般ユーザーとして振る舞っている）
 ${context ? `\n背景: ${context}` : ''}`;
 
   const maxAttempts = 3;
