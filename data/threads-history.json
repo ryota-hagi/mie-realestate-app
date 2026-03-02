@@ -827,7 +827,16 @@
       "topicKey": "kinshi:19",
       "text": "土地、午前中だけ見に行くな。\n\n南側に家が建ってて、午後になったら丸ごと日陰になる土地、相談の中で本当によく出てくる。\n\n「明るかったから決めた」って言う人の多くが、昼前後にしか現地を見てない。\n\n午前・昼・夕方、最低3回は行ってほしい。",
       "threadId": "18395183866197851",
-      "charCount": 119
+      "charCount": 119,
+      "engagement": {
+        "views": 855,
+        "likes": 3,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 3,
+      "engagementUpdatedAt": "2026-03-02T05:44:18.230Z"
     },
     {
       "date": "2026-02-28T12:24:41.543Z",
@@ -835,7 +844,16 @@
       "topicKey": "taiken:yokkaichi:tip:0",
       "text": "四日市西部で建てた人から聞いた話。\n\nコンビナートから離れてるから空気がいいって、地味に決め手になったって声が多い。\n閑静で、それでいて坪単価が抑えられるって地域、三重でも探すと少ない。\n\n近鉄四日市まで車で行けるなら名古屋通勤も現実的、って気づいてから候補に入れたって人もいた。",
       "threadId": "17866762836491621",
-      "charCount": 140
+      "charCount": 140,
+      "engagement": {
+        "views": 4051,
+        "likes": 6,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 14,
+      "engagementUpdatedAt": "2026-03-02T05:44:18.913Z"
     },
     {
       "date": "2026-02-28T13:30:36.533Z",
@@ -843,7 +861,16 @@
       "topicKey": "site:12",
       "text": "三重で土地探してる人に朗報。\n\nうちのサイト、エリア別の土地相場ページ作ったんだけど、これがめちゃくちゃ使えると思ってる。\n\n津と四日市でこんなに違うんだとか、松阪ならこのくらいで探せるんだとか、比べながら見られる。\n「どのエリアにするか決めてない」段階の人こそ、先に見てほしい。\n\nプロフィールにリンクあるよ。",
       "threadId": "17877469524485298",
-      "charCount": 156
+      "charCount": 156,
+      "engagement": {
+        "views": 41,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-02T05:44:19.519Z"
     },
     {
       "date": "2026-02-28T15:04:02.272Z",
@@ -852,7 +879,16 @@
       "text": "予算に余裕がある方が、失敗しやすい。\n\nいろんな人の話聞いてると、「なんとかなる」って思ったとたんに選択肢が増えすぎて、何が正解かわからなくなるパターンが多い。\n\nこれって経験ある人いる？",
       "threadId": "18012419681672198",
       "charCount": 94,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 143,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-02T05:44:20.168Z"
     },
     {
       "date": "2026-03-01T05:44:19.140Z",
@@ -870,6 +906,15 @@
       "text": "📊 親が頭金出してくれた途端、間取りに口出してきた、って相談がちょいちょいある。\n\nお金を出してもらった手前、強く言えなくて。\n結果、自分たちが妥協するパターンが多い。\n\n「ありがたいけど…」って気持ち、すごく複雑だよね。",
       "threadId": "17949694785067707",
       "charCount": 112,
+      "account": "business"
+    },
+    {
+      "date": "2026-03-02T05:44:40.270Z",
+      "category": "gyakusetsu",
+      "topicKey": "gyakusetsu:4",
+      "text": "💡 断熱にこだわるほど、快適になるとは限らない。\n\n換気が追いついてなくて、空気がこもる家になったって話、けっこう聞く。",
+      "threadId": "18106829875832278",
+      "charCount": 61,
       "account": "business"
     }
   ]
