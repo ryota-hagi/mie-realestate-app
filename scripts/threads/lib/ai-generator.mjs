@@ -69,31 +69,36 @@ async function callClaude(systemPrompt, userPrompt, { maxTokens = 1024, model = 
 // ============================================================
 
 /**
- * 投稿に絵文字を1-2個追加する（AI臭さ軽減）
+ * 業者アカウント用: 絵文字を自然な位置に追加（文頭固定はNG）
  * @param {string} text - 投稿テキスト
  * @returns {string} 絵文字を追加したテキスト
  */
 function addEmojis(text) {
   // 既に絵文字が含まれているかチェック（重複防止）
-  const emojiRegex = /[\u{1F300}-\u{1F9FF}]/u;
+  const emojiRegex = /[\u{1F300}-\u{1F9FF}\u{2600}-\u{27FF}]/u;
   if (emojiRegex.test(text)) {
     return text; // 既に絵文字があれば追加しない
   }
 
-  const allowedEmojis = ['📍', '💰', '📊', '💡', '🏠'];
-  const count = Math.random() < 0.5 ? 1 : 2; // 50%で1個、50%で2個
+  // 業者アカウント向け絵文字（情報系）
+  const allowedEmojis = ['📍', '💰', '📊', '💡', '🏠', '📝', '🔑', '🏡'];
+  const emoji = allowedEmojis[Math.floor(Math.random() * allowedEmojis.length)];
 
-  // ランダムに絵文字を選択
-  const selected = [];
-  for (let i = 0; i < count; i++) {
-    const emoji = allowedEmojis[Math.floor(Math.random() * allowedEmojis.length)];
-    if (!selected.includes(emoji)) {
-      selected.push(emoji);
-    }
+  // 配置パターンをランダムに選択（文頭固定はNG）
+  const placement = Math.random();
+
+  if (placement < 0.4) {
+    // 40%: 1行目の末尾に追加
+    const lines = text.split('\n');
+    lines[0] = lines[0] + emoji;
+    return lines.join('\n');
+  } else if (placement < 0.7) {
+    // 30%: 文末に追加
+    return text + '\n' + emoji;
+  } else {
+    // 30%: 追加しない（人間は毎回使わない）
+    return text;
   }
-
-  // テキストの先頭に追加（自然な位置）
-  return `${selected.join('')} ${text}`;
 }
 
 /**
@@ -292,8 +297,8 @@ export async function generatePost(userPrompt, options = {}) {
     // AI臭さを除去
     const naturalized = naturalizeText(trimmed);
 
-    // 絵文字を追加（1-2個）
-    const withEmoji = addEmojis(naturalized);
+    // 絵文字追加: 業者アカウントのみ（ステルスはSYSTEM_PROMPTで絵文字NG設定済み）
+    const withEmoji = isStealth ? naturalized : addEmojis(naturalized);
 
     const errors = isStealth ? validateStealthPost(withEmoji) : validatePost(withEmoji);
 
