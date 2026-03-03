@@ -933,7 +933,16 @@
       "text": "💡 断熱にこだわるほど、快適になるとは限らない。\n\n換気が追いついてなくて、空気がこもる家になったって話、けっこう聞く。",
       "threadId": "18106829875832278",
       "charCount": 61,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 714,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-03T10:29:15.156Z"
     },
     {
       "date": "2026-03-02T09:37:44.409Z",
@@ -1102,6 +1111,15 @@
       "repliedTo": "17872932507538897",
       "keyword": "三重県",
       "charCount": 52
+    },
+    {
+      "date": "2026-03-03T10:29:36.831Z",
+      "category": "taiken",
+      "topicKey": "aruaru:0",
+      "text": "間取り決め、夫婦で一回は本気で揉めてる。🏡\n\n「絶対リビング広くしたい派」vs「収納命派」の戦い、相談でめちゃくちゃ多い。\n\nどっちが勝った？",
+      "threadId": "17856946062573893",
+      "charCount": 72,
+      "account": "business"
     }
   ]
 }
