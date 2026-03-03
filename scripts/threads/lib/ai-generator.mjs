@@ -297,7 +297,8 @@ export async function generatePost(userPrompt, options = {}) {
     // AI臭さを除去
     const naturalized = naturalizeText(trimmed);
 
-    // 絵文字追加: 業者アカウントのみ（ステルスはSYSTEM_PROMPTで絵文字NG設定済み）
+    // 絵文字追加: 業者アカウントのみ（ステルスはSYSTEM_PROMPTで制御させる）
+    // A1はSYSTEM_PROMPT_A1で絵文字ルールを指示済み。プログラム側からは一切追加しない
     const withEmoji = isStealth ? naturalized : addEmojis(naturalized);
 
     const errors = isStealth ? validateStealthPost(withEmoji) : validatePost(withEmoji);
