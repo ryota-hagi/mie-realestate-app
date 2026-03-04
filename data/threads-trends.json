@@ -1,5 +1,5 @@
 {
-  "scannedAt": "2026-03-03T10:29:28.871Z",
+  "scannedAt": "2026-03-04T05:08:57.347Z",
   "keywords": {
     "新築": {
       "resultCount": 2,
@@ -13,7 +13,7 @@
           "timestamp": "2026-02-24T03:19:17+0000",
           "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVIBS8wjfje",
           "insights": {
-            "views": 13363,
+            "views": 13368,
             "likes": 45,
             "replies": 37,
             "reposts": 0,
@@ -38,17 +38,115 @@
         }
       ]
     },
-    "住宅補助金": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
     "マイホーム": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
+    },
+    "土地探し": {
+      "resultCount": 3,
+      "totalScore": 4,
+      "avgScore": 1.3333333333333333,
+      "topPosts": [
+        {
+          "id": "18044765177733474",
+          "text": "土地探しの時、こういうサイトが欲しかった。\n\n三重県の注文住宅情報サイト作ってるんだけど、エリアごとに学区情報とか住みやすさをまとめたページを追加した。\n\n土地探してた頃、これが全然ネット上になくて困ったんだよね。\nリンクはプロフィールに貼ってあるから見てみて。",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-02-24T22:23:00+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVKELwzFGsJ",
+          "insights": {
+            "views": 262,
+            "likes": 0,
+            "replies": 1,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 4
+        },
+        {
+          "id": "18043048223732726",
+          "text": "土地探しって本当それですよね。学区や周辺情報を一箇所でまとめてくれてるサイト、ほんと少ないから助かります。",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-03-03T09:33:00+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVatoGjDqjM",
+          "insights": {
+            "views": 0,
+            "likes": 0,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 0
+        },
+        {
+          "id": "17877469524485298",
+          "text": "三重で土地探してる人に朗報。\n\nうちのサイト、エリア別の土地相場ページ作ったんだけど、これがめちゃくちゃ使えると思ってる。\n\n津と四日市でこんなに違うんだとか、松阪ならこのくらいで探せるんだとか、比べながら見られる。\n「どのエリアにするか決めてない」段階の人こそ、先に見てほしい。\n\nプロフィールにリンクあるよ。",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-02-28T13:30:34+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVTabmEEY4Y",
+          "insights": {
+            "views": 43,
+            "likes": 0,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 0
+        }
+      ]
+    },
+    "工務店": {
+      "resultCount": 6,
+      "totalScore": 102,
+      "avgScore": 20.4,
+      "topPosts": [
+        {
+          "id": "17911201170338958",
+          "text": "ハウスメーカーじゃなくて工務店にした。\n\n正直、まだ正解だったかわからない。\n\n保証とか大手の安心感は捨てた。\nでも担当者と直接話せる距離感はよかった。\n\nみんなはどっちにした？",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-02-26T10:35:50+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVN81_TkbgM",
+          "insights": {
+            "views": 5394,
+            "likes": 38,
+            "replies": 15,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 98
+        },
+        {
+          "id": "17967184536044556",
+          "text": "📊📍 ハウスメーカーか工務店か、どっちにするか迷ったって相談、すごく多い。\n\n結局どっちも正解とも言えるし、後悔してる人もいる。\n\n「大手の安心感を取った」「でも担当者と全然話せなかった」って声も聞くし、逆に「工務店にしたら想定外のことが多かった」って声もある。\n\n三重だと選択肢どのくらいあった？",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-03-02T10:35:13+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVYP87ckWJh",
+          "insights": {
+            "views": 167,
+            "likes": 2,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 2
+        },
+        {
+          "id": "17865484617588393",
+          "text": "火災保険、適当に選んだ。\n\n工務店に「これでいいですよ」って言われた保険、よくわからないまま即決した。\n\n水害補償が薄かったことに後から気づいて、四日市って海も川も近いのに自分何やってたんだろって。\n\nみんなはちゃんと比較した？",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-02-24T07:52:35+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVIgkkwlTX8",
+          "insights": {
+            "views": 769,
+            "likes": 1,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 1
+        }
+      ]
     },
     "注文住宅": {
       "resultCount": 6,
@@ -102,161 +200,17 @@
         }
       ]
     },
-    "間取り": {
-      "resultCount": 8,
-      "totalScore": 1,
-      "avgScore": 0.2,
-      "topPosts": [
-        {
-          "id": "17949694785067707",
-          "text": "📊 親が頭金出してくれた途端、間取りに口出してきた、って相談がちょいちょいある。\n\nお金を出してもらった手前、強く言えなくて。\n結果、自分たちが妥協するパターンが多い。\n\n「ありがたいけど…」って気持ち、すごく複雑だよね。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-01T10:15:04+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVVo2iQkYpX",
-          "insights": {
-            "views": 321,
-            "likes": 1,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 1
-        },
-        {
-          "id": "18064875452310758",
-          "text": "それ相談でめちゃ聞く。間取りは夫婦で何度も歩いて確認する人ほど満足度高いんだよね。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-02T09:39:05+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVYJh7_ka2t",
-          "insights": {
-            "views": 1,
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 0
-        },
-        {
-          "id": "18337895797245871",
-          "text": "その相談めっちゃ多い。間取り決める時点では生活イメージしきれない人ほんと多いんだよね。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-02T09:38:36+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVYJeSnkfGT",
-          "insights": {
-            "views": 1,
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 0
-        }
-      ]
+    "住宅補助金": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
     },
-    "工務店": {
-      "resultCount": 6,
-      "totalScore": 102,
-      "avgScore": 20.4,
-      "topPosts": [
-        {
-          "id": "17911201170338958",
-          "text": "ハウスメーカーじゃなくて工務店にした。\n\n正直、まだ正解だったかわからない。\n\n保証とか大手の安心感は捨てた。\nでも担当者と直接話せる距離感はよかった。\n\nみんなはどっちにした？",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-26T10:35:50+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVN81_TkbgM",
-          "insights": {
-            "views": 5385,
-            "likes": 38,
-            "replies": 15,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 98
-        },
-        {
-          "id": "17967184536044556",
-          "text": "📊📍 ハウスメーカーか工務店か、どっちにするか迷ったって相談、すごく多い。\n\n結局どっちも正解とも言えるし、後悔してる人もいる。\n\n「大手の安心感を取った」「でも担当者と全然話せなかった」って声も聞くし、逆に「工務店にしたら想定外のことが多かった」って声もある。\n\n三重だと選択肢どのくらいあった？",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-02T10:35:13+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVYP87ckWJh",
-          "insights": {
-            "views": 162,
-            "likes": 2,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 2
-        },
-        {
-          "id": "17865484617588393",
-          "text": "火災保険、適当に選んだ。\n\n工務店に「これでいいですよ」って言われた保険、よくわからないまま即決した。\n\n水害補償が薄かったことに後から気づいて、四日市って海も川も近いのに自分何やってたんだろって。\n\nみんなはちゃんと比較した？",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-24T07:52:35+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVIgkkwlTX8",
-          "insights": {
-            "views": 769,
-            "likes": 1,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 1
-        }
-      ]
-    },
-    "四日市": {
-      "resultCount": 10,
-      "totalScore": 107,
-      "avgScore": 21.4,
-      "topPosts": [
-        {
-          "id": "18353559955234453",
-          "text": "鈴鹿市で建てた人の話、よく聞く。\n\n「四日市と迷ったけど、鈴鹿にして土地が全然違った」って。\n同じ予算で庭まで取れたって人、結構いる。\n\n庭付きで建てたい人、鈴鹿はまじで選択肢に入れた方がいい。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-27T08:30:29+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVQTSxxFoQa",
-          "insights": {
-            "views": 15489,
-            "likes": 37,
-            "replies": 13,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 89
-        },
-        {
-          "id": "17866762836491621",
-          "text": "四日市西部で建てた人から聞いた話。\n\nコンビナートから離れてるから空気がいいって、地味に決め手になったって声が多い。\n閑静で、それでいて坪単価が抑えられるって地域、三重でも探すと少ない。\n\n近鉄四日市まで車で行けるなら名古屋通勤も現実的、って気づいてから候補に入れたって人もいた。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-28T12:24:39+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVTS4uEFnZ2",
-          "insights": {
-            "views": 4057,
-            "likes": 6,
-            "replies": 3,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 18
-        },
-        {
-          "id": "18194252947346123",
-          "text": "その通り。四日市の通勤ラッシュ、相談でもよく聞く話だよ。実際の生活感と記事のギャップ、結構あるんだよね。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-03T09:33:15+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVatqHrjlPf",
-          "insights": {
-            "views": 0,
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 0
-        }
-      ]
+    "亀山": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
     },
     "いなべ": {
       "resultCount": 0,
@@ -264,13 +218,13 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "住宅展示場 春": {
+    "引っ越し 新居": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "引っ越し 新居": {
+    "住宅展示場 春": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
