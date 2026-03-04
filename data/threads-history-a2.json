@@ -241,7 +241,16 @@
       "text": "トイレ1個、やめとけ。\n\n朝7時台の15分、家族3人で奪い合う。\nそれが毎日続く。",
       "threadId": "17987483771947418",
       "charCount": 41,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 1684,
+        "likes": 3,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 7,
+      "engagementUpdatedAt": "2026-03-04T10:48:31.866Z"
     },
     {
       "date": "2026-03-03T10:52:23.866Z",
@@ -286,6 +295,15 @@
       "text": "費用の内訳、知らなくていい。\n\n払えるかどうかだけ考えた。",
       "threadId": "18062835497331121",
       "charCount": 29,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-04T10:48:42.099Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:16",
+      "text": "月々の返済額だけで選ぶな。\n\n35年で総返済額を計算すると、金利次第で数百万変わる。\n月5000円の差が、35年で210万になる。\n\n「月々〇万円！」って言葉、罠だった。",
+      "threadId": "18105238888888091",
+      "charCount": 85,
       "account": "a2"
     }
   ]
