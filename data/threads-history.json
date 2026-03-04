@@ -1069,7 +1069,16 @@
       "text": "補助金、申請タイミング間違えて受け取れなかった人がいる。📍\n\n(すでに2/28に投稿済みのため、同じネタは避けるべき)\n\n---\n\n補助金の締め切り、気づいたら終わってた。",
       "threadId": "17963597814043052",
       "charCount": 87,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 0,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-04T10:25:51.492Z"
     },
     {
       "date": "2026-03-03T09:32:24.355Z",
@@ -1198,6 +1207,15 @@
       "repliedTo": "18094421353963863",
       "keyword": "四日市",
       "charCount": 48
+    },
+    {
+      "date": "2026-03-04T10:26:15.345Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:26",
+      "text": "角地、値段見てため息ついた人と、買ってよかったって人、両方いる。\n\n日当たりと開放感は確かにいいんだけど、外構費と固定資産税が上がるから実質もっと高い。\n中間地にして内装に予算まわした方が満足してる人も多い。\n\nどっち選んだ？",
+      "threadId": "18067645469249534",
+      "charCount": 113,
+      "account": "business"
     }
   ]
 }
