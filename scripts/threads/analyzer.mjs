@@ -162,29 +162,46 @@ async function generateStructuredInsights(allStats) {
     },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 800,
+      max_tokens: 1200,
+      tool_choice: { type: 'tool', name: 'save_insights' },
+      tools: [{
+        name: 'save_insights',
+        description: '週次分析のインサイトを保存する',
+        input_schema: {
+          type: 'object',
+          required: ['accounts'],
+          properties: {
+            accounts: {
+              type: 'object',
+              description: 'アカウント別のインサイト。キーはアカウント名（a1, a2, a3等）',
+              additionalProperties: {
+                type: 'object',
+                required: ['strategy', 'categoryTips', 'contentPatterns'],
+                properties: {
+                  strategy: { type: 'string', description: 'このアカウントの来週の全体方針（1文）' },
+                  categoryTips: {
+                    type: 'object',
+                    description: 'カテゴリ別改善アドバイス（最大3カテゴリ）。キーはカテゴリID',
+                    additionalProperties: { type: 'string' },
+                  },
+                  contentPatterns: {
+                    type: 'object',
+                    required: ['toneAdvice', 'endingAdvice'],
+                    properties: {
+                      toneAdvice: { type: 'string', description: 'トーンに関するアドバイス（1文）' },
+                      endingAdvice: { type: 'string', description: '締め方のアドバイス（1文）' },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      }],
       messages: [{
         role: 'user',
         content: `以下はThreadsの各アカウントのエンゲージメント分析データです。
-各アカウント別に「来週の投稿をどう改善すべきか」を分析し、以下のJSON形式で返してください。
-JSONのみを返してください。マークダウンのコードブロックは不要です。
-
-{
-  "generatedAt": "ISO8601の日時",
-  "accounts": {
-    "アカウント名": {
-      "strategy": "このアカウントの来週の全体方針（1文）",
-      "categoryTips": {
-        "カテゴリID": "このカテゴリの具体的改善アドバイス（1文）"
-      },
-      "contentPatterns": {
-        "idealLength": "short|medium|long",
-        "toneAdvice": "トーンに関するアドバイス（1文）",
-        "endingAdvice": "締め方のアドバイス（1文）"
-      }
-    }
-  }
-}
+各アカウント別に「来週の投稿をどう改善すべきか」を分析してください。
 
 注意:
 - categoryTipsは反応が良かったカテゴリと悪かったカテゴリの両方について書く（最大3カテゴリ）
@@ -198,21 +215,16 @@ ${summary}`,
   });
 
   const data = await res.json();
-  const text = data.content?.[0]?.text || null;
-  if (!text) return null;
-
-  try {
-    // コードブロックやテキストからJSON部分を抽出
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
-      console.warn('[analyzer] JSON未検出。raw:', text.slice(0, 200));
-      return null;
-    }
-    return JSON.parse(jsonMatch[0]);
-  } catch (e) {
-    console.warn('[analyzer] 構造化インサイトのJSON解析失敗:', e.message);
+  const toolBlock = data.content?.find(b => b.type === 'tool_use');
+  if (!toolBlock?.input?.accounts) {
+    console.warn('[analyzer] tool_use応答なし');
     return null;
   }
+
+  return {
+    generatedAt: new Date().toISOString(),
+    accounts: toolBlock.input.accounts,
+  };
 }
 
 // ============================================================
