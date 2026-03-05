@@ -219,10 +219,9 @@ ${summary}`,
     console.warn('[analyzer] API error:', JSON.stringify(data.error));
     return null;
   }
-  console.log('[analyzer] stop_reason:', data.stop_reason, 'content_types:', data.content?.map(b => b.type));
   const toolBlock = data.content?.find(b => b.type === 'tool_use');
   if (!toolBlock?.input?.accounts) {
-    console.warn('[analyzer] tool_use応答なし。content:', JSON.stringify(data.content).slice(0, 300));
+    console.warn('[analyzer] tool_use応答なし');
     return null;
   }
 
