@@ -331,7 +331,16 @@
       "text": "費用の内訳、知らなくていい。\n\n払えるかどうかだけ考えた。",
       "threadId": "18062835497331121",
       "charCount": 29,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 248,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-05T06:59:00.998Z"
     },
     {
       "date": "2026-03-04T10:48:42.099Z",
@@ -367,6 +376,15 @@
       "text": "角地、値段を見た瞬間にやめた。\n\n+300万くらい差があった。\n\n広い間口と開放感、確かに魅力はある。\nでも自分が買った中間地、今のところ不満はない。\n\n結局「なんとなく角地の方が良さそう」って感覚だけで選びかけてたと思う。\n\nみんなはどっちにした？",
       "threadId": "17851725591637832",
       "charCount": 125,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-05T06:59:10.560Z",
+      "category": "loan",
+      "topicKey": "loan:cost:section:2",
+      "text": "坪単価、低い方を選んだ。\n\n正解だったかどうかは、まだわからない。",
+      "threadId": "18093116915041568",
+      "charCount": 33,
       "account": "a2"
     }
   ]
