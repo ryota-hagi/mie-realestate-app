@@ -202,9 +202,11 @@ ${summary}`,
   if (!text) return null;
 
   try {
-    return JSON.parse(text);
+    // コードブロックで囲まれている場合を除去
+    const cleaned = text.replace(/^```(?:json)?\s*/m, '').replace(/\s*```\s*$/m, '').trim();
+    return JSON.parse(cleaned);
   } catch {
-    console.warn('[analyzer] 構造化インサイトのJSON解析失敗。スキップ');
+    console.warn('[analyzer] 構造化インサイトのJSON解析失敗。raw:', text.slice(0, 200));
     return null;
   }
 }
