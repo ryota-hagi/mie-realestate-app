@@ -31,7 +31,7 @@ async function withRetry(fn, maxRetries = 3, label = 'API呼出') {
 // Claude API 呼出
 // ============================================================
 
-async function callClaude(systemPrompt, userPrompt, { maxTokens = 1024, model = MODEL_POST } = {}) {
+async function callClaude(systemPrompt, userPrompt, { maxTokens = 1024, model = MODEL_POST, temperature = 1.0 } = {}) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) throw new Error('ANTHROPIC_API_KEY が設定されていません');
 
@@ -46,6 +46,7 @@ async function callClaude(systemPrompt, userPrompt, { maxTokens = 1024, model = 
       body: JSON.stringify({
         model,
         max_tokens: maxTokens,
+        temperature,
         system: systemPrompt,
         messages: [{ role: 'user', content: userPrompt }],
       }),
@@ -61,6 +62,104 @@ async function callClaude(systemPrompt, userPrompt, { maxTokens = 1024, model = 
     const data = await res.json();
     return data.content?.[0]?.text || '';
   }, 3, 'Claude API呼出');
+}
+
+// ============================================================
+// AI臭さ除去（自然化フィルター）
+// ============================================================
+
+/**
+ * 業者アカウント用: 絵文字を自然な位置に追加（文頭固定はNG）
+ * @param {string} text - 投稿テキスト
+ * @returns {string} 絵文字を追加したテキスト
+ */
+function addEmojis(text) {
+  // 既に絵文字が含まれているかチェック（重複防止）
+  const emojiRegex = /[\u{1F300}-\u{1F9FF}\u{2600}-\u{27FF}]/u;
+  if (emojiRegex.test(text)) {
+    return text; // 既に絵文字があれば追加しない
+  }
+
+  // 業者アカウント向け絵文字（情報系）
+  const allowedEmojis = ['📍', '💰', '📊', '💡', '🏠', '📝', '🔑', '🏡'];
+  const emoji = allowedEmojis[Math.floor(Math.random() * allowedEmojis.length)];
+
+  // 配置パターンをランダムに選択（文頭固定はNG）
+  const placement = Math.random();
+
+  if (placement < 0.4) {
+    // 40%: 1行目の末尾に追加
+    const lines = text.split('\n');
+    lines[0] = lines[0] + emoji;
+    return lines.join('\n');
+  } else if (placement < 0.7) {
+    // 30%: 文末に追加
+    return text + '\n' + emoji;
+  } else {
+    // 30%: 追加しない（人間は毎回使わない）
+    return text;
+  }
+}
+
+/**
+ * AI特有の表現を人間的な表現に置き換える
+ * @param {string} text - AI生成テキスト
+ * @returns {string} 自然化されたテキスト
+ */
+function naturalizeText(text) {
+  let result = text;
+
+  // AI特有の接続詞を削除 or 自然な表現に置き換え
+  const aiConnectors = [
+    { pattern: /それにさ、?/g, replace: '' },
+    { pattern: /それでいて、?/g, replace: '' },
+    { pattern: /さらに、?/g, replace: '' },
+    { pattern: /加えて、?/g, replace: '' },
+    { pattern: /その上、?/g, replace: '' },
+    { pattern: /また、/g, replace: 'あと' },
+  ];
+
+  for (const { pattern, replace } of aiConnectors) {
+    result = result.replace(pattern, replace);
+  }
+
+  // 硬い言い回しを簡潔な表現に
+  const stiffPhrases = [
+    { pattern: /が広がってて/g, replace: 'が多くて' },
+    { pattern: /が広がっている/g, replace: 'がある' },
+    { pattern: /充実してる/g, replace: '多い' },
+    { pattern: /充実している/g, replace: 'ある' },
+    { pattern: /本気で検討する価値あり/g, replace: '' },
+    { pattern: /検討する価値あり/g, replace: '' },
+    { pattern: /おすすめです/g, replace: '' },
+    { pattern: /お勧めです/g, replace: '' },
+  ];
+
+  for (const { pattern, replace } of stiffPhrases) {
+    result = result.replace(pattern, replace);
+  }
+
+  // 形式的な地域表現をカジュアルに
+  const regionalPhrases = [
+    { pattern: /東部は/g, replace: '東の方は' },
+    { pattern: /西部は/g, replace: '西の方は' },
+    { pattern: /南部は/g, replace: '南の方は' },
+    { pattern: /北部は/g, replace: '北の方は' },
+    { pattern: /中心部は/g, replace: '街の真ん中は' },
+  ];
+
+  for (const { pattern, replace } of regionalPhrases) {
+    result = result.replace(pattern, replace);
+  }
+
+  // 連続する空白を整理
+  result = result.replace(/\n{3,}/g, '\n\n');
+  result = result.replace(/  +/g, ' ');
+
+  // 文末の余計な改行削除
+  result = result.trim();
+
+  return result;
 }
 
 // ============================================================
@@ -131,6 +230,15 @@ function validateReply(text) {
     errors.push(`文字数超過 (${text.length}/150)`);
   }
 
+  // AI臭い定型書き出しを禁止
+  const bannedOpeners = ['わかる', 'それ', '確かに', 'ほんとそれ'];
+  for (const opener of bannedOpeners) {
+    if (text.startsWith(opener)) {
+      errors.push(`禁止書き出し検出: "${opener}"で始まっている`);
+      break;
+    }
+  }
+
   for (const word of CORPORATE_BLOCKLIST) {
     if (text.includes(word)) {
       errors.push(`企業トーン検出: "${word}"`);
@@ -183,12 +291,20 @@ export async function generatePost(userPrompt, options = {}) {
       prompt += `\n\n【最終やり直し】2〜3文で終わらせて。「〜なんだよね」で終わるくらい雑でいい。難しい言葉は全部やめろ。ハッシュタグなし。`;
     }
 
-    const text = await callClaude(systemPrompt, prompt);
+    const text = await callClaude(systemPrompt, prompt, { model: MODEL_POST, temperature: 1.0 });
     const trimmed = text.trim();
-    const errors = isStealth ? validateStealthPost(trimmed) : validatePost(trimmed);
+
+    // AI臭さを除去
+    const naturalized = naturalizeText(trimmed);
+
+    // 絵文字追加: 業者アカウントのみ（ステルスはSYSTEM_PROMPTで制御させる）
+    // A1はSYSTEM_PROMPT_A1で絵文字ルールを指示済み。プログラム側からは一切追加しない
+    const withEmoji = isStealth ? naturalized : addEmojis(naturalized);
+
+    const errors = isStealth ? validateStealthPost(withEmoji) : validatePost(withEmoji);
 
     if (errors.length === 0) {
-      return trimmed;
+      return withEmoji;
     }
 
     console.warn(`⚠️ バリデーション失敗 (${attempt}/${maxAttempts}):`, errors.join(', '));
@@ -199,7 +315,7 @@ export async function generatePost(userPrompt, options = {}) {
         return null;
       }
       console.warn('⚠️ バリデーション再試行上限。カットして使用します。');
-      return trimmed.slice(0, 497) + '...';
+      return withEmoji.slice(0, 497) + '...';
     }
   }
 }
@@ -223,28 +339,34 @@ export async function generateArticlePost(userPrompt, options = {}) {
       prompt += `\n\n【最終やり直し】2〜3文だけ。難しい言葉全部やめろ。URL貼って終わり。ハッシュタグなし。`;
     }
 
-    const text = await callClaude(systemPrompt, prompt);
+    const text = await callClaude(systemPrompt, prompt, { model: MODEL_POST, temperature: 1.0 });
     const trimmed = text.trim();
 
+    // AI臭さを除去
+    const naturalized = naturalizeText(trimmed);
+
+    // 絵文字を追加（1-2個）
+    const withEmoji = addEmojis(naturalized);
+
     const errors = [];
-    if (trimmed.length > 500) errors.push(`文字数超過 (${trimmed.length}/500)`);
-    const hashtagCount = (trimmed.match(/#/g) || []).length;
+    if (withEmoji.length > 500) errors.push(`文字数超過 (${withEmoji.length}/500)`);
+    const hashtagCount = (withEmoji.match(/#/g) || []).length;
     if (hashtagCount > 0) errors.push(`ハッシュタグ検出 (${hashtagCount}個 → タグなしにしろ)`);
     for (const word of CORPORATE_BLOCKLIST) {
-      if (trimmed.includes(word)) { errors.push(`企業トーン検出: "${word}"`); break; }
+      if (withEmoji.includes(word)) { errors.push(`企業トーン検出: "${word}"`); break; }
     }
     for (const word of PR_BLOCKLIST) {
-      if (trimmed.includes(word)) { errors.push(`PR臭検出: "${word}"`); break; }
+      if (withEmoji.includes(word)) { errors.push(`PR臭検出: "${word}"`); break; }
     }
     for (const word of JARGON_BLOCKLIST) {
-      if (trimmed.includes(word)) { errors.push(`専門用語検出: "${word}"`); break; }
+      if (withEmoji.includes(word)) { errors.push(`専門用語検出: "${word}"`); break; }
     }
 
-    if (errors.length === 0) return trimmed;
+    if (errors.length === 0) return withEmoji;
 
     console.warn(`⚠️ バリデーション失敗 (${attempt}/${maxAttempts}):`, errors.join(', '));
     if (attempt === maxAttempts) {
-      return trimmed.slice(0, 497) + '...';
+      return withEmoji.slice(0, 497) + '...';
     }
   }
 }
@@ -285,11 +407,22 @@ ${context ? `\n背景: ${context}` : ''}`;
  * @returns {string}
  */
 export async function generateBusinessReply(originalText, posterAccount = '', context = '') {
-  const userPrompt = `以下のThreads投稿に、注文住宅比較.comの中の人として返信して。
-50〜100文字で短く。共感ベースで。宣伝っぽくならないこと。URLは貼らない。
+  // 返信スタイルをランダムに選択（毎回違うトーンにする）
+  const replyStyles = [
+    '投稿の具体的な話題に触れて共感しろ',
+    '体感の数字（○割、○人に○人）を入れて返せ',
+    '投稿の話題に関連する別の後悔・あるあるを1つ足せ',
+    '質問で返せ。相手に聞き返す形で',
+    '軽くツッコむ感じで返せ',
+    'サイトに届いた声として共感しろ',
+  ];
+  const style = replyStyles[Math.floor(Math.random() * replyStyles.length)];
+
+  const userPrompt = `以下のThreads投稿に返信して。
+スタイル指定: ${style}
+30〜80文字で短く。「わかる」「確かに」「それ」で始めるな。
 
 投稿: 「${originalText}」
-投稿者: ${posterAccount}のアカウント（一般ユーザーとして振る舞っている）
 ${context ? `\n背景: ${context}` : ''}`;
 
   const maxAttempts = 3;

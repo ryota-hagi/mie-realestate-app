@@ -206,6 +206,13 @@ async function main() {
   }
 
   console.log(`\n✅ 自動リプライ完了: ${repliedCount}件返信`);
+
+  // 返信候補があったのに1件も成功しなかった場合はエラー終了
+  // → GitHub Actions が failure になり、問題を検知できる
+  if (candidates.length > 0 && repliedCount === 0) {
+    console.error('⚠️ 返信候補があるのに0件成功。API権限（threads_manage_reply）を確認してください。');
+    process.exit(1);
+  }
 }
 
 main().catch(e => {

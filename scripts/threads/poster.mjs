@@ -18,7 +18,7 @@ import { publishPost, checkAndRefreshToken, getInsights } from './lib/threads-ap
 import { generatePost, generateArticlePost } from './lib/ai-generator.mjs';
 import { loadAllData, randomChoice, getTaikenTopic, getMameTopic, getKijiTopic, getLoanTopic, getAruaruTopic, getMomegotoTopic, getKoukaiTopic, getNewsTopic, getSitePrTopic, getHikakuTopic, getKinshiTopic, getGyakusetsuTopic } from './lib/data-loader.mjs';
 import { scanTrends, buildTrendPrompt } from './lib/trend-scanner.mjs';
-import { loadHistory, saveHistory, isCategoryCoolingDown, isTopicCoolingDown, getPostsNeedingEngagement, updatePostEngagement, getAdjustedWeights, getPerformanceHint, getRecentPostsContext } from './lib/history.mjs';
+import { loadHistory, saveHistory, isCategoryCoolingDown, isTopicCoolingDown, getPostsNeedingEngagement, updatePostEngagement, getAdjustedWeights, getPerformanceHint, getRecentPostsContext, getWeeklyInsightsHint } from './lib/history.mjs';
 import { CATEGORIES, SEASONAL_TOPICS, PERSONA_SYSTEM_PROMPTS } from './lib/config.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -204,6 +204,15 @@ function adaptPromptForPersona(prompt) {
 // ============================================================
 
 function buildPrompt(category, dataSources, trendResult) {
+  const result = _buildPrompt(category, dataSources, trendResult);
+  const weeklyHint = getWeeklyInsightsHint(category.id, ACCOUNT);
+  if (weeklyHint) {
+    result.userPrompt += weeklyHint;
+  }
+  return result;
+}
+
+function _buildPrompt(category, dataSources, trendResult) {
   const { cityData, knowledgeData, liveData } = dataSources;
   const performanceHint = getPerformanceHint(category.id, ACCOUNT) || '';
   const recentContext = getRecentPostsContext(ACCOUNT);

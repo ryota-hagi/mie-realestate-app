@@ -422,3 +422,54 @@ export function getPerformanceHint(categoryId, account = null) {
 
   return `\n\n【学習データ】このカテゴリで反応が良かった投稿:\n${examples}\n→ ${lengthHint}が反応良い傾向。同じような構造・トーンで書いて。`;
 }
+
+// ============================================================
+// 週次分析インサイト（マクロ戦略フィードバック）
+// ============================================================
+
+/**
+ * 週次分析レポートからAIコンテキスト用ヒントを生成
+ * @param {string} categoryId - 現在のカテゴリ
+ * @param {string|null} account - アカウント ('a1','a2','a3','business',null)
+ * @returns {string} ヒント文字列（インサイトがなければ空文字）
+ */
+export function getWeeklyInsightsHint(categoryId, account = null) {
+  const insightsPath = join(ROOT, 'data', 'threads-insights.json');
+  if (!existsSync(insightsPath)) return '';
+
+  try {
+    const insights = JSON.parse(readFileSync(insightsPath, 'utf-8'));
+
+    // 8日以上古いインサイトは無視
+    if (insights.generatedAt) {
+      const age = Date.now() - new Date(insights.generatedAt).getTime();
+      if (age > 8 * 24 * 60 * 60 * 1000) return '';
+    }
+
+    const accKey = (account && account !== 'business') ? account : 'business';
+    const accInsights = insights.accounts?.[accKey];
+    if (!accInsights) return '';
+
+    const parts = [];
+
+    if (accInsights.strategy) {
+      parts.push(`今週の方針: ${accInsights.strategy}`);
+    }
+
+    if (accInsights.categoryTips?.[categoryId]) {
+      parts.push(`このカテゴリの改善: ${accInsights.categoryTips[categoryId]}`);
+    }
+
+    if (accInsights.contentPatterns) {
+      const cp = accInsights.contentPatterns;
+      if (cp.toneAdvice) parts.push(`トーン: ${cp.toneAdvice}`);
+      if (cp.endingAdvice) parts.push(`締め方: ${cp.endingAdvice}`);
+    }
+
+    if (parts.length === 0) return '';
+
+    return `\n\n【週次分析からの改善ヒント】以下を意識して投稿を改善しろ。ただし既存の指示に矛盾する場合は既存を優先。\n${parts.join('\n')}`;
+  } catch {
+    return '';
+  }
+}
