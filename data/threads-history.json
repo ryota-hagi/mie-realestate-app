@@ -1137,7 +1137,16 @@
       "text": "間取り決め、夫婦で一回は本気で揉めてる。🏡\n\n「絶対リビング広くしたい派」vs「収納命派」の戦い、相談でめちゃくちゃ多い。\n\nどっちが勝った？",
       "threadId": "17856946062573893",
       "charCount": 72,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 1201,
+        "likes": 2,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 10,
+      "engagementUpdatedAt": "2026-03-05T05:39:56.835Z"
     },
     {
       "date": "2026-03-04T05:09:08.068Z",
@@ -1146,7 +1155,16 @@
       "text": "コンセントの後悔、相談でも本当に多い。💡\n\n新築なのに延長コードだらけになってる、って声。\n後から増やすのにお金かかるって知らなかった人がほとんど。\n\n建てる前に「多すぎるくらい」つけておくのが正解だった、って言うんだよね。",
       "threadId": "18109204180779336",
       "charCount": 113,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 365,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-05T05:39:57.558Z"
     },
     {
       "date": "2026-03-04T09:30:28.423Z",
@@ -1215,6 +1233,15 @@
       "text": "角地、値段見てため息ついた人と、買ってよかったって人、両方いる。\n\n日当たりと開放感は確かにいいんだけど、外構費と固定資産税が上がるから実質もっと高い。\n中間地にして内装に予算まわした方が満足してる人も多い。\n\nどっち選んだ？",
       "threadId": "18067645469249534",
       "charCount": 113,
+      "account": "business"
+    },
+    {
+      "date": "2026-03-05T05:40:20.388Z",
+      "category": "loan",
+      "topicKey": "loan:housing-loan:section:6",
+      "text": "月々の返済額だけ見て決めると、後で詰む。\n\n総返済額で比べると、数百万単位で差が出ることがある。\n相談で「こんなに違うと思わなかった」って声、けっこう聞く。\n\nみんな月々いくらにしたか、最初どうやって決めた？\n🔑",
+      "threadId": "18255716581290492",
+      "charCount": 107,
       "account": "business"
     }
   ]
