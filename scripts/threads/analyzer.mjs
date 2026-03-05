@@ -202,11 +202,15 @@ ${summary}`,
   if (!text) return null;
 
   try {
-    // コードブロックで囲まれている場合を除去
-    const cleaned = text.replace(/^```(?:json)?\s*/m, '').replace(/\s*```\s*$/m, '').trim();
-    return JSON.parse(cleaned);
-  } catch {
-    console.warn('[analyzer] 構造化インサイトのJSON解析失敗。raw:', text.slice(0, 200));
+    // コードブロックやテキストからJSON部分を抽出
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      console.warn('[analyzer] JSON未検出。raw:', text.slice(0, 200));
+      return null;
+    }
+    return JSON.parse(jsonMatch[0]);
+  } catch (e) {
+    console.warn('[analyzer] 構造化インサイトのJSON解析失敗:', e.message);
     return null;
   }
 }
