@@ -162,7 +162,7 @@ async function generateStructuredInsights(allStats) {
     },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1200,
+      max_tokens: 4096,
       tool_choice: { type: 'tool', name: 'save_insights' },
       tools: [{
         name: 'save_insights',
