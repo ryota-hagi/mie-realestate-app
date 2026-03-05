@@ -349,7 +349,16 @@
       "text": "月々の返済額だけで選ぶな。\n\n35年で総返済額を計算すると、金利次第で数百万変わる。\n月5000円の差が、35年で210万になる。\n\n「月々〇万円！」って言葉、罠だった。",
       "threadId": "18105238888888091",
       "charCount": 85,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 940,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-05T10:52:08.013Z"
     },
     {
       "date": "2026-03-04T13:59:51.457Z",
@@ -385,6 +394,15 @@
       "text": "坪単価、低い方を選んだ。\n\n正解だったかどうかは、まだわからない。",
       "threadId": "18093116915041568",
       "charCount": 33,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-05T10:52:16.598Z",
+      "category": "kinshi",
+      "topicKey": "koukai:16",
+      "text": "固定資産税、完全に忘れてた。\n\n毎年くる。一生くる。",
+      "threadId": "18096485116781110",
+      "charCount": 26,
       "account": "a2"
     }
   ]
