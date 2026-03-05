@@ -9,7 +9,7 @@
  * 実行: node scripts/threads/analyzer.mjs
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -127,6 +127,89 @@ ${summary}`,
 }
 
 // ============================================================
+// 構造化インサイト生成（poster.mjs へのフィードバック用）
+// ============================================================
+
+function buildSummaryText(allStats) {
+  return allStats.map(s => {
+    if (!s) return '';
+    const topPosts = s.top3.map(p =>
+      `  - views:${p.engagement.views} likes:${p.engagement.likes} replies:${p.engagement.replies || 0} [${p.category}] "${p.text?.slice(0, 80)}"`
+    ).join('\n');
+    const worstPosts = s.worst3.map(p =>
+      `  - views:${p.engagement.views} [${p.category}] "${p.text?.slice(0, 60)}"`
+    ).join('\n');
+    const cats = s.catRanking.map(c => `${c.cat}(avg ${c.avg})`).join(' > ');
+    return `【${s.account}】投稿${s.postCount}件 avgViews:${s.avgViews}
+バズTOP3:\n${topPosts}
+ワースト3:\n${worstPosts}
+カテゴリ強い順: ${cats}
+バズ投稿の平均文字数: ${s.buzzAvgChars}文字`;
+  }).join('\n\n');
+}
+
+async function generateStructuredInsights(allStats) {
+  if (!ANTHROPIC_API_KEY) return null;
+
+  const summary = buildSummaryText(allStats);
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'x-api-key': ANTHROPIC_API_KEY,
+      'anthropic-version': '2023-06-01',
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 800,
+      messages: [{
+        role: 'user',
+        content: `以下はThreadsの各アカウントのエンゲージメント分析データです。
+各アカウント別に「来週の投稿をどう改善すべきか」を分析し、以下のJSON形式で返してください。
+JSONのみを返してください。マークダウンのコードブロックは不要です。
+
+{
+  "generatedAt": "ISO8601の日時",
+  "accounts": {
+    "アカウント名": {
+      "strategy": "このアカウントの来週の全体方針（1文）",
+      "categoryTips": {
+        "カテゴリID": "このカテゴリの具体的改善アドバイス（1文）"
+      },
+      "contentPatterns": {
+        "idealLength": "short|medium|long",
+        "toneAdvice": "トーンに関するアドバイス（1文）",
+        "endingAdvice": "締め方のアドバイス（1文）"
+      }
+    }
+  }
+}
+
+注意:
+- categoryTipsは反応が良かったカテゴリと悪かったカテゴリの両方について書く（最大3カテゴリ）
+- バズった投稿の共通パターンから具体的に学べることを書く
+- 抽象的なアドバイスではなく「〜で終わる投稿を増やす」「〜文字以内にする」等の実践的な指示にする
+
+データ:
+${summary}`,
+      }],
+    }),
+  });
+
+  const data = await res.json();
+  const text = data.content?.[0]?.text || null;
+  if (!text) return null;
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    console.warn('[analyzer] 構造化インサイトのJSON解析失敗。スキップ');
+    return null;
+  }
+}
+
+// ============================================================
 // Telegram 送信
 // ============================================================
 
@@ -218,6 +301,17 @@ async function main() {
 
   const report = buildReport(validStats, insights);
   console.log('[analyzer] レポート生成完了\n', report);
+
+  // 構造化インサイトを生成・保存（poster.mjs へのフィードバック）
+  console.log('[analyzer] 構造化インサイトを生成中...');
+  const structuredInsights = await generateStructuredInsights(validStats);
+  if (structuredInsights) {
+    const insightsPath = resolve(DATA_DIR, 'threads-insights.json');
+    writeFileSync(insightsPath, JSON.stringify(structuredInsights, null, 2), 'utf-8');
+    console.log('[analyzer] 構造化インサイト保存完了:', insightsPath);
+  } else {
+    console.warn('[analyzer] 構造化インサイト生成失敗。スキップ');
+  }
 
   console.log('[analyzer] Telegram送信中...');
   await sendTelegram(report);
