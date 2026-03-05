@@ -23,6 +23,7 @@ const ROOT = join(__dirname, '..');
 // ---------------------------------------------------------------------------
 const cityData = JSON.parse(readFileSync(join(ROOT, 'scripts/city-data.json'), 'utf-8'));
 const knowledgeData = JSON.parse(readFileSync(join(ROOT, 'scripts/knowledge-data.json'), 'utf-8'));
+const buildersData = JSON.parse(readFileSync(join(ROOT, 'scripts/builders-data.json'), 'utf-8')).builders;
 const areaHtml = readFileSync(join(ROOT, 'scripts/area-template.html'), 'utf-8');
 
 // MLIT hazard data (optional — skip gracefully if not yet generated)
@@ -1547,11 +1548,19 @@ ${JSON.stringify({
   mainEntityOfPage: { '@type': 'WebPage', '@id': `${DOMAIN}/knowledge/${article.id}/` }
 })}</script>`;
 
-  const sectionsHtml = article.sections.map(s => `
+  const sectionsHtml = article.sections.map(s => {
+    const builderCardsHtml = s.builderCards
+      ? renderBuilderCardGrid(s.builderCards)
+      : '';
+    const bodyContent = s.bodyHtml
+      ? s.bodyHtml
+      : (s.body ? `<p>${escHtml(s.body)}</p>` : '');
+    return `
   <section>
     <h2>${escHtml(s.heading)}</h2>
-    ${s.bodyHtml ? s.bodyHtml : `<p>${escHtml(s.body)}</p>`}
-  </section>`).join('\n');
+    ${bodyContent}${builderCardsHtml}
+  </section>`;
+  }).join('\n');
 
   const faqHtml = (article.faqs || []).map(f => `
     <div class="knowledge-faq">
@@ -1723,6 +1732,24 @@ ${faqJsonLd}
   .ka-figure { margin: 24px 0; text-align: center; }
   .ka-figure img { max-width: 100%; height: auto; border-radius: 10px; border: 1px solid #e5e7eb; }
   .ka-figure figcaption { font-size: 12px; color: #6b7280; margin-top: 8px; line-height: 1.5; }
+
+  /* ビルダーカード */
+  .ka-builder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 24px 0; }
+  .ka-builder-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; }
+  .ka-builder-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .ka-builder-name { font-size: 16px; font-weight: 700; color: #1f2937; }
+  .ka-builder-grade { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; }
+  .ka-builder-grade.lowcost { background: #ecfdf5; color: #059669; }
+  .ka-builder-grade.standard { background: #eff6ff; color: #2563eb; }
+  .ka-builder-grade.highgrade { background: #fdf4ff; color: #7c3aed; }
+  .ka-builder-tagline { font-size: 12px; color: #6b7280; margin-bottom: 8px; }
+  .ka-builder-price { font-size: 20px; font-weight: 800; color: #2563eb; margin: 8px 0; }
+  .ka-builder-price span { font-size: 13px; font-weight: 400; color: #6b7280; }
+  .ka-builder-features { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .ka-builder-feature { background: #f3f4f6; font-size: 12px; padding: 3px 8px; border-radius: 6px; color: #374151; }
+  .ka-builder-summary { font-size: 13px; color: #374151; line-height: 1.7; margin: 12px 0; }
+  .ka-builder-link { display: block; text-align: center; margin-top: 16px; padding: 9px 16px; background: #2563eb; color: #fff; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+  .ka-builder-link:hover { background: #1d4ed8; }
 </style>
 </head>
 <body>
@@ -1776,11 +1803,12 @@ ${faqJsonLd}
     </nav>
 
     ${article.sections.map((s, i) => {
-      const bodyContent = s.bodyHtml ? s.bodyHtml : `<p>${escHtml(s.body)}</p>`;
+      const builderCardsHtml = s.builderCards ? renderBuilderCardGrid(s.builderCards) : '';
+      const bodyContent = s.bodyHtml ? s.bodyHtml : (s.body ? `<p>${escHtml(s.body)}</p>` : '');
       return `
     <section id="section-${i + 1}">
       <h2>${escHtml(s.heading)}</h2>
-      ${bodyContent}
+      ${bodyContent}${builderCardsHtml}
     </section>`;
     }).join('\n')}
 
@@ -2181,6 +2209,214 @@ async function minifyHtml(html) {
 }
 
 // ---------------------------------------------------------------------------
+// Builder card helpers
+// ---------------------------------------------------------------------------
+const GRADE_LABEL = { lowcost: 'ローコスト', standard: 'スタンダード', highgrade: 'ハイグレード' };
+
+function renderBuilderCard(builder) {
+  const gradeCls = builder.grade;
+  const gradeLabel = GRADE_LABEL[builder.grade] || builder.grade;
+  const featuresHtml = builder.features.map(f => `<span class="ka-builder-feature">${escHtml(f)}</span>`).join('');
+  return `<div class="ka-builder-card">
+  <div class="ka-builder-card-header">
+    <div class="ka-builder-name">${escHtml(builder.name)}</div>
+    <div class="ka-builder-grade ${gradeCls}">${escHtml(gradeLabel)}</div>
+  </div>
+  <div class="ka-builder-tagline">${escHtml(builder.tagline)}</div>
+  <div class="ka-builder-price">坪${builder.tsuboPrice.min}〜${builder.tsuboPrice.max}万円<span>/坪</span></div>
+  <p class="ka-builder-summary">${escHtml(builder.summary)}</p>
+  <div class="ka-builder-features">${featuresHtml}</div>
+  <a href="/builders/${escHtml(builder.id)}/" class="ka-builder-link">詳細を見る →</a>
+</div>`;
+}
+
+function renderBuilderCardGrid(builderIds) {
+  const cards = builderIds
+    .map(id => buildersData.find(b => b.id === id))
+    .filter(Boolean)
+    .map(renderBuilderCard)
+    .join('\n');
+  return `<div class="ka-builder-grid">\n${cards}\n</div>\n`;
+}
+
+// ---------------------------------------------------------------------------
+// Generate individual builder page
+// ---------------------------------------------------------------------------
+function generateBuilderPage(builder) {
+  const gradeLabel = GRADE_LABEL[builder.grade] || builder.grade;
+  const AREA_LABEL = {
+    yokkaichi: '四日市市', kuwana: '桑名市', suzuka: '鈴鹿市',
+    inabe: 'いなべ市', kameyama: '亀山市', komono: '菰野町', toin: '東員町'
+  };
+  const areasText = builder.areas.map(a => AREA_LABEL[a] || a).join('・');
+  const prosHtml = builder.pros.map(p => `<li>${escHtml(p)}</li>`).join('');
+  const consHtml = builder.cons.map(c => `<li>${escHtml(c)}</li>`).join('');
+  const recHtml = builder.recommended_for.map(r => `<li>${escHtml(r)}</li>`).join('');
+  const featuresHtml = builder.features.map(f => `<span class="ka-builder-feature">${escHtml(f)}</span>`).join('');
+  const gradeCls = builder.grade;
+  const pageTitle = `${builder.name}の評判・坪単価・特徴｜三重県の注文住宅`;
+  const pageDesc = `${builder.name}（${gradeLabel}）の坪単価・特徴・口コミを解説。坪${builder.tsuboPrice.min}〜${builder.tsuboPrice.max}万円。三重県の対応エリア（${areasText}）や向いている方の特徴も紹介。`;
+
+  return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escHtml(pageTitle)}</title>
+<meta name="description" content="${escHtml(pageDesc)}">
+<link rel="canonical" href="${DOMAIN}/builders/${escHtml(builder.id)}/">
+<meta property="og:title" content="${escHtml(pageTitle)}">
+<meta property="og:description" content="${escHtml(pageDesc)}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="${DOMAIN}/builders/${escHtml(builder.id)}/">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">${JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDesc,
+  author: { '@type': 'Organization', name: '注文住宅比較.com', url: DOMAIN + '/about/' },
+  publisher: { '@type': 'Organization', name: '注文住宅比較.com', url: DOMAIN + '/about/' },
+  datePublished: TODAY,
+  dateModified: TODAY,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': `${DOMAIN}/builders/${builder.id}/` }
+})}</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); min-height: 100vh; color: #1f2937; }
+.knowledge-header { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%); padding: 12px 0; }
+.knowledge-header-inner { max-width: 1100px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.knowledge-header-nav { display: flex; gap: 8px; margin-left: auto; }
+.knowledge-header-nav a, .knowledge-header-nav span { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 13px; font-weight: 500; padding: 4px 10px; border-radius: 6px; }
+.knowledge-header-nav a:hover { background: rgba(255,255,255,0.15); color: #fff; }
+.knowledge-header-nav .active { background: rgba(255,255,255,0.2); color: #fff; font-weight: 700; }
+.site-logo img { height: 44px; width: auto; display: block; }
+.builder-hero { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #7c3aed 100%); color: #fff; padding: 40px 16px 32px; text-align: center; }
+.builder-hero h1 { font-size: clamp(22px, 4vw, 32px); font-weight: 800; line-height: 1.3; margin-bottom: 10px; }
+.builder-hero .grade-badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 999px; margin-bottom: 12px; }
+.grade-badge.lowcost { background: #ecfdf5; color: #059669; }
+.grade-badge.standard { background: #dbeafe; color: #1d4ed8; }
+.grade-badge.highgrade { background: #fdf4ff; color: #7c3aed; }
+.builder-hero .price { font-size: clamp(28px, 6vw, 44px); font-weight: 900; margin: 8px 0; }
+.builder-hero .price span { font-size: 16px; font-weight: 400; opacity: 0.8; }
+.builder-hero .tagline { font-size: 15px; opacity: 0.9; margin-top: 8px; }
+.builder-main { max-width: 860px; margin: 0 auto; padding: 32px 16px 60px; }
+.builder-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 28px; margin-bottom: 28px; }
+.builder-card h2 { font-size: 20px; font-weight: 700; color: #1e40af; border-left: 4px solid #2563eb; padding-left: 14px; margin-bottom: 20px; }
+.builder-summary-text { font-size: 15px; line-height: 1.8; color: #374151; }
+.features-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.feature-tag { background: #eff6ff; color: #1d4ed8; font-size: 13px; font-weight: 600; padding: 5px 12px; border-radius: 8px; }
+.pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 600px) { .pros-cons { grid-template-columns: 1fr; } }
+.pros-box, .cons-box { border-radius: 12px; padding: 16px; }
+.pros-box { background: #f0fdf4; border: 1px solid #bbf7d0; }
+.cons-box { background: #fef2f2; border: 1px solid #fecaca; }
+.pros-box h3 { color: #16a34a; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+.cons-box h3 { color: #dc2626; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+.pros-box ul, .cons-box ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.pros-box li { font-size: 13px; line-height: 1.6; padding-left: 20px; position: relative; color: #374151; }
+.pros-box li::before { content: "○"; position: absolute; left: 0; color: #16a34a; font-weight: 700; }
+.cons-box li { font-size: 13px; line-height: 1.6; padding-left: 20px; position: relative; color: #374151; }
+.cons-box li::before { content: "×"; position: absolute; left: 0; color: #dc2626; font-weight: 700; }
+.info-row { display: flex; gap: 12px; font-size: 14px; margin-top: 4px; flex-wrap: wrap; }
+.info-label { color: #6b7280; font-weight: 500; min-width: 80px; }
+.info-value { color: #1f2937; font-weight: 600; }
+.rec-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.rec-list li { font-size: 14px; line-height: 1.7; padding-left: 24px; position: relative; color: #374151; }
+.rec-list li::before { content: "✔"; position: absolute; left: 0; color: #2563eb; font-weight: 700; }
+.cta-box { background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%); border: 1px solid #bfdbfe; border-radius: 14px; padding: 28px; text-align: center; margin-top: 32px; }
+.cta-box h3 { font-size: 18px; font-weight: 700; color: #1e40af; margin-bottom: 8px; }
+.cta-box p { font-size: 14px; color: #374151; margin-bottom: 20px; line-height: 1.7; }
+.cta-btn { display: inline-block; background: #2563eb; color: #fff; font-size: 15px; font-weight: 700; padding: 13px 32px; border-radius: 10px; text-decoration: none; }
+.cta-btn:hover { background: #1d4ed8; }
+.cta-btn-sub { display: inline-block; background: #fff; color: #2563eb; border: 2px solid #2563eb; font-size: 14px; font-weight: 600; padding: 10px 24px; border-radius: 10px; text-decoration: none; margin-left: 12px; }
+@media (max-width: 480px) { .cta-btn-sub { margin-left: 0; margin-top: 10px; } }
+.breadcrumb { font-size: 12px; color: #6b7280; margin-bottom: 24px; }
+.breadcrumb a { color: #2563eb; text-decoration: none; }
+</style>
+</head>
+<body>
+<header class="knowledge-header">
+  <div class="knowledge-header-inner">
+    <a href="/" class="site-logo" style="text-decoration:none;">
+      <picture>
+        <source srcset="/images/header-banner.webp" type="image/webp">
+        <img src="/images/header-banner.png" alt="注文住宅比較.com">
+      </picture>
+    </a>
+    <nav class="knowledge-header-nav">
+      <a href="/">物件比較</a>
+      <a href="/area/mie/">エリア比較</a>
+      <a href="/knowledge/">知識</a>
+      <a href="/builders/" class="active">会社情報</a>
+      <a href="/about/">運営者情報</a>
+    </nav>
+  </div>
+</header>
+
+<section class="builder-hero">
+  <div class="grade-badge ${gradeCls}">${escHtml(gradeLabel)}</div>
+  <h1>${escHtml(builder.name)}<br><span style="font-size:0.65em;font-weight:600;opacity:0.9;">の評判・坪単価・特徴</span></h1>
+  <div class="price">坪${builder.tsuboPrice.min}〜${builder.tsuboPrice.max}万円<span>/坪</span></div>
+  <div class="tagline">${escHtml(builder.tagline)}</div>
+</section>
+
+<main class="builder-main">
+  <nav class="breadcrumb">
+    <a href="/">トップ</a> / <a href="/builders/">会社情報</a> / <span>${escHtml(builder.name)}</span>
+  </nav>
+
+  <!-- 概要 -->
+  <div class="builder-card">
+    <h2>会社概要・特徴</h2>
+    <p class="builder-summary-text">${escHtml(builder.summary)}</p>
+    <div style="margin-top:20px;display:flex;flex-direction:column;gap:12px;">
+      <div class="info-row"><span class="info-label">坪単価</span><span class="info-value">${builder.tsuboPrice.min}〜${builder.tsuboPrice.max}万円/坪</span></div>
+      <div class="info-row"><span class="info-label">工法</span><span class="info-value">${escHtml(builder.structure)}</span></div>
+      <div class="info-row"><span class="info-label">保証</span><span class="info-value">構造${builder.warranty.structure}年・防水${builder.warranty.leak}年</span></div>
+      <div class="info-row"><span class="info-label">対応エリア</span><span class="info-value">${escHtml(areasText)}</span></div>
+      <div class="info-row"><span class="info-label">三重県での実績</span><span class="info-value">${escHtml(builder.mie_presence)}</span></div>
+    </div>
+    <div style="margin-top:20px;">
+      <div style="font-size:12px;color:#6b7280;margin-bottom:8px;">特徴・対応メニュー</div>
+      <div class="features-grid">${featuresHtml}</div>
+    </div>
+  </div>
+
+  <!-- メリット・デメリット -->
+  <div class="builder-card">
+    <h2>メリット・デメリット</h2>
+    <div class="pros-cons">
+      <div class="pros-box">
+        <h3>◎ メリット</h3>
+        <ul>${prosHtml}</ul>
+      </div>
+      <div class="cons-box">
+        <h3>✗ デメリット・注意点</h3>
+        <ul>${consHtml}</ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- こんな方におすすめ -->
+  <div class="builder-card">
+    <h2>こんな方におすすめ</h2>
+    <ul class="rec-list">${recHtml}</ul>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-box">
+    <h3>${escHtml(builder.name)}と他社を比較しましょう</h3>
+    <p>三重県北部の注文住宅は1社だけ見ても損。複数社の見積もりを比較することで、平均100〜200万円のコスト削減につながります。</p>
+    <a href="${escHtml(builder.officialUrl)}" class="cta-btn" target="_blank" rel="noopener">公式サイトを見る</a>
+    <a href="/knowledge/mie-builder-guide/" class="cta-btn-sub">他社と比較する</a>
+  </div>
+</main>
+</body>
+</html>`;
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 async function main() {
@@ -2218,6 +2454,17 @@ async function main() {
     console.log(`  ✓ knowledge/${article.id}/index.html`);
   }
 
+  // Builder individual pages
+  const buildersDir = join(ROOT, 'builders');
+  ensureDir(buildersDir);
+  for (const builder of buildersData) {
+    const builderPageDir = join(buildersDir, builder.id);
+    ensureDir(builderPageDir);
+    const builderHtml = await minifyHtml(generateBuilderPage(builder));
+    writeFileSync(join(builderPageDir, 'index.html'), builderHtml, 'utf-8');
+    console.log(`  ✓ builders/${builder.id}/index.html`);
+  }
+
   // About page
   const aboutDir = join(ROOT, 'about');
   ensureDir(aboutDir);
@@ -2230,7 +2477,8 @@ async function main() {
   console.log('  ✓ sitemap.xml');
 
   const articleCount = knowledgeData.articles.length;
-  console.log(`Done! Generated 1 hub + 7 city pages + 1 knowledge hub + ${articleCount} articles + about + sitemap.`);
+  const builderCount = buildersData.length;
+  console.log(`Done! Generated 1 hub + 7 city pages + 1 knowledge hub + ${articleCount} articles + ${builderCount} builder pages + about + sitemap.`);
 }
 
 main();
