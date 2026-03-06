@@ -1,6 +1,12 @@
 {
-  "scannedAt": "2026-03-05T10:29:31.888Z",
+  "scannedAt": "2026-03-06T10:24:47.942Z",
   "keywords": {
+    "マイホーム": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
     "家づくり": {
       "resultCount": 9,
       "totalScore": 26,
@@ -53,95 +59,6 @@
         }
       ]
     },
-    "住宅ローン": {
-      "resultCount": 2,
-      "totalScore": 13,
-      "avgScore": 6.5,
-      "topPosts": [
-        {
-          "id": "18179182480373067",
-          "text": "住宅ローン減税、また変わるらしい。\n\n自分が建てた2年前もギリギリ制度変わる前に間に合わせようって焦ってたのに、結局また変わるんかよって感じ。\n\nタイミングで何百万も変わるのに、その「タイミング」が全然読めない。\n\n家建てるって、運ゲーの要素強すぎると思う。みんなはどのタイミングで決断した？",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-25T12:39:10+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVLmKaNkZK6",
-          "insights": {
-            "views": 2871,
-            "likes": 5,
-            "replies": 2,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 13
-        },
-        {
-          "id": "18080516399035663",
-          "text": "固定資産税の見直し、地味に気になってる。\n\n住宅ローンの返済額は計算するのに、毎年かかる税金って後回しにしがちなんだよね。\n\nローン返済中に「こんなにかかるの？」ってなった人、相談の中でもちょいちょい出てくる。\n建てる前にちゃんと試算しておきたいやつだわ。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-27T05:44:06+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVQAQG6jo3E",
-          "insights": {
-            "views": 394,
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 0
-        }
-      ]
-    },
-    "ハウスメーカー": {
-      "resultCount": 4,
-      "totalScore": 100,
-      "avgScore": 25,
-      "topPosts": [
-        {
-          "id": "17911201170338958",
-          "text": "ハウスメーカーじゃなくて工務店にした。\n\n正直、まだ正解だったかわからない。\n\n保証とか大手の安心感は捨てた。\nでも担当者と直接話せる距離感はよかった。\n\nみんなはどっちにした？",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-26T10:35:50+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVN81_TkbgM",
-          "insights": {
-            "views": 5412,
-            "likes": 38,
-            "replies": 15,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 98
-        },
-        {
-          "id": "17967184536044556",
-          "text": "📊📍 ハウスメーカーか工務店か、どっちにするか迷ったって相談、すごく多い。\n\n結局どっちも正解とも言えるし、後悔してる人もいる。\n\n「大手の安心感を取った」「でも担当者と全然話せなかった」って声も聞くし、逆に「工務店にしたら想定外のことが多かった」って声もある。\n\n三重だと選択肢どのくらいあった？",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-02T10:35:13+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVYP87ckWJh",
-          "insights": {
-            "views": 173,
-            "likes": 2,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 2
-        },
-        {
-          "id": "18039316967769277",
-          "text": "火災保険は手抜きしてる人、体感7割超えてるんだよ。ハウスメーカーの言い値で決まる流れ、本当に多い。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-04T10:26:46+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVdYk3tEY9u",
-          "insights": {
-            "views": 0,
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 0
-        }
-      ]
-    },
     "注文住宅": {
       "resultCount": 6,
       "totalScore": 98,
@@ -154,7 +71,7 @@
           "timestamp": "2026-02-25T08:36:24+0000",
           "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVLKYeNDkTt",
           "insights": {
-            "views": 30273,
+            "views": 30275,
             "likes": 46,
             "replies": 11,
             "reposts": 0,
@@ -194,10 +111,62 @@
         }
       ]
     },
-    "工務店": {
-      "resultCount": 8,
+    "間取り": {
+      "resultCount": 10,
+      "totalScore": 14,
+      "avgScore": 2.8,
+      "topPosts": [
+        {
+          "id": "17856946062573893",
+          "text": "間取り決め、夫婦で一回は本気で揉めてる。🏡\n\n「絶対リビング広くしたい派」vs「収納命派」の戦い、相談でめちゃくちゃ多い。\n\nどっちが勝った？",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-03-03T10:29:35+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVa0GsKlLs_",
+          "insights": {
+            "views": 1202,
+            "likes": 2,
+            "replies": 3,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 14
+        },
+        {
+          "id": "18133159321519510",
+          "text": "間取りで夫婦揉めた人、体感で8割超えてるんだよなぁ。後から「あ、これいらなかった」ってなるのより、家事動線優先の判断は後悔少ないと思う",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-03-05T05:24:30+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVfax3ekS5C",
+          "insights": {
+            "views": 0,
+            "likes": 0,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 0
+        },
+        {
+          "id": "18114655000629291",
+          "text": "あと「廊下」も地味に削る決断難しいやつなんだよね。廊下減らすと間取りぐっと良くなるのに、みんなそこに抵抗感あるんだわ",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-03-04T05:09:54+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVc0T4tllJ7",
+          "insights": {
+            "views": 0,
+            "likes": 0,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 0
+        }
+      ]
+    },
+    "ハウスメーカー": {
+      "resultCount": 4,
       "totalScore": 100,
-      "avgScore": 20,
+      "avgScore": 25,
       "topPosts": [
         {
           "id": "17911201170338958",
@@ -206,7 +175,7 @@
           "timestamp": "2026-02-26T10:35:50+0000",
           "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVN81_TkbgM",
           "insights": {
-            "views": 5412,
+            "views": 5421,
             "likes": 38,
             "replies": 15,
             "reposts": 0,
@@ -221,7 +190,7 @@
           "timestamp": "2026-03-02T10:35:13+0000",
           "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVYP87ckWJh",
           "insights": {
-            "views": 173,
+            "views": 179,
             "likes": 2,
             "replies": 0,
             "reposts": 0,
@@ -230,69 +199,11 @@
           "score": 2
         },
         {
-          "id": "17904388752369545",
-          "text": "みんなここで後悔してるんだよなぁ。結局「誰を信じるか」の賭けなんだよね。大手も工務店も当たり外れデカすぎる。",
+          "id": "18039316967769277",
+          "text": "火災保険は手抜きしてる人、体感7割超えてるんだよ。ハウスメーカーの言い値で決まる流れ、本当に多い。",
           "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-04T10:31:26+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVdZHBmETW5",
-          "insights": {
-            "views": 1,
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 0
-        }
-      ]
-    },
-    "マイホーム": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "四日市": {
-      "resultCount": 10,
-      "totalScore": 22,
-      "avgScore": 4.4,
-      "topPosts": [
-        {
-          "id": "17866762836491621",
-          "text": "四日市西部で建てた人から聞いた話。\n\nコンビナートから離れてるから空気がいいって、地味に決め手になったって声が多い。\n閑静で、それでいて坪単価が抑えられるって地域、三重でも探すと少ない。\n\n近鉄四日市まで車で行けるなら名古屋通勤も現実的、って気づいてから候補に入れたって人もいた。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-28T12:24:39+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVTS4uEFnZ2",
-          "insights": {
-            "views": 4060,
-            "likes": 6,
-            "replies": 3,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 18
-        },
-        {
-          "id": "17877469524485298",
-          "text": "三重で土地探してる人に朗報。\n\nうちのサイト、エリア別の土地相場ページ作ったんだけど、これがめちゃくちゃ使えると思ってる。\n\n津と四日市でこんなに違うんだとか、松阪ならこのくらいで探せるんだとか、比べながら見られる。\n「どのエリアにするか決めてない」段階の人こそ、先に見てほしい。\n\nプロフィールにリンクあるよ。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-28T13:30:34+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVTabmEEY4Y",
-          "insights": {
-            "views": 44,
-            "likes": 0,
-            "replies": 1,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 4
-        },
-        {
-          "id": "18128664004551445",
-          "text": "四日市の通勤ラッシュは相談でもほんと多いテーマ。駅近と言っても朝の混雑考えると別の場所の方が快適って人も結構いる。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-04T09:31:02+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVdSMsHlZuc",
+          "timestamp": "2026-03-04T10:26:46+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVdYk3tEY9u",
           "insights": {
             "views": 0,
             "likes": 0,
@@ -304,11 +215,39 @@
         }
       ]
     },
-    "いなべ": {
+    "住宅補助金": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
+    },
+    "桑名": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "鈴鹿": {
+      "resultCount": 1,
+      "totalScore": 89,
+      "avgScore": 89,
+      "topPosts": [
+        {
+          "id": "18353559955234453",
+          "text": "鈴鹿市で建てた人の話、よく聞く。\n\n「四日市と迷ったけど、鈴鹿にして土地が全然違った」って。\n同じ予算で庭まで取れたって人、結構いる。\n\n庭付きで建てたい人、鈴鹿はまじで選択肢に入れた方がいい。",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-02-27T08:30:29+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVQTSxxFoQa",
+          "insights": {
+            "views": 15494,
+            "likes": 37,
+            "replies": 13,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 89
+        }
+      ]
     },
     "住宅展示場 春": {
       "resultCount": 0,
