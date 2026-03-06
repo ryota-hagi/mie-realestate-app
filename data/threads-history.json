@@ -1251,7 +1251,16 @@
       "text": "月々の返済額だけ見て決めると、後で詰む。\n\n総返済額で比べると、数百万単位で差が出ることがある。\n相談で「こんなに違うと思わなかった」って声、けっこう聞く。\n\nみんな月々いくらにしたか、最初どうやって決めた？\n🔑",
       "threadId": "18255716581290492",
       "charCount": 107,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 255,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-06T10:24:33.403Z"
     },
     {
       "date": "2026-03-05T09:33:40.327Z",
@@ -1290,6 +1299,15 @@
       "repliedTo": "17856946062573893",
       "keyword": "間取り",
       "charCount": 34
+    },
+    {
+      "date": "2026-03-06T10:24:58.575Z",
+      "category": "loan",
+      "topicKey": "loan:subsidy-2026:section:1",
+      "text": "補助金、知ってる人と知らない人で100万以上差がつく。\n\n今年も新築向けの補助金が出てて、うまく使えた人は総額100万超えてる。\nでも申請のタイミングを間違えると、条件満たしてても受け取れないことがある。\n\nせっかく建てるなら、ローン組む前に確認しておいた方がいいやつ。\n📍",
+      "threadId": "18055467242438452",
+      "charCount": 138,
+      "account": "business"
     }
   ]
 }
