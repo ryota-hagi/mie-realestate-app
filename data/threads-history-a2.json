@@ -439,7 +439,16 @@
       "text": "固定資産税、完全に忘れてた。\n\n毎年くる。一生くる。",
       "threadId": "18096485116781110",
       "charCount": 26,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 0,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-06T13:57:04.238Z"
     },
     {
       "date": "2026-03-05T14:02:57.472Z",
@@ -484,6 +493,15 @@
       "text": "補助金、申請が間に合わなかった。\n\nそれだけ。",
       "threadId": "18357527185204464",
       "charCount": 23,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-06T13:57:15.708Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:4",
+      "text": "展示場のテンションで契約するな。\n\nあそこ、照明も家具も全部「非日常」に作られてる。\n\n冷静な目で見た自分の予算と、あの空間で感じた「これだ」はたぶん別物だった。\n\n1週間置いたら、削れるものが3つは見つかる。",
+      "threadId": "18399256600195224",
+      "charCount": 105,
       "account": "a2"
     }
   ]
