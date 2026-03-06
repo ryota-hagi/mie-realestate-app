@@ -1,58 +1,6 @@
 {
-  "scannedAt": "2026-03-05T10:29:31.888Z",
+  "scannedAt": "2026-03-06T05:38:35.608Z",
   "keywords": {
-    "家づくり": {
-      "resultCount": 9,
-      "totalScore": 26,
-      "avgScore": 5.2,
-      "topPosts": [
-        {
-          "id": "18133012798502152",
-          "text": "春の引っ越しに間に合わせたくて、土地決めを急ぐ人多いと思うんだけど、自分もそれで失敗した。焦ると後悔しやすいぞ。\n\n家づくり",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-23T11:59:31+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVGYCPBlt3l",
-          "insights": {
-            "views": 962,
-            "likes": 2,
-            "replies": 1,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 6
-        },
-        {
-          "id": "18089419859123743",
-          "text": "間取り決めを嫁に全部任せて、後から「ここ使いづらくない？」って言ったことめっちゃ後悔してる。一緒に決めてりゃよかった。\n\n家づくり",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-23T10:37:55+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVGOskPDvMM",
-          "insights": {
-            "views": 932,
-            "likes": 2,
-            "replies": 1,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 6
-        },
-        {
-          "id": "17896685115400248",
-          "text": "リモートワーク定着で郊外増えるってニュース見たけど、通勤なしになるとマジで家選びの自由度変わるんだな。\n\n三重県 #家づくり",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-23T12:01:05+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVGYNqsFozR",
-          "insights": {
-            "views": 271,
-            "likes": 1,
-            "replies": 1,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 5
-        }
-      ]
-    },
     "住宅ローン": {
       "resultCount": 2,
       "totalScore": 13,
@@ -90,26 +38,11 @@
         }
       ]
     },
-    "ハウスメーカー": {
-      "resultCount": 4,
-      "totalScore": 100,
-      "avgScore": 25,
+    "工務店": {
+      "resultCount": 9,
+      "totalScore": 2,
+      "avgScore": 0.4,
       "topPosts": [
-        {
-          "id": "17911201170338958",
-          "text": "ハウスメーカーじゃなくて工務店にした。\n\n正直、まだ正解だったかわからない。\n\n保証とか大手の安心感は捨てた。\nでも担当者と直接話せる距離感はよかった。\n\nみんなはどっちにした？",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-26T10:35:50+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVN81_TkbgM",
-          "insights": {
-            "views": 5412,
-            "likes": 38,
-            "replies": 15,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 98
-        },
         {
           "id": "17967184536044556",
           "text": "📊📍 ハウスメーカーか工務店か、どっちにするか迷ったって相談、すごく多い。\n\n結局どっちも正解とも言えるし、後悔してる人もいる。\n\n「大手の安心感を取った」「でも担当者と全然話せなかった」って声も聞くし、逆に「工務店にしたら想定外のことが多かった」って声もある。\n\n三重だと選択肢どのくらいあった？",
@@ -117,7 +50,7 @@
           "timestamp": "2026-03-02T10:35:13+0000",
           "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVYP87ckWJh",
           "insights": {
-            "views": 173,
+            "views": 176,
             "likes": 2,
             "replies": 0,
             "reposts": 0,
@@ -126,13 +59,80 @@
           "score": 2
         },
         {
-          "id": "18039316967769277",
-          "text": "火災保険は手抜きしてる人、体感7割超えてるんだよ。ハウスメーカーの言い値で決まる流れ、本当に多い。",
+          "id": "18076604579377529",
+          "text": "大手は営業マンとの相性で満足度めっちゃ変わるんだよなぁ。工務店は担当者が辞めると引き継ぎ悪くなるとこが多い印象。",
           "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-04T10:26:46+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVdYk3tEY9u",
+          "timestamp": "2026-03-05T10:30:57+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVf92Y6kV82",
           "insights": {
-            "views": 0,
+            "views": 7,
+            "likes": 0,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 0
+        },
+        {
+          "id": "17904388752369545",
+          "text": "みんなここで後悔してるんだよなぁ。結局「誰を信じるか」の賭けなんだよね。大手も工務店も当たり外れデカすぎる。",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-03-04T10:31:26+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVdZHBmETW5",
+          "insights": {
+            "views": 1,
+            "likes": 0,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 0
+        }
+      ]
+    },
+    "新築": {
+      "resultCount": 3,
+      "totalScore": 194,
+      "avgScore": 64.66666666666667,
+      "topPosts": [
+        {
+          "id": "17868796203563607",
+          "text": "コンセント、ケチるな。\n\n新築なのに延長コードが床を這ってる。\n自分の家、まさにこれ。\n\n後から増設しようとしたら「壁壊すんで15万です」って言われた。\n追加工事で頼んどきゃ数千円だったのに。\n\nみんなはコンセント足りてる？",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-02-24T03:19:17+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVIBS8wjfje",
+          "insights": {
+            "views": 13372,
+            "likes": 45,
+            "replies": 37,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 193
+        },
+        {
+          "id": "17907248256347089",
+          "text": "省エネ基準義務化のニュース見てさ、自分らが建てた時は選択肢あったのに今からの人はほぼ強制なんだ。自分たちは予算の都合で標準仕様にしたけど、これからはそれもできないんだな。\n\n新築 #工務店",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-02-23T07:10:26+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVF29AgDvt0",
+          "insights": {
+            "views": 933,
+            "likes": 1,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 1
+        },
+        {
+          "id": "18109204180779336",
+          "text": "コンセントの後悔、相談でも本当に多い。💡\n\n新築なのに延長コードだらけになってる、って声。\n後から増やすのにお金かかるって知らなかった人がほとんど。\n\n建てる前に「多すぎるくらい」つけておくのが正解だった、って言うんだよね。",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-03-04T05:09:05+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVc0OCYlhgJ",
+          "insights": {
+            "views": 365,
             "likes": 0,
             "replies": 0,
             "reposts": 0,
@@ -154,7 +154,7 @@
           "timestamp": "2026-02-25T08:36:24+0000",
           "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVLKYeNDkTt",
           "insights": {
-            "views": 30273,
+            "views": 30275,
             "likes": 46,
             "replies": 11,
             "reposts": 0,
@@ -194,49 +194,55 @@
         }
       ]
     },
-    "工務店": {
-      "resultCount": 8,
-      "totalScore": 100,
-      "avgScore": 20,
+    "住宅補助金": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "間取り": {
+      "resultCount": 10,
+      "totalScore": 10,
+      "avgScore": 2,
       "topPosts": [
         {
-          "id": "17911201170338958",
-          "text": "ハウスメーカーじゃなくて工務店にした。\n\n正直、まだ正解だったかわからない。\n\n保証とか大手の安心感は捨てた。\nでも担当者と直接話せる距離感はよかった。\n\nみんなはどっちにした？",
+          "id": "17856946062573893",
+          "text": "間取り決め、夫婦で一回は本気で揉めてる。🏡\n\n「絶対リビング広くしたい派」vs「収納命派」の戦い、相談でめちゃくちゃ多い。\n\nどっちが勝った？",
           "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-26T10:35:50+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVN81_TkbgM",
+          "timestamp": "2026-03-03T10:29:35+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVa0GsKlLs_",
           "insights": {
-            "views": 5412,
-            "likes": 38,
-            "replies": 15,
+            "views": 1202,
+            "likes": 2,
+            "replies": 2,
             "reposts": 0,
             "quotes": 0
           },
-          "score": 98
+          "score": 10
         },
         {
-          "id": "17967184536044556",
-          "text": "📊📍 ハウスメーカーか工務店か、どっちにするか迷ったって相談、すごく多い。\n\n結局どっちも正解とも言えるし、後悔してる人もいる。\n\n「大手の安心感を取った」「でも担当者と全然話せなかった」って声も聞くし、逆に「工務店にしたら想定外のことが多かった」って声もある。\n\n三重だと選択肢どのくらいあった？",
+          "id": "18133159321519510",
+          "text": "間取りで夫婦揉めた人、体感で8割超えてるんだよなぁ。後から「あ、これいらなかった」ってなるのより、家事動線優先の判断は後悔少ないと思う",
           "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-02T10:35:13+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVYP87ckWJh",
+          "timestamp": "2026-03-05T05:24:30+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVfax3ekS5C",
           "insights": {
-            "views": 173,
-            "likes": 2,
+            "views": 0,
+            "likes": 0,
             "replies": 0,
             "reposts": 0,
             "quotes": 0
           },
-          "score": 2
+          "score": 0
         },
         {
-          "id": "17904388752369545",
-          "text": "みんなここで後悔してるんだよなぁ。結局「誰を信じるか」の賭けなんだよね。大手も工務店も当たり外れデカすぎる。",
+          "id": "18114655000629291",
+          "text": "あと「廊下」も地味に削る決断難しいやつなんだよね。廊下減らすと間取りぐっと良くなるのに、みんなそこに抵抗感あるんだわ",
           "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-04T10:31:26+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVdZHBmETW5",
+          "timestamp": "2026-03-04T05:09:54+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVc0T4tllJ7",
           "insights": {
-            "views": 1,
+            "views": 0,
             "likes": 0,
             "replies": 0,
             "reposts": 0,
@@ -245,12 +251,6 @@
           "score": 0
         }
       ]
-    },
-    "マイホーム": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
     },
     "四日市": {
       "resultCount": 10,
