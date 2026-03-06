@@ -582,6 +582,15 @@ function buildStaticCityContent(cityId) {
   </section>
 
   <section>
+    <h2>${escHtml(cityName)}に対応するハウスメーカー・工務店</h2>
+    <p>${escHtml(cityName)}エリアで注文住宅を建てられるハウスメーカー・工務店をご紹介します。</p>
+    <ul>
+      ${buildersData.filter(b => b.areas.includes(cityId)).map(b => `<li><a href="/builders/${escHtml(b.id)}/">${escHtml(b.name)}</a>（坪${b.tsuboPrice.min}〜${b.tsuboPrice.max}万円）</li>`).join('\n      ')}
+    </ul>
+    <p><a href="/builders/">全${buildersData.length}社の一覧を見る →</a></p>
+  </section>
+
+  <section>
     <h2>近隣エリアの注文住宅情報</h2>
     <p>${neighborLinks}</p>
     <p><a href="/area/mie/">三重県エリア比較に戻る</a> | <a href="/">注文住宅比較.comを使う</a></p>
@@ -705,6 +714,8 @@ function buildStaticHubContent() {
         <li><a href="/knowledge/housing-loan/">住宅ローン完全ガイド</a></li>
         <li><a href="/knowledge/land-selection/">土地探しで失敗しない10のポイント</a></li>
         <li><a href="/knowledge/builder-comparison/">ハウスメーカー・工務店の選び方</a></li>
+        <li><a href="/builders/">三重県のハウスメーカー・工務店15社一覧</a></li>
+        <li><a href="/knowledge/mie-builder-guide/">三重県ハウスメーカーおすすめ15社ガイド</a></li>
         <li><a href="/knowledge/energy-efficiency/">断熱性能・省エネ基準ガイド</a></li>
         <li><a href="/knowledge/earthquake-resistance/">耐震性能ガイド</a></li>
         <li><a href="/knowledge/floor-plan/">間取り実例集</a></li>
@@ -2163,6 +2174,8 @@ function generateSitemap() {
     ...CITIES.map(c => ({ loc: `/area/mie/${c.id}/`, priority: '0.8', changefreq: 'weekly' })),
     { loc: '/knowledge/', priority: '0.8', changefreq: 'monthly' },
     ...knowledgeData.articles.map(a => ({ loc: `/knowledge/${a.id}/`, priority: '0.7', changefreq: 'monthly' })),
+    { loc: '/builders/', priority: '0.8', changefreq: 'monthly' },
+    ...buildersData.map(b => ({ loc: `/builders/${b.id}/`, priority: '0.6', changefreq: 'monthly' })),
     { loc: '/about/', priority: '0.3', changefreq: 'monthly' }
   ];
 
@@ -2240,6 +2253,181 @@ function renderBuilderCardGrid(builderIds) {
 }
 
 // ---------------------------------------------------------------------------
+// Generate builders hub page (/builders/index.html)
+// ---------------------------------------------------------------------------
+function generateBuildersHubPage() {
+  const breadcrumbItems = [
+    { name: 'トップ', url: '/' },
+    { name: 'ハウスメーカー・工務店一覧', url: '/builders/' }
+  ];
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(breadcrumbItems);
+
+  const collectionJsonLd = `<script type="application/ld+json">${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: '三重県のハウスメーカー・工務店一覧',
+    description: '三重県で注文住宅を建てられるハウスメーカー・工務店15社を3つの価格帯で比較。坪単価・特徴・対応エリアを一覧で確認できます。',
+    url: `${DOMAIN}/builders/`,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: buildersData.map((b, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `${DOMAIN}/builders/${b.id}/`,
+        name: b.name
+      }))
+    }
+  })}</script>`;
+
+  const grades = ['lowcost', 'standard', 'highgrade'];
+  const gradeDesc = {
+    lowcost: '坪単価40〜65万円のコストパフォーマンス重視プラン。初めての注文住宅やローン負担を抑えたい方に。',
+    standard: '坪単価55〜80万円の性能とデザインのバランスが取れたプラン。地元ビルダーの自由設計が中心。',
+    highgrade: '坪単価75万円以上の高性能・高品質住宅。全館空調や高断熱など最新技術を採用。'
+  };
+
+  const gradeSections = grades.map(grade => {
+    const gradeBuilders = buildersData.filter(b => b.grade === grade);
+    const label = GRADE_LABEL[grade];
+    return `
+  <section class="bh-grade-section" id="grade-${grade}">
+    <h2>${label}（${gradeBuilders.length}社）</h2>
+    <p class="bh-grade-desc">${gradeDesc[grade]}</p>
+    ${renderBuilderCardGrid(gradeBuilders.map(b => b.id))}
+  </section>`;
+  }).join('');
+
+  const gradeNav = grades.map(grade => {
+    const label = GRADE_LABEL[grade];
+    const count = buildersData.filter(b => b.grade === grade).length;
+    return `<a href="#grade-${grade}" class="bh-grade-pill ${grade}">${label}（${count}社）</a>`;
+  }).join('');
+
+  return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#2563eb">
+<meta name="google-site-verification" content="VBmM5Mikm2LrkY9dXa30MUHtT9KD2SpZFsoGHBuFPWM" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SZV3XF0W0G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-SZV3XF0W0G');
+</script>
+<title>三重県のハウスメーカー・工務店15社一覧｜注文住宅比較.com</title>
+<meta name="description" content="三重県で注文住宅を建てられるハウスメーカー・工務店15社を3つの価格帯で比較。坪単価・特徴・対応エリアを一覧で確認。ローコストから高性能住宅まで最適な1社を見つけましょう。">
+<link rel="canonical" href="${DOMAIN}/builders/">
+<meta property="og:title" content="三重県のハウスメーカー・工務店15社一覧｜注文住宅比較.com">
+<meta property="og:description" content="三重県で注文住宅を建てられるハウスメーカー・工務店15社を3つの価格帯で比較。ローコストから高性能住宅まで。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${DOMAIN}/builders/">
+<meta property="og:site_name" content="注文住宅比較.com">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+${breadcrumbJsonLd}
+${collectionJsonLd}
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); min-height: 100vh; color: #1f2937; }
+.knowledge-header { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%); padding: 12px 0; }
+.knowledge-header-inner { max-width: 1100px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.knowledge-header-nav { display: flex; gap: 8px; margin-left: auto; }
+.knowledge-header-nav a, .knowledge-header-nav span { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 13px; font-weight: 500; padding: 4px 10px; border-radius: 6px; }
+.knowledge-header-nav a:hover { background: rgba(255,255,255,0.15); color: #fff; }
+.knowledge-header-nav .active { background: rgba(255,255,255,0.2); color: #fff; font-weight: 700; }
+.site-logo img { height: 44px; width: auto; display: block; }
+.bh-hero { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%); color: #fff; padding: 48px 16px 36px; text-align: center; }
+.bh-hero h1 { font-size: clamp(22px, 4vw, 32px); font-weight: 800; line-height: 1.3; margin-bottom: 10px; }
+.bh-hero p { font-size: 15px; opacity: 0.9; max-width: 600px; margin: 0 auto; line-height: 1.7; }
+.bh-main { max-width: 1000px; margin: 0 auto; padding: 32px 16px 60px; }
+.bh-breadcrumb { font-size: 12px; color: #6b7280; margin-bottom: 24px; }
+.bh-breadcrumb a { color: #2563eb; text-decoration: none; }
+.bh-grade-nav { display: flex; gap: 10px; justify-content: center; margin-bottom: 32px; flex-wrap: wrap; }
+.bh-grade-pill { font-size: 13px; font-weight: 600; padding: 8px 18px; border-radius: 999px; text-decoration: none; transition: transform 0.15s; }
+.bh-grade-pill:hover { transform: translateY(-2px); }
+.bh-grade-pill.lowcost { background: #ecfdf5; color: #059669; }
+.bh-grade-pill.standard { background: #eff6ff; color: #2563eb; }
+.bh-grade-pill.highgrade { background: #fdf4ff; color: #7c3aed; }
+.bh-grade-section { margin-bottom: 40px; }
+.bh-grade-section h2 { font-size: 22px; font-weight: 700; color: #1e40af; border-left: 4px solid #2563eb; padding-left: 14px; margin-bottom: 8px; }
+.bh-grade-desc { font-size: 14px; color: #6b7280; margin-bottom: 16px; line-height: 1.7; }
+.ka-builder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 24px 0; }
+.ka-builder-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; }
+.ka-builder-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.ka-builder-name { font-size: 16px; font-weight: 700; color: #1f2937; }
+.ka-builder-grade { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; }
+.ka-builder-grade.lowcost { background: #ecfdf5; color: #059669; }
+.ka-builder-grade.standard { background: #eff6ff; color: #2563eb; }
+.ka-builder-grade.highgrade { background: #fdf4ff; color: #7c3aed; }
+.ka-builder-tagline { font-size: 12px; color: #6b7280; margin-bottom: 8px; }
+.ka-builder-price { font-size: 20px; font-weight: 800; color: #2563eb; margin: 8px 0; }
+.ka-builder-price span { font-size: 13px; font-weight: 400; color: #6b7280; }
+.ka-builder-summary { font-size: 13px; color: #374151; line-height: 1.7; margin-top: 8px; }
+.ka-builder-features { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.ka-builder-feature { background: #f3f4f6; font-size: 12px; padding: 3px 8px; border-radius: 6px; color: #374151; }
+.ka-builder-link { display: block; text-align: center; margin-top: 16px; padding: 8px; background: #2563eb; color: #fff; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; }
+.ka-builder-link:hover { background: #1d4ed8; }
+.bh-cta { background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%); border: 1px solid #bfdbfe; border-radius: 14px; padding: 28px; text-align: center; margin-top: 40px; }
+.bh-cta h3 { font-size: 18px; font-weight: 700; color: #1e40af; margin-bottom: 8px; }
+.bh-cta p { font-size: 14px; color: #374151; margin-bottom: 16px; line-height: 1.7; }
+.bh-cta a { display: inline-block; background: #2563eb; color: #fff; font-size: 14px; font-weight: 700; padding: 12px 28px; border-radius: 10px; text-decoration: none; }
+.bh-cta a:hover { background: #1d4ed8; }
+</style>
+</head>
+<body>
+<header class="knowledge-header">
+  <div class="knowledge-header-inner">
+    <a href="/" class="site-logo" style="text-decoration:none;">
+      <picture>
+        <source srcset="/images/header-banner.webp" type="image/webp">
+        <img src="/images/header-banner.png" alt="注文住宅比較.com">
+      </picture>
+    </a>
+    <nav class="knowledge-header-nav">
+      <a href="/">物件比較</a>
+      <a href="/area/mie/">エリア比較</a>
+      <a href="/knowledge/">知識</a>
+      <a href="/builders/" class="active">会社情報</a>
+      <a href="/about/">運営者情報</a>
+    </nav>
+  </div>
+</header>
+
+<section class="bh-hero">
+  <h1>三重県のハウスメーカー・工務店一覧</h1>
+  <p>三重県で注文住宅を建てられるハウスメーカー・工務店${buildersData.length}社を、3つの価格帯に分けて比較できます。</p>
+</section>
+
+<main class="bh-main">
+  <nav class="bh-breadcrumb">
+    <a href="/">トップ</a> / <span>ハウスメーカー・工務店一覧</span>
+  </nav>
+
+  <nav class="bh-grade-nav">${gradeNav}</nav>
+
+  ${gradeSections}
+
+  <div class="bh-cta">
+    <h3>ハウスメーカーの選び方を詳しく知る</h3>
+    <p>15社の詳細比較、エリア別対応一覧、失敗しない選び方のコツをまとめた完全ガイド</p>
+    <a href="/knowledge/mie-builder-guide/">三重県ハウスメーカーおすすめガイド →</a>
+  </div>
+</main>
+</body>
+</html>`;
+}
+
+// ---------------------------------------------------------------------------
 // Generate individual builder page
 // ---------------------------------------------------------------------------
 function generateBuilderPage(builder) {
@@ -2257,6 +2445,38 @@ function generateBuilderPage(builder) {
   const pageTitle = `${builder.name}の評判・坪単価・特徴｜三重県の注文住宅`;
   const pageDesc = `${builder.name}（${gradeLabel}）の坪単価・特徴・口コミを解説。坪${builder.tsuboPrice.min}〜${builder.tsuboPrice.max}万円。三重県の対応エリア（${areasText}）や向いている方の特徴も紹介。`;
 
+  // BreadcrumbList
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: 'トップ', url: '/' },
+    { name: 'ハウスメーカー・工務店', url: '/builders/' },
+    { name: builder.name, url: `/builders/${builder.id}/` }
+  ]);
+
+  // HomeAndConstructionBusiness schema
+  const businessJsonLd = `<script type="application/ld+json">${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'HomeAndConstructionBusiness',
+    name: builder.name,
+    description: builder.summary,
+    url: builder.officialUrl,
+    areaServed: { '@type': 'State', name: '三重県' },
+    priceRange: `坪${builder.tsuboPrice.min}〜${builder.tsuboPrice.max}万円`
+  })}</script>`;
+
+  // Same-grade builders (cross-links)
+  const sameGradeBuilders = buildersData.filter(b => b.grade === builder.grade && b.id !== builder.id);
+  const sameGradeHtml = sameGradeBuilders.length ? `
+  <div class="builder-card">
+    <h2>同じ${escHtml(gradeLabel)}の他のハウスメーカー</h2>
+    <div class="same-grade-grid">
+      ${sameGradeBuilders.map(b => `
+      <a href="/builders/${escHtml(b.id)}/" class="same-grade-item">
+        <span class="same-grade-name">${escHtml(b.name)}</span>
+        <span class="same-grade-price">坪${b.tsuboPrice.min}〜${b.tsuboPrice.max}万円</span>
+      </a>`).join('')}
+    </div>
+  </div>` : '';
+
   return `<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -2270,6 +2490,8 @@ function generateBuilderPage(builder) {
 <meta property="og:type" content="article">
 <meta property="og:url" content="${DOMAIN}/builders/${escHtml(builder.id)}/">
 <meta name="twitter:card" content="summary_large_image">
+${breadcrumbJsonLd}
+${businessJsonLd}
 <script type="application/ld+json">${JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Article',
@@ -2333,6 +2555,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
 @media (max-width: 480px) { .cta-btn-sub { margin-left: 0; margin-top: 10px; } }
 .breadcrumb { font-size: 12px; color: #6b7280; margin-bottom: 24px; }
 .breadcrumb a { color: #2563eb; text-decoration: none; }
+.same-grade-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px; }
+.same-grade-item { display: flex; flex-direction: column; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; text-decoration: none; transition: border-color 0.15s; }
+.same-grade-item:hover { border-color: #2563eb; }
+.same-grade-name { font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 4px; }
+.same-grade-price { font-size: 13px; color: #2563eb; font-weight: 600; }
 </style>
 </head>
 <body>
@@ -2404,6 +2631,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
     <ul class="rec-list">${recHtml}</ul>
   </div>
 
+  ${sameGradeHtml}
+
   <!-- CTA -->
   <div class="cta-box">
     <h3>${escHtml(builder.name)}と他社を比較しましょう</h3>
@@ -2454,9 +2683,14 @@ async function main() {
     console.log(`  ✓ knowledge/${article.id}/index.html`);
   }
 
-  // Builder individual pages
+  // Builders hub page
   const buildersDir = join(ROOT, 'builders');
   ensureDir(buildersDir);
+  const buildersHubHtml = await minifyHtml(generateBuildersHubPage());
+  writeFileSync(join(buildersDir, 'index.html'), buildersHubHtml, 'utf-8');
+  console.log('  ✓ builders/index.html');
+
+  // Builder individual pages
   for (const builder of buildersData) {
     const builderPageDir = join(buildersDir, builder.id);
     ensureDir(builderPageDir);
