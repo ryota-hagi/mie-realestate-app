@@ -421,7 +421,16 @@
       "text": "坪単価、低い方を選んだ。\n\n正解だったかどうかは、まだわからない。",
       "threadId": "18093116915041568",
       "charCount": 33,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 0,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-06T10:47:24.496Z"
     },
     {
       "date": "2026-03-05T10:52:16.598Z",
@@ -466,6 +475,15 @@
       "text": "午後の日当たり、確認してなかった。\n\n土地の下見、午前中の1回だけで決めた。\n\n午後になると隣の建物の影がまるごと入ってくる。\nリビングが暗い。冬は特に。\n\n時間帯を変えて複数回見る、それだけで防げた後悔だった。",
       "threadId": "17945207147982408",
       "charCount": 106,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-06T10:47:33.655Z",
+      "category": "loan",
+      "topicKey": "loan:subsidy-2026:section:5",
+      "text": "補助金、申請が間に合わなかった。\n\nそれだけ。",
+      "threadId": "18357527185204464",
+      "charCount": 23,
       "account": "a2"
     }
   ]
