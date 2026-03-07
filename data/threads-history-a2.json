@@ -529,7 +529,16 @@
       "text": "補助金、申請が間に合わなかった。\n\nそれだけ。",
       "threadId": "18357527185204464",
       "charCount": 23,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 312,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 5,
+      "engagementUpdatedAt": "2026-03-07T13:41:13.190Z"
     },
     {
       "date": "2026-03-06T13:57:15.708Z",
@@ -574,6 +583,15 @@
       "text": "トイレ1個、朝が地獄。\n\n家族3人で7時台に取り合う15分、じわじわくる。\n\n2個目、つけとけばよかった。",
       "threadId": "18062480912658099",
       "charCount": 53,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-07T13:41:21.941Z",
+      "category": "loan",
+      "topicKey": "loan:subsidy-2026:section:6",
+      "text": "補助金、締め切り日を誰も教えてくれなかった。\n\n自分で調べないと、気づいたら終わってる。",
+      "threadId": "18174611080387082",
+      "charCount": 44,
       "account": "a2"
     }
   ]
