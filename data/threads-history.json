@@ -1297,7 +1297,16 @@
       "text": "ハザードマップ、確認せずに土地買うな。🏡\n\n相談で「買った後に知った」って人、本当にいる。\n水害リスクは後から変えられない。",
       "threadId": "18569780638010942",
       "charCount": 63,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 254,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 5,
+      "engagementUpdatedAt": "2026-03-07T10:13:50.792Z"
     },
     {
       "date": "2026-03-06T09:28:48.520Z",
@@ -1346,6 +1355,15 @@
       "repliedTo": "18412352554130133",
       "keyword": "四日市",
       "charCount": 55
+    },
+    {
+      "date": "2026-03-07T10:14:11.645Z",
+      "category": "trend",
+      "topicKey": "trend:注文住宅:2026-03-07",
+      "text": "土地代が安くて飛びついたら、造成費で全部吹っ飛んだって相談がある。\n\n「坪単価が安い＝安く建てられる」じゃないんだよね。\n造成がいくらかかるか、土地代と同時に確認しないと詰む。",
+      "threadId": "17877982971529945",
+      "charCount": 88,
+      "account": "business"
     }
   ]
 }
