@@ -619,7 +619,16 @@
       "text": "トイレ1個、朝が地獄。\n\n家族3人で7時台に取り合う15分、じわじわくる。\n\n2個目、つけとけばよかった。",
       "threadId": "18062480912658099",
       "charCount": 53,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 533,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-08T10:33:56.843Z"
     },
     {
       "date": "2026-03-07T13:41:21.941Z",
@@ -655,6 +664,15 @@
       "text": "オール電化にした。停電の瞬間、全部止まった。\n\n都市ガスならコンロだけは使えた。\n\n正直、どっちが正解かは今も言えない。\nみんなはどっちにした？",
       "threadId": "18111473650670160",
       "charCount": 72,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-08T10:34:05.235Z",
+      "category": "koukai",
+      "topicKey": "koukai:26",
+      "text": "「今だけ」で契約した、完全にミスだった。\n\n焦って決めた家に、20年以上住む。",
+      "threadId": "17893549824287105",
+      "charCount": 39,
       "account": "a2"
     }
   ]
