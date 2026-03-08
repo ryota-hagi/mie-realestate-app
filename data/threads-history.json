@@ -1381,7 +1381,16 @@
       "text": "土地代が安くて飛びついたら、造成費で全部吹っ飛んだって相談がある。\n\n「坪単価が安い＝安く建てられる」じゃないんだよね。\n造成がいくらかかるか、土地代と同時に確認しないと詰む。",
       "threadId": "17877982971529945",
       "charCount": 88,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 848,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-08T10:15:24.563Z"
     },
     {
       "date": "2026-03-08T05:36:59.267Z",
@@ -1401,6 +1410,15 @@
       "repliedTo": "18572896546036299",
       "keyword": "四日市",
       "charCount": 46
+    },
+    {
+      "date": "2026-03-08T10:15:52.690Z",
+      "category": "taiken",
+      "topicKey": "taiken:toin:tip:1",
+      "text": "東員町で建てた人、名古屋通勤できてる人多い。\n\n桑名まで電車で15分、そこから名古屋まで25分くらい。\n乗り換え含めて1時間かからない。\n\n「こんな田舎っぽいのに通勤できるんだ」って最初驚いたって人、けっこういる。\n🏠",
+      "threadId": "17873849736438737",
+      "charCount": 110,
+      "account": "business"
     }
   ]
 }
