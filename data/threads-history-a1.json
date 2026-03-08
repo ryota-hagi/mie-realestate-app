@@ -1303,7 +1303,16 @@
       "text": "お風呂の窓、いらなかった。\n\n入居して初めての冬に気づいた。寒いだけだって。",
       "threadId": "18091651205116839",
       "charCount": 38,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 699,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-08T23:29:39.246Z"
     },
     {
       "date": "2026-03-08T03:32:25.143Z",
