@@ -13,7 +13,7 @@ const TRENDS_PATH = join(ROOT, 'data', 'threads-trends.json');
 const REPLY_HISTORY_PATH = join(ROOT, 'data', 'threads-reply-history.json');
 
 const HISTORY_RETENTION_DAYS = 90;
-const TOPIC_COOLDOWN_DAYS = 14;
+const TOPIC_COOLDOWN_DAYS = 30;
 const CATEGORY_COOLDOWN_DAYS = 1;
 const LEARNING_WINDOW_DAYS = 30;
 
@@ -358,25 +358,25 @@ export function getAdjustedWeights(baseCategories, account = null) {
 export function getRecentPostsContext(account = null) {
   const history = loadHistory(account);
   const cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - 7);
+  cutoff.setDate(cutoff.getDate() - 30);
 
   const recentPosts = history.posts
     .filter(p => !p.repliedTo && new Date(p.date) > cutoff)
     .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .slice(0, 20);
+    .slice(0, 40);
 
   if (recentPosts.length === 0) return '';
 
   const lines = recentPosts.map(p => {
     const d = new Date(p.date);
     const dateStr = `${d.getMonth() + 1}/${d.getDate()}`;
-    const firstLine = (p.text || '').split('\n')[0].slice(0, 60);
+    const firstLine = (p.text || '').split('\n')[0].slice(0, 100);
     const score = p.engagementScore || 0;
     const star = score >= 30 ? ` ★反応良(スコア${score})` : '';
     return `[${dateStr} ${p.category}] ${firstLine}${star}`;
   });
 
-  return `\n\n【直近の投稿履歴】同じ話を繰り返すな。矛盾した発言をするな。★マークの投稿は反応が良かったので「前も言ったけど」等で触れてもOK。\n${lines.join('\n')}`;
+  return `\n\n【過去30日の投稿履歴（絶対厳守）】以下の投稿と同じ話題・同じ結論・同じ切り口は絶対に繰り返すな。内容が被ると削除対象になる。★マークの投稿は反応が良かったので別の角度から言及してもOK。\n${lines.join('\n')}`;
 }
 
 /**

@@ -647,7 +647,30 @@ async function main() {
     process.exit(0);
   }
 
-  console.log(`✅ 生成テキスト (${postText.length}文字):`);
+  // 投稿内容の類似度チェック（過去30日の投稿との重複防止）
+  const recentHistory = loadHistory(ACCOUNT);
+  const recentCutoff = new Date(); recentCutoff.setDate(recentCutoff.getDate() - 30);
+  const recentTexts = recentHistory.posts
+    .filter(p => !p.repliedTo && new Date(p.date) > recentCutoff)
+    .map(p => p.text || '');
+
+  function textSimilarity(a, b) {
+    const wordsA = new Set(a.replace(/[\s\n。、！？]/g, '').split(''));
+    const wordsB = b.replace(/[\s\n。、！？]/g, '').split('');
+    const matches = wordsB.filter(c => wordsA.has(c)).length;
+    return matches / Math.max(wordsA.size, wordsB.length, 1);
+  }
+
+  const maxSimilarity = recentTexts.reduce((max, t) => Math.max(max, textSimilarity(postText, t)), 0);
+  if (maxSimilarity > 0.7) {
+    console.warn(`⚠️ 類似度チェック失敗 (類似度: ${(maxSimilarity * 100).toFixed(0)}%)。投稿をスキップします。`);
+    process.exit(0);
+  }
+  if (maxSimilarity > 0.55) {
+    console.warn(`⚠️ 類似度やや高め (${(maxSimilarity * 100).toFixed(0)}%)。続行しますが要注意。`);
+  }
+
+  console.log(`✅ 生成テキスト (${postText.length}文字, 類似度: ${(maxSimilarity * 100).toFixed(0)}%):`);
   console.log('---');
   console.log(postText);
   console.log('---');
