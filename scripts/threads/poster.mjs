@@ -215,7 +215,7 @@ function buildPrompt(category, dataSources, trendResult) {
 function _buildPrompt(category, dataSources, trendResult) {
   const { cityData, knowledgeData, liveData } = dataSources;
   const performanceHint = getPerformanceHint(category.id, ACCOUNT) || '';
-  const recentContext = getRecentPostsContext(ACCOUNT);
+  const recentContext = ''; // 履歴コンテキストはシステムプロンプトに移動（ユーザープロンプトに含めると投稿本文に漏れる）
 
   switch (category.id) {
     case 'trend': {
@@ -632,8 +632,10 @@ async function main() {
   const lengthMatch = userPrompt.match(/長さ: (.+)/);
   if (lengthMatch) console.log(`📏 長さ指示: ${lengthMatch[1]}`);
 
-  // システムプロンプト選択
-  const systemPrompt = PERSONA_SYSTEM_PROMPTS[ACCOUNT] || PERSONA_SYSTEM_PROMPTS.business;
+  // システムプロンプト選択（過去投稿履歴をシステムプロンプトに統合）
+  const baseSystemPrompt = PERSONA_SYSTEM_PROMPTS[ACCOUNT] || PERSONA_SYSTEM_PROMPTS.business;
+  const recentContext = getRecentPostsContext(ACCOUNT);
+  const systemPrompt = recentContext ? `${baseSystemPrompt}\n\n${recentContext}` : baseSystemPrompt;
 
   // AI生成
   console.log('🤖 投稿文生成中...');
