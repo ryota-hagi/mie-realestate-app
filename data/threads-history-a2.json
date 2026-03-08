@@ -637,7 +637,16 @@
       "text": "補助金、締め切り日を誰も教えてくれなかった。\n\n自分で調べないと、気づいたら終わってる。",
       "threadId": "18174611080387082",
       "charCount": 44,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 562,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-08T13:42:19.898Z"
     },
     {
       "date": "2026-03-07T23:18:47.298Z",
@@ -673,6 +682,15 @@
       "text": "「今だけ」で契約した、完全にミスだった。\n\n焦って決めた家に、20年以上住む。",
       "threadId": "17893549824287105",
       "charCount": 39,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-08T13:42:28.010Z",
+      "category": "loan",
+      "topicKey": "loan:subsidy-2026:section:0",
+      "text": "補助金、2026年も変わった。\n\n去年と同じつもりで動いてると、もらえない。",
+      "threadId": "17866152801595117",
+      "charCount": 38,
       "account": "a2"
     }
   ]
