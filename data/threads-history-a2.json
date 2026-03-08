@@ -655,7 +655,16 @@
       "text": "カーテン代、絶対に甘く見るな。\n\n見積もりには入ってない。\n「別途で後から」が来る。\n\n自分は全部屋まとめて32万飛んだ。\n窓の数で純粋に死ねる。",
       "threadId": "17852844042635206",
       "charCount": 73,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 0,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-08T23:19:37.119Z"
     },
     {
       "date": "2026-03-08T04:27:36.664Z",
@@ -691,6 +700,15 @@
       "text": "補助金、2026年も変わった。\n\n去年と同じつもりで動いてると、もらえない。",
       "threadId": "17866152801595117",
       "charCount": 38,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-08T23:19:47.918Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:22",
+      "text": "スーパー1店舗で、利便性を判断するな。\n\n閉店する。",
+      "threadId": "18081666974340125",
+      "charCount": 26,
       "account": "a2"
     }
   ]
