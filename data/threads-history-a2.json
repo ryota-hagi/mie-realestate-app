@@ -691,7 +691,16 @@
       "text": "オール電化にした。停電の瞬間、全部止まった。\n\n都市ガスならコンロだけは使えた。\n\n正直、どっちが正解かは今も言えない。\nみんなはどっちにした？",
       "threadId": "18111473650670160",
       "charCount": 72,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 678,
+        "likes": 0,
+        "replies": 3,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 12,
+      "engagementUpdatedAt": "2026-03-09T07:08:18.569Z"
     },
     {
       "date": "2026-03-08T10:34:05.235Z",
@@ -718,6 +727,15 @@
       "text": "スーパー1店舗で、利便性を判断するな。\n\n閉店する。",
       "threadId": "18081666974340125",
       "charCount": 26,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-09T07:08:29.353Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:14",
+      "text": "変動で借りた。今ソワソワしてる。\n\n0.2%の差で月々1万変わる計算だった。あの判断、正直まだ正解かわからない。\n\n固定にした人、今どう感じてる？",
+      "threadId": "18144630715474528",
+      "charCount": 73,
       "account": "a2"
     }
   ]
