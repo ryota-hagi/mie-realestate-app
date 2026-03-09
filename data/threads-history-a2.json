@@ -745,7 +745,16 @@
       "text": "スーパー1店舗で、利便性を判断するな。\n\n閉店する。",
       "threadId": "18081666974340125",
       "charCount": 26,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 1620,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-09T23:24:13.338Z"
     },
     {
       "date": "2026-03-09T07:08:29.353Z",
@@ -772,6 +781,15 @@
       "text": "インスタの理想、現実と全然違った。",
       "threadId": "18153926557444553",
       "charCount": 17,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-09T23:24:24.304Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:12",
+      "text": "お風呂の窓、なんとなくでつけるな。\n\n寒いだけじゃなくて、掃除も増える。\n\n断熱性も下がる。\n\n削って正解だったと、今でも思ってる。",
+      "threadId": "18106726486643067",
+      "charCount": 66,
       "account": "a2"
     }
   ]
