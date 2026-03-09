@@ -1119,6 +1119,76 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-09T05:16:11.157Z",
+      "originalThreadId": "17850317994646393",
+      "originalAccount": "a1",
+      "originalText": "アパートのほうが楽だったって、一瞬思った。\n\nマイホームに住み始めてすぐ、草むしりして、ゴミ捨て場の当番あって、設備が壊れたら自分で対応して。\n\nアパートのとき、こんなこと何も考えてなかったんだよね。",
+      "replyText": "外構管理と設備の維持費、うちのサイトにも同じ声めちゃ届いてるわ。月3〜5万の隠れ費用になってる人多い",
+      "replyId": "18083241818583218",
+      "buzzLevel": "SUPER_BUZZ",
+      "insights": {
+        "views": 13985,
+        "likes": 117,
+        "replies": 12
+      }
+    },
+    {
+      "date": "2026-03-09T05:18:53.190Z",
+      "originalThreadId": "18127924237552981",
+      "originalAccount": "a1",
+      "originalText": "お隣との境界線、認識がずれてた。\n\n引き渡し後に初めて知ったんだけど、うちが「ここまで」と思ってた場所、お隣は違う認識だったみたいで。\n\n建てる前に確認しとけって話なんだけど、誰も「お隣に聞いておいて",
+      "replyText": "うちのサイトにも同じ相談めっちゃ多い。境界杭の位置まで確認してる人、3割いないんだよなぁ",
+      "replyId": "18082190222590110",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 923,
+        "likes": 3,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-03-09T05:21:11.724Z",
+      "originalThreadId": "18091651205116839",
+      "originalAccount": "a1",
+      "originalText": "お風呂の窓、いらなかった。\n\n入居して初めての冬に気づいた。寒いだけだって。",
+      "replyText": "ちなみに窓の向きはどこ？北や西だと特に後悔率高いんだよね",
+      "replyId": "18042513485551886",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 699,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-09T05:22:56.998Z",
+      "originalThreadId": "18089986988157272",
+      "originalAccount": "a2",
+      "originalText": "繰上げ返済 vs 投資、正直どっちが正解かわからない。\n\n金利1%台なら投資に回した方が数字は合う。\nでも「借金がある」という感覚が消えるのも、価値がある。\n\n理屈と感情で、答えが変わる。\n\nみんなは",
+      "replyText": "体感で7割の人が「完済したい派」になってるんだよね。数字上は投資有利でも、心理的な安心には替えられないやつ",
+      "replyId": "18088524056143879",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 811,
+        "likes": 5,
+        "replies": 4
+      }
+    },
+    {
+      "date": "2026-03-09T05:25:28.783Z",
+      "originalThreadId": "17866152801595117",
+      "originalAccount": "a2",
+      "originalText": "補助金、2026年も変わった。\n\n去年と同じつもりで動いてると、もらえない。",
+      "replyText": "ちなみに、去年利用した補助金と今年のギャップどのくらいあったんですか？",
+      "replyId": "18048993173718965",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1053,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
