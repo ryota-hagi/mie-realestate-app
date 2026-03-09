@@ -709,7 +709,16 @@
       "text": "「今だけ」で契約した、完全にミスだった。\n\n焦って決めた家に、20年以上住む。",
       "threadId": "17893549824287105",
       "charCount": 39,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 0,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-09T10:54:06.251Z"
     },
     {
       "date": "2026-03-08T13:42:28.010Z",
@@ -736,6 +745,15 @@
       "text": "変動で借りた。今ソワソワしてる。\n\n0.2%の差で月々1万変わる計算だった。あの判断、正直まだ正解かわからない。\n\n固定にした人、今どう感じてる？",
       "threadId": "18144630715474528",
       "charCount": 73,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-09T10:54:18.531Z",
+      "category": "gyakusetsu",
+      "topicKey": "gyakusetsu:1",
+      "text": "見学会、多いほど安心だと思われがち。\n\n自分は4社目から記憶が混ざった。\n3社を超えたあたりで、比べてるんじゃなくて迷ってるだけになる。\n\nみんなは何社で決めた？",
+      "threadId": "18087959104922531",
+      "charCount": 81,
       "account": "a2"
     }
   ]
