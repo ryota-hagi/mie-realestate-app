@@ -781,7 +781,16 @@
       "text": "見学会、多いほど安心だと思われがち。\n\n自分は4社目から記憶が混ざった。\n3社を超えたあたりで、比べてるんじゃなくて迷ってるだけになる。\n\nみんなは何社で決めた？",
       "threadId": "18087959104922531",
       "charCount": 81,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 274,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-10T14:03:08.111Z"
     },
     {
       "date": "2026-03-09T14:07:55.108Z",
@@ -826,6 +835,15 @@
       "text": "変動にするか固定にするか、1年悩んだ。\n\n結局、「どっちが得か」じゃなくて「どっちなら眠れるか」で決めた。\n\nみんなはどっちにした？",
       "threadId": "18089512469155653",
       "charCount": 66,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-10T14:03:17.735Z",
+      "category": "gyakusetsu",
+      "topicKey": "aruaru:17",
+      "text": "現場、毎日行ってた。",
+      "threadId": "17953652517089850",
+      "charCount": 10,
       "account": "a2"
     }
   ]
