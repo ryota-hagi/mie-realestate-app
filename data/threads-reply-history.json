@@ -1371,6 +1371,34 @@
         "likes": 10,
         "replies": 7
       }
+    },
+    {
+      "date": "2026-03-10T16:55:19.083Z",
+      "originalThreadId": "18437480221118572",
+      "originalAccount": "a1",
+      "originalText": "間取り、どっちかしか入らない問題。\n\nうちも同じだった。回遊動線か書斎か、どっちかしか無理ってなって。\n\nうちは書斎消えた。夫、今もリビングで作業してる 😅",
+      "replyText": "あと階段の位置でも同じことになるんだよなぁ。中央か端か、どっちかで全然変わっちゃう。うちはパントリー消えた派だわ。",
+      "replyId": "18038704826588376",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 431,
+        "likes": 0,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-03-10T16:57:36.323Z",
+      "originalThreadId": "18093191609039416",
+      "originalAccount": "a1",
+      "originalText": "地盤改良費、存在すら知らなかった。\n\n100万、急に飛んだよ。",
+      "replyText": "地盤調査で引っかかると、ほんと青くなるよな。最初の見積もりに入ってない人、本当に多い。",
+      "replyId": "17958677252921184",
+      "buzzLevel": "SUPER_BUZZ",
+      "insights": {
+        "views": 7770,
+        "likes": 13,
+        "replies": 9
+      }
     }
   ]
 }
