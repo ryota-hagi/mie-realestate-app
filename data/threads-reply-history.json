@@ -1329,6 +1329,48 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-10T10:29:55.487Z",
+      "originalThreadId": "18147296875415828",
+      "originalAccount": "a1",
+      "originalText": "ショールーム、魔法かかるんだよね。\n\n全部よく見えてさ、気づいたら100万くらい上乗せしてたっていう。",
+      "replyText": "ショールーム照明の罠、これマジでやばいんだよなぁ。実際の家と違う環境だから余計に素敵に見えちゃう。予算決めて行った方がいい",
+      "replyId": "18089830565322877",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 533,
+        "likes": 1,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-10T10:31:39.580Z",
+      "originalThreadId": "18437480221118572",
+      "originalAccount": "a1",
+      "originalText": "間取り、どっちかしか入らない問題。\n\nうちも同じだった。回遊動線か書斎か、どっちかしか無理ってなって。\n\nうちは書斎消えた。夫、今もリビングで作業してる 😅",
+      "replyText": "間取りで夫婦揉めた人、体感で8割超えてるんだよね。後から「あっちにしとけば」って話になるやつだわ",
+      "replyId": "18073308749178578",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 426,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-10T10:34:05.135Z",
+      "originalThreadId": "18093191609039416",
+      "originalAccount": "a1",
+      "originalText": "地盤改良費、存在すら知らなかった。\n\n100万、急に飛んだよ。",
+      "replyText": "あと地盤調査の時点で言われないケースもあるんだよね。営業がスルーして後で発覚する悪パターン。",
+      "replyId": "18397293550197123",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 3676,
+        "likes": 10,
+        "replies": 7
+      }
     }
   ]
 }
