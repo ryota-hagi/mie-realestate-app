@@ -1259,6 +1259,76 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-10T05:06:06.213Z",
+      "originalThreadId": "18437480221118572",
+      "originalAccount": "a1",
+      "originalText": "間取り、どっちかしか入らない問題。\n\nうちも同じだった。回遊動線か書斎か、どっちかしか無理ってなって。\n\nうちは書斎消えた。夫、今もリビングで作業してる 😅",
+      "replyText": "ちなみに今、書斎の代わりになる場所って作れた？リビングの一角を仕切るとか工夫してる？",
+      "replyId": "18157327558426181",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 413,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-10T05:08:33.796Z",
+      "originalThreadId": "18091198979109641",
+      "originalAccount": "a1",
+      "originalText": "玄関に手洗い場、つけなかった。\n\nコロナきてから、ずっと後悔してるんだよね。",
+      "replyText": "玄関の手洗い場、相談で一番多い後悔だわ。あと土間の広さもみんな後悔するんだよなぁ。",
+      "replyId": "18112657834675015",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 889,
+        "likes": 1,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-10T05:11:23.297Z",
+      "originalThreadId": "17866152801595117",
+      "originalAccount": "a2",
+      "originalText": "補助金、2026年も変わった。\n\n去年と同じつもりで動いてると、もらえない。",
+      "replyText": "あと制度の改正日が毎回ズレるから、申請締め切り逃す人もめちゃ多いんだよなぁ。早めに動きすぎても落とされたりするし。",
+      "replyId": "17909950281351271",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1071,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-10T05:13:38.018Z",
+      "originalThreadId": "18081666974340125",
+      "originalAccount": "a2",
+      "originalText": "スーパー1店舗で、利便性を判断するな。\n\n閉店する。",
+      "replyText": "体感で6割の人がスーパー距離だけで判断して後悔してるんだよなぁ。営業時間とか品揃えとか、実際に足運ばないと分かんない。",
+      "replyId": "18109966705759704",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1620,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-10T05:16:38.356Z",
+      "originalThreadId": "18570261661022126",
+      "originalAccount": "a3",
+      "originalText": "壁紙、3人で揉めた。\n\n義母の「落ち着いた感じ」と私の「明るい感じ」が、サンプル帳の前で静かに衝突した。",
+      "replyText": "あと照明の色選びも同じパターンで揉める人多いんだよね。昼光色か電球色か、これもサンプル見る時間帯で印象変わって大変だわ",
+      "replyId": "18120003202717519",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 307,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
