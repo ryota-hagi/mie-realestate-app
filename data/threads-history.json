@@ -1445,7 +1445,16 @@
       "text": "ローン通った瞬間、嬉しさより「35年か…」が来たって人、けっこういる。\n💰",
       "threadId": "18098050075967230",
       "charCount": 38,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 736,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-10T10:29:19.873Z"
     },
     {
       "date": "2026-03-09T09:38:07.154Z",
@@ -1493,6 +1502,15 @@
       "text": "卒業式シーズン、「新しい家どう？」って聞かれるのが嫌で早く引っ越したいって人、けっこういる。💡\n\nまだ建ててる最中なんだよね。",
       "threadId": "17869320732574687",
       "charCount": 64,
+      "account": "business"
+    },
+    {
+      "date": "2026-03-10T10:29:44.932Z",
+      "category": "taiken",
+      "topicKey": "taiken:inabe:tip:0",
+      "text": "いなべ市で建てた人、総額2,500万円台で収まったって人が結構いる。🔑\n\n土地が安いのと、移住の補助金が使えるのが大きくて、三重の北の方で一番予算に余裕持って建てられたって声をよく聞く。\n\nみんなはいなべ、候補に入ってた？",
+      "threadId": "18122466883583761",
+      "charCount": 112,
       "account": "business"
     }
   ]
