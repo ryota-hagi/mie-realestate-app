@@ -763,7 +763,16 @@
       "text": "変動で借りた。今ソワソワしてる。\n\n0.2%の差で月々1万変わる計算だった。あの判断、正直まだ正解かわからない。\n\n固定にした人、今どう感じてる？",
       "threadId": "18144630715474528",
       "charCount": 73,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 4,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-10T10:52:12.069Z"
     },
     {
       "date": "2026-03-09T10:54:18.531Z",
@@ -808,6 +817,15 @@
       "text": "2階リビング、50代でもう不安らしい。\n\n階段、毎日20段。\n\n今は平気でも、10年後どうなるかは誰にもわからない。みんなはどっちにした？",
       "threadId": "18020385767807107",
       "charCount": 69,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-10T10:52:21.839Z",
+      "category": "loan",
+      "topicKey": "loan:mortgage-rate-guide:section:1",
+      "text": "変動にするか固定にするか、1年悩んだ。\n\n結局、「どっちが得か」じゃなくて「どっちなら眠れるか」で決めた。\n\nみんなはどっちにした？",
+      "threadId": "18089512469155653",
+      "charCount": 66,
       "account": "a2"
     }
   ]
