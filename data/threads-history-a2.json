@@ -799,7 +799,16 @@
       "text": "インスタの理想、現実と全然違った。",
       "threadId": "18153926557444553",
       "charCount": 17,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 32,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-10T23:23:55.018Z"
     },
     {
       "date": "2026-03-09T23:24:24.304Z",
@@ -844,6 +853,15 @@
       "text": "現場、毎日行ってた。",
       "threadId": "17953652517089850",
       "charCount": 10,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-10T23:24:03.197Z",
+      "category": "koukai",
+      "topicKey": "koukai:0",
+      "text": "玄関、手洗いなし。今も後悔してる。",
+      "threadId": "18125153572567022",
+      "charCount": 17,
       "account": "a2"
     }
   ]
