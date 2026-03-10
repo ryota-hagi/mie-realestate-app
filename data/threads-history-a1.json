@@ -1393,7 +1393,16 @@
       "text": "ショールーム、魔法かかるんだよね。\n\n全部よく見えてさ、気づいたら100万くらい上乗せしてたっていう。",
       "threadId": "18147296875415828",
       "charCount": 51,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 532,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 5,
+      "engagementUpdatedAt": "2026-03-10T07:43:28.996Z"
     },
     {
       "date": "2026-03-09T07:51:21.110Z",
@@ -1438,6 +1447,15 @@
       "text": "地盤改良費、存在すら知らなかった。\n\n100万、急に飛んだよ。",
       "threadId": "18093191609039416",
       "charCount": 31,
+      "account": "a1"
+    },
+    {
+      "date": "2026-03-10T07:43:39.109Z",
+      "category": "aruaru",
+      "topicKey": "aruaru:28",
+      "text": "ハザードマップ、見るんじゃなかった。\n\n全部の土地がなんかやばく見えてきて、「ここは洪水」「ここは土砂」って、最終的に三重県に安全な場所あるの？ってなった😅",
+      "threadId": "17914462779148113",
+      "charCount": 79,
       "account": "a1"
     }
   ]
