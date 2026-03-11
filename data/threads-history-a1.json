@@ -1519,7 +1519,16 @@
       "text": "子ども部屋、いつまで考えてんだろって思った。",
       "threadId": "18576122446047487",
       "charCount": 22,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 562,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-11T11:26:53.565Z"
     },
     {
       "date": "2026-03-10T15:14:59.951Z",
