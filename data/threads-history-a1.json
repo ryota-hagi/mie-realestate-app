@@ -1501,7 +1501,16 @@
       "text": "ハザードマップ、見るんじゃなかった。\n\n全部の土地がなんかやばく見えてきて、「ここは洪水」「ここは土砂」って、最終的に三重県に安全な場所あるの？ってなった😅",
       "threadId": "17914462779148113",
       "charCount": 79,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 286,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-11T07:45:55.136Z"
     },
     {
       "date": "2026-03-10T11:26:30.208Z",
@@ -1537,6 +1546,15 @@
       "text": "間取り、全然まとまらなかった。\n\n夫とうちで見てるとこ違いすぎて、毎回打ち合わせ後に喧嘩してた。\n\n結局どっちかが折れる形で終わったんだよね。",
       "threadId": "18038820029761918",
       "charCount": 71,
+      "account": "a1"
+    },
+    {
+      "date": "2026-03-11T07:46:04.190Z",
+      "category": "momegoto",
+      "topicKey": "momegoto:19",
+      "text": "義両親の意見、全部メモしてた。\n\n採用したのゼロだった。",
+      "threadId": "17862497442606894",
+      "charCount": 28,
       "account": "a1"
     }
   ]
