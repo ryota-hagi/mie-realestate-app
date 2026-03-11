@@ -817,7 +817,16 @@
       "text": "お風呂の窓、なんとなくでつけるな。\n\n寒いだけじゃなくて、掃除も増える。\n\n断熱性も下がる。\n\n削って正解だったと、今でも思ってる。",
       "threadId": "18106726486643067",
       "charCount": 66,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 0,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-11T04:26:26.021Z"
     },
     {
       "date": "2026-03-10T04:26:11.776Z",
@@ -826,7 +835,16 @@
       "text": "住宅ローン控除、13年続くのに誰も教えてくれなかった。\n\n自分は途中まで知らなかった。\n\n13年と10年、どっちにした？",
       "threadId": "18087610910186046",
       "charCount": 60,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 34,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-11T04:26:26.683Z"
     },
     {
       "date": "2026-03-10T06:57:37.062Z",
@@ -862,6 +880,15 @@
       "text": "玄関、手洗いなし。今も後悔してる。",
       "threadId": "18125153572567022",
       "charCount": 17,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-11T04:26:38.013Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:5",
+      "text": "モデルハウスの設備、標準だと思うな。\n\nあれ、ほぼオプション。\n\n「これ込みの価格ですよ」とは一言も言ってない。気づくのは見積もりが出た後。\n\n削って正解だったものと、気づかず追加したもので、最終的に100万以上変わった。",
+      "threadId": "17874209271549351",
+      "charCount": 111,
       "account": "a2"
     }
   ]
