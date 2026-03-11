@@ -871,7 +871,16 @@
       "text": "変動にするか固定にするか、1年悩んだ。\n\n結局、「どっちが得か」じゃなくて「どっちなら眠れるか」で決めた。\n\nみんなはどっちにした？",
       "threadId": "18089512469155653",
       "charCount": 66,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 0,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-11T14:07:37.948Z"
     },
     {
       "date": "2026-03-10T14:03:17.735Z",
@@ -880,7 +889,16 @@
       "text": "現場、毎日行ってた。",
       "threadId": "17953652517089850",
       "charCount": 10,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 423,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-11T14:07:38.646Z"
     },
     {
       "date": "2026-03-10T23:24:03.197Z",
@@ -916,6 +934,15 @@
       "text": "お風呂の窓、いらなかった。\n\n寒いだけだった。",
       "threadId": "18075038648618947",
       "charCount": 23,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-11T14:07:50.070Z",
+      "category": "gyakusetsu",
+      "topicKey": "gyakusetsu:10",
+      "text": "繰上げ返済、損してるかも。\n\n控除が残ってる間は、返すより運用の方が数字が合う場合がある。\n\nみんなはどっちにした？",
+      "threadId": "17934574539036854",
+      "charCount": 58,
       "account": "a2"
     }
   ]
