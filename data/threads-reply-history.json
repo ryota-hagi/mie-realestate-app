@@ -1483,6 +1483,62 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-11T10:30:13.637Z",
+      "originalThreadId": "17850631527643423",
+      "originalAccount": "a1",
+      "originalText": "変動で借りた、ソワソワしてる。\n\n金利上がるたびにニュース見て、「固定にしとけばよかった」ってなる。\n\nでも固定にしてたら「変動のほうが安かったじゃん」って思ってたと思うんだよね😅\n\nどっちにしても",
+      "replyText": "あるあるだわ。あと借入額の決め方で揉める夫婦も多いんだよね。「もっと借りとけば」vs「これ以上やめとけ」で意見割れてさ。",
+      "replyId": "17897011539264836",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 437,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-11T10:33:12.700Z",
+      "originalThreadId": "18093191609039416",
+      "originalAccount": "a1",
+      "originalText": "地盤改良費、存在すら知らなかった。\n\n100万、急に飛んだよ。",
+      "replyText": "地盤改良って事前に分からないから、みんなそこで初めて知るんだよね。予算組み直しになるパターン多い。",
+      "replyId": "18078356558606584",
+      "buzzLevel": "SUPER_BUZZ",
+      "insights": {
+        "views": 9582,
+        "likes": 18,
+        "replies": 14
+      }
+    },
+    {
+      "date": "2026-03-11T10:35:05.030Z",
+      "originalThreadId": "18576122446047487",
+      "originalAccount": "a1",
+      "originalText": "子ども部屋、いつまで考えてんだろって思った。",
+      "replyText": "みんなここ悩みすぎるんだよなぁ。後付けで対応できるのに、今から完璧にしようとする人多い。",
+      "replyId": "18090498173145303",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 558,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-11T10:38:03.941Z",
+      "originalThreadId": "18153926557444553",
+      "originalAccount": "a2",
+      "originalText": "インスタの理想、現実と全然違った。",
+      "replyText": "インスタの間取り、実際に住むと動線クソになってる人、体感9割だわ。家具配置で急に狭くなるやつね。",
+      "replyId": "18574690978007753",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 35,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
