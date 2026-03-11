@@ -1399,6 +1399,90 @@
         "likes": 13,
         "replies": 9
       }
+    },
+    {
+      "date": "2026-03-11T05:07:15.450Z",
+      "originalThreadId": "18091198979109641",
+      "originalAccount": "a1",
+      "originalText": "玄関に手洗い場、つけなかった。\n\nコロナきてから、ずっと後悔してるんだよね。",
+      "replyText": "体感で10人に9人、同じこと言ってるわ。今からでも洗面台の位置変えられないか工務店に相談してみた方がいい",
+      "replyId": "17951586171106358",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 959,
+        "likes": 1,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-03-11T05:09:27.751Z",
+      "originalThreadId": "18093191609039416",
+      "originalAccount": "a1",
+      "originalText": "地盤改良費、存在すら知らなかった。\n\n100万、急に飛んだよ。",
+      "replyText": "みんなここ見落とすんだよなぁ…。地盤調査の結果次第で150万超えることもあるから、最初から予算に組んどくのが正解だわ。",
+      "replyId": "17852329314650599",
+      "buzzLevel": "SUPER_BUZZ",
+      "insights": {
+        "views": 9512,
+        "likes": 18,
+        "replies": 11
+      }
+    },
+    {
+      "date": "2026-03-11T05:12:32.937Z",
+      "originalThreadId": "18061435748676781",
+      "originalAccount": "a1",
+      "originalText": "変動か固定か、結局ずっと迷ってた。\n\n夫と何時間も話して、シミュレーションも何回もして、それでも決め手がないまま時間だけ過ぎてって。最終的にもう期限だからって勢いで決めた感じだよ。あれは後悔というか、",
+      "replyText": "うちのサイトにも同じ声めちゃ届いてるわ。変動固定で夫婦揉める率やばい。シミュレーションより「最悪のシナリオ」で話した方がすっきりするらしいよ。",
+      "replyId": "18041640269753632",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1033,
+        "likes": 2,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-11T05:15:06.297Z",
+      "originalThreadId": "18144630715474528",
+      "originalAccount": "a2",
+      "originalText": "変動で借りた。今ソワソワしてる。\n\n0.2%の差で月々1万変わる計算だった。あの判断、正直まだ正解かわからない。\n\n固定にした人、今どう感じてる？",
+      "replyText": "金利より頭金の額でめちゃ変わるんだよね。あの時点で貯金いくらあったかで判断ガラッと変わる人多い。",
+      "replyId": "18115029766569805",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 5,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-11T05:17:21.811Z",
+      "originalThreadId": "18087959104922531",
+      "originalAccount": "a2",
+      "originalText": "見学会、多いほど安心だと思われがち。\n\n自分は4社目から記憶が混ざった。\n3社を超えたあたりで、比べてるんじゃなくて迷ってるだけになる。\n\nみんなは何社で決めた？",
+      "replyText": "みんなここで逆に判断力落ちるんだよなぁ。3社が黄金比率らしいわ",
+      "replyId": "18060666203365969",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 275,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-11T05:21:17.525Z",
+      "originalThreadId": "17953652517089850",
+      "originalAccount": "a2",
+      "originalText": "現場、毎日行ってた。",
+      "replyText": "毎日通うとちょっとした変化も気づくからいいよね。体感で毎日来てる人と週1の人だと満足度2割くらい違う",
+      "replyId": "17878164366509888",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 415,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
