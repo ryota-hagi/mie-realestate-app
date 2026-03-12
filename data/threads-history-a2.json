@@ -907,7 +907,16 @@
       "text": "玄関、手洗いなし。今も後悔してる。",
       "threadId": "18125153572567022",
       "charCount": 17,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 276,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-12T04:29:10.705Z"
     },
     {
       "date": "2026-03-11T04:26:38.013Z",
@@ -916,7 +925,16 @@
       "text": "モデルハウスの設備、標準だと思うな。\n\nあれ、ほぼオプション。\n\n「これ込みの価格ですよ」とは一言も言ってない。気づくのは見積もりが出た後。\n\n削って正解だったものと、気づかず追加したもので、最終的に100万以上変わった。",
       "threadId": "17874209271549351",
       "charCount": 111,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 583,
+        "likes": 5,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 5,
+      "engagementUpdatedAt": "2026-03-12T04:29:11.436Z"
     },
     {
       "date": "2026-03-11T07:00:46.905Z",
@@ -952,6 +970,15 @@
       "text": "つなぎ融資、完全に盲点だった。\n\n注文住宅は建物が完成するまで、ローンが実行されない。\n\nそれまでの着工金や中間金は自己資金か、つなぎ融資で払う。\n\n自分は事前に知らなくて、一時的に手元が100万以上消えた。\n\nみんなはどう乗り越えた？",
       "threadId": "18167101894397507",
       "charCount": 118,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-12T04:29:24.062Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:0",
+      "text": "1社だけで決めた、損した。\n\nそれだけ。",
+      "threadId": "18454844407099137",
+      "charCount": 20,
       "account": "a2"
     }
   ]
