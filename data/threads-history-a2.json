@@ -979,7 +979,16 @@
       "text": "繰上げ返済、損してるかも。\n\n控除が残ってる間は、返すより運用の方が数字が合う場合がある。\n\nみんなはどっちにした？",
       "threadId": "17934574539036854",
       "charCount": 58,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 34,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-12T23:24:13.801Z"
     },
     {
       "date": "2026-03-11T23:21:28.236Z",
@@ -988,7 +997,16 @@
       "text": "つなぎ融資、完全に盲点だった。\n\n注文住宅は建物が完成するまで、ローンが実行されない。\n\nそれまでの着工金や中間金は自己資金か、つなぎ融資で払う。\n\n自分は事前に知らなくて、一時的に手元が100万以上消えた。\n\nみんなはどう乗り越えた？",
       "threadId": "18167101894397507",
       "charCount": 118,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 35544,
+        "likes": 60,
+        "replies": 18,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 132,
+      "engagementUpdatedAt": "2026-03-12T23:24:14.488Z"
     },
     {
       "date": "2026-03-12T04:29:24.062Z",
@@ -1024,6 +1042,15 @@
       "text": "リビング階段、冬が地獄だった。\n\n暖房つけても熱が全部2階に逃げる。光熱費、1.3倍になった。",
       "threadId": "18110010832776326",
       "charCount": 47,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-12T23:24:25.101Z",
+      "category": "gyakusetsu",
+      "topicKey": "aruaru:15",
+      "text": "入居後、初の電気代明細で固まった。\n\n冬の24時間エアコン、1ヶ月2万超えてた。\n\n快適さは本物。でも金額も本物。\n\nみんなはどうやって折り合いつけてる？",
+      "threadId": "18086231180338330",
+      "charCount": 77,
       "account": "a2"
     }
   ]
