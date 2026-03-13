@@ -1015,7 +1015,16 @@
       "text": "1社だけで決めた、損した。\n\nそれだけ。",
       "threadId": "18454844407099137",
       "charCount": 20,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 411,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-13T07:01:05.480Z"
     },
     {
       "date": "2026-03-12T07:02:34.303Z",
@@ -1060,6 +1069,15 @@
       "text": "土地代に「一式」は存在しない。\n\n仲介手数料、登記費用、地盤調査、分筆費用。\n全部バラバラに請求が来る。\n\n自分は100万単位で見落としてた。",
       "threadId": "18135094690458662",
       "charCount": 71,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-13T07:01:15.696Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:6",
+      "text": "コンセント、ケチった。\n\n後から1箇所増設で3〜5万。\n場所によっては壁を開ける工事になる。\n\n設計時に追加しても1箇所数千円だった。\n\nあの判断、今でも悔やんでる。",
+      "threadId": "17927739294234670",
+      "charCount": 83,
       "account": "a2"
     }
   ]
