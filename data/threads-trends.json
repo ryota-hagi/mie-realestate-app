@@ -1,99 +1,47 @@
 {
-  "scannedAt": "2026-03-12T10:29:43.145Z",
+  "scannedAt": "2026-03-13T05:41:26.583Z",
   "keywords": {
-    "新築": {
-      "resultCount": 4,
-      "totalScore": 195,
-      "avgScore": 48.75,
+    "土地探し": {
+      "resultCount": 3,
+      "totalScore": 8,
+      "avgScore": 2.6666666666666665,
       "topPosts": [
         {
-          "id": "17868796203563607",
-          "text": "コンセント、ケチるな。\n\n新築なのに延長コードが床を這ってる。\n自分の家、まさにこれ。\n\n後から増設しようとしたら「壁壊すんで15万です」って言われた。\n追加工事で頼んどきゃ数千円だったのに。\n\nみんなはコンセント足りてる？",
+          "id": "17877469524485298",
+          "text": "三重で土地探してる人に朗報。\n\nうちのサイト、エリア別の土地相場ページ作ったんだけど、これがめちゃくちゃ使えると思ってる。\n\n津と四日市でこんなに違うんだとか、松阪ならこのくらいで探せるんだとか、比べながら見られる。\n「どのエリアにするか決めてない」段階の人こそ、先に見てほしい。\n\nプロフィールにリンクあるよ。",
           "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-24T03:19:17+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVIBS8wjfje",
+          "timestamp": "2026-02-28T13:30:34+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVTabmEEY4Y",
           "insights": {
-            "views": 13391,
-            "likes": 45,
-            "replies": 37,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 193
-        },
-        {
-          "id": "18055467242438452",
-          "text": "補助金、知ってる人と知らない人で100万以上差がつく。\n\n今年も新築向けの補助金が出てて、うまく使えた人は総額100万超えてる。\nでも申請のタイミングを間違えると、条件満たしてても受け取れないことがある。\n\nせっかく建てるなら、ローン組む前に確認しておいた方がいいやつ。\n📍",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-06T10:24:56+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVih9KeETf9",
-          "insights": {
-            "views": 561,
-            "likes": 1,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 1
-        },
-        {
-          "id": "17907248256347089",
-          "text": "省エネ基準義務化のニュース見てさ、自分らが建てた時は選択肢あったのに今からの人はほぼ強制なんだ。自分たちは予算の都合で標準仕様にしたけど、これからはそれもできないんだな。\n\n新築 #工務店",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-23T07:10:26+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVF29AgDvt0",
-          "insights": {
-            "views": 935,
-            "likes": 1,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 1
-        }
-      ]
-    },
-    "工務店": {
-      "resultCount": 10,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": [
-        {
-          "id": "17951586171106358",
-          "text": "体感で10人に9人、同じこと言ってるわ。今からでも洗面台の位置変えられないか工務店に相談してみた方がいい",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-11T05:07:11+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVu1kPIjqAO",
-          "insights": {
-            "views": 1,
+            "views": 56,
             "likes": 0,
-            "replies": 0,
+            "replies": 1,
             "reposts": 0,
             "quotes": 0
           },
-          "score": 0
+          "score": 4
         },
         {
-          "id": "18365255188206635",
-          "text": "体感9割の人が申請期限で失敗してるんだよなぁ。期限って突然くるから、事前に工務店に確認させといた方がいい",
+          "id": "18044765177733474",
+          "text": "土地探しの時、こういうサイトが欲しかった。\n\n三重県の注文住宅情報サイト作ってるんだけど、エリアごとに学区情報とか住みやすさをまとめたページを追加した。\n\n土地探してた頃、これが全然ネット上になくて困ったんだよね。\nリンクはプロフィールに貼ってあるから見てみて。",
           "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-08T05:18:08+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVnIb0VjeBV",
+          "timestamp": "2026-02-24T22:23:00+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVKELwzFGsJ",
           "insights": {
-            "views": 5,
+            "views": 264,
             "likes": 0,
-            "replies": 0,
+            "replies": 1,
             "reposts": 0,
             "quotes": 0
           },
-          "score": 0
+          "score": 4
         },
         {
-          "id": "17877946677509817",
-          "text": "体感ですけど、担当者の質で8割決まってるんだよね。大手工務店なら両立できる場合もあるし",
+          "id": "18043048223732726",
+          "text": "土地探しって本当それですよね。学区や周辺情報を一箇所でまとめてくれてるサイト、ほんと少ないから助かります。",
           "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-07T10:20:19+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVlGOJMluHE",
+          "timestamp": "2026-03-03T09:33:00+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVatoGjDqjM",
           "insights": {
             "views": 2,
             "likes": 0,
@@ -105,111 +53,7 @@
         }
       ]
     },
-    "間取り": {
-      "resultCount": 10,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": [
-        {
-          "id": "18574690978007753",
-          "text": "インスタの間取り、実際に住むと動線クソになってる人、体感9割だわ。家具配置で急に狭くなるやつね。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-11T10:37:59+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVvbbNMFGxI",
-          "insights": {
-            "views": 1,
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 0
-        },
-        {
-          "id": "18073308749178578",
-          "text": "間取りで夫婦揉めた人、体感で8割超えてるんだよね。後から「あっちにしとけば」って話になるやつだわ",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-10T10:31:36+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVs15f4kXty",
-          "insights": {
-            "views": 1,
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 0
-        },
-        {
-          "id": "18395812915150823",
-          "text": "回遊動線でソファ問題、うちのサイトにも同じ声めちゃ届いてるわ。家具サイズ決めてから間取り確定させた人の満足度、えぐい違うんだよね。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-08T05:23:37+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVnJEHejX4J",
-          "insights": {
-            "views": 0,
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 0
-        }
-      ]
-    },
-    "家づくり": {
-      "resultCount": 9,
-      "totalScore": 26,
-      "avgScore": 5.2,
-      "topPosts": [
-        {
-          "id": "18133012798502152",
-          "text": "春の引っ越しに間に合わせたくて、土地決めを急ぐ人多いと思うんだけど、自分もそれで失敗した。焦ると後悔しやすいぞ。\n\n家づくり",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-23T11:59:31+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVGYCPBlt3l",
-          "insights": {
-            "views": 964,
-            "likes": 2,
-            "replies": 1,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 6
-        },
-        {
-          "id": "18089419859123743",
-          "text": "間取り決めを嫁に全部任せて、後から「ここ使いづらくない？」って言ったことめっちゃ後悔してる。一緒に決めてりゃよかった。\n\n家づくり",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-23T10:37:55+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVGOskPDvMM",
-          "insights": {
-            "views": 934,
-            "likes": 2,
-            "replies": 1,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 6
-        },
-        {
-          "id": "17896685115400248",
-          "text": "リモートワーク定着で郊外増えるってニュース見たけど、通勤なしになるとマジで家選びの自由度変わるんだな。\n\n三重県 #家づくり",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-23T12:01:05+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVGYNqsFozR",
-          "insights": {
-            "views": 273,
-            "likes": 1,
-            "replies": 1,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 5
-        }
-      ]
-    },
-    "マイホーム": {
+    "住宅補助金": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -267,87 +111,166 @@
         }
       ]
     },
-    "三重県": {
-      "resultCount": 5,
-      "totalScore": 30,
-      "avgScore": 6,
+    "住宅ローン": {
+      "resultCount": 2,
+      "totalScore": 13,
+      "avgScore": 6.5,
       "topPosts": [
         {
-          "id": "17872932507538897",
-          "text": "四日市に住んでみて思うけど、記事とか見ると「便利で安い穴場」みたいに書かれてるやん。でも実際のとこ名古屋までの通勤ラッシュはまじきついし、坪単価も下がってきてるんだよね。\n\nhttps://research.chuumon-soudan.com/knowledge/mie-livability/\n\n三重県 #四日市",
+          "id": "18179182480373067",
+          "text": "住宅ローン減税、また変わるらしい。\n\n自分が建てた2年前もギリギリ制度変わる前に間に合わせようって焦ってたのに、結局また変わるんかよって感じ。\n\nタイミングで何百万も変わるのに、その「タイミング」が全然読めない。\n\n家建てるって、運ゲーの要素強すぎると思う。みんなはどのタイミングで決断した？",
           "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-22T14:40:14+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVEFodcDiM3",
+          "timestamp": "2026-02-25T12:39:10+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVLmKaNkZK6",
           "insights": {
-            "views": 205,
+            "views": 2876,
+            "likes": 5,
+            "replies": 2,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 13
+        },
+        {
+          "id": "18080516399035663",
+          "text": "固定資産税の見直し、地味に気になってる。\n\n住宅ローンの返済額は計算するのに、毎年かかる税金って後回しにしがちなんだよね。\n\nローン返済中に「こんなにかかるの？」ってなった人、相談の中でもちょいちょい出てくる。\n建てる前にちゃんと試算しておきたいやつだわ。",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-02-27T05:44:06+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVQAQG6jo3E",
+          "insights": {
+            "views": 398,
             "likes": 0,
-            "replies": 3,
+            "replies": 0,
             "reposts": 0,
             "quotes": 0
           },
-          "score": 12
-        },
-        {
-          "id": "18079185776065216",
-          "text": "補助金、知らないと本当にもったいない。\n\n三重県で家を建てる相談者に伝えると、ほとんどの人が「そんな制度あったんですか」って反応する。\n\n国の補助金だけじゃなくて、市単位で使える制度もあるから、どこで建てるかで受け取れる額が全然変わってくる。\n\n「申請のタイミングを逃した」って後悔、よく聞くから早めに調べとくのが吉。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-28T03:45:48+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVSXgiGDbQO",
-          "insights": {
-            "views": 359,
-            "likes": 1,
-            "replies": 1,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 5
-        },
-        {
-          "id": "17896685115400248",
-          "text": "リモートワーク定着で郊外増えるってニュース見たけど、通勤なしになるとマジで家選びの自由度変わるんだな。\n\n三重県 #家づくり",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-23T12:01:05+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVGYNqsFozR",
-          "insights": {
-            "views": 273,
-            "likes": 1,
-            "replies": 1,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 5
+          "score": 0
         }
       ]
     },
-    "いなべ": {
-      "resultCount": 1,
-      "totalScore": 23,
-      "avgScore": 23,
+    "マイホーム": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "ハウスメーカー": {
+      "resultCount": 5,
+      "totalScore": 102,
+      "avgScore": 20.4,
       "topPosts": [
         {
-          "id": "18122466883583761",
-          "text": "いなべ市で建てた人、総額2,500万円台で収まったって人が結構いる。🔑\n\n土地が安いのと、移住の補助金が使えるのが大きくて、三重の北の方で一番予算に余裕持って建てられたって声をよく聞く。\n\nみんなはいなべ、候補に入ってた？",
+          "id": "17911201170338958",
+          "text": "ハウスメーカーじゃなくて工務店にした。\n\n正直、まだ正解だったかわからない。\n\n保証とか大手の安心感は捨てた。\nでも担当者と直接話せる距離感はよかった。\n\nみんなはどっちにした？",
           "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-10T10:29:42+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVs1rtmkTsi",
+          "timestamp": "2026-02-26T10:35:50+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVN81_TkbgM",
           "insights": {
-            "views": 5639,
-            "likes": 7,
-            "replies": 4,
+            "views": 5504,
+            "likes": 40,
+            "replies": 15,
             "reposts": 0,
             "quotes": 0
           },
-          "score": 23
+          "score": 100
+        },
+        {
+          "id": "17967184536044556",
+          "text": "📊📍 ハウスメーカーか工務店か、どっちにするか迷ったって相談、すごく多い。\n\n結局どっちも正解とも言えるし、後悔してる人もいる。\n\n「大手の安心感を取った」「でも担当者と全然話せなかった」って声も聞くし、逆に「工務店にしたら想定外のことが多かった」って声もある。\n\n三重だと選択肢どのくらいあった？",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-03-02T10:35:13+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVYP87ckWJh",
+          "insights": {
+            "views": 206,
+            "likes": 2,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 2
+        },
+        {
+          "id": "18076060955134228",
+          "text": "三重で家建てようと思ってるけど、何から始めればいいかわからない。🏠\n\nそういう人のためにうちのサイト作った。\n\n地元ハウスメーカーの比較とか、土地の相場とか、三重に絞った情報まとめてるから、使ってみてほしい。プロフィールにリンクあるよ。",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-03-08T05:36:57+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVnKli7jbLx",
+          "insights": {
+            "views": 210,
+            "likes": 0,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 0
         }
       ]
     },
-    "引っ越し 新居": {
+    "四日市": {
+      "resultCount": 10,
+      "totalScore": 4,
+      "avgScore": 0.8,
+      "topPosts": [
+        {
+          "id": "17877469524485298",
+          "text": "三重で土地探してる人に朗報。\n\nうちのサイト、エリア別の土地相場ページ作ったんだけど、これがめちゃくちゃ使えると思ってる。\n\n津と四日市でこんなに違うんだとか、松阪ならこのくらいで探せるんだとか、比べながら見られる。\n「どのエリアにするか決めてない」段階の人こそ、先に見てほしい。\n\nプロフィールにリンクあるよ。",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-02-28T13:30:34+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVTabmEEY4Y",
+          "insights": {
+            "views": 56,
+            "likes": 0,
+            "replies": 1,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 4
+        },
+        {
+          "id": "18572896546036299",
+          "text": "水害対策を工務店に丸投げは危ないね。四日市は特にハザードマップ確認してから設計する人と後悔する人で分かれてる。",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-03-07T09:19:54+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVk_TvpEWoj",
+          "insights": {
+            "views": 0,
+            "likes": 0,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 0
+        },
+        {
+          "id": "18128664004551445",
+          "text": "四日市の通勤ラッシュは相談でもほんと多いテーマ。駅近と言っても朝の混雑考えると別の場所の方が快適って人も結構いる。",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-03-04T09:31:02+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVdSMsHlZuc",
+          "insights": {
+            "views": 0,
+            "likes": 0,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 0
+        }
+      ]
+    },
+    "亀山": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
     "住宅展示場 春": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "引っ越し 新居": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
