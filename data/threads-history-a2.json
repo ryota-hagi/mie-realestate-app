@@ -1052,6 +1052,15 @@
       "threadId": "18086231180338330",
       "charCount": 77,
       "account": "a2"
+    },
+    {
+      "date": "2026-03-13T04:27:50.392Z",
+      "category": "loan",
+      "topicKey": "loan:cost:section:1",
+      "text": "土地代に「一式」は存在しない。\n\n仲介手数料、登記費用、地盤調査、分筆費用。\n全部バラバラに請求が来る。\n\n自分は100万単位で見落としてた。",
+      "threadId": "18135094690458662",
+      "charCount": 71,
+      "account": "a2"
     }
   ]
 }
