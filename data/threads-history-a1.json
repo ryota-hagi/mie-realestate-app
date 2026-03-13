@@ -1609,7 +1609,16 @@
       "text": "ローン通った瞬間、泣きそうになった。\n\nでもすぐ「35年か…」ってなって、喜んでいいのかわからなくなったよ。",
       "threadId": "17937906039162792",
       "charCount": 54,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 20,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-13T23:34:07.723Z"
     },
     {
       "date": "2026-03-11T15:11:19.589Z",
@@ -1618,7 +1627,16 @@
       "text": "友達の家、見るんじゃなかった。\n\nパントリーついてて、洗面もおしゃれで、「うちもそうすればよかった」しかなかった。",
       "threadId": "17974710020843561",
       "charCount": 57,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 506,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-13T23:34:08.430Z"
     },
     {
       "date": "2026-03-11T21:53:28.191Z",
@@ -1627,7 +1645,16 @@
       "text": "タンクレス、見た目で選んだ。\n\n停電のとき、流せなくて焦ったのはうちだけかな🙄 タンク付きにしとけばよかったって一瞬思ったけど、見た目の満足感は今もある。みんなはどっちにした？",
       "threadId": "18092285258028839",
       "charCount": 89,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 323,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-13T23:34:09.117Z"
     },
     {
       "date": "2026-03-11T23:31:28.478Z",
@@ -1636,7 +1663,16 @@
       "text": "金利上がったニュース、心臓止まりそうになった。\n\n変動で借りたうち、毎回ニュース見るたびにスマホ置きたくなるんだよね😅",
       "threadId": "17991247064930773",
       "charCount": 60,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 254,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-13T23:34:09.741Z"
     },
     {
       "date": "2026-03-12T03:34:15.486Z",
@@ -1645,7 +1681,16 @@
       "text": "「坪いくら？」って、だんだん答えたくなくなってた。\n\n坪単価だけ言っても、オプションも外構も含んでないから結局意味ないんだよね。でも説明するのも面倒で、毎回「まあ…そこそこで😅」って誤魔化してたのうち。",
       "threadId": "18121006780593638",
       "charCount": 102,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 296,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-13T23:34:10.480Z"
     },
     {
       "date": "2026-03-12T07:49:24.032Z",
@@ -1654,6 +1699,24 @@
       "text": "子ども部屋、分けるか仕切るかで揉めた。\n\nうちは最初から分けたかったけど、夫は「まだ小さいから仕切りでいい」って聞かなくて、結局仕切りにした。\n\nもう狭い。",
       "threadId": "18344157310300771",
       "charCount": 78,
+      "account": "a1",
+      "engagement": {
+        "views": 105,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-13T23:34:11.185Z"
+    },
+    {
+      "date": "2026-03-13T23:34:22.117Z",
+      "category": "momegoto",
+      "topicKey": "momegoto:9",
+      "text": "「収納多め」って言いながら、何を入れるか一切考えてなかった。\n\nできあがってから、あ、ここ何入れよって初めて気づいたんだよね😅",
+      "threadId": "18137078629450661",
+      "charCount": 64,
       "account": "a1"
     }
   ]
