@@ -1069,7 +1069,16 @@
       "text": "リビング階段、冬が地獄だった。\n\n暖房つけても熱が全部2階に逃げる。光熱費、1.3倍になった。",
       "threadId": "18110010832776326",
       "charCount": 47,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 1280,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-13T23:24:35.106Z"
     },
     {
       "date": "2026-03-12T23:24:25.101Z",
@@ -1078,7 +1087,16 @@
       "text": "入居後、初の電気代明細で固まった。\n\n冬の24時間エアコン、1ヶ月2万超えてた。\n\n快適さは本物。でも金額も本物。\n\nみんなはどうやって折り合いつけてる？",
       "threadId": "18086231180338330",
       "charCount": 77,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 592,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-13T23:24:35.749Z"
     },
     {
       "date": "2026-03-13T04:27:50.392Z",
@@ -1114,6 +1132,15 @@
       "text": "玄関、広げて正解だったかは今も微妙。\n\nリビングが少し狭くなった。\nでも玄関が余裕あると、帰宅したときの気分が思ってたより変わった。\n\n正直どっちも「広ければよかった」は言える。\n\nみんなはどっち優先した？",
       "threadId": "18077503607573021",
       "charCount": 103,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-13T23:24:49.697Z",
+      "category": "gyakusetsu",
+      "topicKey": "gyakusetsu:19",
+      "text": "完璧な間取り、ストレスが多い。",
+      "threadId": "17915468967323954",
+      "charCount": 15,
       "account": "a2"
     }
   ]
