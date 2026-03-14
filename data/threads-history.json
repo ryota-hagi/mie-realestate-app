@@ -1567,6 +1567,69 @@
       "repliedTo": "17873849736438737",
       "keyword": "桑名",
       "charCount": 55
+    },
+    {
+      "date": "2026-03-12T10:29:53.738Z",
+      "category": "mame",
+      "topicKey": "mame:flow:section:3",
+      "text": "設計打ち合わせ、2〜4ヶ月あると思って油断してると足りなくなる。\n\n決めることが多すぎて、後半は疲れて「もうこれでいいや」ってなる人が本当に多い。\n\nコンセントの位置とか照明とか、細かいことほど後回しになって、最後に雑になるやつ。\n🏡",
+      "threadId": "18115327645728246",
+      "charCount": 118,
+      "account": "business",
+      "engagement": {
+        "views": 248,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-14T05:38:13.905Z"
+    },
+    {
+      "date": "2026-03-13T05:41:36.951Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:16",
+      "text": "月々の返済額だけ見てローン決めるな。\n\n金利と期間で、総返済額が1,000万近く変わるケースがある。\n毎月6万に収まった！って喜んでたのに、35年で払う総額聞いて顔が変わる人、結構いる。\n\n変動にした？固定にした？\n💰",
+      "threadId": "18110718532750006",
+      "charCount": 110,
+      "account": "business",
+      "engagement": {
+        "views": 3,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-14T10:17:39.900Z"
+    },
+    {
+      "date": "2026-03-13T10:26:04.114Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:16",
+      "text": "ボーナス払いあり、後悔してる人の方が多い気がする。\n\nみんなはどっちにした？",
+      "threadId": "17942734731139672",
+      "charCount": 38,
+      "account": "business"
+    },
+    {
+      "date": "2026-03-14T05:38:36.538Z",
+      "category": "mame",
+      "topicKey": "mame:regret-ranking:section:1",
+      "text": "間取り、収納の後悔で一番聞くのは「リビングに物が溢れた」。\n\n収納は多めにつけたつもりでも、生活が始まったら全然足りなかった、って相談がほんとに多い。\n\n必要な量の1.5倍は見込んでおいた方がいい、ってのが経験則。\n🏠",
+      "threadId": "18097186480966323",
+      "charCount": 110,
+      "account": "business"
+    },
+    {
+      "date": "2026-03-14T10:18:07.953Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:15",
+      "text": "火災保険、適当に選ぶな。\n\nいざ請求したら「これは対象外です」で終わった、って相談が本当に多い。",
+      "threadId": "17858318997670434",
+      "charCount": 48,
+      "account": "business"
     }
   ]
 }

@@ -961,7 +961,16 @@
       "text": "お風呂の窓、いらなかった。\n\n寒いだけだった。",
       "threadId": "18075038648618947",
       "charCount": 23,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 546,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-12T14:05:03.704Z"
     },
     {
       "date": "2026-03-11T14:07:50.070Z",
@@ -970,7 +979,16 @@
       "text": "繰上げ返済、損してるかも。\n\n控除が残ってる間は、返すより運用の方が数字が合う場合がある。\n\nみんなはどっちにした？",
       "threadId": "17934574539036854",
       "charCount": 58,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 34,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-12T23:24:13.801Z"
     },
     {
       "date": "2026-03-11T23:21:28.236Z",
@@ -979,7 +997,16 @@
       "text": "つなぎ融資、完全に盲点だった。\n\n注文住宅は建物が完成するまで、ローンが実行されない。\n\nそれまでの着工金や中間金は自己資金か、つなぎ融資で払う。\n\n自分は事前に知らなくて、一時的に手元が100万以上消えた。\n\nみんなはどう乗り越えた？",
       "threadId": "18167101894397507",
       "charCount": 118,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 35544,
+        "likes": 60,
+        "replies": 18,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 132,
+      "engagementUpdatedAt": "2026-03-12T23:24:14.488Z"
     },
     {
       "date": "2026-03-12T04:29:24.062Z",
@@ -988,7 +1015,16 @@
       "text": "1社だけで決めた、損した。\n\nそれだけ。",
       "threadId": "18454844407099137",
       "charCount": 20,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 411,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-13T07:01:05.480Z"
     },
     {
       "date": "2026-03-12T07:02:34.303Z",
@@ -997,6 +1033,177 @@
       "text": "分譲地、近所付き合いが多いと聞いて避けた。\n\nでも独立した土地、隣が何者かもわからない。\n\nどっちが正解かは、たぶん性格による。\n\nみんなはどっちにした？",
       "threadId": "17963343263902117",
       "charCount": 77,
+      "account": "a2",
+      "engagement": {
+        "views": 3146,
+        "likes": 3,
+        "replies": 4,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 19,
+      "engagementUpdatedAt": "2026-03-13T10:49:06.538Z"
+    },
+    {
+      "date": "2026-03-12T10:51:43.597Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:23",
+      "text": "畳コーナー、物置になるって聞いてたけど普通に使ってる。\n\n結局、使うかどうかは間取りと習慣次第な気がしてる。\n\n寝っ転がれる場所、意外と家に1か所あるだけで全然違う。\nなくして後悔してる人も、つけて後悔してる人も、両方見た。\n\nみんなはどっちにした？",
+      "threadId": "17862673329606953",
+      "charCount": 125,
+      "account": "a2",
+      "engagement": {
+        "views": 306,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-13T14:01:49.453Z"
+    },
+    {
+      "date": "2026-03-12T14:05:15.586Z",
+      "category": "koukai",
+      "topicKey": "koukai:3",
+      "text": "リビング階段、冬が地獄だった。\n\n暖房つけても熱が全部2階に逃げる。光熱費、1.3倍になった。",
+      "threadId": "18110010832776326",
+      "charCount": 47,
+      "account": "a2",
+      "engagement": {
+        "views": 1280,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-13T23:24:35.106Z"
+    },
+    {
+      "date": "2026-03-12T23:24:25.101Z",
+      "category": "gyakusetsu",
+      "topicKey": "aruaru:15",
+      "text": "入居後、初の電気代明細で固まった。\n\n冬の24時間エアコン、1ヶ月2万超えてた。\n\n快適さは本物。でも金額も本物。\n\nみんなはどうやって折り合いつけてる？",
+      "threadId": "18086231180338330",
+      "charCount": 77,
+      "account": "a2",
+      "engagement": {
+        "views": 592,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-13T23:24:35.749Z"
+    },
+    {
+      "date": "2026-03-13T04:27:50.392Z",
+      "category": "loan",
+      "topicKey": "loan:cost:section:1",
+      "text": "土地代に「一式」は存在しない。\n\n仲介手数料、登記費用、地盤調査、分筆費用。\n全部バラバラに請求が来る。\n\n自分は100万単位で見落としてた。",
+      "threadId": "18135094690458662",
+      "charCount": 71,
+      "account": "a2",
+      "engagement": {
+        "views": 1842,
+        "likes": 1,
+        "replies": 3,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 13,
+      "engagementUpdatedAt": "2026-03-14T06:55:10.200Z"
+    },
+    {
+      "date": "2026-03-13T07:01:15.696Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:6",
+      "text": "コンセント、ケチった。\n\n後から1箇所増設で3〜5万。\n場所によっては壁を開ける工事になる。\n\n設計時に追加しても1箇所数千円だった。\n\nあの判断、今でも悔やんでる。",
+      "threadId": "17927739294234670",
+      "charCount": 83,
+      "account": "a2",
+      "engagement": {
+        "views": 1347,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-14T10:37:51.372Z"
+    },
+    {
+      "date": "2026-03-13T10:49:18.177Z",
+      "category": "loan",
+      "topicKey": "koukai:14",
+      "text": "カーテン代、予算に入れてなかった。\n\n窓13箇所、合計で28万飛んだ。\n\n本体費用ばかり気にして、完全に盲点だった。声多すぎて逆に笑える。",
+      "threadId": "18117514954623372",
+      "charCount": 69,
+      "account": "a2",
+      "engagement": {
+        "views": 788,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-14T13:50:05.452Z"
+    },
+    {
+      "date": "2026-03-13T14:02:02.604Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:21",
+      "text": "玄関、広げて正解だったかは今も微妙。\n\nリビングが少し狭くなった。\nでも玄関が余裕あると、帰宅したときの気分が思ってたより変わった。\n\n正直どっちも「広ければよかった」は言える。\n\nみんなはどっち優先した？",
+      "threadId": "18077503607573021",
+      "charCount": 103,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-13T23:24:49.697Z",
+      "category": "gyakusetsu",
+      "topicKey": "gyakusetsu:19",
+      "text": "完璧な間取り、ストレスが多い。",
+      "threadId": "17915468967323954",
+      "charCount": 15,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-14T04:26:54.683Z",
+      "category": "koukai",
+      "topicKey": "koukai:17",
+      "text": "住宅ローン控除、13年の総額を計算してなかった。\n\n入居後に計算したら、ざっくり200万近く戻ってくる計算だった。\n\n「得した」じゃなくて「もっと早く知ってたら計画が変わってた」という後悔。",
+      "threadId": "18013225064830214",
+      "charCount": 95,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-14T06:55:30.033Z",
+      "category": "koukai",
+      "topicKey": "koukai:7",
+      "text": "バルコニー、年3回しか出てない。\n\n設置費用、確か40万以上だった。\n\n1回あたりの単価で考えると笑えない。掃除だけはするから、むしろマイナスかも。\n\n「外に出たい気分になるかも」って思ってたけど、そんな気分、来なかった。\n\nみんなはどうした？",
+      "threadId": "18014068286828432",
+      "charCount": 122,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-14T10:38:02.808Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:7",
+      "text": "収納、なんとかなると思ってた。\n\n全然なんとかならなかった。\n\n図面上の「収納あり」は当てにするな。\n数字で確認しないと、入居後に棚を買い足すだけ。\n\n自分は結局、後付けで3万円分の棚を追加した。",
+      "threadId": "18021331262656163",
+      "charCount": 98,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-14T13:50:16.973Z",
+      "category": "loan",
+      "topicKey": "koukai:15",
+      "text": "火災保険、適当に選んだ。\n\n入居後に見直したら、水濡れが補償外だった。\n年間数千円の差で、カバー範囲が全然違う。\n\n契約前、3分も調べてなかった。",
+      "threadId": "18078248102575043",
+      "charCount": 73,
       "account": "a2"
     }
   ]

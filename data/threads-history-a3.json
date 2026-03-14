@@ -475,7 +475,16 @@
       "text": "工期、2ヶ月延びた。\n\n賃貸の更新、断ったあとだった。\n\n義母には「大丈夫なの？」って毎日聞かれるし、旦那は「仕方ないよ」しか言わないし、結局ホテルと実家を行き来する謎の生活になった。\n\nそれ、最初から起きうるって教えてほしかった。",
       "threadId": "18086115763979567",
       "charCount": 116,
-      "account": "a3"
+      "account": "a3",
+      "engagement": {
+        "views": 467,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-12T14:13:47.909Z"
     },
     {
       "date": "2026-03-11T14:26:28.909Z",
@@ -484,6 +493,123 @@
       "text": "3社しか比べなかった。\n\nそれで十分だと思ってた。\n\n後で他に建てた友人から話聞いて、金額も提案も全然違ったって知った。比べる数が少なかっただけで、何百万か損してたかもしれない。\n\n気づいたの、もう住み始めてからだった。",
       "threadId": "18425168707186582",
       "charCount": 110,
+      "account": "a3",
+      "engagement": {
+        "views": 1258,
+        "likes": 3,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 7,
+      "engagementUpdatedAt": "2026-03-13T04:57:43.251Z"
+    },
+    {
+      "date": "2026-03-12T11:37:35.437Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:17",
+      "text": "繰上げ返済か、投資か。2年間ずっと迷ってる。\n\nローン残してる不安と、増やせるかもって欲。どっちも正しい気がして、結局どっちつかずのまま来た。\n\nみんなはどっちにした？",
+      "threadId": "18012331067832442",
+      "charCount": 84,
+      "account": "a3",
+      "engagement": {
+        "views": 2183,
+        "likes": 4,
+        "replies": 6,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 28,
+      "engagementUpdatedAt": "2026-03-13T11:37:56.398Z"
+    },
+    {
+      "date": "2026-03-12T14:14:07.103Z",
+      "category": "loan",
+      "topicKey": "loan:cost:section:5",
+      "text": "オプション費用、最初から言えよ。\n\n建てる前に「費用を抑えるコツ」を調べて、カタログの標準仕様に収めようと頑張ってた。\n\nでも実際には、そもそも標準仕様の範囲がうちの場合ほぼ使えなくて。義母の希望で共有スペースにお金かけた分、自分たちの部屋を削る羽目になった。\n\n「抑えられた」って感覚、全然なかった。",
+      "threadId": "18175753855348096",
+      "charCount": 151,
+      "account": "a3",
+      "engagement": {
+        "views": 209,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-14T04:56:15.081Z"
+    },
+    {
+      "date": "2026-03-13T04:57:54.430Z",
+      "category": "koukai",
+      "topicKey": "koukai:7",
+      "text": "バルコニー、年に3回しか出ない。\n\n設計のとき「絶対使う」って思ってた。洗濯物も外に干したいし、朝コーヒー飲もうって。\n\nでも実際は暑いか、雨か、面倒くさいか、のどれか。掃除だけが確実に来る。\n\n作らなかったほうがよかったって、引っ越してから気づいた。",
+      "threadId": "18061131992368460",
+      "charCount": 126,
+      "account": "a3",
+      "engagement": {
+        "views": 351,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-14T11:32:09.952Z"
+    },
+    {
+      "date": "2026-03-13T11:38:14.672Z",
+      "category": "momegoto",
+      "topicKey": "momegoto:23",
+      "text": "近所から苦情が来た。うちじゃなくて、工務店に。\n\nそれ、私に教えてくれるの一番最後だった。\n\nご近所さんへの挨拶回りも、私が気を遣って全部やって。なのに肝心なクレームの話、旦那にも来てなくて、工務店からいきなり「先日少しご迷惑を」って流された。\n\n知ったの、引き渡し後だった。",
+      "threadId": "17878281654505396",
+      "charCount": 138,
+      "account": "a3",
+      "engagement": {
+        "views": 5002,
+        "likes": 4,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 12,
+      "engagementUpdatedAt": "2026-03-14T13:59:35.323Z"
+    },
+    {
+      "date": "2026-03-13T14:10:52.720Z",
+      "category": "hikaku",
+      "topicKey": "koukai:22",
+      "text": "近くにスーパー、閉店した。\n\n家を決めた理由のひとつだったのに、引っ越して1年で消えた。\n\n「徒歩5分」って何度も確認したのに、それが前提ごとなくなるとは思ってなかった。",
+      "threadId": "18098627231509175",
+      "charCount": 85,
+      "account": "a3"
+    },
+    {
+      "date": "2026-03-14T04:56:26.628Z",
+      "category": "loan",
+      "topicKey": "loan:mie-housing-cost:section:6",
+      "text": "三重、土地が安い分、建物に回した。\n\nそれで総額、変わらなかった。",
+      "threadId": "18086865809219019",
+      "charCount": 33,
+      "account": "a3"
+    },
+    {
+      "date": "2026-03-14T11:32:19.156Z",
+      "category": "koukai",
+      "topicKey": "koukai:20",
+      "text": "土地、焦って決めた。\n\nもう少し待てばよかった、って気づいたのは、引き渡しの後だった。",
+      "threadId": "17969165337040135",
+      "charCount": 43,
+      "account": "a3"
+    },
+    {
+      "date": "2026-03-14T13:59:45.573Z",
+      "category": "momegoto",
+      "topicKey": "momegoto:0",
+      "text": "ガレージかパントリーか、どっちかしか無理って言われた。\n\n旦那は「車、守りたい」で譲らない。\n私は「収納、絶対必要」で譲れない。\n\n結局、どっちも中途半端な広さになった。",
+      "threadId": "18576035614026524",
+      "charCount": 85,
       "account": "a3"
     }
   ]
