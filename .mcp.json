@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "mlit-dpf": {
+      "command": "/Users/hagiryouta/mlit-dpf-mcp/.venv/bin/python",
+      "args": [
+        "/Users/hagiryouta/mlit-dpf-mcp/src/server.py"
+      ],
+      "env": {
+        "MLIT_API_KEY": "Zp6TQvh_2S63NHg5_7Cx-fAflC5tY_Cw",
+        "MLIT_BASE_URL": "https://data-platform.mlit.go.jp/api/v1/",
+        "PYTHONUNBUFFERED": "1",
+        "LOG_LEVEL": "WARNING"
+      }
+    }
+  }
+}

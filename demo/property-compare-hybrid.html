@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物件比較表 B+Aハイブリッド デモ</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#f3f4f6; color:#1f2937; line-height:1.6; }
+.demo-header { background:linear-gradient(135deg,#1e3a5f,#2563eb); color:#fff; padding:24px 16px; text-align:center; }
+.demo-header h1 { font-size:20px; margin-bottom:4px; }
+.demo-header p { font-size:12px; opacity:0.8; }
+.container { max-width:900px; margin:16px auto; padding:0 12px; }
+
+/* カード */
+.card { background:#fff; border-radius:12px; border:1px solid #e5e7eb; overflow:hidden; }
+.card + .card { margin-top:12px; }
+
+/* サマリーカード */
+.summary-bar { display:flex; gap:10px; overflow-x:auto; padding-top:14px; padding-bottom:4px; margin-bottom:12px; }
+.summary-card { flex:1; min-width:155px; background:#fff; border-radius:12px; border:2px solid #e5e7eb; padding:14px 12px; text-align:center; cursor:pointer; transition:all 0.2s; position:relative; scroll-snap-align:start; }
+.summary-card:hover { border-color:#93c5fd; box-shadow:0 4px 12px rgba(59,130,246,0.1); transform:translateY(-2px); }
+.summary-card.best { border-color:#22c55e; }
+.summary-card.best::after { content:'👑 おすすめ'; position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:#fef3c7; color:#b45309; font-size:10px; font-weight:700; padding:2px 10px; border-radius:999px; white-space:nowrap; }
+.label-chip { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; font-weight:800; font-size:14px; color:#fff; margin-bottom:6px; }
+.summary-name { font-size:11px; font-weight:600; color:#374151; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.summary-score { font-size:28px; font-weight:900; line-height:1.1; }
+.summary-score-label { font-size:10px; color:#9ca3af; }
+.summary-price { font-size:14px; font-weight:700; color:#1e40af; margin-top:4px; }
+.summary-sub { font-size:10px; color:#9ca3af; }
+
+/* AIサマリ */
+.ai-summary { padding:14px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; margin-bottom:12px; }
+.ai-summary-title { font-size:12px; font-weight:700; color:#1d4ed8; margin-bottom:4px; }
+.ai-summary-text { font-size:13px; color:#374151; line-height:1.7; }
+
+/* アコーディオンセクション */
+.acc-section { background:#fff; border-radius:12px; border:1px solid #e5e7eb; margin-bottom:10px; overflow:hidden; }
+.acc-header { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; cursor:pointer; user-select:none; transition:background 0.15s; }
+.acc-header:hover { background:#f9fafb; }
+.acc-header h3 { font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; }
+.acc-header .count { font-size:11px; color:#9ca3af; font-weight:400; }
+.acc-header .chev { font-size:10px; color:#9ca3af; transition:transform 0.3s; }
+.acc-section.open .acc-header .chev { transform:rotate(180deg); }
+.acc-body { display:none; border-top:1px solid #e5e7eb; }
+.acc-section.open .acc-body { display:block; }
+
+/* テーブル行 */
+.t-table { width:100%; border-collapse:collapse; }
+.t-table th, .t-table td { padding:8px 10px; border-bottom:1px solid #f3f4f6; text-align:left; font-size:12px; vertical-align:top; }
+.t-table th { background:#f9fafb; font-weight:600; color:#6b7280; white-space:nowrap; min-width:80px; width:90px; }
+.t-table td { color:#1f2937; min-width:120px; }
+.t-table tr:last-child td, .t-table tr:last-child th { border-bottom:none; }
+
+/* スコアバー */
+.score-bar { display:inline-flex; align-items:center; gap:5px; }
+.score-bar-track { width:50px; height:6px; background:#e5e7eb; border-radius:99px; overflow:hidden; }
+.score-bar-fill { height:100%; border-radius:99px; }
+.score-val { font-size:13px; font-weight:700; }
+.highlight-cell { background:#fefce8; }
+.best-star { font-size:9px; }
+
+/* ハザードバッジ */
+.hz-badge { display:inline-flex; align-items:center; gap:3px; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600; cursor:pointer; transition:background 0.2s; }
+.hz-low { background:#dcfce7; color:#15803d; }
+.hz-mid { background:#fef3c7; color:#b45309; }
+.hz-high { background:#fee2e2; color:#dc2626; }
+.hz-badge:hover { opacity:0.8; }
+.hz-detail { display:none; margin-top:6px; padding:8px 10px; background:#f8fafc; border-radius:6px; border-left:3px solid #94a3b8; font-size:11px; color:#475569; line-height:1.6; }
+.hz-detail.open { display:block; }
+
+/* メモ */
+.memo-area { width:100%; padding:6px 8px; border:1px solid #e5e7eb; border-radius:6px; font-size:12px; resize:vertical; outline:none; font-family:inherit; }
+.memo-area:focus { border-color:#93c5fd; box-shadow:0 0 0 2px rgba(59,130,246,0.1); }
+
+/* モーダル */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:flex-start; padding:20px 16px; overflow-y:auto; }
+.modal-overlay.open { display:flex; }
+.modal-box { background:#fff; border-radius:16px; max-width:560px; width:100%; margin:auto; padding:20px; max-height:90vh; overflow-y:auto; }
+.modal-close { width:32px; height:32px; border-radius:50%; background:#f3f4f6; border:none; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; color:#6b7280; }
+.modal-close:hover { background:#e5e7eb; }
+
+/* 折りたたみ */
+.fold-header { display:flex; align-items:center; justify-content:space-between; cursor:pointer; padding:8px 0; border-top:1px solid #f3f4f6; margin-top:8px; }
+.fold-header h4 { font-size:12px; font-weight:700; color:#6b7280; display:flex; align-items:center; gap:4px; }
+.fold-body { display:none; padding-top:6px; }
+.fold-body.open { display:block; }
+
+/* KV */
+.kv-row { display:flex; justify-content:space-between; align-items:baseline; padding:7px 0; border-bottom:1px solid #f3f4f6; }
+.kv-row:last-child { border-bottom:none; }
+.kv-label { font-size:11px; color:#6b7280; }
+.kv-value { font-size:12px; font-weight:600; text-align:right; max-width:60%; }
+
+/* グリッド */
+.info-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:#e5e7eb; border-radius:8px; overflow:hidden; }
+.info-cell { background:#fff; padding:8px 10px; }
+.info-cell-label { font-size:10px; color:#9ca3af; margin-bottom:1px; }
+.info-cell-value { font-size:12px; font-weight:600; }
+
+/* プログレスバー（モーダル内） */
+.m-score-row { display:flex; align-items:center; gap:6px; padding:6px 8px; background:#f9fafb; border-radius:6px; margin-bottom:4px; }
+.m-score-label { font-size:11px; color:#6b7280; width:50px; }
+.m-score-bar { flex:1; height:5px; background:#e5e7eb; border-radius:99px; overflow:hidden; }
+.m-score-fill { height:100%; border-radius:99px; }
+.m-score-val { font-size:12px; font-weight:700; width:28px; text-align:right; }
+
+/* Bプラン風 グリッド行 */
+.cpt-grid { overflow-x:auto; }
+.cpt-row { display:grid; grid-template-columns:90px repeat(var(--cols,5), 1fr); border-bottom:1px solid #f3f4f6; }
+.cpt-row:last-child { border-bottom:none; }
+.cpt-row-label { padding:9px 10px; font-size:11px; font-weight:600; color:#6b7280; background:#f9fafb; display:flex; align-items:center; white-space:nowrap; }
+.cpt-row-cell { padding:9px 10px; font-size:12px; text-align:center; display:flex; align-items:center; justify-content:center; word-break:break-all; }
+.cpt-row-cell.highlight { background:#fefce8; font-weight:700; }
+.cpt-expand-btn { grid-column:1/-1; padding:6px 10px; font-size:11px; color:#6b7280; cursor:pointer; text-align:center; background:#f9fafb; border-top:1px solid #f3f4f6; transition:background 0.15s; }
+.cpt-expand-btn:hover { background:#f3f4f6; color:#374151; }
+.cpt-hidden { display:none; }
+.cpt-hidden.open { display:grid; grid-template-columns:90px repeat(var(--cols,5), 1fr); }
+
+/* 物件リンク行 */
+.prop-link { display:inline-block; padding:3px 10px; background:#eff6ff; color:#2563eb; border-radius:4px; font-size:11px; font-weight:600; text-decoration:none; transition:background 0.15s; }
+.prop-link:hover { background:#dbeafe; }
+
+@media (max-width:640px) {
+  .summary-card { min-width:130px; }
+  .t-table td { min-width:100px; }
+  .cpt-row { grid-template-columns:80px repeat(var(--cols,5), 1fr); }
+  .cpt-row-cell { font-size:11px; padding:8px 6px; }
+}
+</style>
+</head>
+<body>
+
+<div class="demo-header">
+  <h1>物件比較表 B+Aハイブリッド</h1>
+  <p>サマリーカード + アコーディオン比較 + カードクリック→モーダル詳細</p>
+</div>
+
+<div class="container">
+  <!-- ヘッダー -->
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+    <h2 style="font-size:16px;font-weight:700;">📊 四日市エリア物件比較</h2>
+    <span style="font-size:11px;color:#9ca3af;">（カードクリックで詳細表示）</span>
+    <button style="margin-left:auto;padding:4px 12px;border:1px solid #e5e7eb;background:#fff;border-radius:6px;font-size:11px;color:#6b7280;cursor:pointer;">📥 CSV出力</button>
+  </div>
+
+  <!-- AIサマリ -->
+  <div class="ai-summary">
+    <div class="ai-summary-title">💡 AIサマリ</div>
+    <div class="ai-summary-text">5物件中、物件Cが総合スコア最高。物件A・Bは高台で土砂災害リスクに注意が必要。物件Cは角地で日当たり◎、周辺施設も充実。物件Dは平坦地で安全性高く通勤利便性も◎。<strong>子育て重視なら物件C、コスト重視なら物件B</strong>がおすすめ。</div>
+  </div>
+
+  <!-- サマリーカード -->
+  <div class="summary-bar" id="summary-bar"></div>
+
+  <!-- アコーディオンセクション -->
+  <div id="accordion-sections"></div>
+
+  <!-- 質問テンプレート -->
+  <div class="card" style="padding:14px;margin-top:12px;">
+    <h3 style="font-size:13px;font-weight:700;margin-bottom:8px;">📋 確認質問テンプレート</h3>
+    <label style="display:flex;align-items:start;gap:6px;font-size:12px;margin-bottom:6px;"><input type="checkbox"><span>造成済みか？未造成の場合、費用はどの程度か？</span></label>
+    <label style="display:flex;align-items:start;gap:6px;font-size:12px;margin-bottom:6px;"><input type="checkbox"><span>浄化槽は個別設置か？合併浄化槽の費用は？</span></label>
+    <label style="display:flex;align-items:start;gap:6px;font-size:12px;margin-bottom:6px;"><input type="checkbox"><span>上下水道引込工事は必要か？費用は？</span></label>
+    <label style="display:flex;align-items:start;gap:6px;font-size:12px;"><input type="checkbox"><span>地盤調査は実施済みか？改良が必要な場合の費用は？</span></label>
+  </div>
+</div>
+
+<!-- モーダル -->
+<div class="modal-overlay" id="prop-modal" onclick="if(event.target===this) closeModal();">
+  <div class="modal-box" id="prop-modal-body" onclick="event.stopPropagation()"></div>
+</div>
+
+<script>
+const COLORS = ['#2563eb','#16a34a','#9333ea','#f59e0b','#ef4444'];
+const LABELS = ['A','B','C','D','E'];
+
+function sc(v) { return v >= 80 ? '#16a34a' : v >= 60 ? '#2563eb' : v >= 40 ? '#f59e0b' : '#dc2626'; }
+
+function riskLevel(text) {
+  if (!text) return 'unknown';
+  const first = text.split(/[。（(]/)[0].trim();
+  if (/^高/.test(first)) return 'high';
+  if (/^中/.test(first)) return 'mid';
+  if (/^低/.test(first)) return 'low';
+  if (first.includes('高')) return 'high';
+  if (first.includes('中')) return 'mid';
+  return 'low';
+}
+
+function riskBadgeHtml(text, id) {
+  if (!text) return '<span style="color:#9ca3af;">—</span>';
+  const level = riskLevel(text);
+  const cls = level === 'high' ? 'hz-high' : level === 'mid' ? 'hz-mid' : 'hz-low';
+  const label = level === 'high' ? '高' : level === 'mid' ? '中' : '低';
+  return `<div>
+    <span class="hz-badge ${cls}" onclick="event.stopPropagation();toggleHzDetail('${id}')">
+      ${label === '低' ? '✓' : '⚠'} ${label}リスク <span style="font-size:9px;opacity:0.7;">▼</span>
+    </span>
+    <div class="hz-detail" id="${id}">${text}</div>
+  </div>`;
+}
+
+function toggleHzDetail(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// ダミーデータ（5物件、実際のデータ構造を再現）
+const PROPS = [
+  {
+    id:'a', label:'A', color:COLORS[0], name:'川島町 土地',
+    address:'四日市市川島町', price:1350, area_m2:228, area_tsubo:69.0, tsubo_price:19.6,
+    station:'富田駅 徒歩18分',
+    scores:{total:68, safety:45, convenience:72, cost:82, lifestyle:70},
+    zoning:'1種低層', coverage:'50%', far:'80%', road:'北6.0m公道 接面19.0m',
+    elevation:'高台の閑静な住宅街、間口広々約19m（高低差有）、傾斜地', infra:'上水道、側溝',
+    hazard:'急傾斜地崩壊危険箇所指定有、三重県災害情報による急傾斜地崩壊危険箇所に指定されています。',
+    maxBuild:'114.0㎡', maxFloor:'182.4㎡（55.2坪）',
+    costLow:'2,760万円', costStd:'3,588万円', costHigh:'4,692万円', misc:'395万円', totalEst:'5,333万円',
+    school:'約700m 川島小学校', junior:'約1.2km 富田中学校',
+    supermarket:'マックスバリュ 約800m', hospital:'富田内科 約1.5km',
+    park:'川島公園 約300m', nursery:'川島保育園 約600m',
+    flood:'低。物件情報に洪水に関する記載がなく、地理的にも高台に位置しているため、洪水リスクは低いと推定されます。',
+    sediment:'高。物件情報に「急傾斜地崩壊危険箇所指定有」「三重県災害情報による急傾斜地崩壊危険箇所に指定されています」と明記されているため、土砂災害（急傾斜地崩壊）のリスクは高いと判断されます。',
+    tsunami:'低。物件情報に津波に関する記載がなく、内陸の高台に位置しているため、津波リスクは低いと推定されます。',
+    ground:'高台の傾斜地であり、物件情報に「地盤改良造成工事ご案内可能」「買主様にて地盤造成（改良）工事がご入用の場合、ご案内できます」との記載があることから、地盤改良や造成が必要となる可能性があります。',
+    ai_comment:'高台で眺望◎だが、傾斜地のため造成費用が追加でかかる可能性。急傾斜地指定あり要注意。',
+    url:'#', memo:'現地確認済み。造成費用200万程度と不動産屋から回答。'
+  },
+  {
+    id:'b', label:'B', color:COLORS[1], name:'川島町 分譲地B',
+    address:'四日市市川島町1500', price:1180, area_m2:198, area_tsubo:59.9, tsubo_price:19.7,
+    station:'近鉄四日市駅 車15分',
+    scores:{total:65, safety:52, convenience:55, cost:85, lifestyle:62},
+    zoning:'1種低層', coverage:'50%', far:'80%', road:'南西4.0m公道 接面14.0m・東4.0m公道 接面15.0m・二方道路',
+    elevation:'高台', infra:'浄化槽、上水道、プロパンガス、電気、側溝',
+    hazard:'崖条例に抵触する可能性あり',
+    maxBuild:'99.0㎡', maxFloor:'158.4㎡（47.9坪）',
+    costLow:'2,395万円', costStd:'3,114万円', costHigh:'4,072万円', misc:'344万円', totalEst:'4,638万円',
+    school:'約900m 川島小学校', junior:'約1.5km 西陵中学校',
+    supermarket:'バロー 車5分', hospital:'水沢クリニック 車8分',
+    park:'水沢自然公園 約1km', nursery:'水沢保育園 車3分',
+    flood:'低。物件情報に洪水に関する記載がなく、地理的にも大きな河川から離れているため、リスクは低いと推定されます。',
+    sediment:'中。物件情報に「崖条例に抵触する可能性あり」と記載があるため、土砂災害（崖崩れ）のリスクが中程度と判断されます。確定的な記載ではないため「高」ではありません。',
+    tsunami:'低。物件情報に津波に関する記載がなく、四日市市川島町は内陸部に位置しており、津波浸水想定区域に該当しないため、リスクは低いと推定されます。',
+    ground:'高台に位置しており、比較的安定した地盤ですが、崖条例の可能性から、一部で地盤の安定性に注意が必要な箇所があるかもしれません。',
+    ai_comment:'二方道路で車の出入り便利。浄化槽・プロパンガスのランニングコスト注意。崖条例の確認必須。',
+    url:'#', memo:''
+  },
+  {
+    id:'c', label:'C', color:COLORS[2], name:'笹川通り 角地',
+    address:'四日市市笹川3丁目', price:1480, area_m2:185, area_tsubo:56.0, tsubo_price:26.4,
+    station:'南四日市駅 徒歩12分',
+    scores:{total:82, safety:78, convenience:80, cost:75, lifestyle:88}, best:true,
+    zoning:'第一種低層住居専用地域', coverage:'50%', far:'80%', road:'道路幅：5.9m',
+    elevation:'造成完成時期 令和7年8月 完成済', infra:'電気:中部電力、ガス:都市ガス、水道:公営水道、汚水・雑排水：公共下水、雨水：道路側溝（U字溝）',
+    hazard:'',
+    maxBuild:'92.5㎡', maxFloor:'148.0㎡（44.8坪）',
+    costLow:'2,240万円', costStd:'2,912万円', costHigh:'3,808万円', misc:'352万円', totalEst:'4,744万円',
+    school:'約500m 笹川小学校', junior:'約800m 笹川中学校',
+    supermarket:'マルヤス 徒歩3分', hospital:'笹川クリニック 徒歩8分',
+    park:'笹川中央公園 徒歩2分', nursery:'みどり保育園 徒歩5分',
+    flood:'低。物件情報に洪水に関するハザードの記載がなく、地理的にも大きな河川から離れており、リスクは低いと推定されます。',
+    sediment:'低。物件情報に土砂災害に関するハザードの記載がなく、周辺の地形も急峻な斜面が少ないため、リスクは低いと推定されます。',
+    tsunami:'低。物件情報に津波に関するハザードの記載がなく、内陸部に位置しており、津波の影響を受ける可能性は低いと推定されます。',
+    ground:'造成地。物件情報に「造成完成時期 令和7年8月 完成済」と記載があるため、造成された地盤であると推定されます。地盤改良の有無は不明ですが、新しい造成地であることから一定の安定性は期待できます。',
+    ai_comment:'角地で日当たり◎。都市ガス・公共下水で維持費安い。周辺施設充実でライフスタイルスコア最高。',
+    url:'#', memo:'第一候補。来週現地再訪問予定。'
+  },
+  {
+    id:'d', label:'D', color:COLORS[3], name:'川島町 平坦地',
+    address:'四日市市川島町2000', price:1250, area_m2:210, area_tsubo:63.5, tsubo_price:19.7,
+    station:'富田駅 車10分',
+    scores:{total:72, safety:80, convenience:65, cost:78, lifestyle:68},
+    zoning:'1種低層', coverage:'50%', far:'80%', road:'北6.0m公道',
+    elevation:'平坦', infra:'上水道、下水道、プロパンガス、電気',
+    hazard:'',
+    maxBuild:'105.0㎡', maxFloor:'168.0㎡（50.8坪）',
+    costLow:'2,540万円', costStd:'3,302万円', costHigh:'4,318万円', misc:'364万円', totalEst:'4,916万円',
+    school:'約800m 川島小学校', junior:'約1.3km 富田中学校',
+    supermarket:'マックスバリュ 約600m', hospital:'富田内科 約1km',
+    park:'川島公園 約500m', nursery:'川島保育園 約400m',
+    flood:'低: 物件情報に洪水ハザードに関する記載がなく、地理的にも大きな河川の氾濫域に直接該当する可能性が低いと推定されます。',
+    sediment:'低: 物件情報に土砂災害に関する記載がなく、周辺の地形も急峻な斜面が少ない平坦地であると推定されるため。',
+    tsunami:'低: 物件情報に津波ハザードに関する記載がなく、三重県四日市市川島町は内陸部に位置しており、津波の影響を受ける可能性が低いと推定されます。',
+    ground:'物件情報に地盤に関する直接的な記載はありませんが、「平坦」という記載から、大規模な造成や地盤改良は必要性が低いと推測されます。ただし、詳細な地盤調査は推奨されます。',
+    ai_comment:'平坦で安全性高い。プロパンガスのランニングコストがやや高め。',
+    url:'#', memo:''
+  },
+  {
+    id:'e', label:'E', color:COLORS[4], name:'小林町 分譲地',
+    address:'四日市市小林町', price:1420, area_m2:175, area_tsubo:52.9, tsubo_price:26.8,
+    station:'近鉄四日市駅 車12分',
+    scores:{total:70, safety:68, convenience:70, cost:72, lifestyle:72},
+    zoning:'1種住居', coverage:'60%', far:'200%', road:'北東5.0m接面18.0m',
+    elevation:'', infra:'上水道可（引込無）、下水道可（接続無）、都市ガス可（引込無）、電気',
+    hazard:'',
+    maxBuild:'105.0㎡', maxFloor:'350.0㎡（105.9坪）',
+    costLow:'2,645万円', costStd:'3,439万円', costHigh:'4,498万円', misc:'389万円', totalEst:'5,248万円',
+    school:'約600m 小林小学校', junior:'約1km 中部中学校',
+    supermarket:'ぎゅーとら 約500m', hospital:'四日市クリニック 約800m',
+    park:'小林公園 約400m', nursery:'小林保育園 約700m',
+    flood:'低。物件情報に水害に関する具体的な記載がなく、地理的にも大きな河川の氾濫区域や内水氾濫の危険性が高い低地であるとの情報が該当しないため、リスクは低いと推定されます。',
+    sediment:'低。物件情報に土砂災害に関する具体的な記載がなく、周辺の地形情報も不明ですが、四日市市小林町は比較的平坦な地域が多く、土砂災害警戒区域等の指定に関する情報が該当しないため、リスクは低いと推定されます。',
+    tsunami:'低。物件情報に津波に関する具体的な記載がなく、四日市市は伊勢湾に面していますが、当該地は海岸線から距離があり、津波浸水想定区域に該当する情報が該当しないため、リスクは低いと推定されます。',
+    ground:'不明。物件情報に地盤に関する具体的な記載がありません。造成の有無も不明です。四日市市小林町周辺は、沖積層や洪積層が分布する地域ですが、詳細な地盤情報は専門家による調査が必要です。',
+    ai_comment:'インフラ引込が未済。上下水道・ガスの引込工事費用（50〜150万円程度）を考慮する必要あり。',
+    url:'#', memo:''
+  }
+];
+
+// サマリーカード描画
+function renderSummary() {
+  const maxScore = Math.max(...PROPS.map(p => p.scores.total));
+  document.getElementById('summary-bar').innerHTML = PROPS.map((p, i) => `
+    <div class="summary-card${p.best ? ' best' : ''}" onclick="openModal(${i})">
+      <div class="label-chip" style="background:${p.color};">${LABELS[i]}</div>
+      <div class="summary-name">${p.address}</div>
+      <div class="summary-score" style="color:${sc(p.scores.total)};">${p.scores.total}</div>
+      <div class="summary-score-label">総合スコア</div>
+      <div class="summary-price">${p.price}万円</div>
+      <div class="summary-sub">${p.area_tsubo}坪 ・ ${p.tsubo_price}万/坪</div>
+    </div>
+  `).join('');
+}
+
+// アコーディオン描画
+function renderAccordions() {
+  const maxScore = Math.max(...PROPS.map(p => p.scores.total));
+
+  const sections = [
+    { id:'scores', icon:'📊', title:'スコア比較', open:true, render: renderScoreSection },
+    { id:'basic', icon:'📍', title:'基本情報', open:false, count:'5項目', render: renderBasicSection },
+    { id:'check', icon:'⚠️', title:'重要確認項目', open:false, count:'7項目', render: renderCheckSection },
+    { id:'build', icon:'🏗️', title:'建築費シミュレーション', open:false, count:'総額比較', render: renderBuildSection },
+    { id:'env', icon:'🔍', title:'周辺環境', open:false, count:'6施設', render: renderEnvSection },
+    { id:'hazard', icon:'🛡️', title:'ハザード・地盤', open:false, count:'4項目', render: renderHazardSection },
+    { id:'aicomment', icon:'💬', title:'AIコメント', open:false, render: renderAICommentSection },
+    { id:'memo', icon:'📝', title:'メモ', open:false, render: renderMemoSection },
+  ];
+
+  document.getElementById('accordion-sections').innerHTML = sections.map(s => `
+    <div class="acc-section${s.open ? ' open' : ''}" id="acc-${s.id}">
+      <div class="acc-header" onclick="document.getElementById('acc-${s.id}').classList.toggle('open')">
+        <h3>${s.icon} ${s.title} ${s.count ? '<span class="count">（'+s.count+'）</span>' : ''}</h3>
+        <span class="chev">▼</span>
+      </div>
+      <div class="acc-body">${s.render()}</div>
+    </div>
+  `).join('');
+}
+
+function scoreRow(label, key) {
+  const vals = PROPS.map(p => p.scores[key]);
+  const maxVal = Math.max(...vals);
+  return `<tr>
+    <th>${label}</th>
+    ${PROPS.map((p,i) => {
+      const v = vals[i];
+      const best = v === maxVal && maxVal > 0;
+      return `<td class="${best ? 'highlight-cell' : ''}">
+        <div class="score-bar">
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:${v}%;background:${sc(v)};"></div></div>
+          <span class="score-val" style="color:${sc(v)};">${v}</span>
+          ${best ? '<span class="best-star">★</span>' : ''}
+        </div>
+      </td>`;
+    }).join('')}
+  </tr>`;
+}
+
+function renderScoreSection() {
+  const maxTotal = Math.max(...PROPS.map(p => p.scores.total));
+  return `<div style="overflow-x:auto;"><table class="t-table">
+    <tr><th>総合</th>${PROPS.map(p => {
+      const best = p.scores.total === maxTotal;
+      return `<td class="${best ? 'highlight-cell' : ''}" style="text-align:center;">
+        <span style="font-size:20px;font-weight:900;color:${sc(p.scores.total)};">${p.scores.total}</span>
+        ${best ? '👑' : ''}
+      </td>`;
+    }).join('')}</tr>
+    ${scoreRow('🛡️ 安全','safety')}
+    ${scoreRow('🏪 利便','convenience')}
+    ${scoreRow('💰 コスト','cost')}
+    ${scoreRow('🏡 ライフ','lifestyle')}
+  </table></div>`;
+}
+
+function textRow(label, key, fmt) {
+  return `<tr><th>${label}</th>${PROPS.map(p => {
+    let v = p[key];
+    if (fmt) v = fmt(v, p);
+    return `<td>${v || '<span style="color:#d1d5db;">—</span>'}</td>`;
+  }).join('')}</tr>`;
+}
+
+function renderBasicSection() {
+  return `<div style="overflow-x:auto;"><table class="t-table">
+    ${textRow('価格','price',(v)=> v ? v.toLocaleString()+'万円' : '—')}
+    ${textRow('土地面積','area_tsubo',(v,p)=> v ? v+'坪（'+p.area_m2+'㎡）' : '—')}
+    ${textRow('坪単価','tsubo_price',(v)=> v ? v+'万円/坪' : '—')}
+    ${textRow('所在地','address')}
+    ${textRow('駅距離','station')}
+    <tr><th>物件ページ</th>${PROPS.map(p =>
+      `<td>${p.url && p.url !== '#' ? '<a href="'+p.url+'" target="_blank" class="prop-link">🔗 物件ページ</a>' : '<a href="'+p.url+'" target="_blank" class="prop-link">🔗 物件ページ</a>'}</td>`
+    ).join('')}</tr>
+  </table></div>`;
+}
+
+function cptRow(label, key, fmt) {
+  return `<div class="cpt-row" style="--cols:${PROPS.length}">
+    <div class="cpt-row-label">${label}</div>
+    ${PROPS.map(p => {
+      let v = p[key];
+      if (fmt) v = fmt(v, p);
+      return `<div class="cpt-row-cell">${v || '<span style="color:#d1d5db;">—</span>'}</div>`;
+    }).join('')}
+  </div>`;
+}
+
+function renderCheckSection() {
+  const uid = 'check-more';
+  return `<div class="cpt-grid">
+    ${cptRow('用途地域','zoning')}
+    ${cptRow('建ぺい率/容積率','coverage',(v,p)=> v+' / '+p.far)}
+    ${cptRow('接道','road')}
+    <div class="cpt-expand-btn" onclick="document.querySelectorAll('.cpt-check-extra').forEach(e=>e.classList.toggle('open'));this.textContent=this.textContent.includes('▼')?'▲ 閉じる':'▼ 他4項目を見る';">▼ 他4項目を見る</div>
+    <div class="cpt-hidden cpt-check-extra" style="--cols:${PROPS.length}">
+      <div class="cpt-row-label">高低差/造成</div>
+      ${PROPS.map(p => `<div class="cpt-row-cell">${p.elevation || '<span style="color:#d1d5db;">—</span>'}</div>`).join('')}
+    </div>
+    <div class="cpt-hidden cpt-check-extra" style="--cols:${PROPS.length}">
+      <div class="cpt-row-label">インフラ</div>
+      ${PROPS.map(p => `<div class="cpt-row-cell" style="font-size:10px;text-align:left;">${p.infra || '<span style="color:#d1d5db;">—</span>'}</div>`).join('')}
+    </div>
+    <div class="cpt-hidden cpt-check-extra" style="--cols:${PROPS.length}">
+      <div class="cpt-row-label">ハザード</div>
+      ${PROPS.map(p => `<div class="cpt-row-cell">${p.hazard ? '<span style="color:#dc2626;font-weight:600;font-size:10px;">'+p.hazard+'</span>' : '<span style="color:#16a34a;">記載なし</span>'}</div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderBuildSection() {
+  return `<div style="overflow-x:auto;"><table class="t-table">
+    ${textRow('最大建築面積','maxBuild')}
+    ${textRow('最大延床面積','maxFloor')}
+    ${textRow('ローコスト','costLow')}
+    ${textRow('スタンダード','costStd',(v) => v ? '<strong style="color:#1e40af;">'+v+'</strong>' : '—')}
+    ${textRow('ハイグレード','costHigh')}
+    ${textRow('諸費用(8%)','misc')}
+    <tr style="border-top:2px solid #fed7aa;background:#fff7ed;">
+      <th style="color:#c2410c;font-weight:700;">💰 総額目安</th>
+      ${PROPS.map(p => `<td style="font-weight:900;color:#c2410c;font-size:13px;">${p.totalEst || '—'}</td>`).join('')}
+    </tr>
+  </table></div>`;
+}
+
+function renderEnvSection() {
+  return `<div class="cpt-grid">
+    ${cptRow('小学校区','school')}
+    ${cptRow('最寄スーパー','supermarket')}
+    ${cptRow('最寄病院','hospital')}
+    <div class="cpt-expand-btn" onclick="document.querySelectorAll('.cpt-env-extra').forEach(e=>e.classList.toggle('open'));this.textContent=this.textContent.includes('▼')?'▲ 閉じる':'▼ 他3施設を見る';">▼ 他3施設を見る</div>
+    <div class="cpt-hidden cpt-env-extra" style="--cols:${PROPS.length}">
+      <div class="cpt-row-label">中学校区</div>
+      ${PROPS.map(p => `<div class="cpt-row-cell">${p.junior || '—'}</div>`).join('')}
+    </div>
+    <div class="cpt-hidden cpt-env-extra" style="--cols:${PROPS.length}">
+      <div class="cpt-row-label">最寄公園</div>
+      ${PROPS.map(p => `<div class="cpt-row-cell">${p.park || '—'}</div>`).join('')}
+    </div>
+    <div class="cpt-hidden cpt-env-extra" style="--cols:${PROPS.length}">
+      <div class="cpt-row-label">最寄保育園</div>
+      ${PROPS.map(p => `<div class="cpt-row-cell">${p.nursery || '—'}</div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderHazardSection() {
+  const hazardRow = (label, key) => `<tr><th>${label}</th>${PROPS.map((p,i) =>
+    `<td>${riskBadgeHtml(p[key], 'hz-'+key+'-'+i)}</td>`
+  ).join('')}</tr>`;
+  return `<div style="overflow-x:auto;"><table class="t-table">
+    ${hazardRow('洪水リスク','flood')}
+    ${hazardRow('土砂災害','sediment')}
+    ${hazardRow('津波リスク','tsunami')}
+    ${hazardRow('地盤','ground')}
+  </table></div>`;
+}
+
+function renderAICommentSection() {
+  return `<div style="overflow-x:auto;"><table class="t-table">
+    <tr><th>AIコメント</th>${PROPS.map(p =>
+      `<td style="font-size:11px;line-height:1.6;">${p.ai_comment || '—'}</td>`
+    ).join('')}</tr>
+  </table></div>`;
+}
+
+function renderMemoSection() {
+  return `<div style="overflow-x:auto;"><table class="t-table">
+    <tr><th>メモ</th>${PROPS.map(p =>
+      `<td><textarea class="memo-area" rows="2" placeholder="メモ...">${p.memo || ''}</textarea></td>`
+    ).join('')}</tr>
+  </table></div>`;
+}
+
+// ===== モーダル =====
+function openModal(index) {
+  const p = PROPS[index];
+  const s = p.scores;
+  const body = document.getElementById('prop-modal-body');
+
+  body.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="label-chip" style="background:${p.color};width:36px;height:36px;font-size:16px;">${LABELS[index]}</div>
+        <div>
+          <div style="font-size:16px;font-weight:700;">${p.name}</div>
+          <div style="font-size:11px;color:#6b7280;">${p.address} | ${p.station}</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div style="margin-bottom:12px;">
+      <a href="${p.url}" target="_blank" style="display:inline-flex;align-items:center;gap:4px;padding:5px 14px;background:#eff6ff;color:#2563eb;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;border:1px solid #bfdbfe;transition:background 0.15s;" onmouseover="this.style.background='#dbeafe'" onmouseout="this.style.background='#eff6ff'">🔗 物件ページを見る</a>
+    </div>
+
+    <!-- スコア -->
+    <div style="text-align:center;margin-bottom:12px;">
+      <div style="font-size:40px;font-weight:900;color:${sc(s.total)};">${s.total}<span style="font-size:14px;font-weight:400;color:#9ca3af;">/100</span></div>
+      ${p.best ? '<div style="margin-top:2px;"><span style="display:inline-block;padding:2px 10px;background:#dcfce7;color:#15803d;border-radius:999px;font-size:11px;font-weight:600;">👑 総合1位</span></div>' : ''}
+    </div>
+
+    ${[['🛡️ 安全',s.safety],['🏪 利便',s.convenience],['💰 コスト',s.cost],['🏡 ライフ',s.lifestyle]].map(([l,v]) => `
+      <div class="m-score-row">
+        <span class="m-score-label">${l}</span>
+        <div class="m-score-bar"><div class="m-score-fill" style="width:${v}%;background:${sc(v)};"></div></div>
+        <span class="m-score-val" style="color:${sc(v)};">${v}</span>
+      </div>
+    `).join('')}
+
+    <!-- 基本情報 -->
+    <div class="info-grid" style="margin-top:12px;">
+      <div class="info-cell"><div class="info-cell-label">価格</div><div class="info-cell-value" style="color:#1e40af;">${p.price}万円</div></div>
+      <div class="info-cell"><div class="info-cell-label">土地面積</div><div class="info-cell-value">${p.area_tsubo}坪（${p.area_m2}㎡）</div></div>
+      <div class="info-cell"><div class="info-cell-label">坪単価</div><div class="info-cell-value">${p.tsubo_price}万/坪</div></div>
+      <div class="info-cell"><div class="info-cell-label">駅距離</div><div class="info-cell-value">${p.station}</div></div>
+    </div>
+
+    <!-- 重要確認 -->
+    <div style="margin-top:14px;">
+      <div style="font-size:12px;font-weight:700;color:#b45309;margin-bottom:6px;">⚠️ 重要確認項目</div>
+      <div class="info-grid">
+        ${[['用途地域',p.zoning],['建ぺい率/容積率',p.coverage+' / '+p.far],['接道',p.road],['高低差/造成',p.elevation || '不明'],['インフラ',p.infra],['ハザード(物件情報)',p.hazard || '記載なし']].map(([l,v]) => `
+          <div class="info-cell"><div class="info-cell-label">${l}</div><div class="info-cell-value" style="font-size:11px;">${v}</div></div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- ハザード判定 -->
+    <div class="fold-header" onclick="toggleFold('modal-hz-${index}')">
+      <h4>🛡️ ハザード判定詳細</h4><span style="font-size:10px;color:#9ca3af;">▼</span>
+    </div>
+    <div class="fold-body" id="modal-hz-${index}">
+      ${[['洪水リスク',p.flood],['土砂災害',p.sediment],['津波リスク',p.tsunami],['地盤',p.ground]].map(([l,v]) => `
+        <div style="margin-bottom:8px;">
+          <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:2px;">${l}</div>
+          <div style="font-size:11px;color:#64748b;line-height:1.6;padding:6px 8px;background:#f8fafc;border-radius:6px;border-left:3px solid ${riskLevel(v)==='high'?'#dc2626':riskLevel(v)==='mid'?'#f59e0b':'#16a34a'};">${v || '情報なし'}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <!-- 建築費 -->
+    <div class="fold-header" onclick="toggleFold('modal-build-${index}')">
+      <h4>🏗️ 建築費シミュレーション</h4><span style="font-size:10px;color:#9ca3af;">▼</span>
+    </div>
+    <div class="fold-body" id="modal-build-${index}">
+      <div class="info-grid" style="grid-template-columns:1fr 1fr 1fr;">
+        <div class="info-cell" style="text-align:center;"><div class="info-cell-label">ローコスト</div><div class="info-cell-value">${p.costLow}</div></div>
+        <div class="info-cell" style="text-align:center;"><div class="info-cell-label">スタンダード</div><div class="info-cell-value" style="color:#1e40af;">${p.costStd}</div></div>
+        <div class="info-cell" style="text-align:center;"><div class="info-cell-label">ハイグレード</div><div class="info-cell-value">${p.costHigh}</div></div>
+      </div>
+      <div style="margin-top:8px;padding:10px;background:#fff7ed;border-radius:8px;text-align:center;">
+        <div style="font-size:10px;color:#9ca3af;">💰 総額目安</div>
+        <div style="font-size:20px;font-weight:900;color:#c2410c;">${p.totalEst}</div>
+      </div>
+    </div>
+
+    <!-- 周辺環境 -->
+    <div class="fold-header" onclick="toggleFold('modal-env-${index}')">
+      <h4>🔍 周辺環境</h4><span style="font-size:10px;color:#9ca3af;">▼</span>
+    </div>
+    <div class="fold-body" id="modal-env-${index}">
+      ${[['小学校区',p.school],['中学校区',p.junior],['スーパー',p.supermarket],['病院',p.hospital],['公園',p.park],['保育園',p.nursery]].map(([l,v]) => `
+        <div class="kv-row"><span class="kv-label">${l}</span><span class="kv-value">${v}</span></div>
+      `).join('')}
+    </div>
+
+    <!-- AIコメント -->
+    ${p.ai_comment ? `
+      <div style="margin-top:12px;padding:10px;background:#f0fdf4;border-radius:8px;">
+        <div style="font-size:11px;font-weight:700;color:#15803d;margin-bottom:3px;">💬 AIコメント</div>
+        <div style="font-size:12px;color:#374151;">${p.ai_comment}</div>
+      </div>
+    ` : ''}
+
+    <!-- メモ -->
+    <div style="margin-top:12px;">
+      <div style="font-size:11px;font-weight:700;color:#15803d;margin-bottom:4px;">📝 メモ</div>
+      <textarea class="memo-area" rows="2" placeholder="メモ...">${p.memo || ''}</textarea>
+    </div>
+
+    <!-- 戻るボタン -->
+    <div style="margin-top:16px;text-align:center;">
+      <button onclick="closeModal()" style="display:inline-block;padding:8px 24px;background:#f3f4f6;color:#374151;border:1px solid #d1d5db;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#e5e7eb'" onmouseout="this.style.background='#f3f4f6'">← 物件比較表へ戻る</button>
+    </div>
+  `;
+
+  document.getElementById('prop-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('prop-modal').classList.remove('open');
+}
+
+function toggleFold(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// 初期化
+renderSummary();
+renderAccordions();
+</script>
+</body>
+</html>

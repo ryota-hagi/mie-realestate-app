@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物件比較表 UIパターン デモ</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#f3f4f6; color:#1f2937; line-height:1.6; }
+.demo-header { background:linear-gradient(135deg,#1e3a5f,#2563eb); color:#fff; padding:32px 20px; text-align:center; }
+.demo-header h1 { font-size:22px; margin-bottom:8px; }
+.demo-header p { font-size:13px; opacity:0.85; }
+.pattern-nav { display:flex; justify-content:center; gap:8px; padding:16px; background:#fff; border-bottom:1px solid #e5e7eb; position:sticky; top:0; z-index:100; }
+.pattern-nav button { padding:10px 20px; border:2px solid #e5e7eb; background:#fff; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+.pattern-nav button.active { border-color:#2563eb; background:#eff6ff; color:#2563eb; }
+.pattern-section { display:none; max-width:800px; margin:20px auto; padding:0 16px; }
+.pattern-section.active { display:block; }
+.pattern-title { font-size:18px; font-weight:700; margin-bottom:4px; }
+.pattern-desc { font-size:13px; color:#6b7280; margin-bottom:16px; }
+
+/* ===========================================
+   共通: カード & ユーティリティ
+   =========================================== */
+.card { background:#fff; border-radius:12px; border:1px solid #e5e7eb; overflow:hidden; }
+.card + .card { margin-top:12px; }
+.badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:600; }
+.badge-green { background:#dcfce7; color:#15803d; }
+.badge-blue { background:#dbeafe; color:#1d4ed8; }
+.badge-amber { background:#fef3c7; color:#b45309; }
+.badge-red { background:#fee2e2; color:#dc2626; }
+.badge-purple { background:#f3e8ff; color:#7c3aed; }
+.score-ring { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; flex-shrink:0; }
+.progress-bar { height:6px; background:#e5e7eb; border-radius:99px; overflow:hidden; }
+.progress-bar-fill { height:100%; border-radius:99px; transition:width 0.5s ease; }
+.section-divider { padding:8px 16px; font-size:12px; font-weight:700; display:flex; align-items:center; gap:6px; }
+.expand-btn { background:none; border:none; cursor:pointer; font-size:12px; color:#6b7280; display:flex; align-items:center; gap:4px; padding:4px 8px; border-radius:6px; transition:background 0.2s; }
+.expand-btn:hover { background:#f3f4f6; }
+.chevron { transition:transform 0.3s; display:inline-block; }
+.chevron.open { transform:rotate(180deg); }
+.hidden { display:none; }
+
+/* ===========================================
+   パターンA: カード型 + 詳細展開
+   =========================================== */
+.pa-grid { display:grid; gap:12px; }
+.pa-card { background:#fff; border-radius:12px; border:1px solid #e5e7eb; overflow:hidden; cursor:pointer; transition:all 0.2s; }
+.pa-card:hover { border-color:#93c5fd; box-shadow:0 4px 12px rgba(37,99,235,0.08); }
+.pa-card.best { border-color:#22c55e; box-shadow:0 0 0 2px rgba(34,197,94,0.15); }
+.pa-header { display:flex; align-items:center; gap:12px; padding:16px; }
+.pa-label { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; color:#fff; flex-shrink:0; }
+.pa-main { flex:1; min-width:0; }
+.pa-title { font-size:15px; font-weight:700; }
+.pa-sub { font-size:12px; color:#6b7280; margin-top:2px; }
+.pa-price { text-align:right; }
+.pa-price-num { font-size:20px; font-weight:800; color:#1e40af; }
+.pa-price-unit { font-size:11px; color:#6b7280; }
+.pa-summary { display:flex; gap:8px; padding:0 16px 12px; flex-wrap:wrap; }
+.pa-chip { display:flex; align-items:center; gap:4px; padding:4px 10px; background:#f9fafb; border-radius:999px; font-size:11px; color:#4b5563; }
+.pa-detail { border-top:1px solid #e5e7eb; overflow:hidden; max-height:0; transition:max-height 0.4s ease; }
+.pa-detail.open { max-height:2000px; }
+.pa-detail-inner { padding:16px; }
+.pa-score-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+.pa-score-item { display:flex; align-items:center; gap:8px; padding:8px 10px; background:#f9fafb; border-radius:8px; }
+.pa-score-label { font-size:11px; color:#6b7280; width:50px; }
+.pa-score-bar { flex:1; }
+.pa-score-val { font-size:13px; font-weight:700; width:30px; text-align:right; }
+.pa-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:#e5e7eb; border-radius:8px; overflow:hidden; }
+.pa-info-cell { background:#fff; padding:10px 12px; }
+.pa-info-cell-label { font-size:10px; color:#9ca3af; margin-bottom:2px; }
+.pa-info-cell-value { font-size:13px; font-weight:600; }
+.pa-section-header { display:flex; align-items:center; justify-content:space-between; padding:10px 0; margin-top:12px; border-top:1px solid #f3f4f6; cursor:pointer; }
+.pa-section-header h4 { font-size:12px; font-weight:700; color:#6b7280; display:flex; align-items:center; gap:4px; }
+.pa-section-body { padding-top:8px; }
+.pa-check-row { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; border-radius:8px; font-size:13px; }
+.pa-check-row:nth-child(odd) { background:#f9fafb; }
+
+/* ===========================================
+   パターンB: サマリーバー + 展開テーブル
+   =========================================== */
+.pb-summary-bar { display:flex; gap:12px; padding:16px; overflow-x:auto; }
+.pb-prop-card { flex:1; min-width:180px; background:#fff; border-radius:12px; border:2px solid #e5e7eb; padding:16px; text-align:center; cursor:pointer; transition:all 0.2s; position:relative; }
+.pb-prop-card:hover { border-color:#93c5fd; }
+.pb-prop-card.selected { border-color:#2563eb; background:#eff6ff; }
+.pb-prop-card.best::after { content:'👑 おすすめ'; position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:#fef3c7; color:#b45309; font-size:10px; font-weight:700; padding:2px 10px; border-radius:999px; white-space:nowrap; }
+.pb-prop-label { width:32px; height:32px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; color:#fff; margin-bottom:8px; }
+.pb-prop-score { font-size:28px; font-weight:900; margin:4px 0; }
+.pb-prop-price { font-size:14px; font-weight:700; color:#1e40af; }
+.pb-prop-area { font-size:11px; color:#6b7280; margin-top:2px; }
+.pb-compare-sections { margin-top:16px; }
+.pb-section { background:#fff; border-radius:12px; border:1px solid #e5e7eb; margin-bottom:12px; overflow:hidden; }
+.pb-section-header { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; cursor:pointer; user-select:none; }
+.pb-section-header:hover { background:#f9fafb; }
+.pb-section-header h3 { font-size:14px; font-weight:700; display:flex; align-items:center; gap:6px; }
+.pb-section-header .count { font-size:11px; color:#9ca3af; font-weight:400; }
+.pb-section-body { display:none; border-top:1px solid #e5e7eb; }
+.pb-section.open .pb-section-body { display:block; }
+.pb-row { display:grid; grid-template-columns:100px repeat(3, 1fr); border-bottom:1px solid #f3f4f6; }
+.pb-row:last-child { border-bottom:none; }
+.pb-row-label { padding:10px 12px; font-size:12px; font-weight:600; color:#6b7280; background:#f9fafb; display:flex; align-items:center; }
+.pb-row-cell { padding:10px 12px; font-size:13px; text-align:center; display:flex; align-items:center; justify-content:center; }
+.pb-row-cell.highlight { background:#fefce8; font-weight:700; }
+.pb-alert { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:4px; font-size:11px; }
+.pb-alert-warn { background:#fef3c7; color:#b45309; }
+.pb-alert-ok { background:#dcfce7; color:#15803d; }
+.pb-alert-danger { background:#fee2e2; color:#dc2626; }
+
+/* ===========================================
+   パターンC: ステップ型（フォーカスUI）
+   =========================================== */
+.pc-tabs { display:flex; gap:6px; padding:0 0 16px; overflow-x:auto; }
+.pc-tab { padding:8px 16px; border:2px solid #e5e7eb; background:#fff; border-radius:999px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; transition:all 0.2s; display:flex; align-items:center; gap:6px; }
+.pc-tab.active { border-color:#2563eb; background:#eff6ff; color:#2563eb; }
+.pc-tab .tab-score { font-weight:800; }
+.pc-view { display:none; }
+.pc-view.active { display:block; }
+.pc-hero { text-align:center; padding:24px 16px; background:#fff; border-radius:12px; border:1px solid #e5e7eb; margin-bottom:16px; }
+.pc-hero-label { display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:12px; font-weight:800; font-size:20px; color:#fff; margin-bottom:8px; }
+.pc-hero-title { font-size:18px; font-weight:700; margin-bottom:4px; }
+.pc-hero-sub { font-size:12px; color:#6b7280; }
+.pc-hero-score { font-size:48px; font-weight:900; margin:8px 0; }
+.pc-hero-price { font-size:20px; font-weight:800; color:#1e40af; }
+.pc-hero-badges { display:flex; justify-content:center; gap:6px; margin-top:10px; flex-wrap:wrap; }
+.pc-metrics { display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; margin-bottom:16px; }
+.pc-metric { text-align:center; padding:12px 8px; background:#fff; border-radius:10px; border:1px solid #e5e7eb; }
+.pc-metric-val { font-size:16px; font-weight:800; }
+.pc-metric-label { font-size:10px; color:#9ca3af; margin-top:2px; }
+.pc-detail-section { background:#fff; border-radius:12px; border:1px solid #e5e7eb; margin-bottom:12px; overflow:hidden; }
+.pc-detail-header { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; cursor:pointer; }
+.pc-detail-header:hover { background:#f9fafb; }
+.pc-detail-header h3 { font-size:14px; font-weight:700; display:flex; align-items:center; gap:6px; }
+.pc-detail-body { display:none; padding:0 16px 16px; }
+.pc-detail-section.open .pc-detail-body { display:block; }
+.pc-kv-list { display:grid; gap:0; }
+.pc-kv { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #f3f4f6; }
+.pc-kv:last-child { border-bottom:none; }
+.pc-kv-label { font-size:12px; color:#6b7280; }
+.pc-kv-value { font-size:13px; font-weight:600; text-align:right; }
+.pc-compare-bar { display:flex; align-items:center; gap:8px; padding:12px 16px; background:#f9fafb; border-radius:8px; margin-bottom:8px; }
+.pc-compare-bar-label { font-size:12px; width:80px; color:#6b7280; }
+.pc-compare-bar-items { flex:1; display:flex; gap:4px; }
+.pc-compare-bar-item { flex:1; text-align:center; padding:6px 4px; border-radius:6px; font-size:12px; font-weight:600; }
+.pc-compare-bar-item.current { background:#dbeafe; color:#1d4ed8; }
+.pc-compare-bar-item.other { background:#f3f4f6; color:#6b7280; }
+</style>
+</head>
+<body>
+
+<div class="demo-header">
+  <h1>🏠 物件比較表 UIパターン デモ</h1>
+  <p>パッと見シンプル → クリックで詳細が見れる 3パターン</p>
+</div>
+
+<div class="pattern-nav">
+  <button class="active" onclick="showPattern('a')">A: カード展開型</button>
+  <button onclick="showPattern('b')">B: セクション展開型</button>
+  <button onclick="showPattern('c')">C: フォーカス型</button>
+</div>
+
+<!-- ===== パターンA: カード展開型 ===== -->
+<div id="pattern-a" class="pattern-section active">
+  <div style="padding:16px 0;">
+    <div class="pattern-title">パターンA: カード展開型</div>
+    <div class="pattern-desc">各物件を独立カードで表示。タップで詳細が下に展開。スマホでも見やすい。</div>
+  </div>
+
+  <!-- AIサマリ -->
+  <div class="card" style="padding:16px; margin-bottom:12px; background:#eff6ff; border-color:#bfdbfe;">
+    <div style="font-size:13px; font-weight:700; color:#1d4ed8; margin-bottom:6px;">💡 AIサマリ</div>
+    <div style="font-size:13px; color:#374151; line-height:1.7;">物件Aは駅近で通勤利便性が高いが、土地が小さく建築面積に制約。物件Bは郊外で広い土地が魅力。物件Cはバランスが良くコスパ最高。<strong>子育て重視なら物件B、通勤重視なら物件A</strong>がおすすめ。</div>
+  </div>
+
+  <div class="pa-grid" id="pa-cards"></div>
+</div>
+
+<!-- ===== パターンB: セクション展開型 ===== -->
+<div id="pattern-b" class="pattern-section">
+  <div style="padding:16px 0;">
+    <div class="pattern-title">パターンB: セクション展開型</div>
+    <div class="pattern-desc">上部にサマリーカード、下部にカテゴリ別の展開セクション。比較しやすい。</div>
+  </div>
+
+  <div class="pb-summary-bar" id="pb-summary"></div>
+  <div class="pb-compare-sections" id="pb-sections"></div>
+</div>
+
+<!-- ===== パターンC: フォーカス型 ===== -->
+<div id="pattern-c" class="pattern-section">
+  <div style="padding:16px 0;">
+    <div class="pattern-title">パターンC: フォーカス型</div>
+    <div class="pattern-desc">一度に1物件にフォーカス。タブ切替で比較。モバイルファースト。</div>
+  </div>
+
+  <div class="pc-tabs" id="pc-tabs"></div>
+  <div id="pc-views"></div>
+</div>
+
+<script>
+// ===== ダミーデータ =====
+const PROPS = [
+  {
+    id:'a', label:'A', color:'#2563eb', name:'富田駅前 土地',
+    address:'四日市市富田2丁目', price:1680, area_m2:165, area_tsubo:49.9,
+    tsubo_price:33.7, station:'富田駅 徒歩8分',
+    scores: { total:78, safety:72, convenience:85, cost:68, lifestyle:82 },
+    badge:'none',
+    zoning:'第一種住居地域', coverage:'60%', far:'200%', road:'南6m公道',
+    elevation:'平坦', infra:'上下水道引込済', hazard:'洪水:浸水0.5m未満',
+    maxBuild:'99.0㎡', maxFloor:'330.0㎡（99.8坪）',
+    costLow:'1,625万円', costStd:'2,113万円', costHigh:'2,763万円',
+    misc:'303万円', totalEst:'4,096万円',
+    school:'富田小学校', junior:'富田中学校', supermarket:'マックスバリュ 徒歩5分',
+    hospital:'富田内科 徒歩10分', park:'富田公園 徒歩3分',
+    nursery:'富田保育園 徒歩7分', flood:'0.5m未満', sediment:'なし', tsunami:'低リスク', ground:'砂質',
+    ai_comment:'駅近で利便性◎。ただし土地面積がコンパクトなので間取りの工夫が必要。', url:'#',
+    memo: ''
+  },
+  {
+    id:'b', label:'B', color:'#16a34a', name:'水沢町 分譲地',
+    address:'四日市市水沢町1500', price:1280, area_m2:230, area_tsubo:69.6,
+    tsubo_price:18.4, station:'近鉄四日市駅 車15分',
+    scores: { total:71, safety:80, convenience:55, cost:85, lifestyle:70 },
+    badge:'none',
+    zoning:'第一種低層住居専用地域', coverage:'50%', far:'100%', road:'東4m私道',
+    elevation:'やや傾斜（要造成）', infra:'上水道のみ（浄化槽要）', hazard:'なし',
+    maxBuild:'115.0㎡', maxFloor:'230.0㎡（69.6坪）',
+    costLow:'2,088万円', costStd:'2,714万円', costHigh:'3,549万円',
+    misc:'319万円', totalEst:'4,313万円',
+    school:'水沢小学校', junior:'西陵中学校', supermarket:'バロー 車5分',
+    hospital:'水沢クリニック 車8分', park:'水沢自然公園 徒歩10分',
+    nursery:'水沢保育園 車3分', flood:'なし', sediment:'注意区域隣接', tsunami:'なし', ground:'粘性土',
+    ai_comment:'広い土地で注文住宅向き。ただし造成費と浄化槽費で+200万円程度を見込むべき。',
+    url:'#', memo: ''
+  },
+  {
+    id:'c', label:'C', color:'#9333ea', name:'笹川通り 角地',
+    address:'四日市市笹川3丁目', price:1480, area_m2:185, area_tsubo:56.0,
+    tsubo_price:26.4, station:'南四日市駅 徒歩12分',
+    scores: { total:82, safety:78, convenience:80, cost:75, lifestyle:88 },
+    badge:'none', best:true,
+    zoning:'第一種中高層住居地域', coverage:'60%', far:'200%', road:'南6m＋東4m角地',
+    elevation:'平坦', infra:'上下水道引込済', hazard:'洪水:0.5m未満',
+    maxBuild:'111.0㎡', maxFloor:'370.0㎡（111.9坪）',
+    costLow:'1,820万円', costStd:'2,366万円', costHigh:'3,094万円',
+    misc:'308万円', totalEst:'4,154万円',
+    school:'笹川小学校', junior:'笹川中学校', supermarket:'マルヤス 徒歩3分',
+    hospital:'笹川クリニック 徒歩8分', park:'笹川中央公園 徒歩2分',
+    nursery:'みどり保育園 徒歩5分', flood:'0.5m未満', sediment:'なし', tsunami:'低リスク', ground:'砂礫',
+    ai_comment:'角地で日当たり◎。周辺環境・利便性・価格のバランスが最も良い。ライフスタイルスコア最高。',
+    url:'#', memo: ''
+  }
+];
+
+function getScoreColor(v) {
+  if (v >= 80) return '#16a34a';
+  if (v >= 60) return '#2563eb';
+  if (v >= 40) return '#f59e0b';
+  return '#dc2626';
+}
+
+function hazardBadge(val) {
+  if (!val || val === 'なし') return '<span class="pb-alert pb-alert-ok">✓ 安全</span>';
+  if (val.includes('注意') || val.includes('低リスク')) return '<span class="pb-alert pb-alert-warn">⚠ ' + val + '</span>';
+  return '<span class="pb-alert pb-alert-danger">⚠ ' + val + '</span>';
+}
+
+// ===== パターンA =====
+function renderPatternA() {
+  const container = document.getElementById('pa-cards');
+  container.innerHTML = PROPS.map(p => {
+    const s = p.scores;
+    return `
+    <div class="pa-card${p.best ? ' best':''}" onclick="togglePaDetail('${p.id}')">
+      <div class="pa-header">
+        <div class="pa-label" style="background:${p.color};">${p.label}</div>
+        <div class="pa-main">
+          <div class="pa-title">${p.name} ${p.best ? '<span class="badge badge-green" style="font-size:10px;">👑 総合1位</span>' : ''}</div>
+          <div class="pa-sub">${p.address} ｜ ${p.station}</div>
+        </div>
+        <div class="pa-price">
+          <div class="pa-price-num">${p.price}<span style="font-size:12px;font-weight:400;">万円</span></div>
+          <div class="pa-price-unit">${p.tsubo_price}万/坪 ・ ${p.area_tsubo}坪</div>
+        </div>
+      </div>
+      <div class="pa-summary">
+        <div class="pa-chip"><span class="score-ring" style="width:28px;height:28px;font-size:12px;background:${getScoreColor(s.total)}20;color:${getScoreColor(s.total)};">${s.total}</span> 総合</div>
+        <div class="pa-chip">🛡️ ${s.safety}</div>
+        <div class="pa-chip">🏪 ${s.convenience}</div>
+        <div class="pa-chip">💰 ${s.cost}</div>
+        <div class="pa-chip">🏡 ${s.lifestyle}</div>
+        <div style="margin-left:auto;"><span class="chevron" id="pa-chev-${p.id}">▼</span></div>
+      </div>
+      <div class="pa-detail" id="pa-detail-${p.id}">
+        <div class="pa-detail-inner">
+          <!-- スコア -->
+          <div class="pa-score-grid">
+            ${[['🛡️ 安全',s.safety],['🏪 利便',s.convenience],['💰 コスト',s.cost],['🏡 ライフ',s.lifestyle]].map(([l,v]) => `
+              <div class="pa-score-item">
+                <div class="pa-score-label">${l}</div>
+                <div class="pa-score-bar"><div class="progress-bar"><div class="progress-bar-fill" style="width:${v}%;background:${getScoreColor(v)};"></div></div></div>
+                <div class="pa-score-val" style="color:${getScoreColor(v)};">${v}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- 基本情報 -->
+          <div class="pa-info-grid">
+            <div class="pa-info-cell"><div class="pa-info-cell-label">用途地域</div><div class="pa-info-cell-value">${p.zoning}</div></div>
+            <div class="pa-info-cell"><div class="pa-info-cell-label">建ぺい率/容積率</div><div class="pa-info-cell-value">${p.coverage} / ${p.far}</div></div>
+            <div class="pa-info-cell"><div class="pa-info-cell-label">接道</div><div class="pa-info-cell-value">${p.road}</div></div>
+            <div class="pa-info-cell"><div class="pa-info-cell-label">高低差</div><div class="pa-info-cell-value">${p.elevation}</div></div>
+            <div class="pa-info-cell"><div class="pa-info-cell-label">インフラ</div><div class="pa-info-cell-value">${p.infra}</div></div>
+            <div class="pa-info-cell"><div class="pa-info-cell-label">ハザード</div><div class="pa-info-cell-value">${p.hazard || 'なし'}</div></div>
+          </div>
+
+          <!-- 建築費 -->
+          <div class="pa-section-header" onclick="event.stopPropagation(); toggleSection('pa-build-${p.id}','pa-build-chev-${p.id}')">
+            <h4>🏗️ 建築費シミュレーション</h4>
+            <span class="chevron" id="pa-build-chev-${p.id}">▼</span>
+          </div>
+          <div class="pa-section-body hidden" id="pa-build-${p.id}">
+            <div class="pa-info-grid" style="grid-template-columns:1fr 1fr 1fr;">
+              <div class="pa-info-cell"><div class="pa-info-cell-label">ローコスト</div><div class="pa-info-cell-value">${p.costLow}</div></div>
+              <div class="pa-info-cell"><div class="pa-info-cell-label">スタンダード</div><div class="pa-info-cell-value" style="color:#1e40af;">${p.costStd}</div></div>
+              <div class="pa-info-cell"><div class="pa-info-cell-label">ハイグレード</div><div class="pa-info-cell-value">${p.costHigh}</div></div>
+            </div>
+            <div style="margin-top:8px; padding:12px; background:#fff7ed; border-radius:8px; text-align:center;">
+              <div style="font-size:11px; color:#9ca3af;">💰 総額目安（土地+建築std+諸費用）</div>
+              <div style="font-size:22px; font-weight:900; color:#c2410c;">${p.totalEst}</div>
+            </div>
+          </div>
+
+          <!-- 周辺環境 -->
+          <div class="pa-section-header" onclick="event.stopPropagation(); toggleSection('pa-env-${p.id}','pa-env-chev-${p.id}')">
+            <h4>🔍 周辺環境・AI情報</h4>
+            <span class="chevron" id="pa-env-chev-${p.id}">▼</span>
+          </div>
+          <div class="pa-section-body hidden" id="pa-env-${p.id}">
+            ${[['小学校区',p.school],['中学校区',p.junior],['最寄スーパー',p.supermarket],['最寄病院',p.hospital],['最寄公園',p.park],['最寄保育園',p.nursery]].map(([l,v]) => `
+              <div class="pa-check-row"><span style="font-size:12px;color:#6b7280;">${l}</span><span style="font-size:13px;font-weight:600;">${v}</span></div>
+            `).join('')}
+          </div>
+
+          <!-- AIコメント -->
+          <div style="margin-top:12px; padding:12px; background:#f0fdf4; border-radius:8px;">
+            <div style="font-size:11px; font-weight:700; color:#15803d; margin-bottom:4px;">💬 AIコメント</div>
+            <div style="font-size:13px; color:#374151;">${p.ai_comment}</div>
+          </div>
+
+          <div style="margin-top:12px; text-align:center;">
+            <a href="${p.url}" style="display:inline-block; padding:8px 20px; background:${p.color}; color:#fff; border-radius:8px; font-size:13px; font-weight:600; text-decoration:none;">🔗 物件ページを見る</a>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function togglePaDetail(id) {
+  const detail = document.getElementById('pa-detail-' + id);
+  const chev = document.getElementById('pa-chev-' + id);
+  detail.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
+function toggleSection(bodyId, chevId) {
+  const body = document.getElementById(bodyId);
+  const chev = document.getElementById(chevId);
+  body.classList.toggle('hidden');
+  chev.classList.toggle('open');
+}
+
+// ===== パターンB =====
+function renderPatternB() {
+  const summary = document.getElementById('pb-summary');
+  summary.innerHTML = PROPS.map(p => `
+    <div class="pb-prop-card${p.best ? ' best' : ''}" onclick="this.classList.toggle('selected')">
+      <div class="pb-prop-label" style="background:${p.color};">${p.label}</div>
+      <div style="font-size:12px;font-weight:600;margin-bottom:4px;">${p.name}</div>
+      <div class="pb-prop-score" style="color:${getScoreColor(p.scores.total)};">${p.scores.total}</div>
+      <div style="font-size:10px;color:#9ca3af;">総合スコア</div>
+      <div class="pb-prop-price">${p.price}万円</div>
+      <div class="pb-prop-area">${p.area_tsubo}坪 ・ ${p.tsubo_price}万/坪</div>
+    </div>
+  `).join('');
+
+  const sections = [
+    {
+      icon:'📊', title:'スコア比較', color:'#7c3aed',
+      rows: [
+        { label:'総合', key:'total' },
+        { label:'🛡️ 安全', key:'safety' },
+        { label:'🏪 利便', key:'convenience' },
+        { label:'💰 コスト', key:'cost' },
+        { label:'🏡 ライフ', key:'lifestyle' },
+      ],
+      type:'score'
+    },
+    {
+      icon:'📍', title:'基本情報', color:'#374151',
+      rows: [
+        { label:'価格', key:'price', fmt: v => v + '万円' },
+        { label:'面積', key:'area_tsubo', fmt: v => v + '坪' },
+        { label:'坪単価', key:'tsubo_price', fmt: v => v + '万/坪' },
+        { label:'所在地', key:'address' },
+        { label:'駅距離', key:'station' },
+      ],
+      type:'text'
+    },
+    {
+      icon:'⚠️', title:'重要確認項目', color:'#b45309', count:'7項目',
+      rows: [
+        { label:'用途地域', key:'zoning' },
+        { label:'建ぺい率', key:'coverage' },
+        { label:'容積率', key:'far' },
+        { label:'接道', key:'road' },
+        { label:'高低差', key:'elevation' },
+        { label:'インフラ', key:'infra' },
+        { label:'ハザード', key:'hazard' },
+      ],
+      type:'text'
+    },
+    {
+      icon:'🏗️', title:'建築費', color:'#c2410c', count:'総額比較',
+      rows: [
+        { label:'ローコスト', key:'costLow' },
+        { label:'スタンダード', key:'costStd' },
+        { label:'ハイグレード', key:'costHigh' },
+        { label:'総額目安', key:'totalEst', highlight:true },
+      ],
+      type:'text'
+    },
+    {
+      icon:'🔍', title:'周辺環境・ハザード', color:'#1d4ed8', count:'10項目',
+      rows: [
+        { label:'小学校', key:'school' },
+        { label:'中学校', key:'junior' },
+        { label:'スーパー', key:'supermarket' },
+        { label:'病院', key:'hospital' },
+        { label:'洪水', key:'flood', badge:true },
+        { label:'土砂災害', key:'sediment', badge:true },
+        { label:'津波', key:'tsunami', badge:true },
+        { label:'地盤', key:'ground' },
+      ],
+      type:'text'
+    },
+  ];
+
+  const container = document.getElementById('pb-sections');
+  container.innerHTML = sections.map((sec, si) => `
+    <div class="pb-section${si === 0 ? ' open' : ''}" id="pb-sec-${si}">
+      <div class="pb-section-header" onclick="document.getElementById('pb-sec-${si}').classList.toggle('open')">
+        <h3><span>${sec.icon}</span> ${sec.title} ${sec.count ? '<span class="count">（' + sec.count + '）</span>' : ''}</h3>
+        <span class="chevron${si === 0 ? ' open' : ''}">▼</span>
+      </div>
+      <div class="pb-section-body">
+        ${sec.rows.map(r => {
+          if (sec.type === 'score') {
+            const vals = PROPS.map(p => p.scores[r.key]);
+            const maxVal = Math.max(...vals);
+            return `<div class="pb-row">
+              <div class="pb-row-label">${r.label}</div>
+              ${PROPS.map(p => {
+                const v = p.scores[r.key];
+                const isBest = v === maxVal;
+                return `<div class="pb-row-cell${isBest ? ' highlight':''}">
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <div class="progress-bar" style="width:50px;"><div class="progress-bar-fill" style="width:${v}%;background:${getScoreColor(v)};"></div></div>
+                    <span style="font-size:14px;font-weight:700;color:${getScoreColor(v)};">${v}</span>
+                    ${isBest ? '<span style="font-size:10px;">★</span>' : ''}
+                  </div>
+                </div>`;
+              }).join('')}
+            </div>`;
+          } else {
+            return `<div class="pb-row">
+              <div class="pb-row-label">${r.label}</div>
+              ${PROPS.map(p => {
+                let val = r.fmt ? r.fmt(p[r.key]) : p[r.key];
+                if (r.badge) val = hazardBadge(p[r.key]);
+                return `<div class="pb-row-cell${r.highlight ? ' highlight' : ''}">${val}</div>`;
+              }).join('')}
+            </div>`;
+          }
+        }).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== パターンC =====
+function renderPatternC() {
+  const tabsEl = document.getElementById('pc-tabs');
+  tabsEl.innerHTML = PROPS.map((p, i) => `
+    <div class="pc-tab${i === 0 ? ' active' : ''}" onclick="switchPcTab(${i})" id="pc-tab-${i}">
+      <span style="width:20px;height:20px;border-radius:6px;background:${p.color};display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;">${p.label}</span>
+      <span>${p.name}</span>
+      <span class="tab-score" style="color:${getScoreColor(p.scores.total)};">${p.scores.total}点</span>
+    </div>
+  `).join('');
+
+  const viewsEl = document.getElementById('pc-views');
+  viewsEl.innerHTML = PROPS.map((p, i) => {
+    const s = p.scores;
+    return `
+    <div class="pc-view${i === 0 ? ' active' : ''}" id="pc-view-${i}">
+      <div class="pc-hero">
+        <div class="pc-hero-label" style="background:${p.color};">${p.label}</div>
+        <div class="pc-hero-title">${p.name}</div>
+        <div class="pc-hero-sub">${p.address} ｜ ${p.station}</div>
+        <div class="pc-hero-score" style="color:${getScoreColor(s.total)};">${s.total}<span style="font-size:16px;font-weight:400;color:#9ca3af;">/100</span></div>
+        <div class="pc-hero-price">${p.price}<span style="font-size:13px;font-weight:400;">万円</span></div>
+        <div class="pc-hero-badges">
+          ${p.best ? '<span class="badge badge-green">👑 総合1位</span>' : ''}
+          <span class="badge badge-blue">${p.area_tsubo}坪</span>
+          <span class="badge badge-purple">${p.tsubo_price}万/坪</span>
+        </div>
+      </div>
+
+      <!-- 他物件との比較バー -->
+      <div style="margin-bottom:16px;">
+        ${[['総合',s.total,'total'],['安全',s.safety,'safety'],['利便',s.convenience,'convenience'],['コスト',s.cost,'cost']].map(([l,v,k]) => `
+          <div class="pc-compare-bar">
+            <div class="pc-compare-bar-label">${l}</div>
+            <div class="pc-compare-bar-items">
+              ${PROPS.map(pp => `
+                <div class="pc-compare-bar-item ${pp.id === p.id ? 'current' : 'other'}">
+                  ${pp.label}: ${pp.scores[k]}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- スコア4指標 -->
+      <div class="pc-metrics">
+        ${[['🛡️',s.safety,'安全'],['🏪',s.convenience,'利便'],['💰',s.cost,'コスト'],['🏡',s.lifestyle,'ライフ']].map(([icon,v,l]) => `
+          <div class="pc-metric">
+            <div style="font-size:14px;">${icon}</div>
+            <div class="pc-metric-val" style="color:${getScoreColor(v)};">${v}</div>
+            <div class="pc-metric-label">${l}</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- 重要確認項目 -->
+      <div class="pc-detail-section open">
+        <div class="pc-detail-header" onclick="this.parentElement.classList.toggle('open')">
+          <h3>⚠️ 重要確認項目</h3>
+          <span class="chevron open">▼</span>
+        </div>
+        <div class="pc-detail-body">
+          <div class="pc-kv-list">
+            ${[['用途地域',p.zoning],['建ぺい率/容積率',p.coverage+' / '+p.far],['接道',p.road],['高低差',p.elevation],['インフラ',p.infra],['ハザード',p.hazard||'なし']].map(([l,v]) => `
+              <div class="pc-kv"><span class="pc-kv-label">${l}</span><span class="pc-kv-value">${v}</span></div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- 建築費 -->
+      <div class="pc-detail-section">
+        <div class="pc-detail-header" onclick="this.parentElement.classList.toggle('open')">
+          <h3>🏗️ 建築費シミュレーション</h3>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="pc-detail-body">
+          <div class="pc-kv-list">
+            ${[['ローコスト',p.costLow],['スタンダード',p.costStd],['ハイグレード',p.costHigh],['諸費用(8%)',p.misc]].map(([l,v]) => `
+              <div class="pc-kv"><span class="pc-kv-label">${l}</span><span class="pc-kv-value">${v}</span></div>
+            `).join('')}
+          </div>
+          <div style="margin-top:12px; padding:12px; background:#fff7ed; border-radius:8px; text-align:center;">
+            <div style="font-size:11px; color:#9ca3af;">💰 総額目安</div>
+            <div style="font-size:24px; font-weight:900; color:#c2410c;">${p.totalEst}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 周辺環境 -->
+      <div class="pc-detail-section">
+        <div class="pc-detail-header" onclick="this.parentElement.classList.toggle('open')">
+          <h3>🔍 周辺環境・ハザード</h3>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="pc-detail-body">
+          <div class="pc-kv-list">
+            ${[['小学校区',p.school],['中学校区',p.junior],['最寄スーパー',p.supermarket],['最寄病院',p.hospital],['最寄公園',p.park],['最寄保育園',p.nursery]].map(([l,v]) => `
+              <div class="pc-kv"><span class="pc-kv-label">${l}</span><span class="pc-kv-value">${v}</span></div>
+            `).join('')}
+          </div>
+          <div style="margin-top:12px;">
+            <div style="font-size:12px;font-weight:700;color:#6b7280;margin-bottom:8px;">ハザード</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              ${[['洪水',p.flood],['土砂災害',p.sediment],['津波',p.tsunami]].map(([l,v]) => `
+                <div>${l}: ${hazardBadge(v)}</div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AIコメント -->
+      <div style="padding:12px; background:#f0fdf4; border-radius:12px; border:1px solid #dcfce7; margin-top:12px;">
+        <div style="font-size:12px; font-weight:700; color:#15803d; margin-bottom:4px;">💬 AIコメント</div>
+        <div style="font-size:13px; color:#374151;">${p.ai_comment}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function switchPcTab(idx) {
+  document.querySelectorAll('.pc-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.pc-view').forEach((v,i) => v.classList.toggle('active', i===idx));
+}
+
+// ===== パターン切替 =====
+function showPattern(id) {
+  document.querySelectorAll('.pattern-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('pattern-' + id).classList.add('active');
+  document.querySelectorAll('.pattern-nav button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// 初期化
+renderPatternA();
+renderPatternB();
+renderPatternC();
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+# 三重県北部 不動産推薦アプリ
+
+三重県北部（桑名市・いなべ市・木曽岬町・東員町・朝日町・川越町・菰野町）の不動産情報をMCP（Model Context Protocol）サーバー経由で取得し、インタラクティブに表示するWebアプリケーション。
+
+## 本番URL
+
+**https://ryota-hagi.github.io/mie-realestate-app/**
+
+## 構成
+
+| コンポーネント | 技術 | ホスト |
+|---|---|---|
+| フロントエンド | HTML + Tailwind CSS + Chart.js | GitHub Pages |
+| MCP Proxy | Supabase Edge Function (Deno) | Supabase |
+| MCP Server | reinfolib, e-stat, get-time | mcp.n-3.ai |
+| データベース | PostgreSQL (app_content) | Supabase |
+
+## ファイル構成
+
+```
+mie-realestate-app/
+├── index.html              # メインアプリ（58,541 bytes）
+├── deploy-to-github.sh     # GitHub Pagesデプロイスクリプト
+└── README.md               # このファイル
+```
+
+## Supabase情報
+
+- **プロジェクトID**: `jvfmvitknqnmuduyscnl`
+- **リージョン**: `ap-northeast-1`
+- **MCP Proxy URL**: `https://jvfmvitknqnmuduyscnl.supabase.co/functions/v1/mcp-proxy`
+
+## 再デプロイ方法
+
+HTMLを更新した場合、以下の手順でGitHub Pagesに再デプロイできます：
+
+### 方法1: デプロイスクリプト（初回のみ）
+```bash
+bash deploy-to-github.sh <GITHUB_TOKEN> <GITHUB_USERNAME>
+```
+
+### 方法2: GitHub上で直接更新
+1. https://github.com/ryota-hagi/mie-realestate-app にアクセス
+2. `index.html` をクリック → 編集アイコン（鉛筆）をクリック
+3. 内容を更新して「Commit changes」
+4. 数分後に反映される
+
+### 方法3: git push
+```bash
+cd mie-realestate-app/
+git init
+git remote add origin https://github.com/ryota-hagi/mie-realestate-app.git
+git add index.html
+git commit -m "Update app"
+git push origin main
+```

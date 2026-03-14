@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高級物件比較表 UI パターンテスト</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans JP"', 'sans-serif'],
+            display: ['"Jost"', '"Noto Sans JP"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f5f7fa',
+              100: '#e4eaf1',
+              200: '#cbd6e6',
+              300: '#a3b8d4',
+              400: '#7593c0',
+              500: '#5371a5',
+              600: '#3f5787', // Primary Brand
+              700: '#34456c',
+              800: '#2d3b5b',
+              900: '#28334d',
+            },
+            accent: '#D4AF37', // Gold for premium feel
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-out',
+            'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+</script>
+<style>
+/* --- Global Styles & Resets --- */
+body {
+    background-color: #fafafa;
+    color: #333;
+    overflow-x: hidden;
+}
+
+/* Glassmorphism effects */
+.glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Tab Switcher Styles */
+.tab-btn {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background: transparent;
+}
+.tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: #3f5787;
+    transition: width 0.3s ease;
+}
+.tab-btn.active {
+    color: #3f5787;
+    font-weight: 700;
+}
+.tab-btn.active::after {
+    width: 100%;
+}
+
+/* --- PATTERN A: Card Scroll --- */
+.pattern-a-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 1.5rem;
+    padding: 1rem 0.5rem 3rem 0.5rem;
+    snap-type: x mandatory;
+    scrollbar-width: none; /* Firefox */
+}
+.pattern-a-container::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+.prop-card-a {
+    flex: 0 0 340px;
+    scroll-snap-align: center;
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+    border: 1px solid rgba(0,0,0,0.03);
+    overflow: hidden;
+    position: relative;
+}
+.prop-card-a:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.12);
+}
+.prop-img-wrapper {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+.prop-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+.prop-card-a:hover .prop-img-wrapper img {
+    transform: scale(1.05);
+}
+.badge-rank {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    backdrop-filter: blur(4px);
+    z-index: 10;
+}
+.badge-gold { background: linear-gradient(135deg, #FFDF73 0%, #D4AF37 100%); color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+.badge-silver { background: linear-gradient(135deg, #E2E2E2 0%, #A0A0A0 100%); color: #fff;}
+.badge-bronze { background: linear-gradient(135deg, #F0C49E 0%, #CD7F32 100%); color: #fff;}
+
+.score-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: white;
+    position: absolute;
+    bottom: -24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    color: #3f5787;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 10;
+    border: 2px solid #f5f7fa;
+}
+.feature-pill {
+    background: #f5f7fa;
+    color: #64748b;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* --- PATTERN B: Premium Matrix --- */
+.matrix-wrapper {
+    border-radius: 24px;
+    background: white;
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.06);
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.04);
+}
+.matrix-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.matrix-table th, .matrix-table td {
+    padding: 1.25rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid #f1f5f9;
+}
+.matrix-table th {
+    background: #fafafa;
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.875rem;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+.matrix-table th:first-child, .matrix-table td:first-child {
+    text-align: left;
+    position: sticky;
+    left: 0;
+    background: white;
+    z-index: 10;
+    box-shadow: 2px 0 5px -2px rgba(0,0,0,0.05);
+    font-weight: 700;
+}
+.matrix-table th:first-child { z-index: 30; background: #fafafa; }
+.matrix-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+.matrix-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+.matrix-table td:first-child {
+    background: inherit;
+}
+.matrix-table tbody tr:hover td:first-child {
+    background-color: #f8fafc;
+}
+
+.score-bar-bg { height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden; width: 60px; margin: 0 auto; }
+.score-bar-fill { height: 100%; border-radius: 4px; background: #3f5787; transition: width 1s ease-out; }
+
+/* --- PATTERN C: Visual Accordion --- */
+.accordion-item {
+    background: white;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+.accordion-item:hover {
+    border-color: #e4eaf1;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+}
+.accordion-item.active {
+    border-color: #cbd6e6;
+    box-shadow: 0 10px 30px rgba(59, 87, 135, 0.1);
+}
+.accordion-header {
+    padding: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+.accordion-img-thumb {
+    width: 100px;
+    height: 70px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+.accordion-content {
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #fafafa;
+    border-top: 1px solid #f1f5f9;
+}
+.accordion-item.active .accordion-content {
+    max-height: 500px; /* arbitrary large height */
+    opacity: 1;
+    padding: 2rem;
+}
+.chevron {
+    transition: transform 0.3s ease;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #64748b;
+}
+.accordion-item:hover .chevron { background: #e2e8f0; color: #3f5787; }
+.accordion-item.active .chevron { transform: rotate(180deg); background: #3f5787; color: white; }
+
+</style>
+</head>
+<body class="antialiased font-sans flex flex-col min-h-screen">
+
+<!-- Header (Glassmorphism) -->
+<header class="fixed top-0 w-full glass z-50 border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-brand-600 flex items-center justify-center text-white font-display font-bold text-xl">
+                M
+            </div>
+            <span class="font-display font-bold text-xl tracking-wide text-gray-900">三重不動産ナビ <span class="text-brand-400 font-light text-sm ml-2">比較デモ</span></span>
+        </div>
+        <div class="text-sm font-medium text-gray-500 bg-gray-100 px-4 py-2 rounded-full flex items-center gap-2">
+            <i class="ri-information-line"></i> 実装検証用モックアップ
+        </div>
+    </div>
+</header>
+
+<main class="flex-grow pt-32 pb-20 px-4 md:px-8 max-w-7xl mx-auto w-full">
+    
+    <!-- Hero / Title Section -->
+    <div class="text-center max-w-2xl mx-auto mb-16 animate-slide-up">
+        <h1 class="text-3xl md:text-5xl font-display font-bold text-gray-900 mb-6 leading-tight">
+            最適な物件を、<br><span class="text-brand-600">比較して見つける。</span>
+        </h1>
+        <p class="text-gray-500 leading-relaxed">
+            3つの異なるUIデザインパターンを用意しました。それぞれのタブを切り替えて、最も直感的で比較しやすいレイアウトをご確認ください。
+        </p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="flex justify-center mb-12 border-b border-gray-200 animate-fade-in relative z-10">
+        <button class="tab-btn active px-6 py-4 text-gray-500" data-target="pattern-a">
+            <i class="ri-layout-right-line mr-2"></i>Pattern A: カード
+        </button>
+        <button class="tab-btn px-6 py-4 text-gray-500" data-target="pattern-b">
+            <i class="ri-grid-fill mr-2"></i>Pattern B: マトリクス
+        </button>
+        <button class="tab-btn px-6 py-4 text-gray-500" data-target="pattern-c">
+            <i class="ri-list-check mr-2"></i>Pattern C: リスト
+        </button>
+    </div>
+
+    <!-- Content Area -->
+    <div id="content-area" class="animate-fade-in">
+        <!-- Rendered by JS -->
+    </div>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-12 mt-auto">
+    <div class="max-w-7xl mx-auto px-6 text-center text-gray-400 text-sm">
+        <p>Mie Real Estate App - UI Design Patterns Demo</p>
+        <p class="mt-2 opacity-50">&copy; 2026 Nemoto Kogyo All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script>
+// Mock Data (High Quality Images from Unsplash API for demo)
+const properties = [
+    {
+        id: 1,
+        name: "四日市 レジデンス",
+        area: "四日市市",
+        price: "3,800",
+        priceUnit: "万円",
+        tsuboPrice: "52.4",
+        access: "近鉄四日市駅 徒歩8分",
+        nagoyaTime: 35,
+        score: 92,
+        rank: 1,
+        image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80",
+        features: ["駅チカ", "角部屋", "床暖房"],
+        scores: { price: 85, access: 95, living: 90, future: 80 }
+    },
+    {
+        id: 2,
+        name: "桑名 ヒルズガーデン",
+        area: "桑名市",
+        price: "4,200",
+        priceUnit: "万円",
+        tsuboPrice: "55.8",
+        access: "桑名駅 徒歩12分",
+        nagoyaTime: 25,
+        score: 88,
+        rank: 2,
+        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
+        features: ["名古屋通勤", "駐車場2台", "庭付き"],
+        scores: { price: 75, access: 98, living: 85, future: 85 }
+    },
+    {
+        id: 3,
+        name: "鈴鹿 ファミリータウン",
+        area: "鈴鹿市",
+        price: "2,980",
+        priceUnit: "万円",
+        tsuboPrice: "41.0",
+        access: "白子駅 徒歩15分",
+        nagoyaTime: 55,
+        score: 85,
+        rank: 3,
+        image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80",
+        features: ["子育て", "広々LDK", "公園近接"],
+        scores: { price: 95, access: 70, living: 80, future: 75 }
+    },
+    {
+        id: 4,
+        name: "菰野 ネイチャーヴィラ",
+        area: "菰野町",
+        price: "3,150",
+        priceUnit: "万円",
+        tsuboPrice: "35.5",
+        access: "菰野駅 車8分",
+        nagoyaTime: 65,
+        score: 79,
+        rank: 4,
+        image: "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=600&q=80",
+        features: ["自然豊か", "温泉保養", "ウッドデッキ"],
+        scores: { price: 90, access: 60, living: 75, future: 70 }
+    }
+];
+
+function getBadgeClass(rank) {
+    if(rank === 1) return 'badge-gold';
+    if(rank === 2) return 'badge-silver';
+    if(rank === 3) return 'badge-bronze';
+    return 'bg-gray-800 text-white';
+}
+
+function getRankText(rank) {
+    return `No.${rank}`;
+}
+
+// --- Render Functions ---
+
+function renderPatternA() {
+    let html = `
+        <div class="mb-6 flex justify-between items-end">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">カードスワイプスタイル</h2>
+                <p class="text-sm text-gray-500 mt-1">横スクロールで直感的に眺められるモバイルライクなUI</p>
+            </div>
+            <div class="hidden md:flex gap-2">
+                <button class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition"><i class="ri-arrow-left-s-line"></i></button>
+                <button class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition"><i class="ri-arrow-right-s-line"></i></button>
+            </div>
+        </div>
+        <div class="pattern-a-container">
+    `;
+
+    properties.forEach(p => {
+        const badgeClass = getBadgeClass(p.rank);
+        html += `
+            <div class="prop-card-a">
+                <div class="prop-img-wrapper">
+                    <div class="badge-rank ${badgeClass}">${getRankText(p.rank)}</div>
+                    <img src="${p.image}" alt="${p.name}">
+                    <div class="score-circle">
+                        ${p.score}
+                    </div>
+                </div>
+                <div class="p-6 pt-8">
+                    <div class="text-xs font-bold text-brand-600 mb-1 tracking-wider">${p.area}</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">${p.name}</h3>
+                    
+                    <div class="flex items-end gap-1 mb-4">
+                        <span class="text-3xl font-display font-bold text-gray-900">${p.price}</span>
+                        <span class="text-sm text-gray-500 mb-1">${p.priceUnit}</span>
+                        <span class="text-xs text-gray-400 mb-1 ml-2">坪単価: ${p.tsuboPrice}万</span>
+                    </div>
+
+                    <div class="space-y-2 mb-5">
+                        <div class="flex items-center text-sm text-gray-600">
+                            <i class="ri-train-line text-brand-400 mr-2"></i> ${p.access}
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600">
+                            <i class="ri-map-pin-time-line text-brand-400 mr-2"></i> 名古屋まで ${p.nagoyaTime}分
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        ${p.features.map(f => `<span class="feature-pill">${f}</span>`).join('')}
+                    </div>
+
+                    <button class="w-full py-3 rounded-xl bg-brand-50 text-brand-700 font-bold hover:bg-brand-600 hover:text-white transition-colors duration-300">
+                        詳細を見る <i class="ri-arrow-right-line ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+
+    html += `</div>`;
+    return html;
+}
+
+function renderPatternB() {
+    let html = `
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">フィーチャーマトリクススタイル</h2>
+            <p class="text-sm text-gray-500 mt-1">パソコンでの閲覧に最適な、全項目を一覧で細かく比較できるプロ仕様UI</p>
+        </div>
+        <div class="matrix-wrapper overflow-x-auto">
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th class="w-48">物件・エリア</th>
+                        <th>総合スコア</th>
+                        <th>価格</th>
+                        <th>名古屋アクセス</th>
+                        <th>間取り特徴</th>
+                        <th>価格スコア</th>
+                        <th>利便性スコア</th>
+                        <th>将来性スコア</th>
+                        <th>アクション</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+
+    properties.forEach(p => {
+        html += `
+            <tr>
+                <td>
+                    <div class="flex items-center gap-3">
+                        <img src="${p.image}" class="w-12 h-12 rounded-lg object-cover flex-shrink-0" alt="">
+                        <div>
+                            <div class="text-xs text-gray-400">${p.area}</div>
+                            <div class="text-sm font-bold text-gray-900 line-clamp-1">${p.name}</div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-brand-50 text-brand-700 font-bold">
+                        ${p.score}
+                    </div>
+                </td>
+                <td>
+                    <div class="font-bold text-gray-900">${p.price}<span class="text-xs font-normal text-gray-500">${p.priceUnit}</span></div>
+                    <div class="text-xs text-gray-400">坪${p.tsuboPrice}万</div>
+                </td>
+                <td>
+                    <div class="text-sm font-medium text-gray-800">${p.nagoyaTime}分</div>
+                    <div class="text-xs text-gray-400 line-clamp-1">${p.access}</div>
+                </td>
+                <td>
+                    <div class="flex flex-col gap-1 items-center">
+                        ${p.features.slice(0,2).map(f => `<span class="text-[10px] px-2 py-0.5 bg-gray-100 text-gray-600 rounded whitespace-nowrap">${f}</span>`).join('')}
+                    </div>
+                </td>
+                <td>
+                    <div class="score-bar-bg"><div class="score-bar-fill" style="width: ${p.scores.price}%"></div></div>
+                    <div class="text-xs mt-1 text-gray-500">${p.scores.price}</div>
+                </td>
+                <td>
+                    <div class="score-bar-bg"><div class="score-bar-fill" style="width: ${p.scores.living}%"></div></div>
+                    <div class="text-xs mt-1 text-gray-500">${p.scores.living}</div>
+                </td>
+                <td>
+                    <div class="score-bar-bg"><div class="score-bar-fill" style="width: ${p.scores.future}%"></div></div>
+                    <div class="text-xs mt-1 text-gray-500">${p.scores.future}</div>
+                </td>
+                <td>
+                    <button class="p-2 rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-brand-50 hover:text-brand-600 transition shadow-sm">
+                        <i class="ri-arrow-right-line"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+
+    html += `
+                </tbody>
+            </table>
+        </div>
+    `;
+    return html;
+}
+
+function renderPatternC() {
+    let html = `
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">ビジュアルアコーディオン</h2>
+            <p class="text-sm text-gray-500 mt-1">画像を大きく見せつつ、クリックで詳細を展開するスッキリとした洗練UI</p>
+        </div>
+        <div class="max-w-4xl mx-auto">
+    `;
+
+    properties.forEach((p, index) => {
+        html += `
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+                <div class="accordion-header">
+                    <img src="${p.image}" class="accordion-img-thumb" alt="${p.name}">
+                    <div class="flex-grow grid grid-cols-2 md:grid-cols-4 gap-4 items-center">
+                        <div class="col-span-2 md:col-span-1">
+                            <div class="text-xs text-brand-600 font-bold mb-1">${p.area}</div>
+                            <h3 class="font-bold text-gray-900">${p.name}</h3>
+                        </div>
+                        <div class="hidden md:block">
+                            <div class="text-xs text-gray-400">販売価格</div>
+                            <div class="font-bold text-gray-900">${p.price}<span class="text-xs font-normal">万円</span></div>
+                        </div>
+                        <div class="hidden md:block text-center">
+                            <div class="text-xs text-gray-400 mb-1">スコア</div>
+                            <div class="inline-flex px-3 py-1 bg-[#f5f7fa] text-brand-700 font-bold rounded-full text-sm">
+                                ${p.score} pt
+                            </div>
+                        </div>
+                        <div class="col-span-2 md:col-span-1 flex justify-end">
+                            <div class="chevron"><i class="ri-arrow-down-s-line text-xl"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <img src="${p.image}" class="w-full h-64 object-cover rounded-xl shadow-sm mb-4">
+                            <div class="flex gap-2">
+                                ${p.features.map(f => `<span class="px-3 py-1 bg-white border border-gray-200 text-sm font-medium rounded-lg text-gray-600">${f}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-gray-900 border-b pb-2 mb-4 border-gray-200">物件詳細</h4>
+                            
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+                                    <span class="text-gray-500 text-sm">坪単価</span>
+                                    <span class="font-bold text-gray-900">${p.tsuboPrice} 万円</span>
+                                </div>
+                                <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+                                    <span class="text-gray-500 text-sm">アクセス</span>
+                                    <span class="font-medium text-gray-900">${p.access}</span>
+                                </div>
+                                <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+                                    <span class="text-gray-500 text-sm">名古屋まで</span>
+                                    <span class="font-medium text-gray-900">最速 ${p.nagoyaTime} 分</span>
+                                </div>
+                            </div>
+
+                            <h4 class="text-lg font-bold text-gray-900 border-b pb-2 mb-4 mt-8 border-gray-200">スコア詳細</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <div class="flex justify-between text-xs text-gray-500 mb-1"><span>価格</span><span>${p.scores.price}</span></div>
+                                    <div class="h-1.5 w-full bg-gray-200 rounded-full"><div class="h-full bg-brand-500 rounded-full" style="width: ${p.scores.price}%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs text-gray-500 mb-1"><span>交通</span><span>${p.scores.access}</span></div>
+                                    <div class="h-1.5 w-full bg-gray-200 rounded-full"><div class="h-full bg-[#10b981] rounded-full" style="width: ${p.scores.access}%"></div></div>
+                                </div>
+                            </div>
+                            
+                            <button class="mt-8 w-full py-3 bg-brand-600 text-white font-bold rounded-xl shadow-lg shadow-brand-600/30 hover:bg-brand-700 transition transform hover:-translate-y-0.5">
+                                この物件について問い合わせる
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    html += `</div>`;
+    return html;
+}
+
+
+// --- Logic ---
+const contentArea = document.getElementById('content-area');
+const tabs = document.querySelectorAll('.tab-btn');
+
+function switchPattern(patternId) {
+    // Reset active tab
+    tabs.forEach(t => t.classList.remove('active', 'font-bold'));
+    const activeTab = document.querySelector(`[data-target="${patternId}"]`);
+    activeTab.classList.add('active');
+
+    // Fade out
+    contentArea.style.opacity = '0';
+    
+    setTimeout(() => {
+        if (patternId === 'pattern-a') contentArea.innerHTML = renderPatternA();
+        else if (patternId === 'pattern-b') contentArea.innerHTML = renderPatternB();
+        else if (patternId === 'pattern-c') contentArea.innerHTML = renderPatternC();
+        
+        // Fade in
+        contentArea.style.opacity = '1';
+    }, 200);
+}
+
+// Global function for Accordion (Pattern C)
+window.toggleAccordion = function(element) {
+    const isActive = element.classList.contains('active');
+    // Close all
+    document.querySelectorAll('.accordion-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    // Open clicked if it was not active
+    if (!isActive) {
+        element.classList.add('active');
+    }
+}
+
+// Event Listeners
+tabs.forEach(tab => {
+    tab.addEventListener('click', (e) => {
+        switchPattern(e.currentTarget.dataset.target);
+    });
+});
+
+// Init
+contentArea.style.transition = 'opacity 0.2s ease-out';
+switchPattern('pattern-a');
+
+</script>
+</body>
+</html>

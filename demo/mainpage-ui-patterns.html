@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>注文住宅の物件比較ツール｜AIで簡単比較 | 注文相談.com</title>
+<meta name="description" content="注文住宅の土地探しに。気になる物件のURLを貼るだけでAIが自動整理。複数物件を並べて比較表を作成。SUUMO・アットホーム等の物件を統一フォーマットで比較できる無料ツール。">
+<meta name="keywords" content="注文住宅,物件比較,土地比較,AI,土地探し,SUUMO,アットホーム,不動産比較,比較表,三重県">
+<link rel="canonical" href="https://research.chuumon-soudan.com/">
+
+<!-- OGP -->
+<meta property="og:title" content="注文住宅の物件比較ツール｜AIで簡単比較">
+<meta property="og:description" content="物件URLを貼るだけでAIが自動整理。複数物件をスコア付きで一覧比較できる無料ツール。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://research.chuumon-soudan.com/">
+<meta property="og:site_name" content="注文相談.com">
+<meta property="og:locale" content="ja_JP">
+
+<!-- Structured Data: WebApplication -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "注文住宅 物件比較ツール",
+  "description": "注文住宅の土地探しに。AIが物件情報を自動整理し、複数物件を比較表で一覧比較できる無料ツール",
+  "url": "https://research.chuumon-soudan.com/",
+  "applicationCategory": "RealEstate",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" },
+  "author": { "@type": "Organization", "name": "注文相談.com" }
+}
+</script>
+
+<!-- Structured Data: FAQPage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "利用料金はかかりますか？",
+      "acceptedAnswer": { "@type": "Answer", "text": "完全無料でご利用いただけます。会員登録も不要で、物件URLを貼るだけですぐにお使いいただけます。" }
+    },
+    {
+      "@type": "Question",
+      "name": "どの不動産サイトに対応していますか？",
+      "acceptedAnswer": { "@type": "Answer", "text": "SUUMO、アットホーム、LIFULL HOME'Sなど主要な不動産ポータルサイトに対応しています。物件ページのURLをそのまま貼り付けてください。" }
+    },
+    {
+      "@type": "Question",
+      "name": "スコアはどのように算出されますか？",
+      "acceptedAnswer": { "@type": "Answer", "text": "安全性（ハザード・地盤）、利便性（駅距離・商業施設）、コスト（価格・坪単価）、ライフスタイル（公園・医療・学校）の4軸で100点満点のスコアを自動算出しています。" }
+    },
+    {
+      "@type": "Question",
+      "name": "三重県以外のエリアにも対応していますか？",
+      "acceptedAnswer": { "@type": "Answer", "text": "物件URLを貼る機能は全国の不動産サイトに対応しています。エリア比較スコア機能は現在、三重県北部7市町（四日市・桑名・鈴鹿・いなべ・亀山・菰野・東員）に対応しています。" }
+    },
+    {
+      "@type": "Question",
+      "name": "個人情報の入力は必要ですか？",
+      "acceptedAnswer": { "@type": "Answer", "text": "一切不要です。会員登録・メールアドレス・電話番号など個人情報の入力なしでご利用いただけます。" }
+    }
+  ]
+}
+</script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+* { font-family: 'M PLUS Rounded 1c', sans-serif; }
+body { background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 60%, #EFF6FF 100%); }
+
+/* Shared */
+.demo-card { border-radius:16px; transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+.demo-card:hover { transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,0,0,0.1); }
+.mock-bar { height:6px; border-radius:3px; overflow:hidden; background:rgba(0,0,0,0.04); }
+.mock-fill { height:100%; border-radius:3px; animation:barGrow 1s ease-out forwards; }
+.timeline-dot { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; }
+
+/* Blue theme */
+.btn-primary { background:#2563EB; color:white; box-shadow:0 4px 14px rgba(37,99,235,0.25); transition:all 0.2s; }
+.btn-primary:hover { background:#1D4ED8; box-shadow:0 6px 20px rgba(37,99,235,0.35); transform:translateY(-1px); }
+.badge-blue { background:#EFF6FF; border:1.5px solid #BFDBFE; color:#2563EB; }
+.feature-card { background:white; border:1px solid #E8E8E8; box-shadow:0 2px 12px rgba(0,0,0,0.06); border-radius:16px; padding:24px; }
+.feature-card:hover { transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,0,0,0.1); }
+
+/* FAQ Accordion */
+.faq-item { border:1px solid #E8E8E8; border-radius:12px; overflow:hidden; transition:all 0.2s; }
+.faq-item:hover { border-color:#BFDBFE; }
+.faq-question { cursor:pointer; display:flex; align-items:center; justify-content:space-between; padding:16px 20px; background:white; }
+.faq-question h3 { font-size:14px; font-weight:700; color:#333; margin:0; }
+.faq-icon { width:24px; height:24px; border-radius:50%; background:#EFF6FF; color:#2563EB; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; transition:transform 0.3s; flex-shrink:0; }
+.faq-answer { max-height:0; overflow:hidden; transition:max-height 0.35s ease; }
+.faq-answer-inner { padding:0 20px 16px; font-size:13px; color:#666; line-height:1.8; }
+.faq-item.open .faq-icon { transform:rotate(45deg); }
+.faq-item.open .faq-answer { max-height:200px; }
+
+/* Area card */
+.area-card { background:white; border:1px solid #E8E8E8; border-left:3px solid #2563EB; border-radius:12px; padding:16px; transition:all 0.2s; }
+.area-card:hover { border-left-color:#1D4ED8; box-shadow:0 4px 16px rgba(0,0,0,0.08); transform:translateY(-2px); }
+
+/* Animations */
+@keyframes barGrow { from { width:0; } }
+</style>
+</head>
+<body>
+
+<!-- ===== Header ===== -->
+<header class="sticky top-0 z-50 px-4 py-3" style="background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); border-bottom:1px solid rgba(0,0,0,0.06);">
+  <div class="max-w-5xl mx-auto flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-xl flex items-center justify-center text-white text-sm" style="background:#2563EB;">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 6l6-4 6 4v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z"/><path d="M6 14V8h4v6"/></svg>
+      </div>
+      <span class="font-bold text-sm" style="color:#1E1E1E;">かんたん土地くらべ</span>
+    </div>
+    <span class="text-xs font-bold px-3 py-1.5 rounded-full badge-blue">三重県エリア比較</span>
+  </div>
+</header>
+
+<!-- ===== HERO (確定済み - 変更なし) ===== -->
+<section class="max-w-5xl mx-auto px-4 py-12 lg:py-20">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+    <!-- Left: Text + CTA -->
+    <div>
+      <span class="inline-block text-xs font-bold px-4 py-1.5 rounded-full mb-5 badge-blue">AI搭載の物件比較</span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight mb-4" style="color:#1E1E1E;">物件くらべ、<br>AIにおまかせ。</h1>
+      <p class="text-sm leading-relaxed mb-8" style="color:#666666;">物件URLを貼るだけで、AIが自動で情報を整理。複数物件をスコア付きで一覧比較できます。</p>
+      <div class="flex flex-col sm:flex-row gap-3 mb-4">
+        <input type="text" placeholder="物件URLを貼り付け..." class="flex-1 px-4 py-3 rounded-xl text-sm border" style="border-color:#E8E8E8; outline-color:#2563EB;">
+        <button class="btn-primary px-6 py-3 rounded-xl font-bold text-sm">くらべてみる</button>
+      </div>
+      <div class="flex flex-wrap gap-2 text-xs" style="color:#999999;">
+        <span class="px-2 py-1 rounded-md" style="background:#F5F5F5;">SUUMO</span>
+        <span class="px-2 py-1 rounded-md" style="background:#F5F5F5;">アットホーム</span>
+        <span class="px-2 py-1 rounded-md" style="background:#F5F5F5;">LIFULL HOME'S</span>
+        <span>等に対応</span>
+      </div>
+    </div>
+    <!-- Right: Mock (Rotated Cards) -->
+    <div class="bg-white rounded-2xl border p-5 sm:p-6" style="border-color:#E8E8E8; box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+      <div class="flex gap-3 mb-4 items-end">
+        <div class="flex-1 bg-white rounded-xl border p-3 text-center" style="border-color:#E8E8E8; transform:rotate(-3deg);">
+          <div class="w-8 h-8 rounded-full mx-auto mb-2 flex items-center justify-center text-white text-xs font-bold" style="background:#2563EB;">A</div>
+          <div class="text-xs mb-1" style="color:#666;">四日市市三滝台</div>
+          <div class="text-2xl font-extrabold" style="color:#2563EB;">76</div>
+          <div class="text-xs mt-1" style="color:#999;">500万円</div>
+        </div>
+        <div class="flex-1 bg-white rounded-xl border p-3 text-center" style="border-color:#E8E8E8;">
+          <div class="w-8 h-8 rounded-full mx-auto mb-2 flex items-center justify-center text-white text-xs font-bold" style="background:#14B8A6;">B</div>
+          <div class="text-xs mb-1" style="color:#666;">四日市市川島町</div>
+          <div class="text-2xl font-extrabold" style="color:#14B8A6;">68</div>
+          <div class="text-xs mt-1" style="color:#999;">480万円</div>
+        </div>
+        <div class="flex-1 rounded-xl border-2 p-3 text-center" style="border-color:#2563EB; background:white; transform:rotate(3deg);">
+          <div class="text-xs font-bold mb-1 rounded-full px-2 py-0.5 inline-block" style="background:#EFF6FF; color:#2563EB;">おすすめ</div>
+          <div class="w-8 h-8 rounded-full mx-auto mb-2 flex items-center justify-center text-white text-xs font-bold" style="background:#F43F5E;">C</div>
+          <div class="text-xs mb-1" style="color:#666;">四日市市別山</div>
+          <div class="text-2xl font-extrabold" style="color:#F43F5E;">82</div>
+          <div class="text-xs mt-1" style="color:#999;">1,120万円</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl border p-4" style="border-color:#E8E8E8;">
+        <div class="text-xs font-bold mb-3" style="color:#1E1E1E;">スコア比較</div>
+        <div class="space-y-2.5">
+          <div class="flex items-center gap-2"><span class="text-xs w-8 shrink-0" style="color:#666;">安全</span><div class="flex-1 flex gap-1"><div class="mock-bar flex-1"><div class="mock-fill" style="width:76%;background:#2563EB;"></div></div><div class="mock-bar flex-1"><div class="mock-fill" style="width:60%;background:#14B8A6;"></div></div><div class="mock-bar flex-1"><div class="mock-fill" style="width:85%;background:#F43F5E;"></div></div></div></div>
+          <div class="flex items-center gap-2"><span class="text-xs w-8 shrink-0" style="color:#666;">利便</span><div class="flex-1 flex gap-1"><div class="mock-bar flex-1"><div class="mock-fill" style="width:82%;background:#2563EB;"></div></div><div class="mock-bar flex-1"><div class="mock-fill" style="width:72%;background:#14B8A6;"></div></div><div class="mock-bar flex-1"><div class="mock-fill" style="width:78%;background:#F43F5E;"></div></div></div></div>
+          <div class="flex items-center gap-2"><span class="text-xs w-8 shrink-0" style="color:#666;">コスト</span><div class="flex-1 flex gap-1"><div class="mock-bar flex-1"><div class="mock-fill" style="width:65%;background:#2563EB;"></div></div><div class="mock-bar flex-1"><div class="mock-fill" style="width:70%;background:#14B8A6;"></div></div><div class="mock-bar flex-1"><div class="mock-fill" style="width:55%;background:#F43F5E;"></div></div></div></div>
+        </div>
+      </div>
+      <div class="text-right mt-3"><span class="inline-block text-xs font-bold px-3 py-1.5 rounded-full" style="background:white; border:2px solid #BFDBFE; color:#2563EB;">AIが自動で分析</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== [1] 物件比較の3ステップ ===== -->
+<section class="max-w-4xl mx-auto px-4 py-16">
+  <h2 class="text-center text-xl font-bold mb-12" style="color:#1E1E1E;">物件比較の3ステップ</h2>
+  <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-0">
+    <div class="flex flex-col items-center text-center flex-1">
+      <div class="timeline-dot mb-4" style="background:#EFF6FF; color:#2563EB;">1</div>
+      <div class="text-sm font-bold mb-1.5" style="color:#333;">URLをコピペ</div>
+      <div class="text-xs leading-relaxed" style="color:#999;">SUUMOやアットホームの<br>物件ページURLを貼るだけ</div>
+    </div>
+    <div class="flex-1 h-0.5 hidden sm:block" style="background:linear-gradient(90deg, #BFDBFE, #E8E8E8);"></div>
+    <div class="w-px h-8 sm:hidden" style="background:#E8E8E8;"></div>
+    <div class="flex flex-col items-center text-center flex-1">
+      <div class="timeline-dot mb-4" style="background:#F0FDFA; color:#14B8A6;">2</div>
+      <div class="text-sm font-bold mb-1.5" style="color:#333;">AIが自動で情報整理</div>
+      <div class="text-xs leading-relaxed" style="color:#999;">価格・面積・立地・周辺環境を<br>AIが抽出・整理</div>
+    </div>
+    <div class="flex-1 h-0.5 hidden sm:block" style="background:linear-gradient(90deg, #E8E8E8, #FECDD3);"></div>
+    <div class="w-px h-8 sm:hidden" style="background:#E8E8E8;"></div>
+    <div class="flex flex-col items-center text-center flex-1">
+      <div class="timeline-dot mb-4" style="background:#FFF1F2; color:#F43F5E;">3</div>
+      <div class="text-sm font-bold mb-1.5" style="color:#333;">スコアで一目で比較</div>
+      <div class="text-xs leading-relaxed" style="color:#999;">安全性・利便性・コスト・ライフスタイルの<br>4軸100点スコア</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== [2] AI物件比較ツールの特長 ===== -->
+<section class="max-w-5xl mx-auto px-4 py-16">
+  <h2 class="text-center text-xl font-bold mb-12" style="color:#1E1E1E;">AI物件比較ツールの特長</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+    <div class="feature-card transition-all">
+      <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:#EFF6FF;">
+        <svg width="22" height="22" fill="none" stroke="#2563EB" stroke-width="2"><path d="M3 11h2l3-7 4 14 3-7h2"/></svg>
+      </div>
+      <h3 class="font-bold text-sm mb-2" style="color:#333;">AIが物件情報を自動整理</h3>
+      <p class="text-xs leading-relaxed" style="color:#999;">URLを貼るだけで、価格・面積・立地・駅距離・築年数などの情報をAIが自動で抽出。手入力の手間なく、すべての物件を同じフォーマットで整理します。</p>
+    </div>
+
+    <div class="feature-card transition-all">
+      <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:#F0FDFA;">
+        <svg width="22" height="22" fill="none" stroke="#14B8A6" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="12" y="3" width="7" height="7" rx="1"/><rect x="3" y="12" width="7" height="7" rx="1"/><rect x="12" y="12" width="7" height="7" rx="1"/></svg>
+      </div>
+      <h3 class="font-bold text-sm mb-2" style="color:#333;">複数サイトの物件を並べて比較</h3>
+      <p class="text-xs leading-relaxed" style="color:#999;">SUUMO・アットホーム・LIFULL HOME'Sなど、異なる不動産サイトの物件をまとめて比較表で確認。サイトをまたいで行ったり来たりする必要がなくなります。</p>
+    </div>
+
+    <div class="feature-card transition-all">
+      <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:#FFF1F2;">
+        <svg width="22" height="22" fill="none" stroke="#F43F5E" stroke-width="2"><path d="M4 15V5a2 2 0 012-2h10a2 2 0 012 2v10"/><path d="M2 15h18"/><path d="M9 8h4"/><path d="M9 11h4"/></svg>
+      </div>
+      <h3 class="font-bold text-sm mb-2" style="color:#333;">100点スコアで直感的に評価</h3>
+      <p class="text-xs leading-relaxed" style="color:#999;">安全性・利便性・コスト・ライフスタイルの4つの軸で各物件を100点満点で自動スコアリング。数字で比べるから、迷いが減ります。</p>
+    </div>
+
+    <div class="feature-card transition-all">
+      <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:#FFF7ED;">
+        <svg width="22" height="22" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M11 2a9 9 0 100 18 9 9 0 000-18z"/><path d="M8 11l2 2 4-4"/></svg>
+      </div>
+      <h3 class="font-bold text-sm mb-2" style="color:#333;">ハザード・建築費もAIがチェック</h3>
+      <p class="text-xs leading-relaxed" style="color:#999;">浸水リスクや地盤の強さ、建築費の目安などもAIが自動で調査。見落としがちなリスク情報を事前に把握できます。</p>
+    </div>
+
+    <div class="feature-card transition-all">
+      <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:#F5F3FF;">
+        <svg width="22" height="22" fill="none" stroke="#8B5CF6" stroke-width="2"><path d="M3 11l3-3 3 3 4-4 3 3"/><path d="M14 7h5v5"/></svg>
+      </div>
+      <h3 class="font-bold text-sm mb-2" style="color:#333;">三重県エリアのスコア比較</h3>
+      <p class="text-xs leading-relaxed" style="color:#999;">四日市・桑名・鈴鹿など三重県北部7エリアの地価・アクセス・生活利便性をスコアで比較。エリア選びの参考情報も充実しています。</p>
+    </div>
+
+    <div class="feature-card transition-all">
+      <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:#ECFEFF;">
+        <svg width="22" height="22" fill="none" stroke="#06B6D4" stroke-width="2"><path d="M11 2v4"/><path d="M11 16v4"/><path d="M4.93 5.93l2.83 2.83"/><path d="M14.24 14.24l2.83 2.83"/><path d="M2 12h4"/><path d="M16 12h4"/></svg>
+      </div>
+      <h3 class="font-bold text-sm mb-2" style="color:#333;">完全無料・登録不要</h3>
+      <p class="text-xs leading-relaxed" style="color:#999;">会員登録なし、料金もゼロ。URLを貼るだけですぐに使えます。個人情報の入力は一切不要です。</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== [3] 三重県の対応エリア ===== -->
+<section class="max-w-5xl mx-auto px-4 py-16">
+  <h2 class="text-center text-xl font-bold mb-4" style="color:#1E1E1E;">三重県の対応エリア</h2>
+  <p class="text-center text-xs mb-10" style="color:#999;">三重県北部7市町のエリアスコアを比較できます</p>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+    <div class="area-card">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-sm font-bold mb-1" style="color:#333;">四日市市</div>
+          <div class="text-xs" style="color:#999;">県内最大の都市。商業施設・交通の利便性が高い</div>
+        </div>
+        <svg width="16" height="16" fill="none" stroke="#BFDBFE" stroke-width="2"><path d="M6 3l5 5-5 5"/></svg>
+      </div>
+    </div>
+    <div class="area-card">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-sm font-bold mb-1" style="color:#333;">桑名市</div>
+          <div class="text-xs" style="color:#999;">名古屋へのアクセス良好。ファミリー層に人気</div>
+        </div>
+        <svg width="16" height="16" fill="none" stroke="#BFDBFE" stroke-width="2"><path d="M6 3l5 5-5 5"/></svg>
+      </div>
+    </div>
+    <div class="area-card">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-sm font-bold mb-1" style="color:#333;">鈴鹿市</div>
+          <div class="text-xs" style="color:#999;">F1サーキットで有名。住宅地として発展中</div>
+        </div>
+        <svg width="16" height="16" fill="none" stroke="#BFDBFE" stroke-width="2"><path d="M6 3l5 5-5 5"/></svg>
+      </div>
+    </div>
+    <div class="area-card">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-sm font-bold mb-1" style="color:#333;">いなべ市</div>
+          <div class="text-xs" style="color:#999;">自然豊かでコスパの高い住環境</div>
+        </div>
+        <svg width="16" height="16" fill="none" stroke="#BFDBFE" stroke-width="2"><path d="M6 3l5 5-5 5"/></svg>
+      </div>
+    </div>
+    <div class="area-card">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-sm font-bold mb-1" style="color:#333;">亀山市</div>
+          <div class="text-xs" style="color:#999;">新名神IC至近。今後の発展が期待されるエリア</div>
+        </div>
+        <svg width="16" height="16" fill="none" stroke="#BFDBFE" stroke-width="2"><path d="M6 3l5 5-5 5"/></svg>
+      </div>
+    </div>
+    <div class="area-card">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-sm font-bold mb-1" style="color:#333;">菰野町</div>
+          <div class="text-xs" style="color:#999;">湯の山温泉のふもと。自然と利便性のバランス</div>
+        </div>
+        <svg width="16" height="16" fill="none" stroke="#BFDBFE" stroke-width="2"><path d="M6 3l5 5-5 5"/></svg>
+      </div>
+    </div>
+    <div class="area-card sm:col-span-2 lg:col-span-1">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-sm font-bold mb-1" style="color:#333;">東員町</div>
+          <div class="text-xs" style="color:#999;">コンパクトなまち。子育て支援が充実</div>
+        </div>
+        <svg width="16" height="16" fill="none" stroke="#BFDBFE" stroke-width="2"><path d="M6 3l5 5-5 5"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== [4] よくある質問（FAQ） ===== -->
+<section class="max-w-3xl mx-auto px-4 py-16">
+  <h2 class="text-center text-xl font-bold mb-12" style="color:#1E1E1E;">よくある質問</h2>
+  <div class="space-y-3">
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question" role="button" aria-expanded="false">
+        <h3>利用料金はかかりますか？</h3>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer"><div class="faq-answer-inner">完全無料でご利用いただけます。会員登録も不要で、物件URLを貼るだけですぐにお使いいただけます。</div></div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question" role="button" aria-expanded="false">
+        <h3>どの不動産サイトに対応していますか？</h3>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer"><div class="faq-answer-inner">SUUMO、アットホーム、LIFULL HOME'Sなど主要な不動産ポータルサイトに対応しています。物件ページのURLをそのまま貼り付けてください。</div></div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question" role="button" aria-expanded="false">
+        <h3>スコアはどのように算出されますか？</h3>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer"><div class="faq-answer-inner">安全性（ハザード・地盤）、利便性（駅距離・商業施設）、コスト（価格・坪単価）、ライフスタイル（公園・医療・学校）の4軸で100点満点のスコアを自動算出しています。</div></div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question" role="button" aria-expanded="false">
+        <h3>三重県以外のエリアにも対応していますか？</h3>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer"><div class="faq-answer-inner">物件URLを貼る機能は全国の不動産サイトに対応しています。エリア比較スコア機能は現在、三重県北部7市町（四日市・桑名・鈴鹿・いなべ・亀山・菰野・東員）に対応しています。</div></div>
+    </div>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-question" role="button" aria-expanded="false">
+        <h3>個人情報の入力は必要ですか？</h3>
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer"><div class="faq-answer-inner">一切不要です。会員登録・メールアドレス・電話番号など個人情報の入力なしでご利用いただけます。</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== [5] CTA繰り返し ===== -->
+<section class="py-16 px-4" style="background:#EFF6FF;">
+  <div class="max-w-2xl mx-auto text-center">
+    <p class="text-lg font-bold mb-6" style="color:#1E1E1E;">さっそく物件を比較してみよう</p>
+    <div class="flex flex-col sm:flex-row gap-3 mb-6 max-w-lg mx-auto">
+      <input type="text" placeholder="物件URLを貼り付け..." class="flex-1 px-4 py-3 rounded-xl text-sm border bg-white" style="border-color:#BFDBFE; outline-color:#2563EB;">
+      <button class="btn-primary px-6 py-3 rounded-xl font-bold text-sm">くらべてみる</button>
+    </div>
+    <div class="flex flex-wrap justify-center gap-4 text-sm" style="color:#666;">
+      <span class="flex items-center gap-1.5"><span style="color:#2563EB;">&#10003;</span> 完全無料</span>
+      <span class="flex items-center gap-1.5"><span style="color:#2563EB;">&#10003;</span> 会員登録不要</span>
+      <span class="flex items-center gap-1.5"><span style="color:#2563EB;">&#10003;</span> 30秒でスタート</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== [6] フッター ===== -->
+<footer class="py-10 px-4" style="background:#F9FAFB; border-top:1px solid #E8E8E8;">
+  <div class="max-w-5xl mx-auto">
+    <div class="flex flex-col sm:flex-row justify-between items-start gap-6 mb-8">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-6 h-6 rounded-lg flex items-center justify-center text-white text-xs" style="background:#2563EB;">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 4.5l4.5-3 4.5 3v5.25a.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V4.5z"/><path d="M4.5 10.5V6h3v4.5"/></svg>
+          </div>
+          <span class="font-bold text-xs" style="color:#333;">かんたん土地くらべ</span>
+        </div>
+        <p class="text-xs" style="color:#999;">注文住宅の土地探しをAIがサポート。<br>三重県北部エリアの物件比較に特化した無料ツールです。</p>
+      </div>
+      <div class="flex gap-8">
+        <div>
+          <div class="text-xs font-bold mb-2" style="color:#666;">エリア</div>
+          <div class="space-y-1 text-xs" style="color:#999;">
+            <div>四日市市</div><div>桑名市</div><div>鈴鹿市</div><div>いなべ市</div>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs font-bold mb-2" style="color:#666;">エリア</div>
+          <div class="space-y-1 text-xs" style="color:#999;">
+            <div>亀山市</div><div>菰野町</div><div>東員町</div>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs font-bold mb-2" style="color:#666;">コンテンツ</div>
+          <div class="space-y-1 text-xs" style="color:#999;">
+            <div>知識記事</div><div>運営者情報</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="border-t pt-4 text-center" style="border-color:#E8E8E8;">
+      <p class="text-xs" style="color:#BFBFBF;">&copy; 2025 注文相談.com</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== FAQ Accordion JS ===== -->
+<script>
+function toggleFaq(item) {
+  const isOpen = item.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-item').forEach(el => {
+    el.classList.remove('open');
+    el.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+  });
+  // Toggle clicked
+  if (!isOpen) {
+    item.classList.add('open');
+    item.querySelector('.faq-question').setAttribute('aria-expanded', 'true');
+  }
+}
+</script>
+</body>
+</html>
