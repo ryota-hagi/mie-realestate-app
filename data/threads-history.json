@@ -1647,7 +1647,16 @@
       "text": "火災保険、適当に選ぶな。\n\nいざ請求したら「これは対象外です」で終わった、って相談が本当に多い。",
       "threadId": "17858318997670434",
       "charCount": 48,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 1291,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-15T10:19:36.273Z"
     },
     {
       "date": "2026-03-15T09:24:29.825Z",
@@ -1668,6 +1677,15 @@
       "repliedTo": "18059447060680770",
       "keyword": "家づくり",
       "charCount": 41
+    },
+    {
+      "date": "2026-03-15T10:20:00.800Z",
+      "category": "news",
+      "topicKey": "news:2",
+      "text": "マンション価格、また過去最高更新したらしい。\n\n注文住宅も建材費と人件費が上がり続けてて、3年前の見積もりはもう参考にならないって相談が増えてる。\n\n「もう少し待てば下がるかも」って思ってる人、逆に高くなってく可能性の方が高いんだよね。\n🏡",
+      "threadId": "18107293333839405",
+      "charCount": 121,
+      "account": "business"
     }
   ]
 }
