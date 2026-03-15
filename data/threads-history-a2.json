@@ -1249,7 +1249,16 @@
       "text": "火災保険、適当に選んだ。\n\n入居後に見直したら、水濡れが補償外だった。\n年間数千円の差で、カバー範囲が全然違う。\n\n契約前、3分も調べてなかった。",
       "threadId": "18078248102575043",
       "charCount": 73,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 2703,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 5,
+      "engagementUpdatedAt": "2026-03-15T13:50:43.158Z"
     },
     {
       "date": "2026-03-14T23:23:35.417Z",
@@ -1276,6 +1285,15 @@
       "text": "ハザードマップ、一回見たら戻れない。\n\n気になる土地が全部「浸水想定区域」に見えてくる。みんなはどうやって折り合いつけた？",
       "threadId": "17965552341040728",
       "charCount": 61,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-15T13:50:53.028Z",
+      "category": "gyakusetsu",
+      "topicKey": "aruaru:26",
+      "text": "「この予算じゃ厳しいですね」、一回は言われる。\n\nでも後から思うと、あれ向こうの上限設定だった。",
+      "threadId": "18007978337698894",
+      "charCount": 48,
       "account": "a2"
     }
   ]
