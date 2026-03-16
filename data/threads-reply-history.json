@@ -2099,6 +2099,62 @@
         "likes": 4,
         "replies": 2
       }
+    },
+    {
+      "date": "2026-03-16T05:45:22.894Z",
+      "originalThreadId": "17878973151513920",
+      "originalAccount": "a1",
+      "originalText": "食洗機、浅型にして1年、後悔してる。\n\n鍋もフライパンも入らなくて、結局手洗いが増えた。\n深型との差額、たしか2〜3万だったと思うんだけど😅\n\nみんな最初、どっちにした？",
+      "replyText": "体感で食洗機の後悔、深型選ばなかった人が7割超えてるんだよなぁ。浅型は土鍋とか大物が詰まるからやっぱり損する",
+      "replyId": "18019013477815517",
+      "buzzLevel": "SUPER_BUZZ",
+      "insights": {
+        "views": 5544,
+        "likes": 4,
+        "replies": 5
+      }
+    },
+    {
+      "date": "2026-03-16T05:47:16.570Z",
+      "originalThreadId": "18100801555933098",
+      "originalAccount": "a2",
+      "originalText": "ボーナス払い、やめとけばよかった。\n\n月々が軽く見えて、つい頼った。\nでも夏と冬、各20万飛んでくと思うと正直しんどい。\n\n月払いで最初から組んどいた方が精神的には楽だったかも。\n\nみんなはどっちにし",
+      "replyText": "ボーナス払いで月々を抑えた人、後から家計が苦しくなるパターンめちゃ多いんだよなぁ。減額申請できる銀行もあるよ。",
+      "replyId": "18109690048771424",
+      "buzzLevel": "SUPER_BUZZ",
+      "insights": {
+        "views": 8184,
+        "likes": 5,
+        "replies": 4
+      }
+    },
+    {
+      "date": "2026-03-16T05:50:03.448Z",
+      "originalThreadId": "17916208674319873",
+      "originalAccount": "a2",
+      "originalText": "地盤改良費、見積もりに入ってなかった。\n\n契約後に100万追加。ほぼ諦めた。",
+      "replyText": "地盤調査後に判明する人、体感7割超えてるんだよなぁ。最初の見積に「地盤改良費」明記されてなかったら要注意だわ。",
+      "replyId": "18096528881487326",
+      "buzzLevel": "SUPER_BUZZ",
+      "insights": {
+        "views": 5261,
+        "likes": 12,
+        "replies": 3
+      }
+    },
+    {
+      "date": "2026-03-16T05:52:37.746Z",
+      "originalThreadId": "17969165337040135",
+      "originalAccount": "a3",
+      "originalText": "土地、焦って決めた。\n\nもう少し待てばよかった、って気づいたのは、引き渡しの後だった。",
+      "replyText": "みんなここで焦るんだよなぁ…。土地って一度決めたら引き返せないからな。事前にどれくらい見て回った？",
+      "replyId": "17992221761766522",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1767,
+        "likes": 2,
+        "replies": 0
+      }
     }
   ]
 }
