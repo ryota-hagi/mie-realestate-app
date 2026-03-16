@@ -836,7 +836,8 @@
         "mie-livability",
         "mie-school-district",
         "land-selection",
-        "kuwana-housing-guide"
+        "kuwana-housing-guide",
+        "site-guide"
       ],
       "nextArticle": {
         "id": "mie-school-district",
@@ -2660,8 +2661,10 @@
       "relatedArticles": [
         "cost",
         "flow",
-        "land-selection",
-        "mie-housing-cost"
+        "housing-loan",
+        "mie-livability",
+        "hazard-map",
+        "builder-comparison"
       ],
       "nextArticle": {
         "id": "cost",
