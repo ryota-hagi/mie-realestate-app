@@ -3,5 +3,8 @@
   "devDependencies": {
     "sharp": "^0.34.5",
     "terser": "^5"
+  },
+  "dependencies": {
+    "puppeteer": "^24.39.1"
   }
 }
