@@ -619,7 +619,16 @@
       "text": "土地、焦って決めた。\n\nもう少し待てばよかった、って気づいたのは、引き渡しの後だった。",
       "threadId": "17969165337040135",
       "charCount": 43,
-      "account": "a3"
+      "account": "a3",
+      "engagement": {
+        "views": 1766,
+        "likes": 2,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 2,
+      "engagementUpdatedAt": "2026-03-15T11:33:43.176Z"
     },
     {
       "date": "2026-03-14T13:59:45.573Z",
@@ -628,7 +637,16 @@
       "text": "ガレージかパントリーか、どっちかしか無理って言われた。\n\n旦那は「車、守りたい」で譲らない。\n私は「収納、絶対必要」で譲れない。\n\n結局、どっちも中途半端な広さになった。",
       "threadId": "18576035614026524",
       "charCount": 85,
-      "account": "a3"
+      "account": "a3",
+      "engagement": {
+        "views": 458,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-15T14:01:55.971Z"
     },
     {
       "date": "2026-03-15T05:16:47.309Z",
@@ -637,7 +655,16 @@
       "text": "ボーナス払い、やめればよかった。\n\n会社の業績が落ちたのを知ったの、返済が始まってからだった。\n\n毎年夏と冬、ボーナスの額を見るたびに胃が痛い。あの時の自分に言いたい。",
       "threadId": "17988953306941539",
       "charCount": 84,
-      "account": "a3"
+      "account": "a3",
+      "engagement": {
+        "views": 808,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-16T05:26:55.072Z"
     }
   ]
 }

@@ -1611,7 +1611,16 @@
       "text": "ボーナス払いあり、後悔してる人の方が多い気がする。\n\nみんなはどっちにした？",
       "threadId": "17942734731139672",
       "charCount": 38,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 144,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-15T05:59:46.589Z"
     },
     {
       "date": "2026-03-14T05:38:36.538Z",
@@ -1620,7 +1629,16 @@
       "text": "間取り、収納の後悔で一番聞くのは「リビングに物が溢れた」。\n\n収納は多めにつけたつもりでも、生活が始まったら全然足りなかった、って相談がほんとに多い。\n\n必要な量の1.5倍は見込んでおいた方がいい、ってのが経験則。\n🏠",
       "threadId": "18097186480966323",
       "charCount": 110,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 424,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-15T05:59:47.366Z"
     },
     {
       "date": "2026-03-14T10:18:07.953Z",
@@ -1629,6 +1647,44 @@
       "text": "火災保険、適当に選ぶな。\n\nいざ請求したら「これは対象外です」で終わった、って相談が本当に多い。",
       "threadId": "17858318997670434",
       "charCount": 48,
+      "account": "business",
+      "engagement": {
+        "views": 1291,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-15T10:19:36.273Z"
+    },
+    {
+      "date": "2026-03-15T09:24:29.825Z",
+      "category": "engage",
+      "topicKey": "engage:18217646089314135",
+      "text": "それ相談でほんと多いんだよね。細かい部分だからこそ後から気になる人多い。",
+      "threadId": "18110939383688130",
+      "repliedTo": "18217646089314135",
+      "keyword": "家づくり",
+      "charCount": 36
+    },
+    {
+      "date": "2026-03-15T09:24:45.612Z",
+      "category": "engage",
+      "topicKey": "engage:18059447060680770",
+      "text": "それ相談で本当に多いんだよね。後から「もっと作っとけばよかった」って声ほんと多い。",
+      "threadId": "18098062088058450",
+      "repliedTo": "18059447060680770",
+      "keyword": "家づくり",
+      "charCount": 41
+    },
+    {
+      "date": "2026-03-15T10:20:00.800Z",
+      "category": "news",
+      "topicKey": "news:2",
+      "text": "マンション価格、また過去最高更新したらしい。\n\n注文住宅も建材費と人件費が上がり続けてて、3年前の見積もりはもう参考にならないって相談が増えてる。\n\n「もう少し待てば下がるかも」って思ってる人、逆に高くなってく可能性の方が高いんだよね。\n🏡",
+      "threadId": "18107293333839405",
+      "charCount": 121,
       "account": "business"
     }
   ]
