@@ -655,7 +655,16 @@
       "text": "ボーナス払い、やめればよかった。\n\n会社の業績が落ちたのを知ったの、返済が始まってからだった。\n\n毎年夏と冬、ボーナスの額を見るたびに胃が痛い。あの時の自分に言いたい。",
       "threadId": "17988953306941539",
       "charCount": 84,
-      "account": "a3"
+      "account": "a3",
+      "engagement": {
+        "views": 808,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-16T05:26:55.072Z"
     }
   ]
 }
