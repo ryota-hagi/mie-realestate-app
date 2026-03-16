@@ -1339,7 +1339,16 @@
       "text": "地盤改良費、見積もりに入ってなかった。\n\n契約後に100万追加。ほぼ諦めた。",
       "threadId": "17916208674319873",
       "charCount": 38,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 13667,
+        "likes": 18,
+        "replies": 6,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 42,
+      "engagementUpdatedAt": "2026-03-16T23:28:04.485Z"
     },
     {
       "date": "2026-03-16T05:07:47.339Z",
@@ -1366,6 +1375,15 @@
       "text": "外構費、予算に入れ忘れた。\n\n建物だけ計算して、満足してた。\n外構で100万じゃ全然足りなかった。",
       "threadId": "18121809277526095",
       "charCount": 49,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-16T23:28:18.075Z",
+      "category": "gyakusetsu",
+      "topicKey": "gyakusetsu:6",
+      "text": "アップグレード、損してることがある。\n\n標準のキッチン水栓、変えようとしてたけど結局そのまま。\n\n使ってみたら十分だった。差額3万、他に回して正解だったかも。\n\nみんなはどこに差額使った？",
+      "threadId": "18065021432648881",
+      "charCount": 94,
       "account": "a2"
     }
   ]
