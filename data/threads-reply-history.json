@@ -2239,6 +2239,90 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-17T05:17:29.453Z",
+      "originalThreadId": "17996791508868355",
+      "originalAccount": "a2",
+      "originalText": "ベランダ広げた分、完全に無駄だった。\n\n1.5畳ぶん広くしてオプション代は確か12万。\n洗濯乾燥機を買ったのは入居1ヶ月後。\n今のベランダ使用回数、年でたぶん10回以下。\n\n「干す前提」で設計したのに",
+      "replyText": "うちのサイトにも同じ声めちゃ届いてるわ。乾燥機買うと一気に使わなくなるやつだよなぁ",
+      "replyId": "18038320871779250",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 777,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-17T05:19:30.279Z",
+      "originalThreadId": "17916208674319873",
+      "originalAccount": "a2",
+      "originalText": "地盤改良費、見積もりに入ってなかった。\n\n契約後に100万追加。ほぼ諦めた。",
+      "replyText": "みんなここケチるんだよなぁ…地盤調査結果は契約前に絶対確認しとかないと、同じことになる",
+      "replyId": "18119737156540898",
+      "buzzLevel": "SUPER_BUZZ",
+      "insights": {
+        "views": 13844,
+        "likes": 18,
+        "replies": 6
+      }
+    },
+    {
+      "date": "2026-03-17T05:21:32.609Z",
+      "originalThreadId": "18145585780422890",
+      "originalAccount": "a2",
+      "originalText": "金利、また上がった。\n\n去年より確実に高い。\n自分が借りたタイミング、ギリギリよかったのかもしれない。\n\n今から建てる人、数字が全然違う。",
+      "replyText": "金利0.1%違うだけで月々の返済、数万変わるんだよなぁ…タイミング本当に運だわ",
+      "replyId": "17880166821483164",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1246,
+        "likes": 1,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-17T05:23:39.208Z",
+      "originalThreadId": "18121809277526095",
+      "originalAccount": "a2",
+      "originalText": "外構費、予算に入れ忘れた。\n\n建物だけ計算して、満足してた。\n外構で100万じゃ全然足りなかった。",
+      "replyText": "外構費、体感9割の人が予算組み間違えてるやつなんだよなぁ。建物に150万くらい割かないと後悔する確率えぐい",
+      "replyId": "18560599051063955",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 2918,
+        "likes": 5,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-17T05:26:46.393Z",
+      "originalThreadId": "17902265685389187",
+      "originalAccount": "a3",
+      "originalText": "ここに棚、なんでなかったんだろ。\n\n引っ越して2年、同じ場所で毎回思う。結局、突っ張り棒で妥協した。",
+      "replyText": "みんなここケチるんだよなぁ…。収納計画立ててないと後からこれ出てくるんだよね。突っ張り棒だと壁も傷つくし",
+      "replyId": "17857146546622445",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 653,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-17T05:28:37.457Z",
+      "originalThreadId": "18112770022604197",
+      "originalAccount": "a3",
+      "originalText": "ショールーム、罠だった。\n\n床材のサンプル触ったら「これにしたい」ってなって、照明見たら「これも」ってなって。気づいたら50万くらいオーバーしてた。\n\n全部削って、結局フローリングだけ残した。",
+      "replyText": "体感で9割くらいの人がここでやられるんだよなぁ。照明と床の組み合わせ見ると脳がバグるんだよね。",
+      "replyId": "18062272181665342",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 68,
+        "likes": 1,
+        "replies": 0
+      }
     }
   ]
 }
