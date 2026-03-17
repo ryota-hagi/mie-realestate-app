@@ -2365,6 +2365,20 @@
         "likes": 1,
         "replies": 1
       }
+    },
+    {
+      "date": "2026-03-17T17:03:36.170Z",
+      "originalThreadId": "17916208674319873",
+      "originalAccount": "a2",
+      "originalText": "地盤改良費、見積もりに入ってなかった。\n\n契約後に100万追加。ほぼ諦めた。",
+      "replyText": "地盤改良は体感9割の人が想定外だわ。契約前に地盤調査の結果を必ず確認しておくべきだった。次点で他社見積もり時に改良費を明記させるのが鉄則。",
+      "replyId": "18091523377896862",
+      "buzzLevel": "SUPER_BUZZ",
+      "insights": {
+        "views": 13850,
+        "likes": 18,
+        "replies": 8
+      }
     }
   ]
 }
