@@ -1393,7 +1393,16 @@
       "text": "外構費、予算に入れ忘れた。\n\n建物だけ計算して、満足してた。\n外構で100万じゃ全然足りなかった。",
       "threadId": "18121809277526095",
       "charCount": 49,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 3404,
+        "likes": 5,
+        "replies": 3,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 17,
+      "engagementUpdatedAt": "2026-03-17T14:19:25.667Z"
     },
     {
       "date": "2026-03-16T23:28:18.075Z",
@@ -1429,6 +1438,15 @@
       "text": "審査中、毎日口座確認してた。\n\n意味ないのはわかってる。でも見てしまう。\n\nあの数週間、人生で一番ソワソワしてた気がする。みんなもそうだった？",
       "threadId": "17883099492376967",
       "charCount": 71,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-17T14:19:35.673Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:20",
+      "text": "ハザードマップ、土地を買ってから見るな。\n\n順番が逆だった。",
+      "threadId": "17948065209070418",
+      "charCount": 30,
       "account": "a2"
     }
   ]
