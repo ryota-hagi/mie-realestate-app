@@ -1411,7 +1411,16 @@
       "text": "アップグレード、損してることがある。\n\n標準のキッチン水栓、変えようとしてたけど結局そのまま。\n\n使ってみたら十分だった。差額3万、他に回して正解だったかも。\n\nみんなはどこに差額使った？",
       "threadId": "18065021432648881",
       "charCount": 94,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 862,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-17T23:28:26.984Z"
     },
     {
       "date": "2026-03-17T04:45:02.370Z",
@@ -1447,6 +1456,15 @@
       "text": "ハザードマップ、土地を買ってから見るな。\n\n順番が逆だった。",
       "threadId": "17948065209070418",
       "charCount": 30,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-17T23:28:37.086Z",
+      "category": "gyakusetsu",
+      "topicKey": "aruaru:7",
+      "text": "照明の色、沼だった。\n\n電球色か昼白色か、3週間迷った。\n結局リビングは電球色にして、今は正解だと思ってる。\n後悔は2割くらい。\n\nみんなはどっちにした？",
+      "threadId": "18000249458735117",
+      "charCount": 77,
       "account": "a2"
     }
   ]
