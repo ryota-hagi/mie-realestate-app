@@ -2449,6 +2449,76 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-18T10:41:39.941Z",
+      "originalThreadId": "18015423758819161",
+      "originalAccount": "a1",
+      "originalText": "ファミクロにしたけど、夫の服が床に落ちてる。\n\nうちは「家族で1つの収納」にしたら使い方がバラバラで、結局カオス😅\n\nみんなはどっちにした？",
+      "replyText": "みんなここ失敗するんだよなぁ。結局個人スペース作んないと、誰かが全部悪いになるパターン。",
+      "replyId": "18157560835431306",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 638,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-18T10:43:49.364Z",
+      "originalThreadId": "18121809277526095",
+      "originalAccount": "a2",
+      "originalText": "外構費、予算に入れ忘れた。\n\n建物だけ計算して、満足してた。\n外構で100万じゃ全然足りなかった。",
+      "replyText": "外構って後付けできないのがやばいんだよなぁ。門扉とか駐車場も一緒にやっとかないと、後から追加工事で割高になる。",
+      "replyId": "17951440584066741",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 3416,
+        "likes": 5,
+        "replies": 4
+      }
+    },
+    {
+      "date": "2026-03-18T10:45:57.628Z",
+      "originalThreadId": "17883099492376967",
+      "originalAccount": "a2",
+      "originalText": "審査中、毎日口座確認してた。\n\n意味ないのはわかってる。でも見てしまう。\n\nあの数週間、人生で一番ソワソワしてた気がする。みんなもそうだった？",
+      "replyText": "ローン審査の間って、理屈では無駄だってわかってても見ちゃうよなぁ。体感で9割以上がそれやってるわ。メール通知も何度も確認してしまう地獄。",
+      "replyId": "18074310797539720",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 133,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-18T10:48:37.011Z",
+      "originalThreadId": "17948065209070418",
+      "originalAccount": "a2",
+      "originalText": "ハザードマップ、土地を買ってから見るな。\n\n順番が逆だった。",
+      "replyText": "洪水区域内だったのかな。買った後に気づくパターン、相談でもめちゃ多いんだよなぁ",
+      "replyId": "17979449150977045",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 0,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-18T10:51:43.535Z",
+      "originalThreadId": "18000249458735117",
+      "originalAccount": "a2",
+      "originalText": "照明の色、沼だった。\n\n電球色か昼白色か、3週間迷った。\n結局リビングは電球色にして、今は正解だと思ってる。\n後悔は2割くらい。\n\nみんなはどっちにした？",
+      "replyText": "みんなここケチって後から替えるんだよなぁ…。全室統一じゃなくて部屋ごとに変えるのが正解なんだよね。",
+      "replyId": "18070805618644716",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 630,
+        "likes": 1,
+        "replies": 0
+      }
     }
   ]
 }
