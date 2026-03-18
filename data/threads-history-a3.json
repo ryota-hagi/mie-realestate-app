@@ -727,7 +727,16 @@
       "text": "平屋、真剣に迷った。\n\n階段、子どもが小さい今は怖いし、老後も絶対しんどくなる。でも土地の広さが足りなくて、諦めた。\n\nみんなはどっちにした？",
       "threadId": "18075589556431894",
       "charCount": 71,
-      "account": "a3"
+      "account": "a3",
+      "engagement": {
+        "views": 785,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-18T14:46:18.421Z"
     },
     {
       "date": "2026-03-18T05:12:00.103Z",
@@ -745,6 +754,15 @@
       "text": "補助金、申請期限に気づいたの引き渡し後だった。\n\n数万、ふつうに消えた。",
       "threadId": "17965921443016876",
       "charCount": 36,
+      "account": "a3"
+    },
+    {
+      "date": "2026-03-18T14:46:29.383Z",
+      "category": "koukai",
+      "topicKey": "koukai:5",
+      "text": "窓、大きくしすぎた。\n\n南向きの大窓、光が入って最高って思ってたのに、夏は暑すぎて昼間カーテン閉めっぱなし。\n\n結局、窓の意味がない。",
+      "threadId": "17856157554628383",
+      "charCount": 67,
       "account": "a3"
     }
   ]
