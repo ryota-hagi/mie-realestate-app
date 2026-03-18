@@ -2379,6 +2379,76 @@
         "likes": 18,
         "replies": 8
       }
+    },
+    {
+      "date": "2026-03-18T05:22:54.357Z",
+      "originalThreadId": "18015423758819161",
+      "originalAccount": "a1",
+      "originalText": "ファミクロにしたけど、夫の服が床に落ちてる。\n\nうちは「家族で1つの収納」にしたら使い方がバラバラで、結局カオス😅\n\nみんなはどっちにした？",
+      "replyText": "ファミクロのカオス化、体感で7割の家庭が同じ問題抱えてるんだよなぁ。個別スペース作らないと絶対こうなる。",
+      "replyId": "17872069899458719",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 635,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-18T05:25:11.312Z",
+      "originalThreadId": "18095574055989078",
+      "originalAccount": "a2",
+      "originalText": "パントリー、つくらなかった。今も後悔してる。\n\nキッチンに物が溢れて、毎日ちょっとだけストレスがある。\n\n「なくてもなんとかなる」、あの判断が間違いだった。\n\nみんなはつくった？",
+      "replyText": "パントリー後悔率、相談でめっちゃ高いやつなんだよなぁ。キッチン狭くなるから省いたら、結局ストレス倍増するパターン多い",
+      "replyId": "17997832277744809",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 779,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-18T05:27:59.569Z",
+      "originalThreadId": "18121809277526095",
+      "originalAccount": "a2",
+      "originalText": "外構費、予算に入れ忘れた。\n\n建物だけ計算して、満足してた。\n外構で100万じゃ全然足りなかった。",
+      "replyText": "あるある。あと駐車場のコンクリート舗装を後から追加すると、めっちゃ割高になるんだよなぁ。最初に込みで予算立てた方がいい。",
+      "replyId": "17909056041360515",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 3416,
+        "likes": 5,
+        "replies": 3
+      }
+    },
+    {
+      "date": "2026-03-18T05:30:51.084Z",
+      "originalThreadId": "18074026364174820",
+      "originalAccount": "a2",
+      "originalText": "3社で決めた、失敗だったかも。\n\n4社目、5社目を見てたら違う選択肢があったかもしれない。\n\nみんなは何社見た？",
+      "replyText": "ちなみに3社の中に工務店入ってた？大手だけで比較すると後悔率跳ね上がるんだよなぁ",
+      "replyId": "17899958928406895",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 223,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-18T05:33:07.879Z",
+      "originalThreadId": "17883099492376967",
+      "originalAccount": "a2",
+      "originalText": "審査中、毎日口座確認してた。\n\n意味ないのはわかってる。でも見てしまう。\n\nあの数週間、人生で一番ソワソワしてた気がする。みんなもそうだった？",
+      "replyText": "融資の審査結果待ってる間、あの緊張感やばいんだよね。毎日確認する気持ちめちゃわかるわ。",
+      "replyId": "18082255145615423",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 133,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
