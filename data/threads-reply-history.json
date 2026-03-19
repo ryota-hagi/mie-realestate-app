@@ -2645,6 +2645,20 @@
         "likes": 0,
         "replies": 3
       }
+    },
+    {
+      "date": "2026-03-19T16:57:26.261Z",
+      "originalThreadId": "18124764097601233",
+      "originalAccount": "a2",
+      "originalText": "角地、高い。\n\n諦めた。",
+      "replyText": "みんなここケチって後から土地代の方が気になり出すんだよなぁ…",
+      "replyId": "17953550556095138",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 148,
+        "likes": 0,
+        "replies": 1
+      }
     }
   ]
 }
