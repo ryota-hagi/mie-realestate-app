@@ -1501,7 +1501,16 @@
       "text": "照明の色、沼だった。\n\n電球色か昼白色か、3週間迷った。\n結局リビングは電球色にして、今は正解だと思ってる。\n後悔は2割くらい。\n\nみんなはどっちにした？",
       "threadId": "18000249458735117",
       "charCount": 77,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 636,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 5,
+      "engagementUpdatedAt": "2026-03-19T04:48:14.553Z"
     },
     {
       "date": "2026-03-18T07:07:28.329Z",
@@ -1537,6 +1546,15 @@
       "text": "角地、高い。\n\n諦めた。",
       "threadId": "18124764097601233",
       "charCount": 12,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-19T04:48:24.984Z",
+      "category": "gyakusetsu",
+      "topicKey": "aruaru:24",
+      "text": "金利ニュース、毎回心臓止まりそうになる。\n\n変動にした自分は、上がるたびに返済額を計算し直してる。みんなはどっちにした？",
+      "threadId": "18003760631896800",
+      "charCount": 60,
       "account": "a2"
     }
   ]
