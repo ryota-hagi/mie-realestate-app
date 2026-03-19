@@ -2561,6 +2561,90 @@
         "likes": 0,
         "replies": 1
       }
+    },
+    {
+      "date": "2026-03-19T10:30:31.487Z",
+      "originalThreadId": "17892361293431661",
+      "originalAccount": "a1",
+      "originalText": "分譲地にしたけど、近所付き合いの濃さ、知らなかった。\n\n最初から全員顔見知りなの、正直しんどかった。みんなはどっち派だった？",
+      "replyText": "分譲地ってそれ地味にでかいよな。最初の説明会でこっぴどく後悔した人けっこういるわ",
+      "replyId": "18061574855669812",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 611,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-19T10:33:17.134Z",
+      "originalThreadId": "18115213660654556",
+      "originalAccount": "a2",
+      "originalText": "口約束、信じるな。\n\n担当者との会話で「それでいきましょう」ってなっても、書面に残してなければ存在しない。\n\n自分も一度やった。\n変更した仕様が反映されてなくて、着工後に気づいた。\n担当者は覚えてなか",
+      "replyText": "着工後の変更は金額も跳ね上がるからマジで危険。メール履歴も契約と同じくらい大事だわ",
+      "replyId": "18570775039059417",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 130,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-19T10:35:59.371Z",
+      "originalThreadId": "18124764097601233",
+      "originalAccount": "a2",
+      "originalText": "角地、高い。\n\n諦めた。",
+      "replyText": "周辺相場でどのくらい跳ね上がってた？うちの地域は角地だと500万以上違うんだよね",
+      "replyId": "18001715282885029",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 146,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-19T10:37:47.320Z",
+      "originalThreadId": "18066109739315947",
+      "originalAccount": "a3",
+      "originalText": "アパートのが楽だったな、って思った。\n\n住んだ最初の冬。設備トラブル、義母との調整、学校の書類。全部自分で対処しないといけないやつ。\n\nでも今はもう慣れた。慣れただけで、楽にはなってないけど。",
+      "replyText": "みんなここケチって後から泣くんだよなぁ…\n\nあ、違った。設備トラブルは建築時にどんだけ詰めるかで変わってくるんだよね。",
+      "replyId": "18104830603894620",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 179,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-19T10:39:54.371Z",
+      "originalThreadId": "17965921443016876",
+      "originalAccount": "a3",
+      "originalText": "補助金、申請期限に気づいたの引き渡し後だった。\n\n数万、ふつうに消えた。",
+      "replyText": "あと建築会社も教えてくれない場合多いんだよなぁ。自分から調べないと本当にもったいない",
+      "replyId": "17949081171024456",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 2343,
+        "likes": 2,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-19T10:42:35.177Z",
+      "originalThreadId": "17950118120962920",
+      "originalAccount": "a3",
+      "originalText": "ベランダなし、正解だと思ってた。\n\n花粉の季節、やっぱり外に干したくなった。\n\nみんなはどっちにした？",
+      "replyText": "花粉症じゃない時期は要らないって思うんだけど、春秋の洗濯物だけで後悔する人、うちのサイトにもめっちゃ多いわ。",
+      "replyId": "18096571768822289",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 204,
+        "likes": 0,
+        "replies": 3
+      }
     }
   ]
 }
