@@ -1573,7 +1573,16 @@
       "text": "角地、高い。\n\n諦めた。",
       "threadId": "18124764097601233",
       "charCount": 12,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 148,
+        "likes": 0,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 8,
+      "engagementUpdatedAt": "2026-03-20T04:29:41.989Z"
     },
     {
       "date": "2026-03-19T04:48:24.984Z",
@@ -1618,6 +1627,15 @@
       "text": "スーパー、閉店した。\n\n徒歩5分が売りだったのに、入居1年で消えた。",
       "threadId": "18102395363505397",
       "charCount": 34,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-20T04:29:55.884Z",
+      "category": "koukai",
+      "topicKey": "koukai:8",
+      "text": "和室、完全に物置になってる。\n\n「つくっておけば後悔しない」って思ってたけど、6畳分の床面積と追加費用、どっちが正解だったか今も分からない。\n\nみんなはどっちにした？",
+      "threadId": "17928118635072070",
+      "charCount": 83,
       "account": "a2"
     }
   ]
