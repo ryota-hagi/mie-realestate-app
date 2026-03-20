@@ -2687,6 +2687,76 @@
         "likes": 0,
         "replies": 1
       }
+    },
+    {
+      "date": "2026-03-20T10:28:33.795Z",
+      "originalThreadId": "18124764097601233",
+      "originalAccount": "a2",
+      "originalText": "角地、高い。\n\n諦めた。",
+      "replyText": "角地は体感9割が値段で諦めてるやつだわ。ただ売却時に強いんだよね。",
+      "replyId": "18058275797699945",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 148,
+        "likes": 0,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-03-20T10:30:51.188Z",
+      "originalThreadId": "18003760631896800",
+      "originalAccount": "a2",
+      "originalText": "金利ニュース、毎回心臓止まりそうになる。\n\n変動にした自分は、上がるたびに返済額を計算し直してる。みんなはどっちにした？",
+      "replyText": "変動にした人、毎月ドキドキしてる声うちにもめっちゃ届くわ。固定+変動の組み合わせ選んだ人の後悔率は意外と低いんだよね",
+      "replyId": "17887138719452477",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 575,
+        "likes": 1,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-20T10:32:39.813Z",
+      "originalThreadId": "18122431513593049",
+      "originalAccount": "a2",
+      "originalText": "2階リビング、1年住んだ正直な感想。\n\n日当たりは本物。でも買い物のたびに荷物を2階まで運ぶのが地味にしんどい。\n\n後悔は4割、納得は6割。ギリギリこっちで良かった、たぶん。\n\nみんなはどっちにした？",
+      "replyText": "階段の上り下りで地味に体力消費するのもあるんだよなぁ。夏場の室温上昇も想外だって人多い",
+      "replyId": "17912431206162453",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 559,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-20T10:34:38.117Z",
+      "originalThreadId": "18086515466192749",
+      "originalAccount": "a2",
+      "originalText": "間取りで揉めなかった夫婦、存在するのか。\n\n自分は独身だから揉めなかった。\nそれだけが唯一の正解だったかもしれない。\n\nみんなはどうやって折り合いつけた？",
+      "replyText": "間取りの夫婦喧嘩、体感で8割超えてるんだよね。特にキッチンの向き問題でもめる人ほんと多い。",
+      "replyId": "18352001494225395",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 369,
+        "likes": 1,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-20T10:36:28.795Z",
+      "originalThreadId": "18001013423732357",
+      "originalAccount": "a3",
+      "originalText": "ベランダ、広くしたの後悔してる。\n\n乾燥機買ったら全部そっちで終わるから、結局ほぼ使ってない。\n\nスペース分、収納にすればよかった。",
+      "replyText": "ちなみに乾燥機導入は契約後？それとも最初から想定してた？ベランダの広さ決める時点で気づけるやつなんだよね。",
+      "replyId": "18179026228378623",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 616,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
