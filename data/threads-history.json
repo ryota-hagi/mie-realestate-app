@@ -1795,7 +1795,16 @@
       "text": "オール電化にしたけど停電のとき何もできなかった、って話、けっこう聞く。💰\n\n都市ガスは基本料かかるのが嫌で辞めたけど、いざ停電になると料理もできないし、お風呂も入れないし。\n\n正直どっちが正解かって今でも言えない。\n\nみんなはどっちにした？",
       "threadId": "18385677889091284",
       "charCount": 121,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 261,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-20T10:28:19.035Z"
     },
     {
       "date": "2026-03-20T05:43:51.902Z",
@@ -1804,6 +1813,15 @@
       "text": "台風のたびに「窓、大丈夫かな」って思う人、多いんじゃないかな。\n\n家建てるとき、窓の強度ってあんまり話題にならないんだけど、実は結構差がある。\n📍",
       "threadId": "17880471159484870",
       "charCount": 74,
+      "account": "business"
+    },
+    {
+      "date": "2026-03-20T10:28:45.255Z",
+      "category": "loan",
+      "topicKey": "loan:cost:section:2",
+      "text": "見積もり、本体価格より付帯費用の方がびっくりする。",
+      "threadId": "17954818308083951",
+      "charCount": 25,
       "account": "business"
     }
   ]
