@@ -1609,7 +1609,16 @@
       "text": "棚、後付けしてる。\n\n設計中は「なんとかなる」と思ってた。\n住んでみて毎月気づく、ここに棚があれば、って。\n\nみんなはどこに後悔した？",
       "threadId": "17891697696307175",
       "charCount": 67,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 348,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-20T10:49:29.783Z"
     },
     {
       "date": "2026-03-19T10:52:59.982Z",
@@ -1654,6 +1663,15 @@
       "text": "間取りで揉めなかった夫婦、存在するのか。\n\n自分は独身だから揉めなかった。\nそれだけが唯一の正解だったかもしれない。\n\nみんなはどうやって折り合いつけた？",
       "threadId": "18086515466192749",
       "charCount": 77,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-20T10:49:36.523Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:1",
+      "text": "「今だけ」に焦って、サインした。",
+      "threadId": "18056281316472236",
+      "charCount": 16,
       "account": "a2"
     }
   ]
