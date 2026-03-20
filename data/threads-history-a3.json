@@ -781,7 +781,16 @@
       "text": "窓、大きくしすぎた。\n\n南向きの大窓、光が入って最高って思ってたのに、夏は暑すぎて昼間カーテン閉めっぱなし。\n\n結局、窓の意味がない。",
       "threadId": "17856157554628383",
       "charCount": 67,
-      "account": "a3"
+      "account": "a3",
+      "engagement": {
+        "views": 839,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-20T04:59:53.089Z"
     },
     {
       "date": "2026-03-19T05:08:40.508Z",
@@ -808,6 +817,15 @@
       "text": "2階リビング、老後のこと全然考えてなかった。\n\n義母が膝痛めてから、毎日ヒヤヒヤしてる。",
       "threadId": "18386517727086669",
       "charCount": 44,
+      "account": "a3"
+    },
+    {
+      "date": "2026-03-20T05:00:02.908Z",
+      "category": "koukai",
+      "topicKey": "koukai:6",
+      "text": "ベランダ、広くしたの後悔してる。\n\n乾燥機買ったら全部そっちで終わるから、結局ほぼ使ってない。\n\nスペース分、収納にすればよかった。",
+      "threadId": "18001013423732357",
+      "charCount": 66,
       "account": "a3"
     }
   ]
