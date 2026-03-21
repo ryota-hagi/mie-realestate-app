@@ -2799,6 +2799,62 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-21T05:01:35.976Z",
+      "originalThreadId": "17891697696307175",
+      "originalAccount": "a2",
+      "originalText": "棚、後付けしてる。\n\n設計中は「なんとかなる」と思ってた。\n住んでみて毎月気づく、ここに棚があれば、って。\n\nみんなはどこに後悔した？",
+      "replyText": "みんなここケチるんだよなぁ…。あと洗面所の収納も後付けになる人多い。設計段階で言わないと本当に困る",
+      "replyId": "18107118181833681",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 349,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-21T05:03:47.431Z",
+      "originalThreadId": "18102395363505397",
+      "originalAccount": "a2",
+      "originalText": "スーパー、閉店した。\n\n徒歩5分が売りだったのに、入居1年で消えた。",
+      "replyText": "うちのサイトにも同じ声めちゃ届いてるわ。周辺施設の「現在地」で判断するのはマジ危ないんだよね。",
+      "replyId": "18567390595052129",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1780,
+        "likes": 1,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-21T05:06:51.693Z",
+      "originalThreadId": "18086515466192749",
+      "originalAccount": "a2",
+      "originalText": "間取りで揉めなかった夫婦、存在するのか。\n\n自分は独身だから揉めなかった。\nそれだけが唯一の正解だったかもしれない。\n\nみんなはどうやって折り合いつけた？",
+      "replyText": "あと寝室の広さで揉める夫婦も多いんだよなぁ。主寝室か子ども部屋か、どっちに振るかで夫婦戦争になる家かなり多い。",
+      "replyId": "18100353493765315",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 395,
+        "likes": 1,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-03-21T05:09:10.239Z",
+      "originalThreadId": "18059928584400477",
+      "originalAccount": "a2",
+      "originalText": "引き戸にして1年、指挟みは一度もない。でも開き戸だったら広さの使い方が違ったかも、とたまに思う。\n\nどっちが正解かは今も出てない。\n\nみんなはどっちにした？",
+      "replyText": "体感で10人中7人は引き戸選んでるけど、後悔してるのは広さより「開け閉めの手軽さ」なんだよね。どっちも一長一短だわ",
+      "replyId": "18098050606963346",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 352,
+        "likes": 1,
+        "replies": 0
+      }
     }
   ]
 }
