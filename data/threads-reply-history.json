@@ -2925,6 +2925,20 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-21T16:28:45.462Z",
+      "originalThreadId": "18102395363505397",
+      "originalAccount": "a2",
+      "originalText": "スーパー、閉店した。\n\n徒歩5分が売りだったのに、入居1年で消えた。",
+      "replyText": "ちなみにその物件、他の条件で選んだ理由ってあった？スーパーだけが決め手だと痛いからさ",
+      "replyId": "18066325976645806",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1781,
+        "likes": 1,
+        "replies": 2
+      }
     }
   ]
 }
