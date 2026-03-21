@@ -1813,7 +1813,16 @@
       "text": "台風のたびに「窓、大丈夫かな」って思う人、多いんじゃないかな。\n\n家建てるとき、窓の強度ってあんまり話題にならないんだけど、実は結構差がある。\n📍",
       "threadId": "17880471159484870",
       "charCount": 74,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 895,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-21T10:16:23.243Z"
     },
     {
       "date": "2026-03-20T10:28:45.255Z",
@@ -1822,6 +1831,15 @@
       "text": "見積もり、本体価格より付帯費用の方がびっくりする。",
       "threadId": "17954818308083951",
       "charCount": 25,
+      "account": "business"
+    },
+    {
+      "date": "2026-03-21T10:16:49.973Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:22",
+      "text": "2階リビング、日当たり最高なんだけど買い物のたびに荷物運びが地味につらいって声、けっこう多い。\n\n1階リビングにしとけばよかったって人もいれば、それでも2階にしてよかったって人もいて、正直どっちもありだと思う。\n\nみんなはどっちにした？\n🏠",
+      "threadId": "18017143250832262",
+      "charCount": 121,
       "account": "business"
     }
   ]
