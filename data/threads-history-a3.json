@@ -835,7 +835,16 @@
       "text": "2階リビング、老後のこと全然考えてなかった。\n\n義母が膝痛めてから、毎日ヒヤヒヤしてる。",
       "threadId": "18386517727086669",
       "charCount": 44,
-      "account": "a3"
+      "account": "a3",
+      "engagement": {
+        "views": 919,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-21T04:50:35.957Z"
     },
     {
       "date": "2026-03-20T05:00:02.908Z",
@@ -844,6 +853,15 @@
       "text": "ベランダ、広くしたの後悔してる。\n\n乾燥機買ったら全部そっちで終わるから、結局ほぼ使ってない。\n\nスペース分、収納にすればよかった。",
       "threadId": "18001013423732357",
       "charCount": 66,
+      "account": "a3"
+    },
+    {
+      "date": "2026-03-21T04:50:45.809Z",
+      "category": "momegoto",
+      "topicKey": "aruaru:15",
+      "text": "電気代、倍になった。\n\n全館空調にすれば快適って聞いてたけど、快適と引き換えに何を失うかは聞いてなかった。",
+      "threadId": "17902593504395801",
+      "charCount": 53,
       "account": "a3"
     }
   ]
