@@ -1699,7 +1699,16 @@
       "text": "間取りで揉めなかった夫婦、存在するのか。\n\n自分は独身だから揉めなかった。\nそれだけが唯一の正解だったかもしれない。\n\nみんなはどうやって折り合いつけた？",
       "threadId": "18086515466192749",
       "charCount": 77,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 398,
+        "likes": 1,
+        "replies": 3,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 13,
+      "engagementUpdatedAt": "2026-03-21T10:36:20.661Z"
     },
     {
       "date": "2026-03-20T10:49:36.523Z",
@@ -1744,6 +1753,15 @@
       "text": "窓、でかくしすぎた。\n\n南向きの大窓、見た目は最高だった。\n夏は西日で室温が2〜3度違う。カーテン閉めたら意味ない。\n\n削って正解だったかもしれない。",
       "threadId": "18094949516320681",
       "charCount": 75,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-21T10:36:33.200Z",
+      "category": "gyakusetsu",
+      "topicKey": "gyakusetsu:13",
+      "text": "狭い家、窮屈だと思ってた。\n\n実際は家族の声が届く距離に、ずっといる。",
+      "threadId": "17870809533581097",
+      "charCount": 35,
       "account": "a2"
     }
   ]
