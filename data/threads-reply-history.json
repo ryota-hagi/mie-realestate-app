@@ -2981,6 +2981,48 @@
         "likes": 3,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-22T10:18:16.987Z",
+      "originalThreadId": "18094949516320681",
+      "originalAccount": "a2",
+      "originalText": "窓、でかくしすぎた。\n\n南向きの大窓、見た目は最高だった。\n夏は西日で室温が2〜3度違う。カーテン閉めたら意味ない。\n\n削って正解だったかもしれない。",
+      "replyText": "みんなここケチらずに大きくしちゃうんだよなぁ。遮熱性能のガラスにしないと夏地獄になるやつだわ",
+      "replyId": "18037172750716474",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 805,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-22T10:20:03.166Z",
+      "originalThreadId": "17859792777562240",
+      "originalAccount": "a2",
+      "originalText": "土地探し始めた瞬間、電話が止まらなくなった。\n\n1日3件とか来る。\n\n着信拒否するまでやめなかった。",
+      "replyText": "あ、これうちのサイトにも同じ声めちゃ届いてるわ。土地の問い合わせ出した途端に営業電話の嵐になるパターン、ほんと多い。",
+      "replyId": "18108018358846772",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 592,
+        "likes": 1,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-22T10:22:44.404Z",
+      "originalThreadId": "17902593504395801",
+      "originalAccount": "a3",
+      "originalText": "電気代、倍になった。\n\n全館空調にすれば快適って聞いてたけど、快適と引き換えに何を失うかは聞いてなかった。",
+      "replyText": "ちなみに夏冬の日中は家にいる時間多い方？24時間回しっぱなしだと効率悪いんだよなぁ",
+      "replyId": "18119266867617175",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 906,
+        "likes": 0,
+        "replies": 1
+      }
     }
   ]
 }
