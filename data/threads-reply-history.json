@@ -3023,6 +3023,48 @@
         "likes": 0,
         "replies": 1
       }
+    },
+    {
+      "date": "2026-03-22T16:29:50.355Z",
+      "originalThreadId": "18317019061248253",
+      "originalAccount": "a2",
+      "originalText": "ショールーム、罠だった。\n\n照明もキレイ、素材もツヤツヤ、全部良く見える。気づいたら50万オーバーしてた。\n\nみんなはどこで正気に戻った？",
+      "replyText": "体感7割の人がショールームで予算オーバーしてるわ。照明の色温度だけは家の完成後に後悔する人多いんだよね。",
+      "replyId": "18067005509324449",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 2,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-22T16:32:35.033Z",
+      "originalThreadId": "17902593504395801",
+      "originalAccount": "a3",
+      "originalText": "電気代、倍になった。\n\n全館空調にすれば快適って聞いてたけど、快適と引き換えに何を失うかは聞いてなかった。",
+      "replyText": "何社から見積もり取った？全館空調って会社によって消費電力かなり違うらしいんだけど。",
+      "replyId": "18083404616595097",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 912,
+        "likes": 0,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-03-22T16:34:55.642Z",
+      "originalThreadId": "18191178145362412",
+      "originalAccount": "a3",
+      "originalText": "距離感、最後まで揉めた。\n\n義実家まで車で3分にした。近すぎるって反対したけど、子どもが小さいし結局折れた。\n\n今は…まぁ、助かってる場面もある。複雑。",
+      "replyText": "うちのサイトにも同じ声めちゃ届いてるわ。3分距離は後悔と感謝が同居するパターンなんだよね。",
+      "replyId": "18224689618311372",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 2682,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
