@@ -1685,7 +1685,16 @@
       "text": "マンション価格、また過去最高更新したらしい。\n\n注文住宅も建材費と人件費が上がり続けてて、3年前の見積もりはもう参考にならないって相談が増えてる。\n\n「もう少し待てば下がるかも」って思ってる人、逆に高くなってく可能性の方が高いんだよね。\n🏡",
       "threadId": "18107293333839405",
       "charCount": 121,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 519,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 5,
+      "engagementUpdatedAt": "2026-03-16T10:44:04.605Z"
     },
     {
       "date": "2026-03-16T09:54:44.921Z",
@@ -1706,6 +1715,159 @@
       "repliedTo": "18107293333839405",
       "keyword": "注文住宅",
       "charCount": 44
+    },
+    {
+      "date": "2026-03-16T10:44:33.911Z",
+      "category": "news",
+      "topicKey": "news:15",
+      "text": "リモートワーク定着で、三重に家建てる人じわじわ増えてるらしい。\n\n名古屋に毎日通わなくていいなら、鈴鹿とか津でもいいってなるの、わかる気がする。\n\n土地も広く取れるし、同じ予算で全然違う家になるし。この流れ、しばらく続きそう。\n📝",
+      "threadId": "18152939866399487",
+      "charCount": 116,
+      "account": "business",
+      "engagement": {
+        "views": 75,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-18T05:56:24.039Z"
+    },
+    {
+      "date": "2026-03-17T05:52:45.679Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:18",
+      "text": "土地は一番最初に後悔が来る。\n\n「近くにこんな施設あるの知らなかった」「夜になったら真っ暗で怖い」って相談、マジで多い。\n\n焦って決めた土地、あとから変えられないんだよね。家は直せるけど場所は直せない。\n🏡",
+      "threadId": "18104254258710908",
+      "charCount": 104,
+      "account": "business",
+      "engagement": {
+        "views": 174,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-18T05:56:24.799Z"
+    },
+    {
+      "date": "2026-03-17T10:40:22.382Z",
+      "category": "koukai",
+      "topicKey": "koukai:21",
+      "text": "土地、午前中だけ見に行くな。\n\n午後に行ったら隣の家の影になってて、日当たり全然違ったって相談がある。",
+      "threadId": "18099525802985092",
+      "charCount": 51,
+      "account": "business",
+      "engagement": {
+        "views": 794,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-18T10:41:00.169Z"
+    },
+    {
+      "date": "2026-03-18T05:56:52.192Z",
+      "category": "loan",
+      "topicKey": "loan:cost:section:4",
+      "text": "「三重で2,500万で建てたい」って相談、すごく多い。\n\nただ土地代によって、建物に使える金額が全然変わる。\n駅の近くで土地探してたら、建物予算が1,500万切ってた、なんてことも普通にある。\n\n予算って「総額」で考えないと後でしんどくなる。\n💡",
+      "threadId": "18090978671515031",
+      "charCount": 124,
+      "account": "business",
+      "engagement": {
+        "views": 380,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-19T10:29:55.812Z"
+    },
+    {
+      "date": "2026-03-19T05:52:11.462Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:5",
+      "text": "オール電化にしたけど停電のとき何もできなかった、って話、けっこう聞く。💰\n\n都市ガスは基本料かかるのが嫌で辞めたけど、いざ停電になると料理もできないし、お風呂も入れないし。\n\n正直どっちが正解かって今でも言えない。\n\nみんなはどっちにした？",
+      "threadId": "18385677889091284",
+      "charCount": 121,
+      "account": "business",
+      "engagement": {
+        "views": 261,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-20T10:28:19.035Z"
+    },
+    {
+      "date": "2026-03-20T05:43:51.902Z",
+      "category": "news",
+      "topicKey": "news:13",
+      "text": "台風のたびに「窓、大丈夫かな」って思う人、多いんじゃないかな。\n\n家建てるとき、窓の強度ってあんまり話題にならないんだけど、実は結構差がある。\n📍",
+      "threadId": "17880471159484870",
+      "charCount": 74,
+      "account": "business",
+      "engagement": {
+        "views": 895,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-21T10:16:23.243Z"
+    },
+    {
+      "date": "2026-03-20T10:28:45.255Z",
+      "category": "loan",
+      "topicKey": "loan:cost:section:2",
+      "text": "見積もり、本体価格より付帯費用の方がびっくりする。",
+      "threadId": "17954818308083951",
+      "charCount": 25,
+      "account": "business",
+      "engagement": {
+        "views": 1229,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-22T05:45:12.961Z"
+    },
+    {
+      "date": "2026-03-21T10:16:49.973Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:22",
+      "text": "2階リビング、日当たり最高なんだけど買い物のたびに荷物運びが地味につらいって声、けっこう多い。\n\n1階リビングにしとけばよかったって人もいれば、それでも2階にしてよかったって人もいて、正直どっちもありだと思う。\n\nみんなはどっちにした？\n🏠",
+      "threadId": "18017143250832262",
+      "charCount": 121,
+      "account": "business",
+      "engagement": {
+        "views": 207,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-22T10:17:16.841Z"
+    },
+    {
+      "date": "2026-03-22T05:45:39.561Z",
+      "category": "koukai",
+      "topicKey": "koukai:5",
+      "text": "窓を大きくして後悔、めちゃくちゃ多い。\n\n南向きの大きい窓、日当たり良くて最高って思ってたのに、夏になったら部屋が灼熱になったって声がすごく多い。\n\nカーテン閉めっぱなしで結局せっかくの眺めも見えない、ってオチ。\n📝",
+      "threadId": "18057209147458054",
+      "charCount": 109,
+      "account": "business"
     }
   ]
 }

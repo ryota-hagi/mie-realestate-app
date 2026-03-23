@@ -665,6 +665,267 @@
       },
       "engagementScore": 1,
       "engagementUpdatedAt": "2026-03-16T05:26:55.072Z"
+    },
+    {
+      "date": "2026-03-16T14:44:24.738Z",
+      "category": "koukai",
+      "topicKey": "aruaru:8",
+      "text": "ここに棚、なんでなかったんだろ。\n\n引っ越して2年、同じ場所で毎回思う。結局、突っ張り棒で妥協した。",
+      "threadId": "17902265685389187",
+      "charCount": 50,
+      "account": "a3",
+      "engagement": {
+        "views": 654,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-18T05:11:40.684Z"
+    },
+    {
+      "date": "2026-03-17T05:07:51.334Z",
+      "category": "momegoto",
+      "topicKey": "aruaru:1",
+      "text": "ショールーム、罠だった。\n\n床材のサンプル触ったら「これにしたい」ってなって、照明見たら「これも」ってなって。気づいたら50万くらいオーバーしてた。\n\n全部削って、結局フローリングだけ残した。",
+      "threadId": "18112770022604197",
+      "charCount": 96,
+      "account": "a3",
+      "engagement": {
+        "views": 758,
+        "likes": 1,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 9,
+      "engagementUpdatedAt": "2026-03-18T05:11:41.416Z"
+    },
+    {
+      "date": "2026-03-17T11:48:56.306Z",
+      "category": "loan",
+      "topicKey": "aruaru:19",
+      "text": "アパートのが楽だったな、って思った。\n\n住んだ最初の冬。設備トラブル、義母との調整、学校の書類。全部自分で対処しないといけないやつ。\n\nでも今はもう慣れた。慣れただけで、楽にはなってないけど。",
+      "threadId": "18066109739315947",
+      "charCount": 96,
+      "account": "a3",
+      "engagement": {
+        "views": 177,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-18T11:52:04.699Z"
+    },
+    {
+      "date": "2026-03-17T14:39:25.568Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:3",
+      "text": "平屋、真剣に迷った。\n\n階段、子どもが小さい今は怖いし、老後も絶対しんどくなる。でも土地の広さが足りなくて、諦めた。\n\nみんなはどっちにした？",
+      "threadId": "18075589556431894",
+      "charCount": 71,
+      "account": "a3",
+      "engagement": {
+        "views": 785,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-18T14:46:18.421Z"
+    },
+    {
+      "date": "2026-03-18T05:12:00.103Z",
+      "category": "momegoto",
+      "topicKey": "aruaru:27",
+      "text": "日当たり確認、4回行った。\n\n冬の午前中、夏の午後、曇りの日。「念のため」が止まらなくて。\n\n結局その土地は諦めたんだけど、今の家に決めた日は1回しか見てない。\n\nあの4回、なんだったんだろうって今でも思う。\n\n二世帯の人も同じことやった？",
+      "threadId": "17961101091066588",
+      "charCount": 120,
+      "account": "a3",
+      "engagement": {
+        "views": 526,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-19T11:42:43.419Z"
+    },
+    {
+      "date": "2026-03-18T11:52:14.190Z",
+      "category": "loan",
+      "topicKey": "loan:subsidy-2026:section:0",
+      "text": "補助金、申請期限に気づいたの引き渡し後だった。\n\n数万、ふつうに消えた。",
+      "threadId": "17965921443016876",
+      "charCount": 36,
+      "account": "a3",
+      "engagement": {
+        "views": 2348,
+        "likes": 2,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 6,
+      "engagementUpdatedAt": "2026-03-19T14:27:54.420Z"
+    },
+    {
+      "date": "2026-03-18T14:46:29.383Z",
+      "category": "koukai",
+      "topicKey": "koukai:5",
+      "text": "窓、大きくしすぎた。\n\n南向きの大窓、光が入って最高って思ってたのに、夏は暑すぎて昼間カーテン閉めっぱなし。\n\n結局、窓の意味がない。",
+      "threadId": "17856157554628383",
+      "charCount": 67,
+      "account": "a3",
+      "engagement": {
+        "views": 839,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-20T04:59:53.089Z"
+    },
+    {
+      "date": "2026-03-19T05:08:40.508Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:12",
+      "text": "ベランダなし、正解だと思ってた。\n\n花粉の季節、やっぱり外に干したくなった。\n\nみんなはどっちにした？",
+      "threadId": "17950118120962920",
+      "charCount": 51,
+      "account": "a3",
+      "engagement": {
+        "views": 210,
+        "likes": 0,
+        "replies": 4,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 16,
+      "engagementUpdatedAt": "2026-03-20T11:38:39.928Z"
+    },
+    {
+      "date": "2026-03-19T11:43:04.590Z",
+      "category": "momegoto",
+      "topicKey": "aruaru:16",
+      "text": "散歩ルート、新築工事で変わった。\n\nずっと気になって、なんか毎日チェックしに行ってた。\n\n上棟の日、足が止まってしばらく眺めてたら、職人さんと目が合った。\n\nちょっと恥ずかしかったけど、まぁ仕方ない。家買う前後って、そういう時期なんだよね。\n\n同じことした人、いる？",
+      "threadId": "18125640370572181",
+      "charCount": 133,
+      "account": "a3",
+      "engagement": {
+        "views": 73,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-20T14:11:47.620Z"
+    },
+    {
+      "date": "2026-03-19T14:28:03.910Z",
+      "category": "loan",
+      "topicKey": "koukai:10",
+      "text": "2階リビング、老後のこと全然考えてなかった。\n\n義母が膝痛めてから、毎日ヒヤヒヤしてる。",
+      "threadId": "18386517727086669",
+      "charCount": 44,
+      "account": "a3",
+      "engagement": {
+        "views": 919,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-21T04:50:35.957Z"
+    },
+    {
+      "date": "2026-03-20T05:00:02.908Z",
+      "category": "koukai",
+      "topicKey": "koukai:6",
+      "text": "ベランダ、広くしたの後悔してる。\n\n乾燥機買ったら全部そっちで終わるから、結局ほぼ使ってない。\n\nスペース分、収納にすればよかった。",
+      "threadId": "18001013423732357",
+      "charCount": 66,
+      "account": "a3",
+      "engagement": {
+        "views": 659,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-21T11:30:49.054Z"
+    },
+    {
+      "date": "2026-03-21T04:50:45.809Z",
+      "category": "momegoto",
+      "topicKey": "aruaru:15",
+      "text": "電気代、倍になった。\n\n全館空調にすれば快適って聞いてたけど、快適と引き換えに何を失うかは聞いてなかった。",
+      "threadId": "17902593504395801",
+      "charCount": 53,
+      "account": "a3",
+      "engagement": {
+        "views": 905,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-22T05:06:06.034Z"
+    },
+    {
+      "date": "2026-03-21T11:30:58.972Z",
+      "category": "koukai",
+      "topicKey": "koukai:4",
+      "text": "トイレ、1個にした。朝が地獄になった。\n\n6人で1個って、当然渋滞する。\nなんで気づかなかったんだろ。\n\n2年経って慣れたけど、慣れたくなかった。\n\n二世帯でトイレ1個、うちだけじゃないよね？",
+      "threadId": "17919998808296000",
+      "charCount": 96,
+      "account": "a3",
+      "engagement": {
+        "views": 3176,
+        "likes": 6,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 14,
+      "engagementUpdatedAt": "2026-03-22T11:31:35.367Z"
+    },
+    {
+      "date": "2026-03-21T13:57:31.872Z",
+      "category": "loan",
+      "topicKey": "aruaru:23",
+      "text": "ローン通った瞬間、泣きそうになった。\n\n安堵で。でも1秒後に「35年」って数字が頭に浮かんで、顔が固まった。\n\n私が65歳になるまで払い続けるやつ、これ。\n\nなんか審査に受かったことより、そっちの方が後から効いてきた。",
+      "threadId": "18098823742786489",
+      "charCount": 109,
+      "account": "a3",
+      "engagement": {
+        "views": 1624,
+        "likes": 3,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 7,
+      "engagementUpdatedAt": "2026-03-22T13:59:08.536Z"
+    },
+    {
+      "date": "2026-03-22T13:59:21.052Z",
+      "category": "momegoto",
+      "topicKey": "momegoto:2",
+      "text": "距離感、最後まで揉めた。\n\n義実家まで車で3分にした。近すぎるって反対したけど、子どもが小さいし結局折れた。\n\n今は…まぁ、助かってる場面もある。複雑。",
+      "threadId": "18191178145362412",
+      "charCount": 76,
+      "account": "a3"
     }
   ]
 }

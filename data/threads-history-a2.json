@@ -1303,7 +1303,16 @@
       "text": "ハザードマップ、一回見たら戻れない。\n\n気になる土地が全部「浸水想定区域」に見えてくる。みんなはどうやって折り合いつけた？",
       "threadId": "17965552341040728",
       "charCount": 61,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 336,
+        "likes": 1,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 9,
+      "engagementUpdatedAt": "2026-03-16T11:03:12.923Z"
     },
     {
       "date": "2026-03-15T13:50:53.028Z",
@@ -1312,7 +1321,16 @@
       "text": "「この予算じゃ厳しいですね」、一回は言われる。\n\nでも後から思うと、あれ向こうの上限設定だった。",
       "threadId": "18007978337698894",
       "charCount": 48,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 535,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-16T14:22:11.096Z"
     },
     {
       "date": "2026-03-15T23:25:02.687Z",
@@ -1321,7 +1339,16 @@
       "text": "地盤改良費、見積もりに入ってなかった。\n\n契約後に100万追加。ほぼ諦めた。",
       "threadId": "17916208674319873",
       "charCount": 38,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 13667,
+        "likes": 18,
+        "replies": 6,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 42,
+      "engagementUpdatedAt": "2026-03-16T23:28:04.485Z"
     },
     {
       "date": "2026-03-16T05:07:47.339Z",
@@ -1330,7 +1357,16 @@
       "text": "金利、また上がった。\n\n去年より確実に高い。\n自分が借りたタイミング、ギリギリよかったのかもしれない。\n\n今から建てる人、数字が全然違う。",
       "threadId": "18145585780422890",
       "charCount": 69,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 1247,
+        "likes": 1,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 9,
+      "engagementUpdatedAt": "2026-03-17T07:11:31.794Z"
     },
     {
       "date": "2026-03-16T07:25:16.889Z",
@@ -1339,6 +1375,492 @@
       "text": "パントリー、つくらなかった。今も後悔してる。\n\nキッチンに物が溢れて、毎日ちょっとだけストレスがある。\n\n「なくてもなんとかなる」、あの判断が間違いだった。\n\nみんなはつくった？",
       "threadId": "18095574055989078",
       "charCount": 89,
+      "account": "a2",
+      "engagement": {
+        "views": 776,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-17T10:59:07.302Z"
+    },
+    {
+      "date": "2026-03-16T11:03:22.542Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:13",
+      "text": "外構費、予算に入れ忘れた。\n\n建物だけ計算して、満足してた。\n外構で100万じゃ全然足りなかった。",
+      "threadId": "18121809277526095",
+      "charCount": 49,
+      "account": "a2",
+      "engagement": {
+        "views": 3404,
+        "likes": 5,
+        "replies": 3,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 17,
+      "engagementUpdatedAt": "2026-03-17T14:19:25.667Z"
+    },
+    {
+      "date": "2026-03-16T23:28:18.075Z",
+      "category": "gyakusetsu",
+      "topicKey": "gyakusetsu:6",
+      "text": "アップグレード、損してることがある。\n\n標準のキッチン水栓、変えようとしてたけど結局そのまま。\n\n使ってみたら十分だった。差額3万、他に回して正解だったかも。\n\nみんなはどこに差額使った？",
+      "threadId": "18065021432648881",
+      "charCount": 94,
+      "account": "a2",
+      "engagement": {
+        "views": 862,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-17T23:28:26.984Z"
+    },
+    {
+      "date": "2026-03-17T04:45:02.370Z",
+      "category": "hikaku",
+      "topicKey": "koukai:25",
+      "text": "3社で決めた、失敗だったかも。\n\n4社目、5社目を見てたら違う選択肢があったかもしれない。\n\nみんなは何社見た？",
+      "threadId": "18074026364174820",
+      "charCount": 56,
+      "account": "a2",
+      "engagement": {
+        "views": 223,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-18T04:49:27.580Z"
+    },
+    {
+      "date": "2026-03-17T07:11:42.730Z",
+      "category": "loan",
+      "topicKey": "aruaru:11",
+      "text": "外壁の色、サンプルと全然違う。\n\n小さい紙で見た「薄いグレー」が、実際は思いっきり白だった。\n\n面積が増えると色は飛ぶ。これ誰も教えてくれなかった。\n\nみんなはどうやって決めた？",
+      "threadId": "17963573517048223",
+      "charCount": 89,
+      "account": "a2",
+      "engagement": {
+        "views": 398,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-18T10:58:54.619Z"
+    },
+    {
+      "date": "2026-03-17T10:59:18.176Z",
+      "category": "koukai",
+      "topicKey": "aruaru:9",
+      "text": "審査中、毎日口座確認してた。\n\n意味ないのはわかってる。でも見てしまう。\n\nあの数週間、人生で一番ソワソワしてた気がする。みんなもそうだった？",
+      "threadId": "17883099492376967",
+      "charCount": 71,
+      "account": "a2",
+      "engagement": {
+        "views": 133,
+        "likes": 0,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 8,
+      "engagementUpdatedAt": "2026-03-18T14:22:53.229Z"
+    },
+    {
+      "date": "2026-03-17T14:19:35.673Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:20",
+      "text": "ハザードマップ、土地を買ってから見るな。\n\n順番が逆だった。",
+      "threadId": "17948065209070418",
+      "charCount": 30,
+      "account": "a2",
+      "engagement": {
+        "views": 0,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-18T14:22:53.972Z"
+    },
+    {
+      "date": "2026-03-17T23:28:37.086Z",
+      "category": "gyakusetsu",
+      "topicKey": "aruaru:7",
+      "text": "照明の色、沼だった。\n\n電球色か昼白色か、3週間迷った。\n結局リビングは電球色にして、今は正解だと思ってる。\n後悔は2割くらい。\n\nみんなはどっちにした？",
+      "threadId": "18000249458735117",
+      "charCount": 77,
+      "account": "a2",
+      "engagement": {
+        "views": 636,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 5,
+      "engagementUpdatedAt": "2026-03-19T04:48:14.553Z"
+    },
+    {
+      "date": "2026-03-18T07:07:28.329Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:6",
+      "text": "大手と工務店、1年住んで「どっちでもよかった」と思い始めた。\n\n安心感は大手。自由度は工務店。自分は工務店にして、後悔は4割、納得は6割。\n\nみんなはどっちにした？",
+      "threadId": "17927511771252022",
+      "charCount": 82,
+      "account": "a2",
+      "engagement": {
+        "views": 868,
+        "likes": 0,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 8,
+      "engagementUpdatedAt": "2026-03-19T10:52:48.125Z"
+    },
+    {
+      "date": "2026-03-18T10:59:06.181Z",
+      "category": "loan",
+      "topicKey": "aruaru:23",
+      "text": "ローン通った瞬間、泣きそうになった。\n\n次の瞬間、35年って数字が目に入って固まった。\n\n安堵と絶望、同時に来るんだな。あれは誰も教えてくれなかった。\n\nみんなも同じだった？",
+      "threadId": "18045200303742044",
+      "charCount": 87,
+      "account": "a2",
+      "engagement": {
+        "views": 222,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-19T14:08:55.880Z"
+    },
+    {
+      "date": "2026-03-18T14:23:06.093Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:2",
+      "text": "口約束、信じるな。\n\n担当者との会話で「それでいきましょう」ってなっても、書面に残してなければ存在しない。\n\n自分も一度やった。\n変更した仕様が反映されてなくて、着工後に気づいた。\n担当者は覚えてなかった。\n\n変更があるたびに「変更確認書」として紙かメールに残す。\nそれだけで防げる。\n\n口約束は、ない。",
+      "threadId": "18115213660654556",
+      "charCount": 152,
+      "account": "a2",
+      "engagement": {
+        "views": 134,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-19T23:26:21.325Z"
+    },
+    {
+      "date": "2026-03-18T23:27:33.530Z",
+      "category": "koukai",
+      "topicKey": "aruaru:29",
+      "text": "角地、高い。\n\n諦めた。",
+      "threadId": "18124764097601233",
+      "charCount": 12,
+      "account": "a2",
+      "engagement": {
+        "views": 148,
+        "likes": 0,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 8,
+      "engagementUpdatedAt": "2026-03-20T04:29:41.989Z"
+    },
+    {
+      "date": "2026-03-19T04:48:24.984Z",
+      "category": "gyakusetsu",
+      "topicKey": "aruaru:24",
+      "text": "金利ニュース、毎回心臓止まりそうになる。\n\n変動にした自分は、上がるたびに返済額を計算し直してる。みんなはどっちにした？",
+      "threadId": "18003760631896800",
+      "charCount": 60,
+      "account": "a2",
+      "engagement": {
+        "views": 575,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-20T07:02:14.832Z"
+    },
+    {
+      "date": "2026-03-19T07:04:01.670Z",
+      "category": "kinshi",
+      "topicKey": "aruaru:8",
+      "text": "棚、後付けしてる。\n\n設計中は「なんとかなる」と思ってた。\n住んでみて毎月気づく、ここに棚があれば、って。\n\nみんなはどこに後悔した？",
+      "threadId": "17891697696307175",
+      "charCount": 67,
+      "account": "a2",
+      "engagement": {
+        "views": 348,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-20T10:49:29.783Z"
+    },
+    {
+      "date": "2026-03-19T10:52:59.982Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:22",
+      "text": "2階リビング、1年住んだ正直な感想。\n\n日当たりは本物。でも買い物のたびに荷物を2階まで運ぶのが地味にしんどい。\n\n後悔は4割、納得は6割。ギリギリこっちで良かった、たぶん。\n\nみんなはどっちにした？",
+      "threadId": "18122431513593049",
+      "charCount": 100,
+      "account": "a2",
+      "engagement": {
+        "views": 559,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-20T14:02:29.626Z"
+    },
+    {
+      "date": "2026-03-19T14:09:07.444Z",
+      "category": "loan",
+      "topicKey": "loan:housing-loan:section:3",
+      "text": "審査、余裕で通ると思ってた。\n\n収入は悪くなかった。でも引っかかったのは、カードの分割払いの残高だった。\n\n解約じゃなくて残高を全部消すのが先。それだけで通過ラインが変わる。自分はギリギリ間に合ったけど、知ったのは申込み直前だった。\n\n早めに残高ゼロにしとくだけで、だいぶ違う。それだけの話。",
+      "threadId": "18327160363222872",
+      "charCount": 146,
+      "account": "a2",
+      "engagement": {
+        "views": 405,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-20T23:25:21.042Z"
+    },
+    {
+      "date": "2026-03-19T23:26:38.345Z",
+      "category": "loan",
+      "topicKey": "koukai:22",
+      "text": "スーパー、閉店した。\n\n徒歩5分が売りだったのに、入居1年で消えた。",
+      "threadId": "18102395363505397",
+      "charCount": 34,
+      "account": "a2",
+      "engagement": {
+        "views": 1779,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-21T04:21:56.928Z"
+    },
+    {
+      "date": "2026-03-20T04:29:55.884Z",
+      "category": "koukai",
+      "topicKey": "koukai:8",
+      "text": "和室、完全に物置になってる。\n\n「つくっておけば後悔しない」って思ってたけど、6畳分の床面積と追加費用、どっちが正解だったか今も分からない。\n\nみんなはどっちにした？",
+      "threadId": "17928118635072070",
+      "charCount": 83,
+      "account": "a2",
+      "engagement": {
+        "views": 219,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-21T06:52:10.022Z"
+    },
+    {
+      "date": "2026-03-20T07:02:23.098Z",
+      "category": "gyakusetsu",
+      "topicKey": "aruaru:0",
+      "text": "間取りで揉めなかった夫婦、存在するのか。\n\n自分は独身だから揉めなかった。\nそれだけが唯一の正解だったかもしれない。\n\nみんなはどうやって折り合いつけた？",
+      "threadId": "18086515466192749",
+      "charCount": 77,
+      "account": "a2",
+      "engagement": {
+        "views": 398,
+        "likes": 1,
+        "replies": 3,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 13,
+      "engagementUpdatedAt": "2026-03-21T10:36:20.661Z"
+    },
+    {
+      "date": "2026-03-20T10:49:36.523Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:1",
+      "text": "「今だけ」に焦って、サインした。",
+      "threadId": "18056281316472236",
+      "charCount": 16,
+      "account": "a2",
+      "engagement": {
+        "views": 164,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-21T13:45:40.999Z"
+    },
+    {
+      "date": "2026-03-20T14:02:39.977Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:13",
+      "text": "引き戸にして1年、指挟みは一度もない。でも開き戸だったら広さの使い方が違ったかも、とたまに思う。\n\nどっちが正解かは今も出てない。\n\nみんなはどっちにした？",
+      "threadId": "18059928584400477",
+      "charCount": 78,
+      "account": "a2",
+      "engagement": {
+        "views": 355,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 5,
+      "engagementUpdatedAt": "2026-03-21T23:20:37.024Z"
+    },
+    {
+      "date": "2026-03-20T23:25:36.526Z",
+      "category": "loan",
+      "topicKey": "koukai:11",
+      "text": "ウォークインクローゼット、通路分がまるまる無駄だった。\n\n普通のクローゼット複数にすればよかった。",
+      "threadId": "18092989067035274",
+      "charCount": 49,
+      "account": "a2",
+      "engagement": {
+        "views": 992,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-22T04:45:52.484Z"
+    },
+    {
+      "date": "2026-03-21T04:22:09.908Z",
+      "category": "loan",
+      "topicKey": "loan:cost:section:5",
+      "text": "「費用を抑えるコツ」、全部試したけど半分は効かなかった。\n\nグレードを下げたところと、下げなかったところがある。\nキッチンは下げた。外壁は下げなかった。\n判断基準は「毎日触るかどうか」だけ。\n\n削って本当に正解だったのは、吊り戸棚と1箇所のダウンライトと、玄関のニッチ。\n合計で30万ちょっと。地味だけど確実だった。\n\n「7つのコツ」より「3つだけ削る」の方が現実的だと思う。",
+      "threadId": "18100432646300000",
+      "charCount": 188,
+      "account": "a2",
+      "engagement": {
+        "views": 214,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-22T04:45:53.385Z"
+    },
+    {
+      "date": "2026-03-21T06:52:21.025Z",
+      "category": "koukai",
+      "topicKey": "koukai:5",
+      "text": "窓、でかくしすぎた。\n\n南向きの大窓、見た目は最高だった。\n夏は西日で室温が2〜3度違う。カーテン閉めたら意味ない。\n\n削って正解だったかもしれない。",
+      "threadId": "18094949516320681",
+      "charCount": 75,
+      "account": "a2",
+      "engagement": {
+        "views": 805,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-22T06:57:45.969Z"
+    },
+    {
+      "date": "2026-03-21T10:36:33.200Z",
+      "category": "gyakusetsu",
+      "topicKey": "gyakusetsu:13",
+      "text": "狭い家、窮屈だと思ってた。\n\n実際は家族の声が届く距離に、ずっといる。",
+      "threadId": "17870809533581097",
+      "charCount": 35,
+      "account": "a2",
+      "engagement": {
+        "views": 443,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-22T13:47:32.270Z"
+    },
+    {
+      "date": "2026-03-21T13:45:52.877Z",
+      "category": "kinshi",
+      "topicKey": "aruaru:22",
+      "text": "繰上げ返済のシミュレーション、何回やってる。\n\n金額変えて、時期変えて、また金額変えて。\n結局まだ一回も実行してない。\n\nみんなはもう動いた？",
+      "threadId": "18125655280600659",
+      "charCount": 71,
+      "account": "a2",
+      "engagement": {
+        "views": 876,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-22T13:47:33.121Z"
+    },
+    {
+      "date": "2026-03-22T06:57:59.023Z",
+      "category": "koukai",
+      "topicKey": "aruaru:10",
+      "text": "土地探し始めた瞬間、電話が止まらなくなった。\n\n1日3件とか来る。\n\n着信拒否するまでやめなかった。",
+      "threadId": "17859792777562240",
+      "charCount": 50,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-22T10:36:41.163Z",
+      "category": "loan",
+      "topicKey": "aruaru:1",
+      "text": "ショールーム、罠だった。\n\n照明もキレイ、素材もツヤツヤ、全部良く見える。気づいたら50万オーバーしてた。\n\nみんなはどこで正気に戻った？",
+      "threadId": "18317019061248253",
+      "charCount": 69,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-22T23:24:06.571Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:15",
+      "text": "火災保険、適当に選ぶな。\n\n3/14にも書いたけど、自分がやらかしたのは「補償内容を読まずにサイン」したこと。\n\n水災、風災、家財——何が入って何が入ってないか、契約時に確認した記憶がほぼない。\n\nいざ使う場面になって初めて読む、が一番怖い。",
+      "threadId": "18085698650007091",
+      "charCount": 121,
       "account": "a2"
     }
   ]

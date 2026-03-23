@@ -1745,6 +1745,87 @@
       },
       "engagementScore": 24,
       "engagementUpdatedAt": "2026-03-15T14:54:04.215Z"
+    },
+    {
+      "date": "2026-03-17T07:55:29.898Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:19",
+      "text": "ファミクロにしたけど、夫の服が床に落ちてる。\n\nうちは「家族で1つの収納」にしたら使い方がバラバラで、結局カオス😅\n\nみんなはどっちにした？",
+      "threadId": "18015423758819161",
+      "charCount": 71,
+      "account": "a1",
+      "engagement": {
+        "views": 638,
+        "likes": 0,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 8,
+      "engagementUpdatedAt": "2026-03-18T14:19:43.083Z"
+    },
+    {
+      "date": "2026-03-19T04:48:23.445Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:27",
+      "text": "分譲地にしたけど、近所付き合いの濃さ、知らなかった。\n\n最初から全員顔見知りなの、正直しんどかった。みんなはどっち派だった？",
+      "threadId": "17892361293431661",
+      "charCount": 62,
+      "account": "a1",
+      "engagement": {
+        "views": 614,
+        "likes": 0,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 8,
+      "engagementUpdatedAt": "2026-03-20T11:24:28.396Z"
+    },
+    {
+      "date": "2026-03-19T15:14:32.723Z",
+      "category": "momegoto",
+      "topicKey": "momegoto:25",
+      "text": "落ち葉、隣から来るんだよね。\n\n新築してすぐ気づいたんだけど、庭に積もるやつ、全部お隣の木から。\n\nこれって誰に言えばいいの😅 みんなどうしてる？",
+      "threadId": "17853342549635391",
+      "charCount": 74,
+      "account": "a1",
+      "engagement": {
+        "views": 576,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-22T23:33:34.164Z"
+    },
+    {
+      "date": "2026-03-20T11:24:40.654Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:21",
+      "text": "玄関広めにしたの、ちょっと後悔してる🥲\n\nリビング、あと1畳あったらなって毎日思う。\nでも帰ってきたとき玄関が狭かったら嫌だしな、ってあのとき思ってたんだよね。\n\nみんなはどっち優先した？",
+      "threadId": "18089852152900940",
+      "charCount": 95,
+      "account": "a1",
+      "engagement": {
+        "views": 638,
+        "likes": 2,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 2,
+      "engagementUpdatedAt": "2026-03-22T23:33:34.840Z"
+    },
+    {
+      "date": "2026-03-22T23:33:44.737Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:13",
+      "text": "引き戸にしたら、子どもが指挟んだ。\n\n開き戸のほうが指挟みやすいって聞いてたのに、引き戸でもやるんだね😅\n\nみんなはどっちにした？",
+      "threadId": "18158025250384392",
+      "charCount": 66,
+      "account": "a1"
     }
   ]
 }
