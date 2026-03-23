@@ -52,9 +52,10 @@
       "sns": {
         "instagram": "https://www.instagram.com/tamahome_official/",
         "x": "https://x.com/jutakunet",
-        "youtube": "https://www.youtube.com/@TamaHome"
+        "youtube": "https://www.youtube.com/channel/UCvVk0AikByOLqLZOz5JdMWg",
+        "facebook": "https://www.facebook.com/tamahome.jp/"
       },
-      "eventsPageUrl": "https://www.tamahome.jp/area/tokai/events/"
+      "eventsPageUrl": "https://www.tamahome.jp/event/index.html"
     },
     {
       "id": "aqura-home",
@@ -164,9 +165,10 @@
       "sns": {
         "instagram": "https://www.instagram.com/cleverlyhome.official/",
         "youtube": "https://www.youtube.com/cleverlyhome-ch",
-        "facebook": "https://www.facebook.com/CLEVERLYHOME/"
+        "facebook": "https://www.facebook.com/CLEVERLYHOME/",
+        "x": "https://x.com/cleverlyhome_k"
       },
-      "eventsPageUrl": "https://cleverlyhome.com/event/"
+      "eventsPageUrl": "https://www.cleverlyhome.com/cleverlyhome/event/"
     },
     {
       "id": "asahi-global-home",
@@ -222,7 +224,8 @@
       ],
       "mie_presence": "三重県北部7エリア全域で対応。展示場は四日市・桑名・鈴鹿",
       "sns": {
-        "instagram": "https://www.instagram.com/asahigloval/"
+        "instagram": "https://www.instagram.com/asahigloval/",
+        "line": "https://page.line.me/ivd0842v"
       },
       "eventsPageUrl": "https://asahigloval.co.jp/event/"
     },
@@ -278,9 +281,10 @@
       "mie_presence": "三重県北部・中勢を中心に展開",
       "sns": {
         "instagram": "https://www.instagram.com/sunkushome_official/",
-        "facebook": "https://www.facebook.com/sunkushome/"
+        "facebook": "https://www.facebook.com/sunkushome/",
+        "line": "https://sunkushome.jp/line-account/"
       },
-      "eventsPageUrl": "https://sunkushome.jp/event/"
+      "eventsPageUrl": "https://sunkushome.jp/event_cat/%E8%A6%8B%E5%AD%A6%E4%BC%9A/"
     },
     {
       "id": "satis-home",
@@ -331,9 +335,11 @@
       "mie_presence": "三重県北部・桑名エリアを中心に展開",
       "sns": {
         "instagram": "https://www.instagram.com/satishome/",
-        "x": "https://twitter.com/satis_home"
+        "x": "https://x.com/satis_home",
+        "line": "https://page.line.me/?accountId=satishome",
+        "facebook": "https://www.facebook.com/satishome/"
       },
-      "eventsPageUrl": "https://satishome.com/event/"
+      "eventsPageUrl": "https://satishome.com/event"
     },
     {
       "id": "house-craft",
@@ -388,9 +394,10 @@
       "mie_presence": "三重県全7エリアで施工対応",
       "sns": {
         "instagram": "https://www.instagram.com/housecraft.jp/",
-        "facebook": "https://www.facebook.com/housecraft.jp/"
+        "facebook": "https://www.facebook.com/housecraft.jp/",
+        "x": "https://x.com/housecraft_jp"
       },
-      "eventsPageUrl": "https://www.house-craft.jp/event/"
+      "eventsPageUrl": "https://www.house-craft.jp/events/"
     },
     {
       "id": "yamato-juken",
@@ -440,9 +447,11 @@
       "mie_presence": "三重県北部（四日市・桑名・鈴鹿）エリアで施工対応",
       "sns": {
         "instagram": "https://www.instagram.com/yamatojuken_official/",
-        "youtube": "https://www.youtube.com/@yamatojuken"
+        "youtube": "https://www.youtube.com/channel/UC9WLLyhntM85xdQD1bKPvNA",
+        "x": "https://x.com/yamatojuken",
+        "facebook": "https://www.facebook.com/yamatojk/"
       },
-      "eventsPageUrl": "https://www.yamatojuken.com/event/"
+      "eventsPageUrl": "https://www.yamatojk.co.jp/event"
     },
     {
       "id": "zencho",
@@ -494,7 +503,8 @@
       ],
       "mie_presence": "三重県全7エリアで施工対応",
       "sns": {
-        "instagram": "https://www.instagram.com/iiietsukuru_zenshoo/"
+        "instagram": "https://www.instagram.com/iiietsukuru_zenshoo/",
+        "x": "https://x.com/iiie_zenshoo"
       },
       "eventsPageUrl": "https://www.zenshoo.com/event/"
     },
@@ -548,9 +558,11 @@
       "mie_presence": "三重県北部・中勢エリア（四日市・桑名・鈴鹿・亀山）で対応",
       "sns": {
         "instagram": "https://www.instagram.com/toyotahome_official/",
-        "youtube": "https://www.youtube.com/@toyotahome"
+        "youtube": "https://www.youtube.com/@toyotahome",
+        "x": "https://x.com/toyotahome_pr",
+        "facebook": "https://www.facebook.com/TOYOTAHOME/"
       },
-      "eventsPageUrl": "https://www.toyotahome.co.jp/mie/event/"
+      "eventsPageUrl": "https://www.toyotahome.co.jp/s/event/"
     },
     {
       "id": "ichijo-koumuten",
@@ -663,7 +675,8 @@
       "mie_presence": "三重県北部エリア（四日市・桑名・鈴鹿）に対応",
       "sns": {
         "instagram": "https://www.instagram.com/sfc_ie/",
-        "youtube": "https://www.youtube.com/c/sfc_ie/"
+        "youtube": "https://www.youtube.com/c/sfc_ie/",
+        "x": "https://x.com/sumirin_kikorin"
       },
       "eventsPageUrl": "https://sfc.jp/ie/event/"
     },
@@ -717,10 +730,12 @@
       "mie_presence": "三重県北部・中勢エリアで施工対応",
       "sns": {
         "instagram": "https://www.instagram.com/daiwahouse_official/",
-        "youtube": "https://www.youtube.com/@daiwahouse",
-        "facebook": "https://www.facebook.com/DaiwaHouse"
+        "youtube": "https://www.youtube.com/user/DaiwaHouseTV",
+        "facebook": "https://www.facebook.com/DaiwaHouse/",
+        "x": "https://x.com/daiwahouse_pr",
+        "line": "https://page.line.me/256biryn"
       },
-      "eventsPageUrl": "https://www.daiwahouse.co.jp/jutaku/events/"
+      "eventsPageUrl": "https://www.daiwahouse.co.jp/jutaku/event/"
     },
     {
       "id": "panasonic-homes",
@@ -772,7 +787,8 @@
         "instagram": "https://www.instagram.com/panasonichomes_official/",
         "x": "https://x.com/panasonic_homes",
         "youtube": "https://www.youtube.com/channel/UCUGh-9ozJ9XuyNY2nnuUwMQ",
-        "line": "https://lin.ee/xAB0fIb"
+        "line": "https://lin.ee/xAB0fIb",
+        "facebook": "https://www.facebook.com/p/Panasonic-Homesjp-100054423252660/"
       },
       "eventsPageUrl": "https://homes.panasonic.com/event/"
     },
@@ -829,7 +845,8 @@
         "instagram": "https://www.instagram.com/heimlife_816/",
         "youtube": "https://www.youtube.com/user/SekisuiheimChannel",
         "line": "https://page.line.me/938lobgr",
-        "facebook": "https://www.facebook.com/sekisuiheim/"
+        "facebook": "https://www.facebook.com/sekisuiheim/",
+        "x": "https://x.com/sekisuiheim_ad"
       },
       "eventsPageUrl": "https://www.sekisuiheim.com/event/"
     }
