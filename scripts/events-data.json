@@ -13,7 +13,8 @@
       "city": "yokkaichi",
       "location": "四日市市日永西",
       "description": "実際にお住まいになるお家を見学できます。自由設計の間取りアイデアが満載。ご予約不要。",
-      "url": "",
+      "sourceUrl": "https://satishome.com/event",
+      "sourceType": "official",
       "reservationRequired": false,
       "source": "manual"
     },
@@ -29,7 +30,8 @@
       "city": "suzuka",
       "location": "鈴鹿市算所",
       "description": "デザイン性の高いモデルハウスを体感。設計士による無料相談も同時開催。",
-      "url": "",
+      "sourceUrl": "https://www.house-craft.jp/events/",
+      "sourceType": "official",
       "reservationRequired": false,
       "source": "manual"
     },
@@ -45,7 +47,8 @@
       "city": "yokkaichi",
       "location": "アサヒグローバルホーム四日市展示場",
       "description": "注文住宅の基礎知識をプロが解説。資金計画や土地探しの疑問にもお答えします。",
-      "url": "",
+      "sourceUrl": "https://asahigloval.co.jp/event/",
+      "sourceType": "official",
       "reservationRequired": true,
       "source": "manual"
     },
@@ -61,7 +64,8 @@
       "city": "kuwana",
       "location": "桑名市大山田",
       "description": "自然素材をふんだんに使った注文住宅の完成見学会。キッズスペースあり。",
-      "url": "",
+      "sourceUrl": "https://sunkushome.jp/event_cat/%E8%A6%8B%E5%AD%A6%E4%BC%9A/",
+      "sourceType": "official",
       "reservationRequired": false,
       "source": "manual"
     },
@@ -77,7 +81,8 @@
       "city": "yokkaichi",
       "location": "タマホーム四日市店",
       "description": "期間限定の特別プランをご用意。ご来場予約でQUOカード3,000円プレゼント。",
-      "url": "",
+      "sourceUrl": "https://www.tamahome.jp/event/index.html",
+      "sourceType": "official",
       "reservationRequired": false,
       "source": "manual"
     },
@@ -93,7 +98,8 @@
       "city": "yokkaichi",
       "location": "トヨタホーム四日市展示場",
       "description": "資金計画・土地探し・間取りなど、お客様の疑問に専門スタッフが個別にお答えします。",
-      "url": "",
+      "sourceUrl": "https://www.toyotahome.co.jp/s/event/",
+      "sourceType": "official",
       "reservationRequired": true,
       "source": "manual"
     },
@@ -109,7 +115,8 @@
       "city": "kuwana",
       "location": "一条工務店 桑名展示場",
       "description": "全館床暖房・高断熱住宅を実際に体感。光熱費シミュレーションも実施。",
-      "url": "",
+      "sourceUrl": "https://www.ichijo.co.jp/guide/event/",
+      "sourceType": "official",
       "reservationRequired": false,
       "source": "manual"
     },
@@ -125,7 +132,8 @@
       "city": "suzuka",
       "location": "鈴鹿市白子",
       "description": "完成物件と構造段階の2棟を同時公開。職人の技と自然素材へのこだわりをご覧ください。",
-      "url": "",
+      "sourceUrl": "https://www.zenshoo.com/event/",
+      "sourceType": "official",
       "reservationRequired": false,
       "source": "manual"
     }

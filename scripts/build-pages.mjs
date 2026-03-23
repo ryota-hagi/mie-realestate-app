@@ -2772,6 +2772,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
           <div style="font-size:12px;color:#6b7280;">📍 ${escHtml(cityLabel)} ${escHtml(ev.location)} ｜ ${escHtml(ev.startTime)}〜${escHtml(ev.endTime)}</div>
           <span style="display:inline-block;margin-top:6px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#eff6ff;color:#2563eb;">${escHtml(typeLabel)}</span>
           ${ev.reservationRequired ? '<span style="display:inline-block;margin-top:6px;margin-left:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#fef2f2;color:#dc2626;">要予約</span>' : ''}
+          ${ev.sourceUrl ? `<a href="${escHtml(ev.sourceUrl)}" target="_blank" rel="noopener" style="display:inline-block;margin-top:6px;margin-left:4px;font-size:11px;color:#2563eb;text-decoration:none;font-weight:500;">🔗 ${ev.sourceType === 'instagram' ? 'Instagram投稿' : ev.sourceType === 'x' ? 'X投稿' : '公式サイト'}で詳細を見る</a>` : ''}
         </div>
       </div>`;
       }).join('\n      ')}
@@ -3086,7 +3087,9 @@ function ecSelectDay(dateStr){
     var bname = '';
     EC_BUILDERS.forEach(function(b){if(b.id===e.builderId)bname=b.name;});
     var tc = TYPE_COLOR[e.type]||TYPE_COLOR['other'];
-    html += '<div class="ec-event-item"><div class="ec-event-title">'+e.title+'</div><div class="ec-event-meta">'+bname+' ｜ '+(AREA_L[e.city]||'')+' '+e.location+' ｜ '+e.startTime+'〜'+e.endTime+'</div><div class="ec-event-desc">'+e.description+'</div><div class="ec-event-tags"><span class="ec-event-tag" style="background:'+tc+'">'+( TYPE_L[e.type]||'その他')+'</span>'+(e.reservationRequired?'<span class="ec-event-tag" style="background:#fef2f2;color:#dc2626;">要予約</span>':'')+'</div></div>';
+    var srcLabel = e.sourceType==='instagram'?'Instagram投稿を見る':e.sourceType==='x'?'X投稿を見る':'公式サイトで詳細を見る';
+    var srcLink = e.sourceUrl ? '<a href="'+e.sourceUrl+'" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:13px;color:#2563eb;text-decoration:none;font-weight:600;">🔗 '+srcLabel+'</a>' : '';
+    html += '<div class="ec-event-item"><div class="ec-event-title">'+e.title+'</div><div class="ec-event-meta">'+bname+' ｜ '+(AREA_L[e.city]||'')+' '+e.location+' ｜ '+e.startTime+'〜'+e.endTime+'</div><div class="ec-event-desc">'+e.description+'</div><div class="ec-event-tags"><span class="ec-event-tag" style="background:'+tc+'">'+( TYPE_L[e.type]||'その他')+'</span>'+(e.reservationRequired?'<span class="ec-event-tag" style="background:#fef2f2;color:#dc2626;">要予約</span>':'')+'</div>'+srcLink+'</div>';
   });
   html += '</div>';
   detail.innerHTML = html;
@@ -3113,7 +3116,9 @@ function ecRenderList(){
     EC_BUILDERS.forEach(function(b){if(b.id===e.builderId)bname=b.name;});
     var tc = TYPE_COLOR[e.type]||TYPE_COLOR['other'];
     var dateLabel = e.startDate===e.endDate ? e.startDate : e.startDate+' 〜 '+e.endDate;
-    html += '<div class="ec-list-item"><div class="ec-list-date">'+dateLabel+'</div><div class="ec-event-title">'+e.title+'</div><div class="ec-event-meta">'+bname+' ｜ '+(AREA_L[e.city]||'')+' '+e.location+' ｜ '+e.startTime+'〜'+e.endTime+'</div><div class="ec-event-desc">'+e.description+'</div><div class="ec-event-tags"><span class="ec-event-tag" style="background:'+tc+'">'+(TYPE_L[e.type]||'その他')+'</span>'+(e.reservationRequired?'<span class="ec-event-tag" style="background:#fef2f2;color:#dc2626;">要予約</span>':'')+'</div></div>';
+    var srcLabel2 = e.sourceType==='instagram'?'Instagram投稿を見る':e.sourceType==='x'?'X投稿を見る':'公式サイトで詳細を見る';
+    var srcLink2 = e.sourceUrl ? '<a href="'+e.sourceUrl+'" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-size:13px;color:#2563eb;text-decoration:none;font-weight:600;">🔗 '+srcLabel2+'</a>' : '';
+    html += '<div class="ec-list-item"><div class="ec-list-date">'+dateLabel+'</div><div class="ec-event-title">'+e.title+'</div><div class="ec-event-meta">'+bname+' ｜ '+(AREA_L[e.city]||'')+' '+e.location+' ｜ '+e.startTime+'〜'+e.endTime+'</div><div class="ec-event-desc">'+e.description+'</div><div class="ec-event-tags"><span class="ec-event-tag" style="background:'+tc+'">'+(TYPE_L[e.type]||'その他')+'</span>'+(e.reservationRequired?'<span class="ec-event-tag" style="background:#fef2f2;color:#dc2626;">要予約</span>':'')+'</div>'+srcLink2+'</div>';
   });
   document.getElementById('ec-list-view').innerHTML = html;
 }
