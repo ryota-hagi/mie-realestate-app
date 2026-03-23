@@ -148,7 +148,7 @@ async function scrapeHouseCraft(page) {
 }
 
 /** サティスホーム - .event-item カード
- *  構造: .event-item > a > カテゴリ + タイトル + 日付(03/20 fri 03/29 sun) + 場所
+ *  セレクタ: h2.item-ttl, .date-start/.date-end, .item-place dd, .event-finished
  */
 async function scrapeSatisHome(page) {
   await page.goto('https://satishome.com/event/', { waitUntil: 'networkidle2', timeout: 25000 });
@@ -156,89 +156,71 @@ async function scrapeSatisHome(page) {
   return page.evaluate(() => {
     const results = [];
     document.querySelectorAll('.event-item').forEach(card => {
-      const text = (card.textContent || '').replace(/\s+/g, ' ').trim();
       // 終了イベントはスキップ
-      if (text.includes('このイベントは終了しました')) return;
-      const linkEl = card.querySelector('a[href]');
+      if (card.querySelector('.event-finished')) return;
+      const linkEl = card.querySelector('a.item-link') || card.querySelector('a[href]');
       const href = linkEl?.href || '';
       if (!href) return;
-      results.push({ title: text.substring(0, 150), meta: text, sourceUrl: href });
+      const title = (card.querySelector('h2.item-ttl')?.textContent || '').trim();
+      const category = (card.querySelector('.item-cate span')?.textContent || '').trim();
+      const dateStart = (card.querySelector('.date-start')?.textContent || '').trim();
+      const dateEnd = (card.querySelector('.date-end')?.textContent || '').trim();
+      const place = (card.querySelector('.item-place dd')?.textContent || '').trim();
+      const time = (card.querySelector('.item-schedule li:nth-child(2)')?.textContent || '').trim();
+      const meta = [category, title, dateStart, dateEnd, time, place].join(' ');
+      if (title.length > 3 || category.length > 0) {
+        results.push({ title: (category + ' ' + title).trim().substring(0, 150), meta, sourceUrl: href });
+      }
     });
     return results;
   });
 }
 
-/** サンクスホーム - メインイベントページのテキストから抽出
- *  構造: /event/ ページにイベント情報がSPA風に埋め込み
- *  個別ポストは /event-post/ にある
+/** サンクスホーム - WordPress構造 article.work-archive-box
+ *  セレクタ: h2.work-archive-box--title, span.work-archive-box--time, a.div-link
+ *  エリアフィルタURL: /event_area/yokkaichi/ 等
  */
 async function scrapeThanksHome(page) {
   const results = [];
+  // 三重県エリア別 + 全体ページをスクレイプ
+  const urls = [
+    'https://sunkushome.jp/event-post/',
+    'https://sunkushome.jp/event_cat/%E8%A6%8B%E5%AD%A6%E4%BC%9A/',
+    'https://sunkushome.jp/event_cat/%E7%9B%B8%E8%AB%87%E4%BC%9A/',
+    'https://sunkushome.jp/event_cat/%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%9A%E3%83%BC%E3%83%B3/',
+  ];
 
-  // 個別イベントポスト一覧
-  try {
-    await page.goto('https://sunkushome.jp/event-post/', { waitUntil: 'networkidle2', timeout: 20000 });
-    await wait(2000);
-    const posts = await page.evaluate(() => {
-      const items = [];
-      const seen = new Set();
-      document.querySelectorAll('article, .post, a[href*="event-post"]').forEach(el => {
-        const a = el.tagName === 'A' ? el : el.querySelector('a[href]');
-        if (!a) return;
-        const href = a.href;
-        if (seen.has(href) || !href.includes('event-post')) return;
-        seen.add(href);
-        const card = a.closest('article, div, li') || a;
-        const title = (card.querySelector('h2, h3, .entry-title')?.textContent || a.textContent || '').trim();
-        const meta = (card.textContent || '').replace(/\s+/g, ' ').substring(0, 500);
-        if (title.length > 5) items.push({ title, meta, sourceUrl: href });
-      });
-      return items;
-    });
-    results.push(...posts);
-  } catch (e) { /* skip */ }
-
-  // メインイベントページからテキストベースで抽出
-  try {
-    await page.goto('https://sunkushome.jp/event/', { waitUntil: 'networkidle2', timeout: 20000 });
-    await wait(2000);
-    const mainEvents = await page.evaluate(() => {
-      const items = [];
-      const bodyText = document.body.innerText;
-      // 全テキストから「【数字/数字】」パターンを含む行を抽出
-      const lines = bodyText.split('\n').map(l => l.trim()).filter(l => l.length > 8 && l.length < 250);
-      for (const line of lines) {
-        // 日付パターン: 【3/14-15】, 【3/31】, 3/20(金), 2/28
-        if (/\d{1,2}\/\d{1,2}/.test(line)) {
-          items.push({ title: line.substring(0, 150), meta: line, sourceUrl: 'https://sunkushome.jp/event/' });
-        }
-      }
-      return items;
-    });
-    results.push(...mainEvents);
-  } catch (e) { /* skip */ }
-
-  // event_cat の各カテゴリもチェック
-  for (const cat of ['見学会', 'event']) {
+  const seen = new Set();
+  for (const url of urls) {
     try {
-      const url = 'https://sunkushome.jp/event_cat/' + encodeURIComponent(cat) + '/';
-      await page.goto(url, { waitUntil: 'networkidle2', timeout: 15000 });
-      await wait(1500);
-      const catEvents = await page.evaluate(() => {
+      await page.goto(url, { waitUntil: 'networkidle2', timeout: 20000 });
+      await wait(2000);
+      const pageResults = await page.evaluate(() => {
         const items = [];
-        const bodyText = document.body.innerText;
-        const lines = bodyText.split('\n').map(l => l.trim()).filter(l => l.length > 8 && l.length < 250);
-        for (const line of lines) {
-          if (/\d{1,2}\/\d{1,2}/.test(line)) {
-            items.push({ title: line.substring(0, 150), meta: line, sourceUrl: window.location.href });
+        document.querySelectorAll('article.work-archive-box, article.event-post-archive-box').forEach(card => {
+          const title = (card.querySelector('h2.work-archive-box--title')?.textContent || '').trim();
+          const dateEl = card.querySelector('span.work-archive-box--time');
+          const dateText = dateEl ? dateEl.textContent.replace('開催日：', '').trim() : '';
+          const link = card.querySelector('a.div-link')?.href || card.querySelector('a[href]')?.href || '';
+          const tags = Array.from(card.querySelectorAll('.work-archive-box-tag em')).map(e => e.textContent.trim());
+          if (title.length > 3) {
+            items.push({
+              title,
+              meta: [title, dateText, ...tags].join(' '),
+              sourceUrl: link || window.location.href
+            });
           }
-        }
+        });
         return items;
       });
-      results.push(...catEvents);
+      for (const r of pageResults) {
+        if (!seen.has(r.sourceUrl)) {
+          seen.add(r.sourceUrl);
+          results.push(r);
+        }
+      }
     } catch (e) { /* skip */ }
   }
-
   return results;
 }
 
@@ -323,44 +305,31 @@ async function scrapeZensho(page) {
   });
 }
 
-/** アキュラホーム - SPA風、三重県エリアに限定 */
+/** アキュラホーム - /modelhouse/event/ のevents_itemカード
+ *  セレクタ: div.events_item, p.events_name, p.events_date, p.events_place
+ */
 async function scrapeAquraHome(page) {
-  // Try the model house / event search with Mie filter
-  const urls = [
-    'https://www.aqura.co.jp/modelhouse/event/?pref=24', // pref=24 is Mie
-    'https://www.aqura.co.jp/modelhouse/?pref=24',
-    'https://www.aqura.co.jp/event/'
-  ];
-  const results = [];
-  for (const url of urls) {
-    try {
-      await page.goto(url, { waitUntil: 'networkidle2', timeout: 20000 });
-      await wait(2000);
-      const pageResults = await page.evaluate(() => {
-        const items = [];
-        const seen = new Set();
-        document.querySelectorAll('a[href]').forEach(a => {
-          const text = a.textContent.trim();
-          const href = a.href;
-          if (seen.has(href) || text.length < 10 || text.length > 300) return;
-          const hasKeyword = ['見学', '相談', 'モデル', 'イベント', 'フェア', '展示', 'オープン']
-            .some(k => text.includes(k));
-          if (!hasKeyword) return;
-          seen.add(href);
-          const card = a.closest('article, div, li') || a;
-          items.push({
-            title: text.substring(0, 120),
-            meta: (card.textContent || '').replace(/\s+/g, ' ').substring(0, 500),
-            sourceUrl: href
-          });
+  await page.goto('https://www.aqura.co.jp/modelhouse/event/', { waitUntil: 'networkidle2', timeout: 25000 });
+  await wait(2000);
+  return page.evaluate(() => {
+    const items = [];
+    document.querySelectorAll('.events_item, div.events_item').forEach(card => {
+      const linkEl = card.querySelector('a.events_itemInner') || card.querySelector('a[href]');
+      const href = linkEl?.href || '';
+      const title = (card.querySelector('p.events_name')?.textContent || '').trim();
+      const date = (card.querySelector('p.events_date')?.textContent || '').trim();
+      const place = (card.querySelector('p.events_place')?.textContent || '').trim();
+      const label = (card.querySelector('p.events_label')?.textContent || '').trim();
+      if (title.length > 3) {
+        items.push({
+          title: title.substring(0, 120),
+          meta: [label, title, date, place].join(' '),
+          sourceUrl: href ? (href.startsWith('http') ? href : 'https://www.aqura.co.jp' + href) : 'https://www.aqura.co.jp/modelhouse/event/'
         });
-        return items;
-      });
-      results.push(...pageResults);
-      if (results.length > 0) break;
-    } catch (e) { /* continue */ }
-  }
-  return results;
+      }
+    });
+    return items;
+  });
 }
 
 /** クレバリーホーム - エリア別マップ方式 */

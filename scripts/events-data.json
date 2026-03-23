@@ -212,7 +212,7 @@
     {
       "id": "satis-home-2026-03-20-完成見学会-モデルハウスグランドオープン",
       "builderId": "satis-home",
-      "title": "完成見学会 モデルハウスグランドオープン＠四日市市小林町 03/20 fri 03/29 sun 9:00-16:00 場所 四日市市小林町",
+      "title": "完成見学会 モデルハウスグランドオープン＠四日市市小林町",
       "type": "open-house",
       "startDate": "2026-03-20",
       "endDate": "2026-03-29",
@@ -220,7 +220,7 @@
       "endTime": "16:00",
       "city": "yokkaichi",
       "location": "四日市",
-      "description": "完成見学会 モデルハウスグランドオープン＠四日市市小林町 03/20 fri 03/29 sun 9:00-16:00 場所 四日市市小林町",
+      "description": "完成見学会 モデルハウスグランドオープン＠四日市市小林町",
       "url": "https://satishome.com/event/yokkaichishimodelhouse",
       "reservationRequired": false,
       "source": "scraped"
@@ -237,7 +237,7 @@
       "city": "yokkaichi",
       "location": "四日市",
       "description": "【3/31】知育×住環境　春の絵本おはなし会&知育環境づくりセミナー同時開催〈四日市支店〉",
-      "url": "https://sunkushome.jp/event_cat/event/",
+      "url": "https://sunkushome.jp/event-post/%e3%80%903-31%e3%80%91%e7%9f%a5%e8%82%b2x%e4%bd%8f%e7%92%b0%e5%a2%83%e3%80%80%e6%98%a5%e3%81%ae%e7%b5%b5%e6%9c%ac%e3%81%8a%e3%81%af%e3%81%aa%e3%81%97%e4%bc%9a%e7%9f%a5%e8%82%b2%e7%92%b0%e5%a2%83/",
       "reservationRequired": false,
       "source": "scraped"
     },
@@ -249,11 +249,11 @@
       "startDate": "2026-04-10",
       "endDate": "2026-04-10",
       "startTime": "10:00",
-      "endTime": "17:00",
+      "endTime": "11:30",
       "city": "yokkaichi",
       "location": "四日市",
       "description": "【4/10】知育×住環境　ベビーマッサージ&知育環境づくりセミナー同時開催〈四日市市〉",
-      "url": "https://sunkushome.jp/event_cat/event/",
+      "url": "https://sunkushome.jp/event-post/%e3%80%904-10%e3%80%91%e7%9f%a5%e8%82%b2x%e4%bd%8f%e7%92%b0%e5%a2%83%e3%80%80%e3%83%99%e3%83%93%e3%83%bc%e3%83%9e%e3%83%83%e3%82%b5%e3%83%bc%e3%82%b8%e7%9f%a5%e8%82%b2%e7%92%b0%e5%a2%83/",
       "reservationRequired": false,
       "source": "scraped"
     },
