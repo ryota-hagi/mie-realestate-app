@@ -1861,7 +1861,16 @@
       "text": "ショールーム、罠だった。\n\n照明もキレイ、素材もツヤツヤ、全部良く見える。気づいたら50万オーバーしてた。\n\nみんなはどこで正気に戻った？",
       "threadId": "18317019061248253",
       "charCount": 69,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 6,
+        "likes": 0,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 8,
+      "engagementUpdatedAt": "2026-03-23T11:01:05.368Z"
     },
     {
       "date": "2026-03-22T23:24:06.571Z",
@@ -1888,6 +1897,15 @@
       "text": "子ども部屋の広さ、1ヶ月悩んだ。\n\nまだ子どももいないのに。",
       "threadId": "17982736370979965",
       "charCount": 30,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-23T11:01:14.863Z",
+      "category": "koukai",
+      "topicKey": "aruaru:5",
+      "text": "完成見学会で「すごいですね」って言った翌日、電話が3件来た。\n\n社交辞令、通じない。",
+      "threadId": "18087516023235136",
+      "charCount": 42,
       "account": "a2"
     }
   ]
