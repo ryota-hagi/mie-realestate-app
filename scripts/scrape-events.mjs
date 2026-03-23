@@ -1,14 +1,33 @@
 #!/usr/bin/env node
+/**
+ * 三重県ローカル工務店イベントスクレイパー
+ * 対象: ハウスクラフト, サティスホーム, サンクスホーム, アサヒグローバル,
+ *       大和住研, 善匠, アキュラホーム, クレバリーホーム
+ * 大手HM（ダイワハウス・セキスイハイム・パナソニック・住友林業・一条・トヨタ・タマホーム）は対象外
+ */
 import puppeteer from 'puppeteer';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 
-const buildersData = JSON.parse(readFileSync('scripts/builders-data.json', 'utf8')).builders;
-const BUILDERS = Object.values(buildersData);
+// ===== 三重県ローカル工務店のみ対象 =====
+const LOCAL_BUILDER_IDS = [
+  'house-craft', 'satis-home', 'thanks-home', 'asahi-global-home',
+  'yamato-juken', 'zencho', 'aqura-home', 'cleverly-home'
+];
 
 const CITY_MAP = {
   '四日市': 'yokkaichi', '桑名': 'kuwana', '鈴鹿': 'suzuka',
-  'いなべ': 'inabe', '亀山': 'kameyama', '菰野': 'komono', '東員': 'toin'
+  'いなべ': 'inabe', '亀山': 'kameyama', '菰野': 'komono', '東員': 'toin',
+  '津市': 'tsu', '津 ': 'tsu', '松阪': 'matsusaka', '伊勢': 'ise',
+  '名張': 'nabari', '伊賀': 'iga'
 };
+
+// 三重県の市名（三重県イベントかどうかの判定に使用）
+const MIE_CITIES = ['四日市', '桑名', '鈴鹿', 'いなべ', '亀山', '菰野', '東員',
+  '津市', '松阪', '伊勢', '名張', '伊賀', '三重県', '三重'];
+
+function isMieEvent(text) {
+  return MIE_CITIES.some(c => text.includes(c));
+}
 
 function detectCity(text) {
   for (const [key, val] of Object.entries(CITY_MAP)) {
@@ -18,307 +37,516 @@ function detectCity(text) {
 }
 
 function detectCityLabel(text) {
-  for (const [key] of Object.entries(CITY_MAP)) {
-    if (text.includes(key)) return key;
+  for (const key of Object.keys(CITY_MAP)) {
+    if (text.includes(key)) return key.replace(/\s/g, '');
   }
   return '';
 }
 
 function detectType(text) {
-  if (text.includes('見学会') || text.includes('オープンハウス')) return 'open-house';
-  if (text.includes('モデルハウス')) return 'model-home';
-  if (text.includes('セミナー') || text.includes('勉強会')) return 'seminar';
-  if (text.includes('キャンペーン') || text.includes('フェア') || text.includes('特典')) return 'campaign';
+  if (text.includes('完成見学') || text.includes('オープンハウス') || text.includes('内覧')) return 'open-house';
+  if (text.includes('モデルハウス') || text.includes('展示場')) return 'model-home';
+  if (text.includes('セミナー') || text.includes('勉強会') || text.includes('教室')) return 'seminar';
+  if (text.includes('キャンペーン') || text.includes('フェア') || text.includes('特典') || text.includes('販売会')) return 'campaign';
   if (text.includes('相談会') || text.includes('相談')) return 'consultation';
+  if (text.includes('見学会') || text.includes('見学')) return 'open-house';
   return 'other';
 }
 
 function parseJpDates(text) {
-  // "3/20(金)～4/30(木)" or "3.20-4.30" patterns
   const year = new Date().getFullYear();
-  
-  // Range: "3/20～4/30" or "3.20-4.30" or "3/20(金)〜4/30(木)"
-  const rangeMatch = text.match(/(\d{1,2})[/.．](\d{1,2})[\s\S]*?[～〜\-\–][\s\S]*?(\d{1,2})[/.．](\d{1,2})/);
-  if (rangeMatch) {
-    const start = `${year}-${rangeMatch[1].padStart(2,'0')}-${rangeMatch[2].padStart(2,'0')}`;
-    const end = `${year}-${rangeMatch[3].padStart(2,'0')}-${rangeMatch[4].padStart(2,'0')}`;
+
+  // "2026年3月20日" or "2026.3.20"
+  const fullMatch = text.match(/(\d{4})[年./](\d{1,2})[月./](\d{1,2})/);
+
+  // サティスホーム形式: "03/20 fri 03/29 sun" or "01/16 fri 01/18 sun"
+  const satisRange = text.match(/(\d{2})\/(\d{2})\s+\w{3}\s+(\d{2})\/(\d{2})\s+\w{3}/);
+  if (satisRange) {
+    const start = `${year}-${satisRange[1]}-${satisRange[2]}`;
+    const end = `${year}-${satisRange[3]}-${satisRange[4]}`;
     return { startDate: start, endDate: end };
   }
-  
-  // Single date: "3/20"
-  const single = text.match(/(\d{1,2})[/.．](\d{1,2})/);
+
+  // 善匠形式: "2026.3.21-22" or "2026.3.28-4.5" (年付き範囲)
+  const zenshoRange = text.match(/(\d{4})\.(\d{1,2})\.(\d{1,2})\s*[-\-]\s*(?:(\d{1,2})\.)?(\d{1,2})/);
+  if (zenshoRange) {
+    const y = zenshoRange[1];
+    const sm = zenshoRange[2].padStart(2, '0');
+    const sd = zenshoRange[3].padStart(2, '0');
+    const em = zenshoRange[4] ? zenshoRange[4].padStart(2, '0') : sm;
+    const ed = zenshoRange[5].padStart(2, '0');
+    return { startDate: `${y}-${sm}-${sd}`, endDate: `${y}-${em}-${ed}` };
+  }
+
+  // Range: "3/20～4/30", "3.20-4.30", "3/20(金)〜4/30(木)"
+  const rangeMatch = text.match(/(\d{1,2})[/.．月](\d{1,2})[\s\S]{0,20}?[～〜\-\–―][\s\S]{0,20}?(\d{1,2})[/.．月](\d{1,2})/);
+  if (rangeMatch) {
+    const sy = fullMatch ? parseInt(fullMatch[1]) : year;
+    const start = `${sy}-${rangeMatch[1].padStart(2,'0')}-${rangeMatch[2].padStart(2,'0')}`;
+    const end = `${sy}-${rangeMatch[3].padStart(2,'0')}-${rangeMatch[4].padStart(2,'0')}`;
+    return { startDate: start, endDate: end };
+  }
+
+  // サンクスホーム形式: "【3/14-15】" (同月内)
+  const sameMonthRange = text.match(/(\d{1,2})\/(\d{1,2})\s*[-\-]\s*(\d{1,2})/);
+  if (sameMonthRange && parseInt(sameMonthRange[3]) < 32) {
+    const m = sameMonthRange[1].padStart(2, '0');
+    const start = `${year}-${m}-${sameMonthRange[2].padStart(2,'0')}`;
+    const end = `${year}-${m}-${sameMonthRange[3].padStart(2,'0')}`;
+    return { startDate: start, endDate: end };
+  }
+
+  // Single date: "3/20" or "2026年3月20日"
+  if (fullMatch) {
+    const d = `${fullMatch[1]}-${fullMatch[2].padStart(2,'0')}-${fullMatch[3].padStart(2,'0')}`;
+    return { startDate: d, endDate: d };
+  }
+  const single = text.match(/(\d{1,2})[/.．月](\d{1,2})/);
   if (single) {
     const d = `${year}-${single[1].padStart(2,'0')}-${single[2].padStart(2,'0')}`;
     return { startDate: d, endDate: d };
   }
-  
+
   return null;
 }
 
+function parseTime(text) {
+  const m = text.match(/(\d{1,2})[：:](\d{2})\s*[～〜\-]\s*(\d{1,2})[：:](\d{2})/);
+  if (m) return { startTime: `${m[1].padStart(2,'0')}:${m[2]}`, endTime: `${m[3].padStart(2,'0')}:${m[4]}` };
+  return { startTime: '10:00', endTime: '17:00' };
+}
+
 function slugify(text) {
-  return text.replace(/[^a-zA-Z0-9\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/g, '-').substring(0, 40).toLowerCase();
+  return text.replace(/[^a-zA-Z0-9\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/g, '-').substring(0, 30).toLowerCase();
 }
 
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
-// ============== Per-builder scrapers ==============
+// ===================================================================
+//  各社専用スクレイパー
+// ===================================================================
 
-async function scrapeHouseCraft(page, builder) {
-  await page.goto('https://www.house-craft.jp/events/', { waitUntil: 'networkidle2', timeout: 30000 });
+/** ハウスクラフト - カードリンク方式 */
+async function scrapeHouseCraft(page) {
+  await page.goto('https://www.house-craft.jp/events/', { waitUntil: 'networkidle2', timeout: 25000 });
   await wait(2000);
-  
-  return await page.evaluate(() => {
-    const events = [];
-    // House Craft lists events as cards with links
-    const articles = document.querySelectorAll('article, .event-item, .post-item, a[href*="event"]');
+  return page.evaluate(() => {
+    const results = [];
     const seen = new Set();
-    
-    // Get all links that look like individual event pages
     document.querySelectorAll('a[href*="/events/"]').forEach(a => {
       const href = a.href;
-      if (seen.has(href) || href === window.location.href) return;
+      if (seen.has(href) || href === location.href || href.includes('events_category')) return;
       seen.add(href);
-      
       const card = a.closest('article, .card, li, div') || a;
-      const title = (a.querySelector('h2, h3, .title')?.textContent || a.textContent || '').trim();
-      const meta = card.textContent || '';
-      
-      if (title.length > 5 && title.length < 200) {
-        events.push({ title, meta: meta.substring(0, 500), sourceUrl: href });
+      const title = (card.querySelector('h2, h3, .title, .ttl')?.textContent || a.textContent || '').trim();
+      if (title.length > 5) {
+        results.push({ title, meta: (card.textContent || '').replace(/\s+/g, ' ').substring(0, 500), sourceUrl: href });
       }
     });
-    
-    // Fallback: grab main page content for event info
-    if (events.length === 0) {
-      const bodyText = document.body.innerText;
-      events.push({ title: 'PAGE_CONTENT', meta: bodyText.substring(0, 3000), sourceUrl: window.location.href });
-    }
-    
-    return events;
+    return results;
   });
 }
 
-async function scrapeSatisHome(page, builder) {
-  await page.goto('https://satishome.com/event/', { waitUntil: 'networkidle2', timeout: 30000 });
+/** サティスホーム - .event-item カード
+ *  構造: .event-item > a > カテゴリ + タイトル + 日付(03/20 fri 03/29 sun) + 場所
+ */
+async function scrapeSatisHome(page) {
+  await page.goto('https://satishome.com/event/', { waitUntil: 'networkidle2', timeout: 25000 });
   await wait(2000);
-  
-  return await page.evaluate(() => {
-    const events = [];
-    // Satis Home event page has event cards
-    const cards = document.querySelectorAll('.event-card, article, .post, [class*="event"]');
-    
-    cards.forEach(card => {
-      const title = (card.querySelector('h2, h3, .event-title, .title')?.textContent || '').trim();
-      const meta = card.textContent || '';
-      const link = card.querySelector('a[href]')?.href || card.closest('a')?.href || '';
-      
-      if (title.length > 3) {
-        events.push({ title, meta: meta.substring(0, 500), sourceUrl: link || window.location.href });
-      }
+  return page.evaluate(() => {
+    const results = [];
+    document.querySelectorAll('.event-item').forEach(card => {
+      const text = (card.textContent || '').replace(/\s+/g, ' ').trim();
+      // 終了イベントはスキップ
+      if (text.includes('このイベントは終了しました')) return;
+      const linkEl = card.querySelector('a[href]');
+      const href = linkEl?.href || '';
+      if (!href) return;
+      results.push({ title: text.substring(0, 150), meta: text, sourceUrl: href });
     });
-    
-    if (events.length === 0) {
-      events.push({ title: 'PAGE_CONTENT', meta: document.body.innerText.substring(0, 3000), sourceUrl: window.location.href });
-    }
-    
-    return events;
+    return results;
   });
 }
 
-async function scrapeGeneric(page, builder) {
-  if (!builder.eventsPageUrl) return [];
-  
+/** サンクスホーム - メインイベントページのテキストから抽出
+ *  構造: /event/ ページにイベント情報がSPA風に埋め込み
+ *  個別ポストは /event-post/ にある
+ */
+async function scrapeThanksHome(page) {
+  const results = [];
+
+  // 個別イベントポスト一覧
   try {
-    await page.goto(builder.eventsPageUrl, { waitUntil: 'networkidle2', timeout: 20000 });
+    await page.goto('https://sunkushome.jp/event-post/', { waitUntil: 'networkidle2', timeout: 20000 });
     await wait(2000);
-    
-    return await page.evaluate((builderName) => {
-      const events = [];
+    const posts = await page.evaluate(() => {
+      const items = [];
       const seen = new Set();
-      
-      // Strategy 1: Find event links
-      document.querySelectorAll('a[href]').forEach(a => {
+      document.querySelectorAll('article, .post, a[href*="event-post"]').forEach(el => {
+        const a = el.tagName === 'A' ? el : el.querySelector('a[href]');
+        if (!a) return;
         const href = a.href;
-        const text = (a.textContent || '').trim();
-        if (seen.has(href) || text.length < 10 || text.length > 300) return;
-        
-        const combined = text.toLowerCase();
-        const isEvent = combined.includes('見学') || combined.includes('相談') || 
-                       combined.includes('セミナー') || combined.includes('フェア') ||
-                       combined.includes('キャンペーン') || combined.includes('イベント') ||
-                       combined.includes('オープン') || combined.includes('モデル');
-        
-        if (isEvent) {
+        if (seen.has(href) || !href.includes('event-post')) return;
+        seen.add(href);
+        const card = a.closest('article, div, li') || a;
+        const title = (card.querySelector('h2, h3, .entry-title')?.textContent || a.textContent || '').trim();
+        const meta = (card.textContent || '').replace(/\s+/g, ' ').substring(0, 500);
+        if (title.length > 5) items.push({ title, meta, sourceUrl: href });
+      });
+      return items;
+    });
+    results.push(...posts);
+  } catch (e) { /* skip */ }
+
+  // メインイベントページからテキストベースで抽出
+  try {
+    await page.goto('https://sunkushome.jp/event/', { waitUntil: 'networkidle2', timeout: 20000 });
+    await wait(2000);
+    const mainEvents = await page.evaluate(() => {
+      const items = [];
+      const bodyText = document.body.innerText;
+      // 全テキストから「【数字/数字】」パターンを含む行を抽出
+      const lines = bodyText.split('\n').map(l => l.trim()).filter(l => l.length > 8 && l.length < 250);
+      for (const line of lines) {
+        // 日付パターン: 【3/14-15】, 【3/31】, 3/20(金), 2/28
+        if (/\d{1,2}\/\d{1,2}/.test(line)) {
+          items.push({ title: line.substring(0, 150), meta: line, sourceUrl: 'https://sunkushome.jp/event/' });
+        }
+      }
+      return items;
+    });
+    results.push(...mainEvents);
+  } catch (e) { /* skip */ }
+
+  // event_cat の各カテゴリもチェック
+  for (const cat of ['見学会', 'event']) {
+    try {
+      const url = 'https://sunkushome.jp/event_cat/' + encodeURIComponent(cat) + '/';
+      await page.goto(url, { waitUntil: 'networkidle2', timeout: 15000 });
+      await wait(1500);
+      const catEvents = await page.evaluate(() => {
+        const items = [];
+        const bodyText = document.body.innerText;
+        const lines = bodyText.split('\n').map(l => l.trim()).filter(l => l.length > 8 && l.length < 250);
+        for (const line of lines) {
+          if (/\d{1,2}\/\d{1,2}/.test(line)) {
+            items.push({ title: line.substring(0, 150), meta: line, sourceUrl: window.location.href });
+          }
+        }
+        return items;
+      });
+      results.push(...catEvents);
+    } catch (e) { /* skip */ }
+  }
+
+  return results;
+}
+
+/** アサヒグローバルホーム - article カード */
+async function scrapeAsahiGlobal(page) {
+  await page.goto('https://asahigloval.co.jp/event/', { waitUntil: 'networkidle2', timeout: 25000 });
+  await wait(2000);
+  return page.evaluate(() => {
+    const results = [];
+    const seen = new Set();
+    // Main event articles
+    document.querySelectorAll('article, .e-box-item, [class*="event"]').forEach(card => {
+      const linkEl = card.querySelector('a[href*="/event"]') || card.querySelector('a[href]');
+      const href = linkEl?.href || '';
+      if (!href || seen.has(href) || href === location.href) return;
+      seen.add(href);
+      const title = (card.querySelector('h2, h3, .title, .ttl')?.textContent || linkEl?.textContent || '').trim();
+      const meta = (card.textContent || '').replace(/\s+/g, ' ').substring(0, 500);
+      if (title.length > 5) {
+        results.push({ title, meta, sourceUrl: href });
+      }
+    });
+    // Also get direct event links
+    document.querySelectorAll('a[href*="/event/"]').forEach(a => {
+      const href = a.href;
+      if (seen.has(href) || href === location.href) return;
+      seen.add(href);
+      const text = a.textContent.trim();
+      if (text.length > 10) {
+        const card = a.closest('div, li') || a;
+        results.push({ title: text.substring(0, 120), meta: (card.textContent || '').replace(/\s+/g, ' ').substring(0, 500), sourceUrl: href });
+      }
+    });
+    return results;
+  });
+}
+
+/** ヤマト住建 - 三重県ページに直接アクセス */
+async function scrapeYamatoJuken(page) {
+  // 三重県専用ページがある
+  await page.goto('https://www.yamatojk.co.jp/event_cat/mie', { waitUntil: 'networkidle2', timeout: 20000 });
+  await wait(2000);
+  return page.evaluate(() => {
+    const items = [];
+    const seen = new Set();
+    // イベントカード or 記事リンクを取得
+    document.querySelectorAll('a[href]').forEach(a => {
+      const href = a.href;
+      const text = a.textContent.trim().replace(/\s+/g, ' ');
+      if (seen.has(href) || text.length < 10 || text.length > 300) return;
+      // イベント個別ページ or 展示場ページ
+      if (!href.includes('/event/') && !href.includes('/ex-construction/')) return;
+      if (href.includes('/event_cat/')) return; // カテゴリページはスキップ
+      seen.add(href);
+      const card = a.closest('article, .card, li, div') || a;
+      const meta = (card.textContent || '').replace(/\s+/g, ' ').substring(0, 500);
+      items.push({ title: text.substring(0, 150), meta, sourceUrl: href });
+    });
+    return items;
+  });
+}
+
+/** 善匠 - イベントカード */
+async function scrapeZensho(page) {
+  await page.goto('https://www.zenshoo.com/event/', { waitUntil: 'networkidle2', timeout: 25000 });
+  await wait(2000);
+  return page.evaluate(() => {
+    const results = [];
+    const seen = new Set();
+    document.querySelectorAll('[class*="event"], article, .card').forEach(card => {
+      const linkEl = card.querySelector('a[href*="/event"]') || card.querySelector('a[href]');
+      const href = linkEl?.href || '';
+      if (!href || seen.has(href) || href === location.href) return;
+      seen.add(href);
+      const title = (card.querySelector('h2, h3, .title, .ttl')?.textContent || linkEl?.textContent || '').trim();
+      const meta = (card.textContent || '').replace(/\s+/g, ' ').substring(0, 500);
+      if (title.length > 5) {
+        results.push({ title, meta, sourceUrl: href });
+      }
+    });
+    return results;
+  });
+}
+
+/** アキュラホーム - SPA風、三重県エリアに限定 */
+async function scrapeAquraHome(page) {
+  // Try the model house / event search with Mie filter
+  const urls = [
+    'https://www.aqura.co.jp/modelhouse/event/?pref=24', // pref=24 is Mie
+    'https://www.aqura.co.jp/modelhouse/?pref=24',
+    'https://www.aqura.co.jp/event/'
+  ];
+  const results = [];
+  for (const url of urls) {
+    try {
+      await page.goto(url, { waitUntil: 'networkidle2', timeout: 20000 });
+      await wait(2000);
+      const pageResults = await page.evaluate(() => {
+        const items = [];
+        const seen = new Set();
+        document.querySelectorAll('a[href]').forEach(a => {
+          const text = a.textContent.trim();
+          const href = a.href;
+          if (seen.has(href) || text.length < 10 || text.length > 300) return;
+          const hasKeyword = ['見学', '相談', 'モデル', 'イベント', 'フェア', '展示', 'オープン']
+            .some(k => text.includes(k));
+          if (!hasKeyword) return;
           seen.add(href);
-          const card = a.closest('article, li, .card, div') || a;
-          events.push({
-            title: text.substring(0, 150),
-            meta: (card.textContent || '').substring(0, 500),
+          const card = a.closest('article, div, li') || a;
+          items.push({
+            title: text.substring(0, 120),
+            meta: (card.textContent || '').replace(/\s+/g, ' ').substring(0, 500),
             sourceUrl: href
           });
-        }
-      });
-      
-      // Strategy 2: page body text
-      if (events.length === 0) {
-        events.push({
-          title: 'PAGE_CONTENT',
-          meta: document.body.innerText.substring(0, 4000),
-          sourceUrl: window.location.href
         });
-      }
-      
-      return events;
-    }, builder.name);
-  } catch (e) {
-    console.log(`  Error: ${e.message.substring(0, 60)}`);
-    return [];
+        return items;
+      });
+      results.push(...pageResults);
+      if (results.length > 0) break;
+    } catch (e) { /* continue */ }
   }
+  return results;
 }
 
-// ============== Main ==============
+/** クレバリーホーム - エリア別マップ方式 */
+async function scrapeCleverlyHome(page) {
+  // Try Mie/Chubu area event page
+  const urls = [
+    'https://www.cleverlyhome.com/cleverlyhome/event/#c-area__chubuMap',
+    'https://www.cleverlyhome.com/cleverlyhome/event/'
+  ];
+  const results = [];
+  for (const url of urls) {
+    try {
+      await page.goto(url, { waitUntil: 'networkidle2', timeout: 20000 });
+      await wait(2000);
+      // Try to click on Chubu/Tokai area
+      await page.evaluate(() => {
+        document.querySelectorAll('a, button').forEach(el => {
+          const text = el.textContent || '';
+          if (text.includes('中部') || text.includes('東海') || text.includes('三重')) {
+            el.click();
+          }
+        });
+      });
+      await wait(2000);
+      const pageResults = await page.evaluate(() => {
+        const items = [];
+        const seen = new Set();
+        document.querySelectorAll('a[href]').forEach(a => {
+          const text = a.textContent.trim();
+          const href = a.href;
+          if (seen.has(href) || text.length < 10 || text.length > 300) return;
+          const hasKeyword = ['見学', '相談', 'モデル', 'イベント', 'フェア', '展示', '三重']
+            .some(k => text.includes(k));
+          if (!hasKeyword) return;
+          seen.add(href);
+          const card = a.closest('article, div, li') || a;
+          items.push({
+            title: text.substring(0, 120),
+            meta: (card.textContent || '').replace(/\s+/g, ' ').substring(0, 500),
+            sourceUrl: href
+          });
+        });
+        return items;
+      });
+      results.push(...pageResults);
+    } catch (e) { /* continue */ }
+  }
+  return results;
+}
+
+// ===================================================================
+//  スクレイパー登録
+// ===================================================================
+
+const SCRAPERS = {
+  'house-craft':       scrapeHouseCraft,
+  'satis-home':        scrapeSatisHome,
+  'thanks-home':       scrapeThanksHome,
+  'asahi-global-home': scrapeAsahiGlobal,
+  'yamato-juken':      scrapeYamatoJuken,
+  'zencho':            scrapeZensho,
+  'aqura-home':        scrapeAquraHome,
+  'cleverly-home':     scrapeCleverlyHome,
+};
+
+// ===================================================================
+//  メイン処理
+// ===================================================================
 
 async function main() {
-  console.log('=== イベントスクレイピング開始 ===\n');
-  
+  console.log('=== 三重県ローカル工務店イベントスクレイピング ===');
+  console.log(`対象: ${LOCAL_BUILDER_IDS.length}社\n`);
+
+  const buildersData = JSON.parse(readFileSync('scripts/builders-data.json', 'utf8')).builders;
+  const today = new Date().toISOString().split('T')[0];
+
   const browser = await puppeteer.launch({
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
-  
   const page = await browser.newPage();
-  await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36');
+  await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
   await page.setViewport({ width: 1400, height: 900 });
-  
+
   const allEvents = [];
-  const today = new Date().toISOString().split('T')[0];
-  
-  for (const builder of BUILDERS) {
-    console.log(`\n--- ${builder.name} ---`);
-    
-    if (!builder.eventsPageUrl) {
-      console.log('  スキップ: イベントページURL未設定');
-      continue;
-    }
-    
+
+  for (const builderId of LOCAL_BUILDER_IDS) {
+    const builder = Object.values(buildersData).find(b => b.id === builderId);
+    if (!builder) { console.log(`⚠️ ${builderId}: builders-data.jsonに未登録`); continue; }
+
+    console.log(`\n--- ${builder.name} (${builderId}) ---`);
+
+    const scraper = SCRAPERS[builderId];
+    if (!scraper) { console.log('  スキップ: スクレイパー未定義'); continue; }
+
     let rawEvents = [];
     try {
-      rawEvents = await scrapeGeneric(page, builder);
+      rawEvents = await scraper(page, builder);
     } catch (e) {
-      console.log(`  エラー: ${e.message.substring(0, 60)}`);
+      console.log(`  エラー: ${e.message.substring(0, 80)}`);
       continue;
     }
-    
-    console.log(`  取得: ${rawEvents.length}件の候補`);
-    
+
+    console.log(`  候補: ${rawEvents.length}件`);
+
+    let matched = 0;
     for (const raw of rawEvents) {
-      if (raw.title === 'PAGE_CONTENT') {
-        // Parse page content for event info
-        const text = raw.meta;
-        const dates = parseJpDates(text);
-        if (!dates) continue;
-        
-        // Extract event-like sections from page text
-        const lines = text.split('\n').filter(l => l.trim().length > 5);
-        for (const line of lines) {
-          const lineDates = parseJpDates(line);
-          if (!lineDates) continue;
-          
-          const city = detectCity(line);
-          if (!city) continue; // Only Mie events
-          
-          const type = detectType(line);
-          const title = line.trim().substring(0, 100);
-          
-          const id = `${builder.id}-${lineDates.startDate}-${slugify(title).substring(0,20)}`;
-          
-          allEvents.push({
-            id,
-            builderId: builder.id,
-            title: `${builder.name} ${title}`,
-            type,
-            startDate: lineDates.startDate,
-            endDate: lineDates.endDate,
-            startTime: '10:00',
-            endTime: '17:00',
-            city,
-            location: `${detectCityLabel(line)}`,
-            description: title,
-            sourceUrl: raw.sourceUrl,
-            sourceType: 'official',
-            reservationRequired: line.includes('予約') || line.includes('要予約'),
-            source: 'scraped'
-          });
-        }
+      if (raw.title === 'PAGE_CONTENT') continue; // Skip fallback content
+
+      const text = raw.title + ' ' + raw.meta;
+
+      // 広域展開ビルダーは三重県のイベントのみ抽出
+      const needsMieFilter = ['yamato-juken', 'aqura-home', 'cleverly-home', 'zencho'];
+      if (needsMieFilter.includes(builderId) && !isMieEvent(text)) {
+        console.log(`    スキップ(三重県外): ${raw.title.substring(0, 40)}`);
         continue;
       }
-      
-      // Process individual event links
-      const text = raw.title + ' ' + raw.meta;
+
       const dates = parseJpDates(text);
-      const city = detectCity(text);
-      
-      if (!city) continue; // Only Mie prefecture events
       if (!dates) continue;
-      
-      // Skip past events
+
+      // 過去イベントスキップ
       if (dates.endDate < today) continue;
-      
+
+      const city = detectCity(text);
       const type = detectType(text);
-      const id = `${builder.id}-${dates.startDate}-${slugify(raw.title).substring(0,20)}`;
-      
+      const times = parseTime(text);
+      const id = `${builderId}-${dates.startDate}-${slugify(raw.title).substring(0, 20)}`;
+
       allEvents.push({
         id,
-        builderId: builder.id,
-        title: raw.title.substring(0, 100),
+        builderId,
+        title: raw.title.substring(0, 120),
         type,
         startDate: dates.startDate,
         endDate: dates.endDate,
-        startTime: '10:00',
-        endTime: '17:00',
-        city,
-        location: detectCityLabel(text),
+        startTime: times.startTime,
+        endTime: times.endTime,
+        city: city || 'other',
+        location: detectCityLabel(text) || '',
         description: raw.title,
-        sourceUrl: raw.sourceUrl,
-        sourceType: 'official',
-        reservationRequired: text.includes('予約') || text.includes('要予約'),
+        url: raw.sourceUrl,
+        reservationRequired: text.includes('予約') || text.includes('要予約') || text.includes('予約制'),
         source: 'scraped'
       });
-      
-      console.log(`  ✓ ${raw.title.substring(0, 50)} (${dates.startDate}〜${dates.endDate}, ${detectCityLabel(text)})`);
+      matched++;
+      console.log(`  ✓ ${raw.title.substring(0, 60)}`);
+      console.log(`    ${dates.startDate}〜${dates.endDate} | ${detectCityLabel(text) || '場所未特定'} | ${type}`);
     }
+    console.log(`  → ${matched}件のイベントを抽出`);
   }
-  
+
   await browser.close();
-  
-  // Merge: keep manual events, replace scraped
+
+  // マージ: 手動イベントを保持、スクレイプ分は置換
   const existingPath = 'scripts/events-data.json';
   let manualEvents = [];
   if (existsSync(existingPath)) {
     const existing = JSON.parse(readFileSync(existingPath, 'utf8'));
     manualEvents = existing.events.filter(e => e.source === 'manual');
   }
-  
-  // Deduplicate scraped events
+
+  // 重複排除
   const seen = new Set();
   const dedupedScraped = allEvents.filter(e => {
-    const key = `${e.builderId}-${e.startDate}-${e.city}`;
+    const key = `${e.builderId}-${e.startDate}-${e.city}-${e.type}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
-  
+
   const merged = [...manualEvents, ...dedupedScraped];
-  
+
   writeFileSync(existingPath, JSON.stringify({
     lastUpdated: today,
     events: merged
   }, null, 2) + '\n', 'utf8');
-  
+
   console.log(`\n=== 完了 ===`);
   console.log(`手動イベント: ${manualEvents.length}件（保持）`);
-  console.log(`スクレイピング: ${dedupedScraped.length}件（新規）`);
+  console.log(`スクレイピング: ${dedupedScraped.length}件（新規取得）`);
   console.log(`合計: ${merged.length}件`);
+  console.log(`保存先: ${existingPath}`);
 }
 
-main().catch(console.error);
+main().catch(e => {
+  console.error('致命的エラー:', e);
+  process.exit(1);
+});
