@@ -1843,7 +1843,16 @@
       "text": "土地探し始めた瞬間、電話が止まらなくなった。\n\n1日3件とか来る。\n\n着信拒否するまでやめなかった。",
       "threadId": "17859792777562240",
       "charCount": 50,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 595,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 5,
+      "engagementUpdatedAt": "2026-03-23T07:17:44.603Z"
     },
     {
       "date": "2026-03-22T10:36:41.163Z",
@@ -1870,6 +1879,15 @@
       "text": "子ども部屋、いらなかったかもしれない。\n\n結局リビングにしかいない。6畳×2部屋分、どう考えても無駄だった気がする。\n\n部屋を与えたら引きこもると思ってたけど、実際は逆だった。",
       "threadId": "18113468584688169",
       "charCount": 88,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-23T07:17:52.929Z",
+      "category": "hikaku",
+      "topicKey": "aruaru:12",
+      "text": "子ども部屋の広さ、1ヶ月悩んだ。\n\nまだ子どももいないのに。",
+      "threadId": "17982736370979965",
+      "charCount": 30,
       "account": "a2"
     }
   ]
