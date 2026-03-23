@@ -1457,6 +1457,7 @@ function generateAboutPage() {
       <div class="about-header-nav">
         <a href="/">物件比較</a>
         <a href="/area/mie/">エリア比較</a>
+        <a href="/builders/">工務店情報</a>
         <a href="/knowledge/">知識</a>
         <span class="active">運営者情報</span>
       </div>
@@ -1473,6 +1474,7 @@ function generateAboutPage() {
     <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
       <a href="/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">物件比較</a>
       <a href="/area/mie/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">エリア比較</a>
+      <a href="/builders/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">工務店情報</a>
       <a href="/knowledge/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">知識</a>
       <span style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:600;background:#dbeafe;color:#1d4ed8;">運営者情報</span>
     </div>
@@ -1520,7 +1522,7 @@ function generateAboutPage() {
   </main>
 
   <footer class="about-footer">
-    <p><a href="/">注文住宅比較.com</a> | <a href="/area/mie/">三重県エリア比較</a> | <a href="/knowledge/">注文住宅の知識</a></p>
+    <p><a href="/">注文住宅比較.com</a> | <a href="/area/mie/">三重県エリア比較</a> | <a href="/builders/">工務店情報</a> | <a href="/knowledge/">注文住宅の知識</a></p>
     <p style="margin-top: 8px;">&copy; 注文住宅比較.com</p>
   </footer>
 </body>
@@ -1781,6 +1783,7 @@ ${faqJsonLd}
       <div class="knowledge-header-nav">
         <a href="/">物件比較</a>
         <a href="/area/mie/">エリア比較</a>
+        <a href="/builders/">工務店情報</a>
         <span class="active">知識</span>
         <a href="/about/">運営者情報</a>
       </div>
@@ -1796,6 +1799,7 @@ ${faqJsonLd}
     <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
       <a href="/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">物件比較</a>
       <a href="/area/mie/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">エリア比較</a>
+      <a href="/builders/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">工務店情報</a>
       <span style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:600;background:#dbeafe;color:#1d4ed8;">知識</span>
       <a href="/about/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">運営者情報</a>
     </div>
@@ -1858,7 +1862,7 @@ ${faqJsonLd}
   </article>
 
   <footer class="knowledge-footer">
-    <p><a href="/">注文住宅比較.com</a> | <a href="/area/mie/">三重県エリア比較</a> | <a href="/knowledge/">注文住宅の知識</a></p>
+    <p><a href="/">注文住宅比較.com</a> | <a href="/area/mie/">三重県エリア比較</a> | <a href="/builders/">工務店情報</a> | <a href="/knowledge/">注文住宅の知識</a></p>
     <p style="margin-top: 8px;">データ出典: <a href="https://www.reinfolib.mlit.go.jp/" rel="noopener">国土交通省 不動産情報ライブラリ</a></p>
     <p style="margin-top: 4px;">&copy; 注文住宅比較.com</p>
   </footer>
@@ -2129,6 +2133,7 @@ ${collectionJsonLd}
       <div class="knowledge-header-nav">
         <a href="/">物件比較</a>
         <a href="/area/mie/">エリア比較</a>
+        <a href="/builders/">工務店情報</a>
         <span class="active">知識</span>
         <a href="/about/">運営者情報</a>
       </div>
@@ -2144,6 +2149,7 @@ ${collectionJsonLd}
     <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
       <a href="/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">物件比較</a>
       <a href="/area/mie/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">エリア比較</a>
+      <a href="/builders/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">工務店情報</a>
       <span style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:600;background:#dbeafe;color:#1d4ed8;">知識</span>
       <a href="/about/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">運営者情報</a>
     </div>
@@ -2163,7 +2169,7 @@ ${collectionJsonLd}
   </main>
 
   <footer class="ka-hub-footer">
-    <p><a href="/">注文住宅比較.com</a> | <a href="/area/mie/">三重県エリア比較</a> | <a href="/knowledge/">注文住宅の知識</a></p>
+    <p><a href="/">注文住宅比較.com</a> | <a href="/area/mie/">三重県エリア比較</a> | <a href="/builders/">工務店情報</a> | <a href="/knowledge/">注文住宅の知識</a></p>
     <p style="margin-top:8px;">&copy; 注文住宅比較.com</p>
   </footer>
 </body>
@@ -2424,7 +2430,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
     <nav class="knowledge-header-nav">
       <a href="/">物件比較</a>
       <a href="/area/mie/">エリア比較</a>
-      <a href="/knowledge/">知識</a>
+        <a href="/builders/">工務店情報</a>
+        <a href="/knowledge/">知識</a>
       <a href="/builders/" class="active">会社情報</a>
       <a href="/about/">運営者情報</a>
     </nav>
@@ -2662,7 +2669,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
     <nav class="knowledge-header-nav">
       <a href="/">物件比較</a>
       <a href="/area/mie/">エリア比較</a>
-      <a href="/knowledge/">知識</a>
+        <a href="/builders/">工務店情報</a>
+        <a href="/knowledge/">知識</a>
       <a href="/builders/" class="active">会社情報</a>
       <a href="/about/">運営者情報</a>
     </nav>
@@ -2935,7 +2943,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
     <nav class="knowledge-header-nav">
       <a href="/">物件比較</a>
       <a href="/area/mie/">エリア比較</a>
-      <a href="/knowledge/">知識</a>
+        <a href="/builders/">工務店情報</a>
+        <a href="/knowledge/">知識</a>
       <a href="/builders/" class="active">会社情報</a>
       <a href="/about/">運営者情報</a>
     </nav>
