@@ -26,6 +26,12 @@ const knowledgeData = JSON.parse(readFileSync(join(ROOT, 'scripts/knowledge-data
 const buildersData = JSON.parse(readFileSync(join(ROOT, 'scripts/builders-data.json'), 'utf-8')).builders;
 const areaHtml = readFileSync(join(ROOT, 'scripts/area-template.html'), 'utf-8');
 
+// Events data (optional)
+const eventsDataPath = join(ROOT, 'scripts/events-data.json');
+const eventsData = existsSync(eventsDataPath)
+  ? JSON.parse(readFileSync(eventsDataPath, 'utf-8')).events
+  : [];
+
 // MLIT hazard data (optional — skip gracefully if not yet generated)
 const mlitHazardPath = join(ROOT, 'data/mlit-hazard.json');
 const mlitHazard = existsSync(mlitHazardPath)
@@ -2460,7 +2466,10 @@ function generateBuilderPage(builder) {
     description: builder.summary,
     url: builder.officialUrl,
     areaServed: { '@type': 'State', name: '三重県' },
-    priceRange: `坪${builder.tsuboPrice.min}〜${builder.tsuboPrice.max}万円`
+    priceRange: `坪${builder.tsuboPrice.min}〜${builder.tsuboPrice.max}万円`,
+    ...(builder.sns && Object.values(builder.sns).filter(Boolean).length > 0
+      ? { sameAs: Object.values(builder.sns).filter(Boolean) }
+      : {})
   })}</script>`;
 
   // Same-grade builders (cross-links)
@@ -2630,6 +2639,67 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
     <h2>こんな方におすすめ</h2>
     <ul class="rec-list">${recHtml}</ul>
   </div>
+
+  ${(() => {
+    // 公式リンクカード
+    const sns = builder.sns || {};
+    const snsEntries = [];
+    if (builder.officialUrl) snsEntries.push({ icon: '🌐', label: '公式サイト', url: builder.officialUrl });
+    if (sns.instagram) snsEntries.push({ icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="#E4405F"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>', label: 'Instagram', url: sns.instagram });
+    if (sns.x) snsEntries.push({ icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>', label: 'X', url: sns.x });
+    if (sns.youtube) snsEntries.push({ icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>', label: 'YouTube', url: sns.youtube });
+    if (sns.line) snsEntries.push({ icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="#06C755"><path d="M19.365 9.864c.018 0 .049.002.075.028.023.024.037.061.037.104v1.87a.144.144 0 01-.037.104.132.132 0 01-.075.028h-1.406v.461h1.406a.132.132 0 01.075.028.144.144 0 01.037.104v.457a.144.144 0 01-.037.104.132.132 0 01-.075.028h-1.996a.132.132 0 01-.075-.028.144.144 0 01-.037-.104V9.996a.144.144 0 01.037-.104.132.132 0 01.075-.028h1.996zM24 10.655C24 4.774 18.627 0 12 0S0 4.774 0 10.655c0 5.269 4.673 9.68 10.987 10.513.428.092 1.01.282 1.158.648.132.333.087.852.042 1.186l-.181 1.093c-.057.333-.264 1.303 1.14.711 1.405-.591 7.578-4.464 10.34-7.644h.001C23.456 18.192 24 14.472 24 10.655z"/></svg>', label: 'LINE', url: sns.line });
+    if (sns.facebook) snsEntries.push({ icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>', label: 'Facebook', url: sns.facebook });
+
+    if (snsEntries.length === 0) return '';
+
+    return `
+  <div class="builder-card">
+    <h2>公式サイト・SNS</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;">
+      ${snsEntries.map(e => `<a href="${escHtml(e.url)}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600;color:#1f2937;transition:border-color 0.15s;" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e5e7eb'">${e.icon}<span>${escHtml(e.label)}</span></a>`).join('\n      ')}
+    </div>
+  </div>`;
+  })()}
+
+  ${(() => {
+    // 最新イベントセクション
+    const builderEvents = eventsData.filter(e => e.builderId === builder.id && e.startDate >= TODAY).sort((a,b) => a.startDate.localeCompare(b.startDate)).slice(0, 3);
+    if (builderEvents.length === 0) return '';
+
+    const EVENT_TYPE_LABEL = { 'open-house': '見学会', 'model-home': 'モデルハウス', 'seminar': 'セミナー', 'campaign': 'キャンペーン', 'consultation': '相談会', 'other': 'その他' };
+    const CITY_LABEL = { yokkaichi: '四日市市', kuwana: '桑名市', suzuka: '鈴鹿市', inabe: 'いなべ市', kameyama: '亀山市', komono: '菰野町', toin: '東員町' };
+
+    return `
+  <div class="builder-card">
+    <h2>最新のイベント・見学会</h2>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      ${builderEvents.map(ev => {
+        const d = new Date(ev.startDate);
+        const month = d.getMonth() + 1;
+        const day = d.getDate();
+        const dayNames = ['日','月','火','水','木','金','土'];
+        const dow = dayNames[d.getDay()];
+        const typeLabel = EVENT_TYPE_LABEL[ev.type] || ev.type;
+        const cityLabel = CITY_LABEL[ev.city] || ev.city;
+        return `<div style="display:flex;gap:16px;align-items:flex-start;padding:14px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;">
+        <div style="text-align:center;min-width:50px;">
+          <div style="font-size:12px;color:#2563eb;font-weight:600;">${month}月</div>
+          <div style="font-size:24px;font-weight:800;color:#1e40af;line-height:1;">${day}</div>
+          <div style="font-size:11px;color:#6b7280;">${dow}</div>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#1f2937;margin-bottom:4px;">${escHtml(ev.title)}</div>
+          <div style="font-size:12px;color:#6b7280;">📍 ${escHtml(cityLabel)} ${escHtml(ev.location)} ｜ ${escHtml(ev.startTime)}〜${escHtml(ev.endTime)}</div>
+          <span style="display:inline-block;margin-top:6px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#eff6ff;color:#2563eb;">${escHtml(typeLabel)}</span>
+          ${ev.reservationRequired ? '<span style="display:inline-block;margin-top:6px;margin-left:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#fef2f2;color:#dc2626;">要予約</span>' : ''}
+        </div>
+      </div>`;
+      }).join('\n      ')}
+    </div>
+    <a href="/builders/events/?builder=${escHtml(builder.id)}" style="display:block;text-align:center;margin-top:16px;font-size:14px;color:#2563eb;font-weight:600;text-decoration:none;">すべてのイベントを見る →</a>
+  </div>`;
+  })()}
 
   ${sameGradeHtml}
 

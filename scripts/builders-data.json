@@ -5,285 +5,833 @@
       "name": "タマホーム",
       "grade": "lowcost",
       "type": "national",
-      "tsuboPrice": { "min": 44, "max": 55 },
+      "tsuboPrice": {
+        "min": 44,
+        "max": 55
+      },
       "tagline": "品質・価格・アフターサービスの三拍子",
       "structure": "木造軸組工法",
-      "areas": ["yokkaichi", "kuwana", "suzuka", "kameyama"],
-      "features": ["ローコスト", "全国展開", "ZEH対応", "長期優良住宅"],
-      "pros": ["コストパフォーマンスが高い", "全国に展示場あり", "施工実績が豊富"],
-      "cons": ["デザインの自由度は低め", "オプション追加で費用が上がりやすい", "担当者の当たり外れがある"],
-      "warranty": { "structure": 10, "leak": 10 },
-      "recommended_for": ["予算を抑えたい方", "シンプルな家を希望する方", "大手の安心感を求める方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka",
+        "kameyama"
+      ],
+      "features": [
+        "ローコスト",
+        "全国展開",
+        "ZEH対応",
+        "長期優良住宅"
+      ],
+      "pros": [
+        "コストパフォーマンスが高い",
+        "全国に展示場あり",
+        "施工実績が豊富"
+      ],
+      "cons": [
+        "デザインの自由度は低め",
+        "オプション追加で費用が上がりやすい",
+        "担当者の当たり外れがある"
+      ],
+      "warranty": {
+        "structure": 10,
+        "leak": 10
+      },
+      "recommended_for": [
+        "予算を抑えたい方",
+        "シンプルな家を希望する方",
+        "大手の安心感を求める方"
+      ],
       "summary": "全国展開の大手ローコスト住宅メーカー。「品質・価格・アフターサービス」の三拍子を売りに、坪40万円台からの家づくりを実現。三重県内の主要都市に展示場があり、施工実績も豊富。",
       "officialUrl": "https://www.tamahome.jp/",
-      "showrooms": ["四日市", "鈴鹿"],
-      "mie_presence": "三重県北部で展開。四日市・鈴鹿エリアに展示場あり"
+      "showrooms": [
+        "四日市",
+        "鈴鹿"
+      ],
+      "mie_presence": "三重県北部で展開。四日市・鈴鹿エリアに展示場あり",
+      "sns": {
+        "instagram": "https://www.instagram.com/tamahome_official/",
+        "x": "https://x.com/jutakunet",
+        "youtube": "https://www.youtube.com/@TamaHome"
+      },
+      "eventsPageUrl": "https://www.tamahome.jp/area/tokai/events/"
     },
     {
       "id": "aqura-home",
       "name": "アキュラホーム",
       "grade": "lowcost",
       "type": "national",
-      "tsuboPrice": { "min": 50, "max": 65 },
+      "tsuboPrice": {
+        "min": 50,
+        "max": 65
+      },
       "tagline": "自由設計×ローコストの両立",
       "structure": "木造軸組工法",
-      "areas": ["yokkaichi", "kuwana", "suzuka"],
-      "features": ["ローコスト", "自由設計", "高性能断熱", "省エネ対応"],
-      "pros": ["自由設計でローコストを実現", "断熱性能が高い", "省エネ仕様が標準"],
-      "cons": ["三重県の展示場が少ない", "施工エリアが限られる", "納期がやや長め"],
-      "warranty": { "structure": 10, "leak": 10 },
-      "recommended_for": ["予算内で自由設計をしたい方", "省エネ・断熱にこだわる方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka"
+      ],
+      "features": [
+        "ローコスト",
+        "自由設計",
+        "高性能断熱",
+        "省エネ対応"
+      ],
+      "pros": [
+        "自由設計でローコストを実現",
+        "断熱性能が高い",
+        "省エネ仕様が標準"
+      ],
+      "cons": [
+        "三重県の展示場が少ない",
+        "施工エリアが限られる",
+        "納期がやや長め"
+      ],
+      "warranty": {
+        "structure": 10,
+        "leak": 10
+      },
+      "recommended_for": [
+        "予算内で自由設計をしたい方",
+        "省エネ・断熱にこだわる方"
+      ],
       "summary": "「自由設計×ローコスト」を実現するハウスメーカー。標準仕様で断熱性能が高く、コストを抑えながら快適な住まいを実現できる。",
       "officialUrl": "https://www.aqura.co.jp/",
-      "showrooms": ["四日市"],
-      "mie_presence": "三重県北部エリアで施工対応"
+      "showrooms": [
+        "四日市"
+      ],
+      "mie_presence": "三重県北部エリアで施工対応",
+      "sns": {
+        "instagram": "https://www.instagram.com/aqurahome/",
+        "x": "https://twitter.com/aqurahome_",
+        "youtube": "https://www.youtube.com/c/aqurahome",
+        "facebook": "https://www.facebook.com/aqurahome/"
+      },
+      "eventsPageUrl": "https://www.aqura.co.jp/event/"
     },
     {
       "id": "cleverly-home",
       "name": "クレバリーホーム",
       "grade": "lowcost",
       "type": "franchise",
-      "tsuboPrice": { "min": 50, "max": 68 },
+      "tsuboPrice": {
+        "min": 50,
+        "max": 68
+      },
       "tagline": "タイル外壁×高耐久のローコスト",
       "structure": "木造軸組工法",
-      "areas": ["yokkaichi", "kuwana", "suzuka", "inabe", "kameyama", "komono", "toin"],
-      "features": ["タイル外壁標準", "高耐久", "フランチャイズ", "ZEH対応"],
-      "pros": ["タイル外壁が標準仕様でメンテナンス費が安い", "三重県全エリア対応", "高い耐久性"],
-      "cons": ["FC加盟店によりサービス差がある", "デザインがやや限定的"],
-      "warranty": { "structure": 10, "leak": 10 },
-      "recommended_for": ["メンテナンス費を抑えたい方", "タイル外壁にこだわる方", "三重県全域で対応してほしい方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka",
+        "inabe",
+        "kameyama",
+        "komono",
+        "toin"
+      ],
+      "features": [
+        "タイル外壁標準",
+        "高耐久",
+        "フランチャイズ",
+        "ZEH対応"
+      ],
+      "pros": [
+        "タイル外壁が標準仕様でメンテナンス費が安い",
+        "三重県全エリア対応",
+        "高い耐久性"
+      ],
+      "cons": [
+        "FC加盟店によりサービス差がある",
+        "デザインがやや限定的"
+      ],
+      "warranty": {
+        "structure": 10,
+        "leak": 10
+      },
+      "recommended_for": [
+        "メンテナンス費を抑えたい方",
+        "タイル外壁にこだわる方",
+        "三重県全域で対応してほしい方"
+      ],
       "summary": "タイル外壁が標準仕様のローコストハウスメーカー。耐久性の高いタイルを採用しながらコストを抑えた家づくりが可能。フランチャイズ展開で三重県全域に対応。",
       "officialUrl": "https://cleverlyhome.com/",
-      "showrooms": ["四日市", "桑名"],
-      "mie_presence": "三重県全7エリアで施工対応（加盟店経由）"
+      "showrooms": [
+        "四日市",
+        "桑名"
+      ],
+      "mie_presence": "三重県全7エリアで施工対応（加盟店経由）",
+      "sns": {
+        "instagram": "https://www.instagram.com/cleverlyhome.official/",
+        "youtube": "https://www.youtube.com/cleverlyhome-ch",
+        "facebook": "https://www.facebook.com/CLEVERLYHOME/"
+      },
+      "eventsPageUrl": "https://cleverlyhome.com/event/"
     },
     {
       "id": "asahi-global-home",
       "name": "アサヒグローバルホーム",
       "grade": "standard",
       "type": "local",
-      "tsuboPrice": { "min": 45, "max": 58 },
+      "tsuboPrice": {
+        "min": 45,
+        "max": 58
+      },
       "tagline": "三重県17年連続No.1ビルダー",
       "structure": "木造軸組工法",
-      "areas": ["yokkaichi", "kuwana", "suzuka", "inabe", "kameyama", "komono", "toin"],
-      "features": ["地域密着", "完全自由設計", "ZEH対応", "豊富な施工実績"],
-      "pros": ["三重県全エリア対応", "完全自由設計で要望を実現しやすい", "地元に強いアフターサービス", "SUUMO施工実績17年連続No.1"],
-      "cons": ["県外には非対応", "全国規模の知名度は低い"],
-      "warranty": { "structure": 10, "leak": 10 },
-      "recommended_for": ["地域密着を重視する方", "完全自由設計を希望する方", "コストパフォーマンスを重視する方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka",
+        "inabe",
+        "kameyama",
+        "komono",
+        "toin"
+      ],
+      "features": [
+        "地域密着",
+        "完全自由設計",
+        "ZEH対応",
+        "豊富な施工実績"
+      ],
+      "pros": [
+        "三重県全エリア対応",
+        "完全自由設計で要望を実現しやすい",
+        "地元に強いアフターサービス",
+        "SUUMO施工実績17年連続No.1"
+      ],
+      "cons": [
+        "県外には非対応",
+        "全国規模の知名度は低い"
+      ],
+      "warranty": {
+        "structure": 10,
+        "leak": 10
+      },
+      "recommended_for": [
+        "地域密着を重視する方",
+        "完全自由設計を希望する方",
+        "コストパフォーマンスを重視する方"
+      ],
       "summary": "三重県北部を地盤に展開するトップビルダー。SUUMO施工実績ランキング17年連続No.1を誇り、完全自由設計と地域密着のアフターサービスが強み。坪45〜58万円で実現できるコストパフォーマンスも魅力。",
-      "officialUrl": "https://www.asahi-global.co.jp/",
-      "showrooms": ["四日市", "桑名", "鈴鹿"],
-      "mie_presence": "三重県北部7エリア全域で対応。展示場は四日市・桑名・鈴鹿"
+      "officialUrl": "https://asahigloval.co.jp/",
+      "showrooms": [
+        "四日市",
+        "桑名",
+        "鈴鹿"
+      ],
+      "mie_presence": "三重県北部7エリア全域で対応。展示場は四日市・桑名・鈴鹿",
+      "sns": {
+        "instagram": "https://www.instagram.com/asahigloval/"
+      },
+      "eventsPageUrl": "https://asahigloval.co.jp/event/"
     },
     {
       "id": "thanks-home",
       "name": "サンクスホーム",
       "grade": "standard",
       "type": "local",
-      "tsuboPrice": { "min": 46, "max": 79 },
+      "tsuboPrice": {
+        "min": 46,
+        "max": 79
+      },
       "tagline": "三重県密着の注文住宅専門店",
       "structure": "木造軸組工法",
-      "areas": ["yokkaichi", "kuwana", "suzuka", "inabe", "komono", "toin"],
-      "features": ["地域密着", "完全注文住宅", "自然素材対応", "高気密高断熱"],
-      "pros": ["完全注文住宅で自由度が高い", "高気密高断熱に対応", "地元密着のきめ細かい対応"],
-      "cons": ["県外は非対応", "施工実績はアサヒグローバルホームより少ない"],
-      "warranty": { "structure": 10, "leak": 10 },
-      "recommended_for": ["完全自由設計を希望する方", "断熱・気密にこだわる方", "地元ビルダーを選びたい方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka",
+        "inabe",
+        "komono",
+        "toin"
+      ],
+      "features": [
+        "地域密着",
+        "完全注文住宅",
+        "自然素材対応",
+        "高気密高断熱"
+      ],
+      "pros": [
+        "完全注文住宅で自由度が高い",
+        "高気密高断熱に対応",
+        "地元密着のきめ細かい対応"
+      ],
+      "cons": [
+        "県外は非対応",
+        "施工実績はアサヒグローバルホームより少ない"
+      ],
+      "warranty": {
+        "structure": 10,
+        "leak": 10
+      },
+      "recommended_for": [
+        "完全自由設計を希望する方",
+        "断熱・気密にこだわる方",
+        "地元ビルダーを選びたい方"
+      ],
       "summary": "三重県北部・中勢エリアを中心に展開する地域密着型ビルダー。完全注文住宅にこだわり、お客様の要望をきめ細かく反映した家づくりを提供。高気密高断熱仕様にも対応。",
-      "officialUrl": "https://www.thanks-h.co.jp/",
-      "showrooms": ["四日市", "鈴鹿"],
-      "mie_presence": "三重県北部・中勢を中心に展開"
+      "officialUrl": "https://sunkushome.jp/",
+      "showrooms": [
+        "四日市",
+        "鈴鹿"
+      ],
+      "mie_presence": "三重県北部・中勢を中心に展開",
+      "sns": {
+        "instagram": "https://www.instagram.com/sunkushome_official/",
+        "facebook": "https://www.facebook.com/sunkushome/"
+      },
+      "eventsPageUrl": "https://sunkushome.jp/event/"
     },
     {
       "id": "satis-home",
       "name": "サティスホーム",
       "grade": "standard",
       "type": "local",
-      "tsuboPrice": { "min": 50, "max": 70 },
+      "tsuboPrice": {
+        "min": 50,
+        "max": 70
+      },
       "tagline": "品質重視の地元工務店",
       "structure": "木造軸組工法",
-      "areas": ["yokkaichi", "kuwana", "suzuka", "inabe", "toin"],
-      "features": ["品質重視", "自由設計", "地元密着", "省エネ住宅"],
-      "pros": ["品質管理が丁寧", "地元密着でアフターが手厚い", "省エネ仕様に対応"],
-      "cons": ["施工エリアが限られる", "知名度が低め"],
-      "warranty": { "structure": 10, "leak": 10 },
-      "recommended_for": ["品質を重視する方", "地元密着のアフターサービスを求める方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka",
+        "inabe",
+        "toin"
+      ],
+      "features": [
+        "品質重視",
+        "自由設計",
+        "地元密着",
+        "省エネ住宅"
+      ],
+      "pros": [
+        "品質管理が丁寧",
+        "地元密着でアフターが手厚い",
+        "省エネ仕様に対応"
+      ],
+      "cons": [
+        "施工エリアが限られる",
+        "知名度が低め"
+      ],
+      "warranty": {
+        "structure": 10,
+        "leak": 10
+      },
+      "recommended_for": [
+        "品質を重視する方",
+        "地元密着のアフターサービスを求める方"
+      ],
       "summary": "品質重視の三重県地元工務店。丁寧な施工管理と地域密着のアフターサービスが特徴。省エネ住宅や自由設計にも対応し、長期的な安心を提供する。",
-      "officialUrl": "https://satis-home.com/",
-      "showrooms": ["四日市"],
-      "mie_presence": "三重県北部・桑名エリアを中心に展開"
+      "officialUrl": "https://satishome.com/",
+      "showrooms": [
+        "四日市"
+      ],
+      "mie_presence": "三重県北部・桑名エリアを中心に展開",
+      "sns": {
+        "instagram": "https://www.instagram.com/satishome/",
+        "x": "https://twitter.com/satis_home"
+      },
+      "eventsPageUrl": "https://satishome.com/event/"
     },
     {
       "id": "house-craft",
       "name": "ハウスクラフト",
       "grade": "standard",
       "type": "local",
-      "tsuboPrice": { "min": 55, "max": 75 },
+      "tsuboPrice": {
+        "min": 55,
+        "max": 75
+      },
       "tagline": "自然素材×デザイン住宅の三重県ビルダー",
       "structure": "木造軸組工法",
-      "areas": ["yokkaichi", "kuwana", "suzuka", "inabe", "kameyama", "komono", "toin"],
-      "features": ["自然素材", "デザイン重視", "無垢材", "ZEH対応"],
-      "pros": ["自然素材・無垢材を豊富に使用", "デザイン性が高い", "三重県全エリア対応"],
-      "cons": ["他の地元ビルダーよりやや高め", "自然素材のメンテナンスが必要"],
-      "warranty": { "structure": 10, "leak": 10 },
-      "recommended_for": ["自然素材・無垢材にこだわる方", "デザイン性を重視する方", "長期優良住宅を希望する方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka",
+        "inabe",
+        "kameyama",
+        "komono",
+        "toin"
+      ],
+      "features": [
+        "自然素材",
+        "デザイン重視",
+        "無垢材",
+        "ZEH対応"
+      ],
+      "pros": [
+        "自然素材・無垢材を豊富に使用",
+        "デザイン性が高い",
+        "三重県全エリア対応"
+      ],
+      "cons": [
+        "他の地元ビルダーよりやや高め",
+        "自然素材のメンテナンスが必要"
+      ],
+      "warranty": {
+        "structure": 10,
+        "leak": 10
+      },
+      "recommended_for": [
+        "自然素材・無垢材にこだわる方",
+        "デザイン性を重視する方",
+        "長期優良住宅を希望する方"
+      ],
       "summary": "自然素材とデザイン住宅を得意とする三重県地元ビルダー。無垢材や自然素材を豊富に使用したオリジナリティの高い住まいを提供。三重県全エリアに対応。",
-      "officialUrl": "https://house-craft.co.jp/",
-      "showrooms": ["四日市", "桑名"],
-      "mie_presence": "三重県全7エリアで施工対応"
+      "officialUrl": "https://www.house-craft.jp/",
+      "showrooms": [
+        "四日市",
+        "桑名"
+      ],
+      "mie_presence": "三重県全7エリアで施工対応",
+      "sns": {
+        "instagram": "https://www.instagram.com/housecraft.jp/",
+        "facebook": "https://www.facebook.com/housecraft.jp/"
+      },
+      "eventsPageUrl": "https://www.house-craft.jp/event/"
     },
     {
       "id": "yamato-juken",
       "name": "ヤマト住建",
       "grade": "standard",
       "type": "national",
-      "tsuboPrice": { "min": 50, "max": 70 },
+      "tsuboPrice": {
+        "min": 50,
+        "max": 70
+      },
       "tagline": "高性能・省エネ住宅のパイオニア",
       "structure": "木造軸組パネル工法",
-      "areas": ["yokkaichi", "kuwana", "suzuka"],
-      "features": ["高性能断熱", "省エネ", "ZEH標準対応", "トリプルサッシ"],
-      "pros": ["断熱・省エネ性能が高水準", "ZEH仕様が標準", "光熱費を大幅削減できる"],
-      "cons": ["デザイン自由度は低め", "三重県の施工エリアが限定的"],
-      "warranty": { "structure": 10, "leak": 10 },
-      "recommended_for": ["断熱・省エネ性能を最優先する方", "ZEH住宅を希望する方", "長期の光熱費削減を重視する方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka"
+      ],
+      "features": [
+        "高性能断熱",
+        "省エネ",
+        "ZEH標準対応",
+        "トリプルサッシ"
+      ],
+      "pros": [
+        "断熱・省エネ性能が高水準",
+        "ZEH仕様が標準",
+        "光熱費を大幅削減できる"
+      ],
+      "cons": [
+        "デザイン自由度は低め",
+        "三重県の施工エリアが限定的"
+      ],
+      "warranty": {
+        "structure": 10,
+        "leak": 10
+      },
+      "recommended_for": [
+        "断熱・省エネ性能を最優先する方",
+        "ZEH住宅を希望する方",
+        "長期の光熱費削減を重視する方"
+      ],
       "summary": "高性能・省エネ住宅を得意とするハウスメーカー。ZEH（ゼロ・エネルギー・ハウス）仕様が標準で、トリプルサッシなど断熱性能にこだわった家づくりを実現。",
       "officialUrl": "https://www.yamatojuken.com/",
-      "showrooms": ["四日市"],
-      "mie_presence": "三重県北部（四日市・桑名・鈴鹿）エリアで施工対応"
+      "showrooms": [
+        "四日市"
+      ],
+      "mie_presence": "三重県北部（四日市・桑名・鈴鹿）エリアで施工対応",
+      "sns": {
+        "instagram": "https://www.instagram.com/yamatojuken_official/",
+        "youtube": "https://www.youtube.com/@yamatojuken"
+      },
+      "eventsPageUrl": "https://www.yamatojuken.com/event/"
     },
     {
       "id": "zencho",
       "name": "善匠",
       "grade": "standard",
       "type": "local",
-      "tsuboPrice": { "min": 54, "max": 59 },
+      "tsuboPrice": {
+        "min": 54,
+        "max": 59
+      },
       "tagline": "三重県の高品質ローコスト住宅",
       "structure": "木造軸組工法",
-      "areas": ["yokkaichi", "kuwana", "suzuka", "inabe", "kameyama", "komono", "toin"],
-      "features": ["高品質", "ローコスト", "完全自由設計", "地元密着"],
-      "pros": ["高品質をローコストで実現", "完全自由設計", "三重県全エリア対応"],
-      "cons": ["知名度がやや低い", "展示場が少ない"],
-      "warranty": { "structure": 10, "leak": 10 },
-      "recommended_for": ["品質を重視しながら予算も抑えたい方", "三重県密着のビルダーを希望する方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka",
+        "inabe",
+        "kameyama",
+        "komono",
+        "toin"
+      ],
+      "features": [
+        "高品質",
+        "ローコスト",
+        "完全自由設計",
+        "地元密着"
+      ],
+      "pros": [
+        "高品質をローコストで実現",
+        "完全自由設計",
+        "三重県全エリア対応"
+      ],
+      "cons": [
+        "知名度がやや低い",
+        "展示場が少ない"
+      ],
+      "warranty": {
+        "structure": 10,
+        "leak": 10
+      },
+      "recommended_for": [
+        "品質を重視しながら予算も抑えたい方",
+        "三重県密着のビルダーを希望する方"
+      ],
       "summary": "三重県密着のローコスト高品質住宅ビルダー。坪54〜59万円というリーズナブルな価格帯で、完全自由設計の家づくりを提供。三重県全エリアに対応。",
-      "officialUrl": "https://zencho.jp/",
-      "showrooms": ["四日市"],
-      "mie_presence": "三重県全7エリアで施工対応"
+      "officialUrl": "https://www.zenshoo.com/",
+      "showrooms": [
+        "四日市"
+      ],
+      "mie_presence": "三重県全7エリアで施工対応",
+      "sns": {
+        "instagram": "https://www.instagram.com/iiietsukuru_zenshoo/"
+      },
+      "eventsPageUrl": "https://www.zenshoo.com/event/"
     },
     {
       "id": "toyota-home",
       "name": "トヨタホーム",
       "grade": "standard",
       "type": "national",
-      "tsuboPrice": { "min": 66, "max": 80 },
+      "tsuboPrice": {
+        "min": 66,
+        "max": 80
+      },
       "tagline": "トヨタの技術×住宅の品質",
       "structure": "鉄骨ユニット工法",
-      "areas": ["yokkaichi", "kuwana", "suzuka", "kameyama"],
-      "features": ["トヨタ品質", "鉄骨ユニット", "耐震性能", "高耐久"],
-      "pros": ["トヨタグループの信頼性", "高い耐震性能", "鉄骨ユニット工法で精度が高い"],
-      "cons": ["木造より重量があり基礎費用が高め", "価格帯がやや高め"],
-      "warranty": { "structure": 30, "leak": 15 },
-      "recommended_for": ["耐震性能を最重視する方", "大手の信頼性を求める方", "長期保証を重視する方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka",
+        "kameyama"
+      ],
+      "features": [
+        "トヨタ品質",
+        "鉄骨ユニット",
+        "耐震性能",
+        "高耐久"
+      ],
+      "pros": [
+        "トヨタグループの信頼性",
+        "高い耐震性能",
+        "鉄骨ユニット工法で精度が高い"
+      ],
+      "cons": [
+        "木造より重量があり基礎費用が高め",
+        "価格帯がやや高め"
+      ],
+      "warranty": {
+        "structure": 30,
+        "leak": 15
+      },
+      "recommended_for": [
+        "耐震性能を最重視する方",
+        "大手の信頼性を求める方",
+        "長期保証を重視する方"
+      ],
       "summary": "トヨタグループの住宅ブランド。鉄骨ユニット工法の高精度な施工と、トヨタが培った品質管理で高耐震・高耐久な家づくりを実現。30年構造保証も魅力。",
       "officialUrl": "https://www.toyotahome.co.jp/",
-      "showrooms": ["四日市", "鈴鹿"],
-      "mie_presence": "三重県北部・中勢エリア（四日市・桑名・鈴鹿・亀山）で対応"
+      "showrooms": [
+        "四日市",
+        "鈴鹿"
+      ],
+      "mie_presence": "三重県北部・中勢エリア（四日市・桑名・鈴鹿・亀山）で対応",
+      "sns": {
+        "instagram": "https://www.instagram.com/toyotahome_official/",
+        "youtube": "https://www.youtube.com/@toyotahome"
+      },
+      "eventsPageUrl": "https://www.toyotahome.co.jp/mie/event/"
     },
     {
       "id": "ichijo-koumuten",
       "name": "一条工務店",
       "grade": "highgrade",
       "type": "national",
-      "tsuboPrice": { "min": 79, "max": 84 },
+      "tsuboPrice": {
+        "min": 79,
+        "max": 84
+      },
       "tagline": "断熱・省エネ性能No.1を目指すハウスメーカー",
       "structure": "木造ツーバイシックス工法",
-      "areas": ["yokkaichi", "kuwana", "suzuka", "inabe", "kameyama", "komono", "toin"],
-      "features": ["超高断熱", "床暖房標準", "ZEH+対応", "全館空調", "太陽光発電標準"],
-      "pros": ["断熱性能が業界最高水準", "床暖房・太陽光発電が標準装備", "光熱費を大幅削減", "全国施工実績が豊富"],
-      "cons": ["価格帯が高め", "デザインの自由度は低め（規格型が多い）", "外観デザインが画一的"],
-      "warranty": { "structure": 10, "leak": 10 },
-      "recommended_for": ["断熱・省エネ性能を最優先する方", "光熱費を極力抑えたい方", "床暖房・太陽光を標準で欲しい方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka",
+        "inabe",
+        "kameyama",
+        "komono",
+        "toin"
+      ],
+      "features": [
+        "超高断熱",
+        "床暖房標準",
+        "ZEH+対応",
+        "全館空調",
+        "太陽光発電標準"
+      ],
+      "pros": [
+        "断熱性能が業界最高水準",
+        "床暖房・太陽光発電が標準装備",
+        "光熱費を大幅削減",
+        "全国施工実績が豊富"
+      ],
+      "cons": [
+        "価格帯が高め",
+        "デザインの自由度は低め（規格型が多い）",
+        "外観デザインが画一的"
+      ],
+      "warranty": {
+        "structure": 10,
+        "leak": 10
+      },
+      "recommended_for": [
+        "断熱・省エネ性能を最優先する方",
+        "光熱費を極力抑えたい方",
+        "床暖房・太陽光を標準で欲しい方"
+      ],
       "summary": "断熱性能・省エネ性能で業界トップを争うハウスメーカー。床暖房・太陽光発電・超高断熱が標準仕様で、年間の光熱費を大幅に削減できる。三重県全エリアで施工実績あり。",
       "officialUrl": "https://www.ichijo.co.jp/",
-      "showrooms": ["四日市", "桑名", "鈴鹿"],
-      "mie_presence": "三重県全7エリアで施工対応。主要都市に展示場あり"
+      "showrooms": [
+        "四日市",
+        "桑名",
+        "鈴鹿"
+      ],
+      "mie_presence": "三重県全7エリアで施工対応。主要都市に展示場あり",
+      "sns": {
+        "instagram": "https://www.instagram.com/ichijo_official/",
+        "x": "https://x.com/joekun_ichijo",
+        "youtube": "https://www.youtube.com/channel/UCGiaiTXTbCWPkcvEWRw69VA",
+        "facebook": "https://www.facebook.com/ichijokomuten/"
+      },
+      "eventsPageUrl": "https://www.ichijo.co.jp/event/"
     },
     {
       "id": "sumitomo-ringyo",
       "name": "住友林業",
       "grade": "highgrade",
       "type": "national",
-      "tsuboPrice": { "min": 90, "max": 130 },
+      "tsuboPrice": {
+        "min": 90,
+        "max": 130
+      },
       "tagline": "木の質感×最高品質の家づくり",
       "structure": "木造軸組工法（BF構法）",
-      "areas": ["yokkaichi", "kuwana", "suzuka"],
-      "features": ["最高級木材", "大空間設計", "高意匠性", "長期優良住宅"],
-      "pros": ["最高品質の木材と職人技", "大空間・吹き抜けを実現しやすい", "資産価値が高い"],
-      "cons": ["価格が高い", "三重県のエリア対応が限定的"],
-      "warranty": { "structure": 30, "leak": 10 },
-      "recommended_for": ["予算に余裕があり最高の品質を求める方", "木の温もりを大切にしたい方", "資産価値を重視する方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka"
+      ],
+      "features": [
+        "最高級木材",
+        "大空間設計",
+        "高意匠性",
+        "長期優良住宅"
+      ],
+      "pros": [
+        "最高品質の木材と職人技",
+        "大空間・吹き抜けを実現しやすい",
+        "資産価値が高い"
+      ],
+      "cons": [
+        "価格が高い",
+        "三重県のエリア対応が限定的"
+      ],
+      "warranty": {
+        "structure": 30,
+        "leak": 10
+      },
+      "recommended_for": [
+        "予算に余裕があり最高の品質を求める方",
+        "木の温もりを大切にしたい方",
+        "資産価値を重視する方"
+      ],
       "summary": "日本最大の林業会社を母体とする大手ハウスメーカー。最高品質の木材と高い施工技術で、上質な住まいを提供。BF（ビッグフレーム）構法により大空間・大開口を実現できる。",
       "officialUrl": "https://sfc.jp/",
-      "showrooms": ["四日市"],
-      "mie_presence": "三重県北部エリア（四日市・桑名・鈴鹿）に対応"
+      "showrooms": [
+        "四日市"
+      ],
+      "mie_presence": "三重県北部エリア（四日市・桑名・鈴鹿）に対応",
+      "sns": {
+        "instagram": "https://www.instagram.com/sfc_ie/",
+        "youtube": "https://www.youtube.com/c/sfc_ie/"
+      },
+      "eventsPageUrl": "https://sfc.jp/ie/event/"
     },
     {
       "id": "daiwa-house",
       "name": "ダイワハウス",
       "grade": "highgrade",
       "type": "national",
-      "tsuboPrice": { "min": 80, "max": 125 },
+      "tsuboPrice": {
+        "min": 80,
+        "max": 125
+      },
       "tagline": "業界最大手の総合住宅ブランド",
       "structure": "鉄骨軸組工法",
-      "areas": ["yokkaichi", "kuwana", "suzuka", "kameyama"],
-      "features": ["業界最大手", "全国ネットワーク", "高耐震", "スマートホーム"],
-      "pros": ["業界トップの施工実績と信頼性", "全国ネットワークで転勤後も安心", "スマートホーム対応"],
-      "cons": ["価格が高い", "営業担当の当たり外れがある"],
-      "warranty": { "structure": 30, "leak": 20 },
-      "recommended_for": ["業界最大手の安心感を求める方", "転勤が多い方", "スマートホームに興味がある方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka",
+        "kameyama"
+      ],
+      "features": [
+        "業界最大手",
+        "全国ネットワーク",
+        "高耐震",
+        "スマートホーム"
+      ],
+      "pros": [
+        "業界トップの施工実績と信頼性",
+        "全国ネットワークで転勤後も安心",
+        "スマートホーム対応"
+      ],
+      "cons": [
+        "価格が高い",
+        "営業担当の当たり外れがある"
+      ],
+      "warranty": {
+        "structure": 30,
+        "leak": 20
+      },
+      "recommended_for": [
+        "業界最大手の安心感を求める方",
+        "転勤が多い方",
+        "スマートホームに興味がある方"
+      ],
       "summary": "売上高・施工棟数ともに業界トップクラスの大手ハウスメーカー。鉄骨軸組工法による高耐震性能と、全国ネットワークのアフターサービスが強み。スマートホーム対応など最新技術も充実。",
       "officialUrl": "https://www.daiwahouse.co.jp/",
-      "showrooms": ["四日市", "桑名"],
-      "mie_presence": "三重県北部・中勢エリアで施工対応"
+      "showrooms": [
+        "四日市",
+        "桑名"
+      ],
+      "mie_presence": "三重県北部・中勢エリアで施工対応",
+      "sns": {
+        "instagram": "https://www.instagram.com/daiwahouse_official/",
+        "youtube": "https://www.youtube.com/@daiwahouse",
+        "facebook": "https://www.facebook.com/DaiwaHouse"
+      },
+      "eventsPageUrl": "https://www.daiwahouse.co.jp/jutaku/events/"
     },
     {
       "id": "panasonic-homes",
       "name": "パナソニックホームズ",
       "grade": "highgrade",
       "type": "national",
-      "tsuboPrice": { "min": 80, "max": 110 },
+      "tsuboPrice": {
+        "min": 80,
+        "max": 110
+      },
       "tagline": "パナソニックのスマートホーム住宅",
       "structure": "鉄骨軸組工法",
-      "areas": ["yokkaichi", "kuwana", "suzuka"],
-      "features": ["スマートホーム", "高耐震", "エネルギーマネジメント", "全館空調"],
-      "pros": ["パナソニック製設備が豊富", "スマートホームシステムが充実", "高い耐震性能"],
-      "cons": ["価格が高い", "エリア対応が限定的"],
-      "warranty": { "structure": 35, "leak": 10 },
-      "recommended_for": ["スマートホームに興味がある方", "パナソニック製品が好きな方", "エネルギーマネジメントを重視する方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka"
+      ],
+      "features": [
+        "スマートホーム",
+        "高耐震",
+        "エネルギーマネジメント",
+        "全館空調"
+      ],
+      "pros": [
+        "パナソニック製設備が豊富",
+        "スマートホームシステムが充実",
+        "高い耐震性能"
+      ],
+      "cons": [
+        "価格が高い",
+        "エリア対応が限定的"
+      ],
+      "warranty": {
+        "structure": 35,
+        "leak": 10
+      },
+      "recommended_for": [
+        "スマートホームに興味がある方",
+        "パナソニック製品が好きな方",
+        "エネルギーマネジメントを重視する方"
+      ],
       "summary": "パナソニックグループの住宅ブランド。エネルギーマネジメントやスマートホームシステムが充実しており、快適で省エネな暮らしを実現。35年の構造保証も魅力。",
       "officialUrl": "https://homes.panasonic.com/",
-      "showrooms": ["四日市"],
-      "mie_presence": "三重県北部エリアで施工対応"
+      "showrooms": [
+        "四日市"
+      ],
+      "mie_presence": "三重県北部エリアで施工対応",
+      "sns": {
+        "instagram": "https://www.instagram.com/panasonichomes_official/",
+        "x": "https://x.com/panasonic_homes",
+        "youtube": "https://www.youtube.com/channel/UCUGh-9ozJ9XuyNY2nnuUwMQ",
+        "line": "https://lin.ee/xAB0fIb"
+      },
+      "eventsPageUrl": "https://homes.panasonic.com/event/"
     },
     {
       "id": "sekisui-heim",
       "name": "セキスイハイム",
       "grade": "highgrade",
       "type": "national",
-      "tsuboPrice": { "min": 75, "max": 100 },
+      "tsuboPrice": {
+        "min": 75,
+        "max": 100
+      },
       "tagline": "工場生産×ユニット工法の高品質住宅",
       "structure": "鉄骨ユニット工法・木質系ユニット工法",
-      "areas": ["yokkaichi", "kuwana", "suzuka", "kameyama"],
-      "features": ["工場生産", "ユニット工法", "高品質", "太陽光標準", "V2H対応"],
-      "pros": ["工場生産による安定した品質", "太陽光・蓄電池の充実", "V2H（電気自動車連携）対応"],
-      "cons": ["ユニット工法のため間取りに制約あり", "価格が高め"],
-      "warranty": { "structure": 30, "leak": 10 },
-      "recommended_for": ["工場生産の品質を重視する方", "太陽光・蓄電池・EVに関心がある方", "省エネを重視する方"],
+      "areas": [
+        "yokkaichi",
+        "kuwana",
+        "suzuka",
+        "kameyama"
+      ],
+      "features": [
+        "工場生産",
+        "ユニット工法",
+        "高品質",
+        "太陽光標準",
+        "V2H対応"
+      ],
+      "pros": [
+        "工場生産による安定した品質",
+        "太陽光・蓄電池の充実",
+        "V2H（電気自動車連携）対応"
+      ],
+      "cons": [
+        "ユニット工法のため間取りに制約あり",
+        "価格が高め"
+      ],
+      "warranty": {
+        "structure": 30,
+        "leak": 10
+      },
+      "recommended_for": [
+        "工場生産の品質を重視する方",
+        "太陽光・蓄電池・EVに関心がある方",
+        "省エネを重視する方"
+      ],
       "summary": "工場生産のユニット工法で安定した品質を実現する大手ハウスメーカー。太陽光発電・蓄電池・V2Hなどエネルギー関連が充実しており、電気自動車との連携も可能。",
       "officialUrl": "https://www.sekisuiheim.com/",
-      "showrooms": ["四日市", "鈴鹿"],
-      "mie_presence": "三重県北部・中勢エリアで施工対応"
+      "showrooms": [
+        "四日市",
+        "鈴鹿"
+      ],
+      "mie_presence": "三重県北部・中勢エリアで施工対応",
+      "sns": {
+        "instagram": "https://www.instagram.com/heimlife_816/",
+        "youtube": "https://www.youtube.com/user/SekisuiheimChannel",
+        "line": "https://page.line.me/938lobgr",
+        "facebook": "https://www.facebook.com/sekisuiheim/"
+      },
+      "eventsPageUrl": "https://www.sekisuiheim.com/event/"
     }
   ]
 }
