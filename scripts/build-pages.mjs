@@ -2442,8 +2442,8 @@ function generateBuilderPage(builder) {
   const recHtml = builder.recommended_for.map(r => `<li>${escHtml(r)}</li>`).join('');
   const featuresHtml = builder.features.map(f => `<span class="ka-builder-feature">${escHtml(f)}</span>`).join('');
   const gradeCls = builder.grade;
-  const pageTitle = `${builder.name}の評判・坪単価・特徴｜三重県の注文住宅`;
-  const pageDesc = `${builder.name}（${gradeLabel}）の坪単価・特徴・口コミを解説。坪${builder.tsuboPrice.min}〜${builder.tsuboPrice.max}万円。三重県の対応エリア（${areasText}）や向いている方の特徴も紹介。`;
+  const pageTitle = `${builder.name}の坪単価は${builder.tsuboPrice.min}〜${builder.tsuboPrice.max}万円｜評判・特徴を解説`;
+  const pageDesc = `${builder.name}の坪単価${builder.tsuboPrice.min}〜${builder.tsuboPrice.max}万円の内訳と実際の評判を徹底解説。${gradeLabel}グレードの特徴・三重県${areasText}の対応状況・向いている人の条件まで。`;
 
   // BreadcrumbList
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
