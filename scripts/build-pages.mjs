@@ -2181,6 +2181,7 @@ function generateSitemap() {
     { loc: '/knowledge/', priority: '0.8', changefreq: 'monthly' },
     ...knowledgeData.articles.map(a => ({ loc: `/knowledge/${a.id}/`, priority: '0.7', changefreq: 'monthly' })),
     { loc: '/builders/', priority: '0.8', changefreq: 'monthly' },
+    { loc: '/builders/events/', priority: '0.7', changefreq: 'weekly' },
     ...buildersData.map(b => ({ loc: `/builders/${b.id}/`, priority: '0.6', changefreq: 'monthly' })),
     { loc: '/about/', priority: '0.3', changefreq: 'monthly' }
   ];
@@ -2236,6 +2237,14 @@ function renderBuilderCard(builder) {
   const gradeCls = builder.grade;
   const gradeLabel = GRADE_LABEL[builder.grade] || builder.grade;
   const featuresHtml = builder.features.map(f => `<span class="ka-builder-feature">${escHtml(f)}</span>`).join('');
+  const sns = builder.sns || {};
+  const snsIcons = [];
+  if (sns.instagram) snsIcons.push(`<a href="${escHtml(sns.instagram)}" target="_blank" rel="noopener" title="Instagram" style="color:#E4405F">IG</a>`);
+  if (sns.x) snsIcons.push(`<a href="${escHtml(sns.x)}" target="_blank" rel="noopener" title="X" style="color:#000">X</a>`);
+  if (sns.youtube) snsIcons.push(`<a href="${escHtml(sns.youtube)}" target="_blank" rel="noopener" title="YouTube" style="color:#FF0000">YT</a>`);
+  const snsHtml = snsIcons.length ? `<div class="bh-sns-icons">${snsIcons.join('')}</div>` : '';
+  const eventCount = eventsData.filter(e => e.builderId === builder.id && e.startDate >= TODAY).length;
+  const eventBadge = eventCount ? `<span class="bh-event-badge">イベント ${eventCount}件</span>` : '';
   return `<div class="ka-builder-card">
   <div class="ka-builder-card-header">
     <div class="ka-builder-name">${escHtml(builder.name)}</div>
@@ -2243,8 +2252,10 @@ function renderBuilderCard(builder) {
   </div>
   <div class="ka-builder-tagline">${escHtml(builder.tagline)}</div>
   <div class="ka-builder-price">坪${builder.tsuboPrice.min}〜${builder.tsuboPrice.max}万円<span>/坪</span></div>
+  ${eventBadge}
   <p class="ka-builder-summary">${escHtml(builder.summary)}</p>
   <div class="ka-builder-features">${featuresHtml}</div>
+  ${snsHtml}
   <a href="/builders/${escHtml(builder.id)}/" class="ka-builder-link">詳細を見る →</a>
 </div>`;
 }
@@ -2388,6 +2399,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
 .bh-cta p { font-size: 14px; color: #374151; margin-bottom: 16px; line-height: 1.7; }
 .bh-cta a { display: inline-block; background: #2563eb; color: #fff; font-size: 14px; font-weight: 700; padding: 12px 28px; border-radius: 10px; text-decoration: none; }
 .bh-cta a:hover { background: #1d4ed8; }
+.bh-search-filter { margin-bottom:24px; }
+#bh-search { width:100%; padding:12px 16px; font-size:15px; border:2px solid #e5e7eb; border-radius:10px; outline:none; }
+#bh-search:focus { border-color:#2563eb; }
+.bh-filters { display:flex; gap:16px; margin-top:12px; flex-wrap:wrap; align-items:center; }
+.bh-filter-group { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.bh-filter-group label { font-size:13px; cursor:pointer; display:flex; align-items:center; gap:4px; }
+.bh-filter-label { font-size:13px; font-weight:600; color:#6b7280; }
+#bh-area { padding:6px 10px; font-size:13px; border:1px solid #e5e7eb; border-radius:6px; }
+.bh-sns-icons { display:flex; gap:8px; margin-top:8px; font-size:12px; font-weight:600; }
+.bh-sns-icons a { text-decoration:none; }
+.bh-event-badge { font-size:12px; font-weight:600; padding:3px 8px; border-radius:999px; background:#fef3c7; color:#d97706; display:inline-block; margin:6px 0; }
 </style>
 </head>
 <body>
@@ -2419,6 +2441,23 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
     <a href="/">トップ</a> / <span>ハウスメーカー・工務店一覧</span>
   </nav>
 
+  <div class="bh-search-filter">
+    <input type="text" id="bh-search" placeholder="会社名・特徴で検索..." oninput="bhFilter()">
+    <div class="bh-filters">
+      <div class="bh-filter-group">
+        <span class="bh-filter-label">グレード:</span>
+        <label><input type="checkbox" value="lowcost" onchange="bhFilter()"> ローコスト</label>
+        <label><input type="checkbox" value="standard" onchange="bhFilter()"> スタンダード</label>
+        <label><input type="checkbox" value="highgrade" onchange="bhFilter()"> ハイグレード</label>
+      </div>
+      <div class="bh-filter-group">
+        <span class="bh-filter-label">エリア:</span>
+        <select id="bh-area" onchange="bhFilter()"><option value="">すべて</option><option value="yokkaichi">四日市市</option><option value="kuwana">桑名市</option><option value="suzuka">鈴鹿市</option><option value="inabe">いなべ市</option><option value="kameyama">亀山市</option><option value="komono">菰野町</option><option value="toin">東員町</option></select>
+      </div>
+    </div>
+  </div>
+  <div id="bh-results" style="display:none;"></div>
+
   <nav class="bh-grade-nav">${gradeNav}</nav>
 
   ${gradeSections}
@@ -2429,6 +2468,46 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
     <a href="/knowledge/mie-builder-guide/">三重県ハウスメーカーおすすめガイド →</a>
   </div>
 </main>
+<script>
+var BH_DATA = ${JSON.stringify(buildersData.map(b => ({id:b.id,name:b.name,grade:b.grade,type:b.type,areas:b.areas,tsuboPrice:b.tsuboPrice,tagline:b.tagline,features:b.features,summary:b.summary,sns:b.sns||{}})))};
+var BH_EVENTS = ${JSON.stringify(eventsData.filter(e => e.startDate >= TODAY))};
+var GRADE_L = {lowcost:'ローコスト',standard:'スタンダード',highgrade:'ハイグレード'};
+var AREA_L = {yokkaichi:'四日市市',kuwana:'桑名市',suzuka:'鈴鹿市',inabe:'いなべ市',kameyama:'亀山市',komono:'菰野町',toin:'東員町'};
+
+function bhFilter(){
+  var q = document.getElementById('bh-search').value.toLowerCase();
+  var grades = [].slice.call(document.querySelectorAll('.bh-filter-group input[type=checkbox]:checked')).map(function(c){return c.value;});
+  var area = document.getElementById('bh-area').value;
+  var hasFilter = q || grades.length || area;
+
+  [].slice.call(document.querySelectorAll('.bh-grade-section')).forEach(function(el){el.style.display=hasFilter?'none':'';});
+  document.querySelector('.bh-grade-nav').style.display=hasFilter?'none':'';
+  var res = document.getElementById('bh-results');
+  res.style.display = hasFilter?'':'none';
+  if(!hasFilter){res.innerHTML='';return;}
+
+  var filtered = BH_DATA.filter(function(b){
+    if(q && !(b.name.toLowerCase().indexOf(q)>=0 || (b.tagline||'').toLowerCase().indexOf(q)>=0 || b.features.some(function(f){return f.toLowerCase().indexOf(q)>=0;}) || (b.summary||'').toLowerCase().indexOf(q)>=0)) return false;
+    if(grades.length && grades.indexOf(b.grade)<0) return false;
+    if(area && b.areas.indexOf(area)<0) return false;
+    return true;
+  });
+
+  if(filtered.length===0){res.innerHTML='<p style="text-align:center;color:#6b7280;padding:40px;">該当する会社が見つかりません</p>';return;}
+
+  var evCounts = {};
+  BH_EVENTS.forEach(function(e){evCounts[e.builderId]=(evCounts[e.builderId]||0)+1;});
+
+  res.innerHTML = '<div class="ka-builder-grid">' + filtered.map(function(b){
+    var ec = evCounts[b.id]||0;
+    var snsIcons = [];
+    if(b.sns.instagram) snsIcons.push('<a href="'+b.sns.instagram+'" target="_blank" rel="noopener" title="Instagram" style="color:#E4405F">IG</a>');
+    if(b.sns.x) snsIcons.push('<a href="'+b.sns.x+'" target="_blank" rel="noopener" title="X" style="color:#000">X</a>');
+    if(b.sns.youtube) snsIcons.push('<a href="'+b.sns.youtube+'" target="_blank" rel="noopener" title="YouTube" style="color:#FF0000">YT</a>');
+    return '<div class="ka-builder-card"><div class="ka-builder-card-header"><span class="ka-builder-name">'+b.name+'</span><span class="ka-builder-grade '+b.grade+'">'+GRADE_L[b.grade]+'</span></div><div class="ka-builder-tagline">'+b.tagline+'</div><div class="ka-builder-price">'+b.tsuboPrice.min+'〜'+b.tsuboPrice.max+'<span>万円/坪</span></div>'+(ec?'<div style="margin:6px 0"><span class="bh-event-badge">イベント '+ec+'件</span></div>':'')+'<div style="font-size:12px;color:#6b7280;margin:4px 0;">対応: '+b.areas.map(function(a){return AREA_L[a]||a;}).join('・')+'</div>'+(snsIcons.length?'<div class="bh-sns-icons">'+snsIcons.join('')+'</div>':'')+'<a href="/builders/'+b.id+'/" class="ka-builder-link">詳細を見る →</a></div>';
+  }).join('') + '</div>';
+}
+</script>
 </body>
 </html>`;
 }
@@ -2716,6 +2795,348 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
 }
 
 // ---------------------------------------------------------------------------
+// Generate events calendar page (/builders/events/index.html)
+// ---------------------------------------------------------------------------
+function generateEventsCalendarPage() {
+  const AREA_LABEL = {
+    yokkaichi: '四日市市', kuwana: '桑名市', suzuka: '鈴鹿市',
+    inabe: 'いなべ市', kameyama: '亀山市', komono: '菰野町', toin: '東員町'
+  };
+  const EVENT_TYPE_LABEL = {
+    'open-house': '完成見学会', 'model-home': 'モデルハウス見学',
+    'seminar': 'セミナー', 'campaign': 'キャンペーン',
+    'consultation': '個別相談会', 'other': 'その他'
+  };
+  const EVENT_TYPE_DOT = {
+    'open-house': 'ec-dot-open-house', 'model-home': 'ec-dot-model-home',
+    'seminar': 'ec-dot-seminar', 'campaign': 'ec-dot-campaign',
+    'consultation': 'ec-dot-consultation', 'other': 'ec-dot-other'
+  };
+
+  const breadcrumbItems = [
+    { name: 'トップ', url: '/' },
+    { name: 'ハウスメーカー・工務店一覧', url: '/builders/' },
+    { name: 'イベントカレンダー', url: '/builders/events/' }
+  ];
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(breadcrumbItems);
+
+  const builderOptions = buildersData.map(b => `<option value="${escHtml(b.id)}">${escHtml(b.name)}</option>`).join('');
+  const areaOptions = CITIES.map(c => `<option value="${escHtml(c.id)}">${escHtml(c.name)}</option>`).join('');
+  const typeOptions = Object.entries(EVENT_TYPE_LABEL).map(([k, v]) => `<option value="${escHtml(k)}">${escHtml(v)}</option>`).join('');
+
+  return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#2563eb">
+<meta name="google-site-verification" content="VBmM5Mikm2LrkY9dXa30MUHtT9KD2SpZFsoGHBuFPWM" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SZV3XF0W0G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-SZV3XF0W0G');
+</script>
+<title>三重県の住宅イベント・見学会カレンダー｜注文住宅比較.com</title>
+<meta name="description" content="三重県の注文住宅イベントを一覧表示。完成見学会・モデルハウス見学・セミナー・キャンペーンの開催情報をカレンダー形式で確認。">
+<link rel="canonical" href="${DOMAIN}/builders/events/">
+<meta property="og:title" content="三重県の住宅イベント・見学会カレンダー｜注文住宅比較.com">
+<meta property="og:description" content="三重県の注文住宅イベントを一覧表示。完成見学会・モデルハウス見学・セミナー・キャンペーンの開催情報をカレンダー形式で確認。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${DOMAIN}/builders/events/">
+<meta property="og:site_name" content="注文住宅比較.com">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+${breadcrumbJsonLd}
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); min-height: 100vh; color: #1f2937; }
+.knowledge-header { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%); padding: 12px 0; }
+.knowledge-header-inner { max-width: 1100px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.knowledge-header-nav { display: flex; gap: 8px; margin-left: auto; }
+.knowledge-header-nav a, .knowledge-header-nav span { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 13px; font-weight: 500; padding: 4px 10px; border-radius: 6px; }
+.knowledge-header-nav a:hover { background: rgba(255,255,255,0.15); color: #fff; }
+.knowledge-header-nav .active { background: rgba(255,255,255,0.2); color: #fff; font-weight: 700; }
+.site-logo img { height: 44px; width: auto; display: block; }
+.ec-hero { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%); color: #fff; padding: 48px 16px 36px; text-align: center; }
+.ec-hero h1 { font-size: clamp(22px, 4vw, 32px); font-weight: 800; line-height: 1.3; margin-bottom: 10px; }
+.ec-hero p { font-size: 15px; opacity: 0.9; max-width: 600px; margin: 0 auto; line-height: 1.7; }
+.ec-main { max-width: 1000px; margin: 0 auto; padding: 32px 16px 60px; }
+.ec-breadcrumb { font-size: 12px; color: #6b7280; margin-bottom: 24px; }
+.ec-breadcrumb a { color: #2563eb; text-decoration: none; }
+.ec-toolbar { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:24px; }
+.ec-toolbar select { padding:8px 12px; font-size:13px; border:1px solid #e5e7eb; border-radius:8px; background:#fff; }
+.ec-view-toggle { display:flex; gap:0; margin-left:auto; }
+.ec-view-btn { padding:8px 16px; font-size:13px; font-weight:600; border:1px solid #e5e7eb; background:#fff; color:#6b7280; cursor:pointer; }
+.ec-view-btn:first-child { border-radius:8px 0 0 8px; }
+.ec-view-btn:last-child { border-radius:0 8px 8px 0; border-left:0; }
+.ec-view-btn.active { background:#2563eb; color:#fff; border-color:#2563eb; }
+.ec-month-nav { display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:20px; }
+.ec-month-nav button { background:#fff; border:1px solid #e5e7eb; border-radius:8px; padding:8px 14px; font-size:14px; font-weight:600; cursor:pointer; color:#374151; }
+.ec-month-nav button:hover { background:#f0f4ff; border-color:#2563eb; }
+.ec-month-label { font-size:20px; font-weight:700; color:#1e40af; min-width:180px; text-align:center; }
+.ec-cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:1px; background:#e5e7eb; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+.ec-day-header { background:#f3f4f6; padding:8px; text-align:center; font-size:12px; font-weight:600; color:#6b7280; }
+.ec-day-header:first-child { color:#dc2626; }
+.ec-day-header:last-child { color:#2563eb; }
+.ec-day { background:#fff; min-height:80px; padding:6px; cursor:pointer; transition:background 0.1s; }
+.ec-day:hover { background:#f0f4ff; }
+.ec-day.today { background:#eff6ff; }
+.ec-day.selected { background:#dbeafe; }
+.ec-day.other-month { background:#f9fafb; color:#d1d5db; }
+.ec-day-num { font-size:13px; font-weight:600; margin-bottom:4px; }
+.ec-day-dot { width:6px; height:6px; border-radius:50%; display:inline-block; margin:1px; }
+.ec-dot-open-house { background:#16a34a; }
+.ec-dot-model-home { background:#2563eb; }
+.ec-dot-seminar { background:#d97706; }
+.ec-dot-campaign { background:#dc2626; }
+.ec-dot-consultation { background:#7c3aed; }
+.ec-dot-other { background:#6b7280; }
+.ec-day-detail { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:24px; margin-top:20px; }
+.ec-day-detail h3 { font-size:16px; font-weight:700; color:#1e40af; margin-bottom:12px; }
+.ec-event-item { padding:12px; border:1px solid #e5e7eb; border-radius:8px; margin-bottom:8px; }
+.ec-event-item:last-child { margin-bottom:0; }
+.ec-event-title { font-size:14px; font-weight:700; color:#1f2937; margin-bottom:4px; }
+.ec-event-meta { font-size:12px; color:#6b7280; margin-bottom:6px; }
+.ec-event-desc { font-size:13px; color:#374151; line-height:1.6; }
+.ec-event-tags { display:flex; gap:6px; margin-top:6px; flex-wrap:wrap; }
+.ec-event-tag { font-size:11px; font-weight:600; padding:2px 8px; border-radius:999px; }
+.ec-list-view { display:none; }
+.ec-list-item { background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:16px; margin-bottom:12px; }
+.ec-list-date { font-size:13px; font-weight:700; color:#2563eb; margin-bottom:6px; }
+.ec-legend { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+.ec-legend-item { display:flex; align-items:center; gap:4px; font-size:12px; color:#6b7280; }
+@media(max-width:600px){
+  .ec-cal-grid { font-size:11px; }
+  .ec-day { min-height:50px; padding:4px; }
+  .ec-toolbar { flex-direction:column; align-items:stretch; }
+  .ec-view-toggle { margin-left:0; justify-content:center; }
+}
+</style>
+</head>
+<body>
+<header class="knowledge-header">
+  <div class="knowledge-header-inner">
+    <a href="/" class="site-logo" style="text-decoration:none;">
+      <picture>
+        <source srcset="/images/header-banner.webp" type="image/webp">
+        <img src="/images/header-banner.png" alt="注文住宅比較.com">
+      </picture>
+    </a>
+    <nav class="knowledge-header-nav">
+      <a href="/">物件比較</a>
+      <a href="/area/mie/">エリア比較</a>
+      <a href="/knowledge/">知識</a>
+      <a href="/builders/" class="active">会社情報</a>
+      <a href="/about/">運営者情報</a>
+    </nav>
+  </div>
+</header>
+
+<section class="ec-hero">
+  <h1>三重県の住宅イベント・見学会カレンダー</h1>
+  <p>完成見学会・モデルハウス見学・セミナー・キャンペーンなどの開催情報をカレンダーで確認できます。</p>
+</section>
+
+<main class="ec-main">
+  <nav class="ec-breadcrumb">
+    <a href="/">トップ</a> / <a href="/builders/">ハウスメーカー・工務店一覧</a> / <span>イベントカレンダー</span>
+  </nav>
+
+  <div class="ec-toolbar">
+    <select id="ec-builder" onchange="ecFilter()"><option value="">すべての会社</option>${builderOptions}</select>
+    <select id="ec-area" onchange="ecFilter()"><option value="">すべてのエリア</option>${areaOptions}</select>
+    <select id="ec-type" onchange="ecFilter()"><option value="">すべての種類</option>${typeOptions}</select>
+    <div class="ec-view-toggle">
+      <button class="ec-view-btn active" onclick="ecSetView('calendar')">カレンダー</button>
+      <button class="ec-view-btn" onclick="ecSetView('list')">リスト</button>
+    </div>
+  </div>
+
+  <div class="ec-legend">
+    <span class="ec-legend-item"><span class="ec-day-dot ec-dot-open-house"></span>完成見学会</span>
+    <span class="ec-legend-item"><span class="ec-day-dot ec-dot-model-home"></span>モデルハウス</span>
+    <span class="ec-legend-item"><span class="ec-day-dot ec-dot-seminar"></span>セミナー</span>
+    <span class="ec-legend-item"><span class="ec-day-dot ec-dot-campaign"></span>キャンペーン</span>
+    <span class="ec-legend-item"><span class="ec-day-dot ec-dot-consultation"></span>個別相談</span>
+  </div>
+
+  <div id="ec-calendar-view">
+    <div class="ec-month-nav">
+      <button onclick="ecNav(-1)">&lt; 前月</button>
+      <span class="ec-month-label" id="ec-month-label"></span>
+      <button onclick="ecNav(1)">翌月 &gt;</button>
+    </div>
+    <div id="ec-cal-container"></div>
+    <div id="ec-day-detail"></div>
+  </div>
+
+  <div id="ec-list-view" class="ec-list-view"></div>
+</main>
+
+<script>
+var EC_EVENTS = ${JSON.stringify(eventsData)};
+var EC_BUILDERS = ${JSON.stringify(buildersData.map(b => ({id:b.id,name:b.name})))};
+var AREA_L = {yokkaichi:'四日市市',kuwana:'桑名市',suzuka:'鈴鹿市',inabe:'いなべ市',kameyama:'亀山市',komono:'菰野町',toin:'東員町'};
+var TYPE_L = {'open-house':'完成見学会','model-home':'モデルハウス見学','seminar':'セミナー','campaign':'キャンペーン','consultation':'個別相談会','other':'その他'};
+var TYPE_DOT = {'open-house':'ec-dot-open-house','model-home':'ec-dot-model-home','seminar':'ec-dot-seminar','campaign':'ec-dot-campaign','consultation':'ec-dot-consultation','other':'ec-dot-other'};
+var TYPE_COLOR = {'open-house':'#ecfdf5;color:#059669','model-home':'#eff6ff;color:#2563eb','seminar':'#fffbeb;color:#d97706','campaign':'#fef2f2;color:#dc2626','consultation':'#f5f3ff;color:#7c3aed','other':'#f3f4f6;color:#6b7280'};
+
+var ecYear, ecMonth, ecFiltered, ecSelectedDay;
+
+function ecInit(){
+  var params = new URLSearchParams(window.location.search);
+  var builderParam = params.get('builder');
+  if(builderParam){
+    var sel = document.getElementById('ec-builder');
+    for(var i=0;i<sel.options.length;i++){
+      if(sel.options[i].value===builderParam){sel.selectedIndex=i;break;}
+    }
+  }
+  var now = new Date();
+  ecYear = now.getFullYear();
+  ecMonth = now.getMonth();
+  if(window.innerWidth<=600) ecSetView('list');
+  ecFilter();
+}
+
+function ecFilter(){
+  var builder = document.getElementById('ec-builder').value;
+  var area = document.getElementById('ec-area').value;
+  var type = document.getElementById('ec-type').value;
+  ecFiltered = EC_EVENTS.filter(function(e){
+    if(builder && e.builderId!==builder) return false;
+    if(area && e.city!==area) return false;
+    if(type && e.type!==type) return false;
+    return true;
+  });
+  ecRenderCalendar();
+  ecRenderList();
+  document.getElementById('ec-day-detail').innerHTML='';
+}
+
+function ecRenderCalendar(){
+  var label = ecYear+'年'+(ecMonth+1)+'月';
+  document.getElementById('ec-month-label').textContent = label;
+  var first = new Date(ecYear, ecMonth, 1);
+  var last = new Date(ecYear, ecMonth+1, 0);
+  var startDay = first.getDay();
+  var daysInMonth = last.getDate();
+  var prevLast = new Date(ecYear, ecMonth, 0).getDate();
+  var todayStr = new Date().toISOString().split('T')[0];
+
+  var html = '<div class="ec-cal-grid">';
+  var headers = ['日','月','火','水','木','金','土'];
+  for(var h=0;h<7;h++) html += '<div class="ec-day-header">'+headers[h]+'</div>';
+
+  for(var i=0;i<startDay;i++){
+    var d = prevLast - startDay + 1 + i;
+    html += '<div class="ec-day other-month"><div class="ec-day-num">'+d+'</div></div>';
+  }
+
+  for(var day=1;day<=daysInMonth;day++){
+    var dateStr = ecYear+'-'+String(ecMonth+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+    var cls = 'ec-day';
+    if(dateStr===todayStr) cls += ' today';
+    if(ecSelectedDay===dateStr) cls += ' selected';
+    var dayEvents = ecGetDayEvents(dateStr);
+    var dots = '';
+    var seen = {};
+    dayEvents.forEach(function(e){
+      if(!seen[e.type]){seen[e.type]=true;dots += '<span class="ec-day-dot '+(TYPE_DOT[e.type]||'ec-dot-other')+'"></span>';}
+    });
+    html += '<div class="'+cls+'" data-date="'+dateStr+'"><div class="ec-day-num">'+day+'</div>'+dots+'</div>';
+  }
+
+  var totalCells = startDay + daysInMonth;
+  var rem = totalCells % 7;
+  if(rem > 0){
+    for(var r=1;r<=7-rem;r++){
+      html += '<div class="ec-day other-month"><div class="ec-day-num">'+r+'</div></div>';
+    }
+  }
+
+  html += '</div>';
+  document.getElementById('ec-cal-container').innerHTML = html;
+}
+
+function ecGetDayEvents(dateStr){
+  return ecFiltered.filter(function(e){return dateStr>=e.startDate && dateStr<=e.endDate;});
+}
+
+function ecSelectDay(dateStr){
+  ecSelectedDay = dateStr;
+  ecRenderCalendar();
+  var dayEvents = ecGetDayEvents(dateStr);
+  var detail = document.getElementById('ec-day-detail');
+  if(dayEvents.length===0){
+    detail.innerHTML = '<div class="ec-day-detail"><h3>'+dateStr+'</h3><p style="color:#6b7280;">この日のイベントはありません</p></div>';
+    return;
+  }
+  var html = '<div class="ec-day-detail"><h3>'+dateStr+' のイベント（'+dayEvents.length+'件）</h3>';
+  dayEvents.forEach(function(e){
+    var bname = '';
+    EC_BUILDERS.forEach(function(b){if(b.id===e.builderId)bname=b.name;});
+    var tc = TYPE_COLOR[e.type]||TYPE_COLOR['other'];
+    html += '<div class="ec-event-item"><div class="ec-event-title">'+e.title+'</div><div class="ec-event-meta">'+bname+' ｜ '+(AREA_L[e.city]||'')+' '+e.location+' ｜ '+e.startTime+'〜'+e.endTime+'</div><div class="ec-event-desc">'+e.description+'</div><div class="ec-event-tags"><span class="ec-event-tag" style="background:'+tc+'">'+( TYPE_L[e.type]||'その他')+'</span>'+(e.reservationRequired?'<span class="ec-event-tag" style="background:#fef2f2;color:#dc2626;">要予約</span>':'')+'</div></div>';
+  });
+  html += '</div>';
+  detail.innerHTML = html;
+}
+
+function ecNav(delta){
+  ecMonth += delta;
+  if(ecMonth<0){ecMonth=11;ecYear--;}
+  if(ecMonth>11){ecMonth=0;ecYear++;}
+  ecSelectedDay = null;
+  ecRenderCalendar();
+  document.getElementById('ec-day-detail').innerHTML='';
+}
+
+function ecRenderList(){
+  var sorted = ecFiltered.slice().sort(function(a,b){return a.startDate<b.startDate?-1:a.startDate>b.startDate?1:0;});
+  if(sorted.length===0){
+    document.getElementById('ec-list-view').innerHTML = '<p style="text-align:center;color:#6b7280;padding:40px;">条件に一致するイベントはありません</p>';
+    return;
+  }
+  var html = '';
+  sorted.forEach(function(e){
+    var bname = '';
+    EC_BUILDERS.forEach(function(b){if(b.id===e.builderId)bname=b.name;});
+    var tc = TYPE_COLOR[e.type]||TYPE_COLOR['other'];
+    var dateLabel = e.startDate===e.endDate ? e.startDate : e.startDate+' 〜 '+e.endDate;
+    html += '<div class="ec-list-item"><div class="ec-list-date">'+dateLabel+'</div><div class="ec-event-title">'+e.title+'</div><div class="ec-event-meta">'+bname+' ｜ '+(AREA_L[e.city]||'')+' '+e.location+' ｜ '+e.startTime+'〜'+e.endTime+'</div><div class="ec-event-desc">'+e.description+'</div><div class="ec-event-tags"><span class="ec-event-tag" style="background:'+tc+'">'+(TYPE_L[e.type]||'その他')+'</span>'+(e.reservationRequired?'<span class="ec-event-tag" style="background:#fef2f2;color:#dc2626;">要予約</span>':'')+'</div></div>';
+  });
+  document.getElementById('ec-list-view').innerHTML = html;
+}
+
+function ecSetView(mode){
+  var btns = document.querySelectorAll('.ec-view-btn');
+  btns[0].className = 'ec-view-btn'+(mode==='calendar'?' active':'');
+  btns[1].className = 'ec-view-btn'+(mode==='list'?' active':'');
+  document.getElementById('ec-calendar-view').style.display = mode==='calendar'?'block':'none';
+  document.getElementById('ec-list-view').style.display = mode==='list'?'block':'none';
+}
+
+document.getElementById('ec-cal-container').addEventListener('click',function(ev){
+  var el = ev.target.closest('.ec-day[data-date]');
+  if(el) ecSelectDay(el.getAttribute('data-date'));
+});
+ecInit();
+</script>
+</body>
+</html>`;
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 async function main() {
@@ -2760,6 +3181,12 @@ async function main() {
   writeFileSync(join(buildersDir, 'index.html'), buildersHubHtml, 'utf-8');
   console.log('  ✓ builders/index.html');
 
+  // Events calendar page
+  const eventsDir = join(buildersDir, 'events');
+  mkdirSync(eventsDir, { recursive: true });
+  writeFileSync(join(eventsDir, 'index.html'), await minifyHtml(generateEventsCalendarPage()), 'utf-8');
+  console.log('  ✓ builders/events/index.html');
+
   // Builder individual pages
   for (const builder of buildersData) {
     const builderPageDir = join(buildersDir, builder.id);
@@ -2782,7 +3209,7 @@ async function main() {
 
   const articleCount = knowledgeData.articles.length;
   const builderCount = buildersData.length;
-  console.log(`Done! Generated 1 hub + 7 city pages + 1 knowledge hub + ${articleCount} articles + ${builderCount} builder pages + about + sitemap.`);
+  console.log(`Done! Generated 1 hub + 7 city pages + 1 knowledge hub + ${articleCount} articles + ${builderCount} builder pages + 1 events calendar + about + sitemap.`);
 }
 
 main();
