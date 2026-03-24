@@ -1933,7 +1933,16 @@
       "text": "完成見学会で「すごいですね」って言った翌日、電話が3件来た。\n\n社交辞令、通じない。",
       "threadId": "18087516023235136",
       "charCount": 42,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 1574,
+        "likes": 0,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 8,
+      "engagementUpdatedAt": "2026-03-24T14:20:25.434Z"
     },
     {
       "date": "2026-03-23T14:17:25.403Z",
@@ -1942,7 +1951,16 @@
       "text": "散歩のルート、変わった。\n\n近所に新築が建ち始めてから、気づいたら毎日その前を通ってる。",
       "threadId": "17879329725406252",
       "charCount": 44,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 612,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-24T14:20:26.077Z"
     },
     {
       "date": "2026-03-23T23:28:51.350Z",
@@ -1969,6 +1987,15 @@
       "text": "収納を増やすと、片付く。\n\nそう思ってた。\n\n実際は収納の数だけ物が増えた。入れる場所があるから捨てない。今の家、収納は最小限にした。そっちのほうが物が少ない。",
       "threadId": "17986631477969021",
       "charCount": 80,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-24T14:20:35.019Z",
+      "category": "hikaku",
+      "topicKey": "aruaru:19",
+      "text": "アパート、楽だったな。\n\n一瞬だけ思う。",
+      "threadId": "18451157632107976",
+      "charCount": 20,
       "account": "a2"
     }
   ]
