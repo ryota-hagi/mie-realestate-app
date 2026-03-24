@@ -3205,6 +3205,62 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-24T05:20:27.434Z",
+      "originalThreadId": "18087516023235136",
+      "originalAccount": "a2",
+      "originalText": "完成見学会で「すごいですね」って言った翌日、電話が3件来た。\n\n社交辞令、通じない。",
+      "replyText": "ちなみに見学会で営業から直接連絡先聞かれたんですか？それとも名簿から？",
+      "replyId": "17989529135950399",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1567,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-24T05:22:48.939Z",
+      "originalThreadId": "18143299462439003",
+      "originalAccount": "a2",
+      "originalText": "引き渡し日、300枚撮った。\n\n全部同じ角度だった。",
+      "replyText": "引き渡しの日、体感9割の人がこれやるんだよなぁ。後から見返すと同じアングルばっかで、あるあるだわ",
+      "replyId": "18096927973824873",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 60,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-24T05:25:28.715Z",
+      "originalThreadId": "18191178145362412",
+      "originalAccount": "a3",
+      "originalText": "距離感、最後まで揉めた。\n\n義実家まで車で3分にした。近すぎるって反対したけど、子どもが小さいし結局折れた。\n\n今は…まぁ、助かってる場面もある。複雑。",
+      "replyText": "みんなここケチって後から泣くんだよなぁ…距離感ほど後悔度でかいやつないわ。3分は正直近すぎるのが世間の常識だぞ",
+      "replyId": "18076527374385277",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 2729,
+        "likes": 0,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-03-24T05:28:35.423Z",
+      "originalThreadId": "18039463892558454",
+      "originalAccount": "a3",
+      "originalText": "義母、間取り図に付箋貼ってきた。\n\n「ここ広げた方がいい」「この壁いらない」って。\n\n自分ちだからね、そうなるよね。わかってたけど、わかってたけどさ。\n\n二世帯の人、どうやって折り合いつけた？",
+      "replyText": "体感で10人に3人くらい、間取りで親世代と揉めてる。設計士に「施主の希望を優先します」って明言させるのが最強だわ",
+      "replyId": "18091388363172572",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 0,
+        "likes": 2,
+        "replies": 0
+      }
     }
   ]
 }
