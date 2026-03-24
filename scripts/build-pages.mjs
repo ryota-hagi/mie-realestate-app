@@ -2913,13 +2913,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
 .ec-day.selected { background:#dbeafe; }
 .ec-day.other-month { background:#f9fafb; color:#d1d5db; }
 .ec-day-num { font-size:13px; font-weight:600; margin-bottom:4px; }
-.ec-day-dot { width:6px; height:6px; border-radius:50%; display:inline-block; margin:1px; }
-.ec-dot-open-house { background:#16a34a; }
-.ec-dot-model-home { background:#2563eb; }
-.ec-dot-seminar { background:#d97706; }
-.ec-dot-campaign { background:#dc2626; }
-.ec-dot-consultation { background:#7c3aed; }
-.ec-dot-other { background:#6b7280; }
+.ec-day { position:relative; }
+.ec-day-badge { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:#2563eb; color:#fff; font-size:14px; font-weight:700; width:28px; height:28px; border-radius:14px; display:flex; align-items:center; justify-content:center; line-height:1; box-shadow:0 1px 3px rgba(37,99,235,0.3); }
 .ec-day-detail { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:24px; margin-top:20px; }
 .ec-day-detail h3 { font-size:16px; font-weight:700; color:#1e40af; margin-bottom:12px; }
 .ec-event-item { padding:12px; border:1px solid #e5e7eb; border-radius:8px; margin-bottom:8px; }
@@ -2984,11 +2979,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
   </div>
 
   <div class="ec-legend">
-    <span class="ec-legend-item"><span class="ec-day-dot ec-dot-open-house"></span>完成見学会</span>
-    <span class="ec-legend-item"><span class="ec-day-dot ec-dot-model-home"></span>モデルハウス</span>
-    <span class="ec-legend-item"><span class="ec-day-dot ec-dot-seminar"></span>セミナー</span>
-    <span class="ec-legend-item"><span class="ec-day-dot ec-dot-campaign"></span>キャンペーン</span>
-    <span class="ec-legend-item"><span class="ec-day-dot ec-dot-consultation"></span>個別相談</span>
+    <span class="ec-legend-item" style="color:#6b7280;font-size:13px;">日付をクリックするとイベント詳細が表示されます</span>
   </div>
 
   <div id="ec-calendar-view">
@@ -3070,12 +3061,8 @@ function ecRenderCalendar(){
     if(dateStr===todayStr) cls += ' today';
     if(ecSelectedDay===dateStr) cls += ' selected';
     var dayEvents = ecGetDayEvents(dateStr);
-    var dots = '';
-    var seen = {};
-    dayEvents.forEach(function(e){
-      if(!seen[e.type]){seen[e.type]=true;dots += '<span class="ec-day-dot '+(TYPE_DOT[e.type]||'ec-dot-other')+'"></span>';}
-    });
-    html += '<div class="'+cls+'" data-date="'+dateStr+'"><div class="ec-day-num">'+day+'</div>'+dots+'</div>';
+    var badge = dayEvents.length > 0 ? '<span class="ec-day-badge">'+dayEvents.length+'</span>' : '';
+    html += '<div class="'+cls+'" data-date="'+dateStr+'"><div class="ec-day-num">'+day+'</div>'+badge+'</div>';
   }
 
   var totalCells = startDay + daysInMonth;
