@@ -1843,7 +1843,16 @@
       "text": "土地探し始めた瞬間、電話が止まらなくなった。\n\n1日3件とか来る。\n\n着信拒否するまでやめなかった。",
       "threadId": "17859792777562240",
       "charCount": 50,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 595,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 5,
+      "engagementUpdatedAt": "2026-03-23T07:17:44.603Z"
     },
     {
       "date": "2026-03-22T10:36:41.163Z",
@@ -1852,7 +1861,16 @@
       "text": "ショールーム、罠だった。\n\n照明もキレイ、素材もツヤツヤ、全部良く見える。気づいたら50万オーバーしてた。\n\nみんなはどこで正気に戻った？",
       "threadId": "18317019061248253",
       "charCount": 69,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 6,
+        "likes": 0,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 8,
+      "engagementUpdatedAt": "2026-03-23T11:01:05.368Z"
     },
     {
       "date": "2026-03-22T23:24:06.571Z",
@@ -1861,7 +1879,16 @@
       "text": "火災保険、適当に選ぶな。\n\n3/14にも書いたけど、自分がやらかしたのは「補償内容を読まずにサイン」したこと。\n\n水災、風災、家財——何が入って何が入ってないか、契約時に確認した記憶がほぼない。\n\nいざ使う場面になって初めて読む、が一番怖い。",
       "threadId": "18085698650007091",
       "charCount": 121,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 909,
+        "likes": 2,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 6,
+      "engagementUpdatedAt": "2026-03-23T23:28:39.954Z"
     },
     {
       "date": "2026-03-23T04:56:09.056Z",
@@ -1870,6 +1897,42 @@
       "text": "子ども部屋、いらなかったかもしれない。\n\n結局リビングにしかいない。6畳×2部屋分、どう考えても無駄だった気がする。\n\n部屋を与えたら引きこもると思ってたけど、実際は逆だった。",
       "threadId": "18113468584688169",
       "charCount": 88,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-23T07:17:52.929Z",
+      "category": "hikaku",
+      "topicKey": "aruaru:12",
+      "text": "子ども部屋の広さ、1ヶ月悩んだ。\n\nまだ子どももいないのに。",
+      "threadId": "17982736370979965",
+      "charCount": 30,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-23T11:01:14.863Z",
+      "category": "koukai",
+      "topicKey": "aruaru:5",
+      "text": "完成見学会で「すごいですね」って言った翌日、電話が3件来た。\n\n社交辞令、通じない。",
+      "threadId": "18087516023235136",
+      "charCount": 42,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-23T14:17:25.403Z",
+      "category": "loan",
+      "topicKey": "aruaru:16",
+      "text": "散歩のルート、変わった。\n\n近所に新築が建ち始めてから、気づいたら毎日その前を通ってる。",
+      "threadId": "17879329725406252",
+      "charCount": 44,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-23T23:28:51.350Z",
+      "category": "kinshi",
+      "topicKey": "aruaru:18",
+      "text": "引き渡し日、300枚撮った。\n\n全部同じ角度だった。",
+      "threadId": "18143299462439003",
+      "charCount": 26,
       "account": "a2"
     }
   ]
