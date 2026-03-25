@@ -849,6 +849,58 @@
         "x": "https://x.com/sekisuiheim_ad"
       },
       "eventsPageUrl": "https://www.sekisuiheim.com/event/"
+    },
+    {
+      "id": "k-style-housing",
+      "name": "ケイ・スタイルハウジング",
+      "grade": "standard",
+      "type": "local",
+      "tsuboPrice": {
+        "min": 55,
+        "max": 70
+      },
+      "tagline": "桑名市密着の自然素材×デザイン住宅",
+      "structure": "木造軸組工法",
+      "areas": [
+        "kuwana",
+        "yokkaichi",
+        "toin",
+        "inabe"
+      ],
+      "features": [
+        "地域密着",
+        "自然素材",
+        "漆喰壁",
+        "土地探しサポート"
+      ],
+      "pros": [
+        "土地探しから家づくりまで一貫サポート（相談の約8割が土地探しから）",
+        "漆喰壁・無垢材など自然素材を活かしたデザイン住宅",
+        "桑名市を中心とした地域密着で、気候・風土に合った設計"
+      ],
+      "cons": [
+        "施工エリアが会社から30分圏内に限定",
+        "全国的な知名度は低い"
+      ],
+      "warranty": {
+        "structure": 10,
+        "leak": 10
+      },
+      "recommended_for": [
+        "桑名市周辺で土地探しから始めたい方",
+        "自然素材や漆喰壁にこだわりたい方",
+        "地域密着型の工務店で安心して家づくりしたい方"
+      ],
+      "summary": "三重県桑名市に本社を構える地域密着型工務店。「地域の気候や風土に合った設計」と「ライフスタイルに合わせた空間づくり」をコンセプトに、漆喰壁や無垢材を活かしたデザイン住宅を提供。土地探しからの相談が約8割を占め、土地・建物をワンストップでサポートする。桑名市内に屋上庭園付きモデルハウスと平屋モデルハウスの2棟を常設展示中。",
+      "officialUrl": "https://k-style-housing.co.jp/",
+      "showrooms": [
+        "桑名"
+      ],
+      "mie_presence": "桑名市を拠点に三重県北部を中心に展開。桑名市江場にモデルハウス2棟を常設",
+      "sns": {
+        "instagram": "https://www.instagram.com/kstylehousing_jp/"
+      },
+      "eventsPageUrl": "https://k-style-housing.co.jp/"
     }
   ]
 }
