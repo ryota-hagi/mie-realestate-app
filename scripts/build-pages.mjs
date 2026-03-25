@@ -2835,7 +2835,7 @@ ${GLOBAL_HEADER_CSS}
 </style>
 </head>
 <body>
-${generateGlobalHeader('builders')}
+${generateGlobalHeader('events')}
 
 <section class="ec-hero">
   <h1>三重県の住宅イベント・見学会カレンダー</h1>
