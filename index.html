@@ -113,10 +113,20 @@
   .step-done { color: #16a34a; }
   .step-pending { color: #d1d5db; }
   /* === Global Header Mobile === */
+  .global-header { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%); padding: 12px 0; position: sticky; top: 0; z-index: 50; }
+  .global-header-inner { max-width: 1100px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .global-nav { display: flex; gap: 8px; margin-left: auto; }
+  .global-nav a, .global-nav span { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 13px; font-weight: 500; padding: 4px 10px; border-radius: 6px; }
+  .global-nav a:hover { background: rgba(255,255,255,0.15); color: #fff; }
+  .global-nav .active { background: rgba(255,255,255,0.2); color: #fff; font-weight: 700; }
+  .site-logo img { height: 44px; width: auto; display: block; }
+  .global-hamburger { display: none; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); font-size: 18px; color: #fff; cursor: pointer; margin-left: auto; }
   #global-nav-links { display: flex; }
   #global-menu-btn { display: none; }
   @media (max-width: 768px) {
     #global-nav-links { display: none !important; }
+    .global-nav { display: none !important; }
+    .global-hamburger { display: flex !important; }
     #global-menu-btn { display: flex !important; }
   }
   /* === V3 Blue Landing Page Styles === */
@@ -1476,25 +1486,24 @@ function renderHeader() {
     : `<button onclick="openAuthModal()" class="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">ログイン</button>`;
 
   return `
-    <header style="background:white;border-bottom:1px solid #e5e7eb;padding:10px 16px;">
-      <div style="max-width:72rem;margin:0 auto;display:flex;align-items:center;justify-content:space-between;">
-        <a href="/" style="text-decoration:none;display:flex;align-items:center;">
+    <header class="global-header">
+      <div class="global-header-inner">
+        <a href="/" class="site-logo" style="text-decoration:none;">
           <picture>
             <source srcset="/images/header-banner.webp" type="image/webp">
-            <img src="/images/header-banner.png" alt="注文住宅比較.com - 絶対に後悔しない家づくり" style="height:56px;width:auto;">
+            <img src="/images/header-banner.png" alt="注文住宅比較.com">
           </picture>
         </a>
         <h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">注文住宅比較.com</h1>
-        <div id="global-nav-links" style="align-items:center;gap:16px;font-size:13px;">
-          <span style="color:#2563EB;font-weight:600;">物件比較</span>
-          <a href="/area/mie/" style="color:#6b7280;text-decoration:none;font-weight:500;">エリア比較</a>
-          <a href="/builders/" style="color:#6b7280;text-decoration:none;font-weight:500;">工務店情報</a>
-          <a href="/builders/events/" style="color:#6b7280;text-decoration:none;font-weight:500;">イベント情報</a>
-          <a href="/knowledge/" style="color:#6b7280;text-decoration:none;font-weight:500;">知識</a>
-          <a href="/about/" style="color:#6b7280;text-decoration:none;font-weight:500;">運営者情報</a>
-          ${authHtml}
-        </div>
-        <button id="global-menu-btn" onclick="openGlobalMenu()" style="align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#f3f4f6;border:1px solid #e5e7eb;font-size:18px;color:#374151;cursor:pointer;" aria-label="メニューを開く">☰</button>
+        <nav class="global-nav">
+          <span class="active">物件比較</span>
+          <a href="/area/mie/">エリア比較</a>
+          <a href="/builders/">工務店情報</a>
+          <a href="/builders/events/">イベント情報</a>
+          <a href="/knowledge/">知識</a>
+          <a href="/about/">運営者情報</a>
+        </nav>
+        <button class="global-hamburger" onclick="openGlobalMenu()" aria-label="メニューを開く">☰</button>
       </div>
     </header>
     <!-- グローバルメニュー ドロワー -->

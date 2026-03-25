@@ -63,6 +63,72 @@ function escHtml(s) {
 }
 
 // ---------------------------------------------------------------------------
+// Global Header Generator — 全ページ共通のナビバー（青グラデ + モバイルドロワー）
+// ---------------------------------------------------------------------------
+function generateGlobalHeader(activePage) {
+  const items = [
+    { href: '/', label: '物件比較', key: 'property' },
+    { href: '/area/mie/', label: 'エリア比較', key: 'area' },
+    { href: '/builders/', label: '工務店情報', key: 'builders' },
+    { href: '/builders/events/', label: 'イベント情報', key: 'events' },
+    { href: '/knowledge/', label: '知識', key: 'knowledge' },
+    { href: '/about/', label: '運営者情報', key: 'about' },
+  ];
+  const pcNav = items.map(i => {
+    if (i.key === activePage) return `<span class="active">${i.label}</span>`;
+    return `<a href="${i.href}">${i.label}</a>`;
+  }).join('\n      ');
+  const mobileNav = items.map(i => {
+    if (i.key === activePage)
+      return `<span style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:600;background:#dbeafe;color:#1d4ed8;">${i.label}</span>`;
+    return `<a href="${i.href}" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">${i.label}</a>`;
+  }).join('\n      ');
+  return `<header class="global-header">
+  <div class="global-header-inner">
+    <a href="/" class="site-logo" style="text-decoration:none;">
+      <picture>
+        <source srcset="/images/header-banner.webp" type="image/webp">
+        <img src="/images/header-banner.png" alt="注文住宅比較.com">
+      </picture>
+    </a>
+    <nav class="global-nav">
+      ${pcNav}
+    </nav>
+    <button class="global-hamburger" onclick="openGlobalMenu()" aria-label="メニューを開く">☰</button>
+  </div>
+</header>
+<div id="global-menu-overlay" style="display:none;position:fixed;inset:0;z-index:70;background:rgba(0,0,0,0.4);opacity:0;transition:opacity 0.3s;" onclick="closeGlobalMenu()"></div>
+<div id="global-menu-panel" style="display:none;position:fixed;top:0;right:0;z-index:80;height:100%;width:260px;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,0.15);transform:translateX(100%);transition:transform 0.3s ease-out;">
+  <div style="padding:16px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:14px;font-weight:700;color:#1f2937;">メニュー</span>
+    <button onclick="closeGlobalMenu()" style="width:32px;height:32px;border-radius:50%;background:#f3f4f6;border:none;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:20px;cursor:pointer;">&times;</button>
+  </div>
+  <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
+      ${mobileNav}
+  </div>
+</div>
+<script>
+function openGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.display='block';p.style.display='block';requestAnimationFrame(function(){o.style.opacity='1';p.style.transform='translateX(0)';});document.body.style.overflow='hidden';}
+function closeGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.opacity='0';p.style.transform='translateX(100%)';document.body.style.overflow='';setTimeout(function(){o.style.display='none';p.style.display='none';},300);}
+</script>`;
+}
+
+const GLOBAL_HEADER_CSS = `
+.global-header { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%); padding: 12px 0; position: sticky; top: 0; z-index: 50; }
+.global-header-inner { max-width: 1100px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.global-nav { display: flex; gap: 8px; margin-left: auto; }
+.global-nav a, .global-nav span { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 13px; font-weight: 500; padding: 4px 10px; border-radius: 6px; }
+.global-nav a:hover { background: rgba(255,255,255,0.15); color: #fff; }
+.global-nav .active { background: rgba(255,255,255,0.2); color: #fff; font-weight: 700; }
+.site-logo img { height: 44px; width: auto; display: block; }
+.global-hamburger { display: none; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); font-size: 18px; color: #fff; cursor: pointer; margin-left: auto; }
+@media (max-width: 768px) {
+  .global-nav { display: none !important; }
+  .global-hamburger { display: flex !important; }
+}
+`;
+
+// ---------------------------------------------------------------------------
 // DPF data injection into AREAS array and SHELTER_DATA constant
 // ---------------------------------------------------------------------------
 function injectDpfData(html) {
@@ -1420,16 +1486,16 @@ function generateAboutPage() {
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); color: #374151; line-height: 1.8; min-height: 100vh; }
-  .about-header { background: white; border-bottom: 1px solid #e5e7eb; padding: 10px 16px; }
-  .about-header-inner { max-width: 72rem; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-  .about-header .site-logo img { height: 56px; width: auto; }
-  .about-header-nav { display: flex; align-items: center; gap: 16px; font-size: 13px; }
-  .about-header-nav a { text-decoration: none; color: #6b7280; font-weight: 500; }
-  .about-header-nav .active { color: #2563EB; font-weight: 600; }
-  .about-hamburger { display: none; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; background: #f3f4f6; border: 1px solid #e5e7eb; font-size: 18px; color: #374151; cursor: pointer; }
+  
+  
+  
+  
+  
+  
+  
   @media (max-width: 768px) {
-    .about-header-nav { display: none !important; }
-    .about-hamburger { display: flex !important; }
+    
+    
   }
   .about-main { max-width: 700px; margin: 0 auto; padding: 32px 16px 48px; }
   .about-main h1 { font-size: 1.5rem; font-weight: 700; color: #111827; margin-bottom: 24px; }
@@ -1446,45 +1512,7 @@ function generateAboutPage() {
 </style>
 </head>
 <body>
-  <header class="about-header">
-    <div class="about-header-inner">
-      <a href="/" class="site-logo" style="text-decoration:none;">
-        <picture>
-          <source srcset="/images/header-banner.webp" type="image/webp">
-          <img src="/images/header-banner.png" alt="注文住宅比較.com - 絶対に後悔しない家づくり">
-        </picture>
-      </a>
-      <div class="about-header-nav">
-        <a href="/">物件比較</a>
-        <a href="/area/mie/">エリア比較</a>
-        <a href="/builders/">工務店情報</a>
-        <a href="/builders/events/">イベント情報</a>
-        <a href="/knowledge/">知識</a>
-        <span class="active">運営者情報</span>
-      </div>
-      <button class="about-hamburger" onclick="openGlobalMenu()" aria-label="メニューを開く">☰</button>
-    </div>
-  </header>
-  <!-- グローバルメニュー ドロワー -->
-  <div id="global-menu-overlay" style="display:none;position:fixed;inset:0;z-index:70;background:rgba(0,0,0,0.4);opacity:0;transition:opacity 0.3s;" onclick="closeGlobalMenu()"></div>
-  <div id="global-menu-panel" style="display:none;position:fixed;top:0;right:0;z-index:80;height:100%;width:260px;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,0.15);transform:translateX(100%);transition:transform 0.3s ease-out;">
-    <div style="padding:16px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;">
-      <span style="font-size:14px;font-weight:700;color:#1f2937;">メニュー</span>
-      <button onclick="closeGlobalMenu()" style="width:32px;height:32px;border-radius:50%;background:#f3f4f6;border:none;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:20px;cursor:pointer;">&times;</button>
-    </div>
-    <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
-      <a href="/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">物件比較</a>
-      <a href="/area/mie/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">エリア比較</a>
-      <a href="/builders/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">工務店情報</a>
-      <a href="/builders/events/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">イベント情報</a>
-      <a href="/knowledge/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">知識</a>
-      <span style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:600;background:#dbeafe;color:#1d4ed8;">運営者情報</span>
-    </div>
-  </div>
-  <script>
-  function openGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.display='block';p.style.display='block';requestAnimationFrame(function(){o.style.opacity='1';p.style.transform='translateX(0)';});document.body.style.overflow='hidden';}
-  function closeGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.opacity='0';p.style.transform='translateX(100%)';document.body.style.overflow='';setTimeout(function(){o.style.display='none';p.style.display='none';},300);}
-  </script>
+  ${generateGlobalHeader('about')}
 
   <main class="about-main">
     <h1>運営者情報</h1>
@@ -1656,16 +1684,14 @@ ${faqJsonLd}
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); color: #374151; line-height: 1.8; min-height: 100vh; }
-  .knowledge-header { background: white; border-bottom: 1px solid #e5e7eb; padding: 10px 16px; }
-  .knowledge-header-inner { max-width: 72rem; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-  .knowledge-header .site-logo img { height: 56px; width: auto; }
-  .knowledge-header-nav { display: flex; align-items: center; gap: 16px; font-size: 13px; }
-  .knowledge-header-nav a { text-decoration: none; color: #6b7280; font-weight: 500; }
-  .knowledge-header-nav .active { color: #2563EB; font-weight: 600; }
-  .knowledge-hamburger { display: none; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; background: #f3f4f6; border: 1px solid #e5e7eb; font-size: 18px; color: #374151; cursor: pointer; }
+  ${GLOBAL_HEADER_CSS}
+  
+  
+  
+  
   @media (max-width: 768px) {
-    .knowledge-header-nav { display: none !important; }
-    .knowledge-hamburger { display: flex !important; }
+    
+    
   }
   .knowledge-breadcrumb { max-width: 800px; margin: 0 auto; padding: 12px 16px; font-size: 12px; color: #9ca3af; }
   .knowledge-breadcrumb a { color: #3b82f6; text-decoration: none; }
@@ -1775,44 +1801,7 @@ ${faqJsonLd}
 </style>
 </head>
 <body>
-  <header class="knowledge-header">
-    <div class="knowledge-header-inner">
-      <a href="/" class="site-logo" style="text-decoration:none;">
-        <picture>
-          <source srcset="/images/header-banner.webp" type="image/webp">
-          <img src="/images/header-banner.png" alt="注文住宅比較.com - 絶対に後悔しない家づくり">
-        </picture>
-      </a>
-      <div class="knowledge-header-nav">
-        <a href="/">物件比較</a>
-        <a href="/area/mie/">エリア比較</a>
-        <a href="/builders/">工務店情報</a>
-        <a href="/builders/events/">イベント情報</a>
-        <span class="active">知識</span>
-        <a href="/about/">運営者情報</a>
-      </div>
-      <button class="knowledge-hamburger" onclick="openGlobalMenu()" aria-label="メニューを開く">☰</button>
-    </div>
-  </header>
-  <div id="global-menu-overlay" style="display:none;position:fixed;inset:0;z-index:70;background:rgba(0,0,0,0.4);opacity:0;transition:opacity 0.3s;" onclick="closeGlobalMenu()"></div>
-  <div id="global-menu-panel" style="display:none;position:fixed;top:0;right:0;z-index:80;height:100%;width:260px;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,0.15);transform:translateX(100%);transition:transform 0.3s ease-out;">
-    <div style="padding:16px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;">
-      <span style="font-size:14px;font-weight:700;color:#1f2937;">メニュー</span>
-      <button onclick="closeGlobalMenu()" style="width:32px;height:32px;border-radius:50%;background:#f3f4f6;border:none;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:20px;cursor:pointer;">&times;</button>
-    </div>
-    <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
-      <a href="/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">物件比較</a>
-      <a href="/area/mie/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">エリア比較</a>
-      <a href="/builders/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">工務店情報</a>
-      <a href="/builders/events/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">イベント情報</a>
-      <span style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:600;background:#dbeafe;color:#1d4ed8;">知識</span>
-      <a href="/about/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">運営者情報</a>
-    </div>
-  </div>
-  <script>
-  function openGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.display='block';p.style.display='block';requestAnimationFrame(function(){o.style.opacity='1';p.style.transform='translateX(0)';});document.body.style.overflow='hidden';}
-  function closeGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.opacity='0';p.style.transform='translateX(100%)';document.body.style.overflow='';setTimeout(function(){o.style.display='none';p.style.display='none';},300);}
-  </script>
+  ${generateGlobalHeader('knowledge')}
 
   ${breadcrumbHtml}
 
@@ -2041,17 +2030,7 @@ ${collectionJsonLd}
   body{font-family:'Noto Sans JP',sans-serif;background:linear-gradient(135deg,#f0f4ff 0%,#e8f0fe 50%,#f5f0ff 100%);color:#374151;line-height:1.8;min-height:100vh;}
 
   /* Header */
-  .knowledge-header{background:white;border-bottom:1px solid #e5e7eb;padding:10px 16px;}
-  .knowledge-header-inner{max-width:72rem;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
-  .knowledge-header .site-logo img{height:56px;width:auto;}
-  .knowledge-header-nav{display:flex;align-items:center;gap:16px;font-size:13px;}
-  .knowledge-header-nav a{text-decoration:none;color:#6b7280;font-weight:500;}
-  .knowledge-header-nav .active{color:#2563EB;font-weight:600;}
-  .knowledge-hamburger{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#f3f4f6;border:1px solid #e5e7eb;font-size:18px;color:#374151;cursor:pointer;}
-  @media(max-width:768px){
-    .knowledge-header-nav{display:none !important;}
-    .knowledge-hamburger{display:flex !important;}
-  }
+  ${GLOBAL_HEADER_CSS}
 
   /* Hero */
   .ka-hub-hero{padding:48px 16px 40px;text-align:center;max-width:64rem;margin:0 auto;}
@@ -2128,44 +2107,7 @@ ${collectionJsonLd}
 </style>
 </head>
 <body>
-  <header class="knowledge-header">
-    <div class="knowledge-header-inner">
-      <a href="/" class="site-logo" style="text-decoration:none;">
-        <picture>
-          <source srcset="/images/header-banner.webp" type="image/webp">
-          <img src="/images/header-banner.png" alt="注文住宅比較.com - 絶対に後悔しない家づくり">
-        </picture>
-      </a>
-      <div class="knowledge-header-nav">
-        <a href="/">物件比較</a>
-        <a href="/area/mie/">エリア比較</a>
-        <a href="/builders/">工務店情報</a>
-        <a href="/builders/events/">イベント情報</a>
-        <span class="active">知識</span>
-        <a href="/about/">運営者情報</a>
-      </div>
-      <button class="knowledge-hamburger" onclick="openGlobalMenu()" aria-label="メニューを開く">☰</button>
-    </div>
-  </header>
-  <div id="global-menu-overlay" style="display:none;position:fixed;inset:0;z-index:70;background:rgba(0,0,0,0.4);opacity:0;transition:opacity 0.3s;" onclick="closeGlobalMenu()"></div>
-  <div id="global-menu-panel" style="display:none;position:fixed;top:0;right:0;z-index:80;height:100%;width:260px;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,0.15);transform:translateX(100%);transition:transform 0.3s ease-out;">
-    <div style="padding:16px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;">
-      <span style="font-size:14px;font-weight:700;color:#1f2937;">メニュー</span>
-      <button onclick="closeGlobalMenu()" style="width:32px;height:32px;border-radius:50%;background:#f3f4f6;border:none;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:20px;cursor:pointer;">&times;</button>
-    </div>
-    <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
-      <a href="/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">物件比較</a>
-      <a href="/area/mie/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">エリア比較</a>
-      <a href="/builders/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">工務店情報</a>
-      <a href="/builders/events/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">イベント情報</a>
-      <span style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:600;background:#dbeafe;color:#1d4ed8;">知識</span>
-      <a href="/about/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">運営者情報</a>
-    </div>
-  </div>
-  <script>
-  function openGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.display='block';p.style.display='block';requestAnimationFrame(function(){o.style.opacity='1';p.style.transform='translateX(0)';});document.body.style.overflow='hidden';}
-  function closeGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.opacity='0';p.style.transform='translateX(100%)';document.body.style.overflow='';setTimeout(function(){o.style.display='none';p.style.display='none';},300);}
-  </script>
+  ${generateGlobalHeader('knowledge')}
 
   ${heroHtml}
 
@@ -2371,12 +2313,12 @@ ${collectionJsonLd}
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); min-height: 100vh; color: #1f2937; }
-.knowledge-header { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%); padding: 12px 0; }
-.knowledge-header-inner { max-width: 1100px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.knowledge-header-nav { display: flex; gap: 8px; margin-left: auto; }
-.knowledge-header-nav a, .knowledge-header-nav span { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 13px; font-weight: 500; padding: 4px 10px; border-radius: 6px; }
-.knowledge-header-nav a:hover { background: rgba(255,255,255,0.15); color: #fff; }
-.knowledge-header-nav .active { background: rgba(255,255,255,0.2); color: #fff; font-weight: 700; }
+
+
+
+
+
+
 .site-logo img { height: 44px; width: auto; display: block; }
 .bh-hero { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%); color: #fff; padding: 48px 16px 36px; text-align: center; }
 .bh-hero h1 { font-size: clamp(22px, 4vw, 32px); font-weight: 800; line-height: 1.3; margin-bottom: 10px; }
@@ -2428,24 +2370,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
 </style>
 </head>
 <body>
-<header class="knowledge-header">
-  <div class="knowledge-header-inner">
-    <a href="/" class="site-logo" style="text-decoration:none;">
-      <picture>
-        <source srcset="/images/header-banner.webp" type="image/webp">
-        <img src="/images/header-banner.png" alt="注文住宅比較.com">
-      </picture>
-    </a>
-    <nav class="knowledge-header-nav">
-      <a href="/">物件比較</a>
-      <a href="/area/mie/">エリア比較</a>
-      <a href="/builders/" class="active">工務店情報</a>
-      <a href="/builders/events/">イベント情報</a>
-      <a href="/knowledge/">知識</a>
-      <a href="/about/">運営者情報</a>
-    </nav>
-  </div>
-</header>
+${generateGlobalHeader('builders')}
 
 <section class="bh-hero">
   <h1>三重県のハウスメーカー・工務店一覧</h1>
@@ -2610,12 +2535,12 @@ ${businessJsonLd}
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); min-height: 100vh; color: #1f2937; }
-.knowledge-header { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%); padding: 12px 0; }
-.knowledge-header-inner { max-width: 1100px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.knowledge-header-nav { display: flex; gap: 8px; margin-left: auto; }
-.knowledge-header-nav a, .knowledge-header-nav span { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 13px; font-weight: 500; padding: 4px 10px; border-radius: 6px; }
-.knowledge-header-nav a:hover { background: rgba(255,255,255,0.15); color: #fff; }
-.knowledge-header-nav .active { background: rgba(255,255,255,0.2); color: #fff; font-weight: 700; }
+
+
+
+
+
+
 .site-logo img { height: 44px; width: auto; display: block; }
 .builder-hero { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #7c3aed 100%); color: #fff; padding: 40px 16px 32px; text-align: center; }
 .builder-hero h1 { font-size: clamp(22px, 4vw, 32px); font-weight: 800; line-height: 1.3; margin-bottom: 10px; }
@@ -2667,24 +2592,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
 </style>
 </head>
 <body>
-<header class="knowledge-header">
-  <div class="knowledge-header-inner">
-    <a href="/" class="site-logo" style="text-decoration:none;">
-      <picture>
-        <source srcset="/images/header-banner.webp" type="image/webp">
-        <img src="/images/header-banner.png" alt="注文住宅比較.com">
-      </picture>
-    </a>
-    <nav class="knowledge-header-nav">
-      <a href="/">物件比較</a>
-      <a href="/area/mie/">エリア比較</a>
-      <a href="/builders/" class="active">工務店情報</a>
-      <a href="/builders/events/">イベント情報</a>
-      <a href="/knowledge/">知識</a>
-      <a href="/about/">運営者情報</a>
-    </nav>
-  </div>
-</header>
+${generateGlobalHeader('builders')}
 
 <section class="builder-hero">
   <div class="grade-badge ${gradeCls}">${escHtml(gradeLabel)}</div>
@@ -2877,12 +2785,12 @@ ${breadcrumbJsonLd}
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); min-height: 100vh; color: #1f2937; }
-.knowledge-header { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%); padding: 12px 0; }
-.knowledge-header-inner { max-width: 1100px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.knowledge-header-nav { display: flex; gap: 8px; margin-left: auto; }
-.knowledge-header-nav a, .knowledge-header-nav span { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 13px; font-weight: 500; padding: 4px 10px; border-radius: 6px; }
-.knowledge-header-nav a:hover { background: rgba(255,255,255,0.15); color: #fff; }
-.knowledge-header-nav .active { background: rgba(255,255,255,0.2); color: #fff; font-weight: 700; }
+
+
+
+
+
+
 .site-logo img { height: 44px; width: auto; display: block; }
 .ec-hero { background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%); color: #fff; padding: 48px 16px 36px; text-align: center; }
 .ec-hero h1 { font-size: clamp(22px, 4vw, 32px); font-weight: 800; line-height: 1.3; margin-bottom: 10px; }
@@ -2936,24 +2844,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
 </style>
 </head>
 <body>
-<header class="knowledge-header">
-  <div class="knowledge-header-inner">
-    <a href="/" class="site-logo" style="text-decoration:none;">
-      <picture>
-        <source srcset="/images/header-banner.webp" type="image/webp">
-        <img src="/images/header-banner.png" alt="注文住宅比較.com">
-      </picture>
-    </a>
-    <nav class="knowledge-header-nav">
-      <a href="/">物件比較</a>
-      <a href="/area/mie/">エリア比較</a>
-      <a href="/builders/" class="active">工務店情報</a>
-      <a href="/builders/events/">イベント情報</a>
-      <a href="/knowledge/">知識</a>
-      <a href="/about/">運営者情報</a>
-    </nav>
-  </div>
-</header>
+${generateGlobalHeader('builders')}
 
 <section class="ec-hero">
   <h1>三重県の住宅イベント・見学会カレンダー</h1>
