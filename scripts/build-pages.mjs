@@ -2439,10 +2439,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
     <nav class="knowledge-header-nav">
       <a href="/">物件比較</a>
       <a href="/area/mie/">エリア比較</a>
-        <a href="/builders/">工務店情報</a>
-        <a href="/builders/events/">イベント情報</a>
-        <a href="/knowledge/">知識</a>
       <a href="/builders/" class="active">工務店情報</a>
+      <a href="/builders/events/">イベント情報</a>
+      <a href="/knowledge/">知識</a>
       <a href="/about/">運営者情報</a>
     </nav>
   </div>
@@ -2679,10 +2678,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
     <nav class="knowledge-header-nav">
       <a href="/">物件比較</a>
       <a href="/area/mie/">エリア比較</a>
-        <a href="/builders/">工務店情報</a>
-        <a href="/builders/events/">イベント情報</a>
-        <a href="/knowledge/">知識</a>
       <a href="/builders/" class="active">工務店情報</a>
+      <a href="/builders/events/">イベント情報</a>
+      <a href="/knowledge/">知識</a>
       <a href="/about/">運営者情報</a>
     </nav>
   </div>
@@ -2949,10 +2947,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
     <nav class="knowledge-header-nav">
       <a href="/">物件比較</a>
       <a href="/area/mie/">エリア比較</a>
-        <a href="/builders/">工務店情報</a>
-        <a href="/builders/events/">イベント情報</a>
-        <a href="/knowledge/">知識</a>
       <a href="/builders/" class="active">工務店情報</a>
+      <a href="/builders/events/">イベント情報</a>
+      <a href="/knowledge/">知識</a>
       <a href="/about/">運営者情報</a>
     </nav>
   </div>
