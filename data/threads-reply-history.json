@@ -3345,6 +3345,76 @@
         "likes": 2,
         "replies": 2
       }
+    },
+    {
+      "date": "2026-03-25T05:19:34.184Z",
+      "originalThreadId": "18069525002295525",
+      "originalAccount": "a1",
+      "originalText": "リビング広くしたくて、部屋数削ろうとしたら夫に反対された。\n\n子どもが増えたら部屋が足りないって言われて、確かにそうなんだけど……うちもそこで揉めたな😅",
+      "replyText": "間取りで夫婦揉めた人、体感で8割超えてるんだよなぁ。あと後から「子ども部屋は要らなかった」って後悔する人も結構いるやつ。",
+      "replyId": "18120722911719758",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 775,
+        "likes": 1,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-03-25T05:22:19.029Z",
+      "originalThreadId": "18143299462439003",
+      "originalAccount": "a2",
+      "originalText": "引き渡し日、300枚撮った。\n\n全部同じ角度だった。",
+      "replyText": "みんなここやるんだよなぁ…後で見返すと使える写真ほぼ0だったりする",
+      "replyId": "18096273689484210",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 61,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-25T05:25:19.125Z",
+      "originalThreadId": "18451157632107976",
+      "originalAccount": "a2",
+      "originalText": "アパート、楽だったな。\n\n一瞬だけ思う。",
+      "replyText": "あー、これ相談で結構聞くやつ。庭の手入れとか管理とか、想像以上にめんどくさいって言ってくる人多い。",
+      "replyId": "18325730806247732",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 514,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-25T05:28:24.605Z",
+      "originalThreadId": "17879087736536396",
+      "originalAccount": "a3",
+      "originalText": "金利、結局ずっと迷って「えいや」で決めた。\n\n変動か固定か、何時間話し合ったかわかんない。\n夫婦で意見が割れて、義母まで口挟んできて。\n\n結局、旦那が「周りも変動多いらしいよ」って一言で変動にした。\n",
+      "replyText": "あと固定にしたら「今のうちに繰り上げ返済しろ」って別の人から言われたりするんだよなぁ。判断基準が人によってバラバラだから迷うんだと思う",
+      "replyId": "18167149099414541",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 479,
+        "likes": 0,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-03-25T05:30:08.388Z",
+      "originalThreadId": "18112734706739725",
+      "originalAccount": "a3",
+      "originalText": "キッチンの形で、夫婦で初めて本気で揉めた。\n\n私はアイランドにしたくて、夫は「高い」の一点張り。\n\n結局ペニンシュラで落ち着いたけど、今でも料理するたびに思い出す。\n\n同じで折れた人、いる？",
+      "replyText": "キッチン形で揉める夫婦、うちのサイト経由でもめっちゃ多いんだよね。ペニンシュラは妥協に見えるけど実は使い勝手いいやつだわ。",
+      "replyId": "18136516183511422",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 0,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
