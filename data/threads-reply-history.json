@@ -3429,6 +3429,62 @@
         "likes": 1,
         "replies": 2
       }
+    },
+    {
+      "date": "2026-03-25T17:01:04.960Z",
+      "originalThreadId": "18170333614397264",
+      "originalAccount": "a2",
+      "originalText": "変動と固定、月6000円の差だった。\n\nその6000円、35年で250万になる。\n\nどっちが正解か、今もわからない。",
+      "replyText": "みんなここで判断ミスるんだよなぁ。結局「その時点での金利情勢」と「返済期間の残り」でしか判定できないんだわ。",
+      "replyId": "18573215020000622",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 889,
+        "likes": 1,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-25T17:04:04.520Z",
+      "originalThreadId": "17986631477969021",
+      "originalAccount": "a2",
+      "originalText": "収納を増やすと、片付く。\n\nそう思ってた。\n\n実際は収納の数だけ物が増えた。入れる場所があるから捨てない。今の家、収納は最小限にした。そっちのほうが物が少ない。",
+      "replyText": "みんなここケチって後から泣くんだよなぁ…と思いきや、逆パターンなんだ。収納少ないと、本当に必要な物だけ残るのか。これ参考になるわ。",
+      "replyId": "18040250651781417",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 329,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-25T17:06:28.924Z",
+      "originalThreadId": "18451157632107976",
+      "originalAccount": "a2",
+      "originalText": "アパート、楽だったな。\n\n一瞬だけ思う。",
+      "replyText": "体感10人中8人がこれ言ってるわ。新築の維持費と手間が想像以上だからかな。",
+      "replyId": "17960120426915109",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 514,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-25T17:09:06.425Z",
+      "originalThreadId": "18155223529445516",
+      "originalAccount": "a2",
+      "originalText": "三重は、土地に金かけすぎると詰む。\n\n建物に回せる額が変わる。そこだけ最初に知っておけばよかった。",
+      "replyText": "三重は坪単価の変動がやばいんだよね。土地に予算吸われて建物ショボくなる人、体感7割超えてる。最初の予算配分が全部決まっちゃう。",
+      "replyId": "18112796245666036",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 564,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
