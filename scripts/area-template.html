@@ -235,6 +235,9 @@
 </div>
 
 <script>
+// グローバルメニュー
+function openGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.display='block';p.style.display='block';requestAnimationFrame(function(){o.style.opacity='1';p.style.transform='translateX(0)';});document.body.style.overflow='hidden';}
+function closeGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.opacity='0';p.style.transform='translateX(100%)';document.body.style.overflow='';setTimeout(function(){o.style.display='none';p.style.display='none';},300);}
 // ============================================================
 // 設定 — デプロイ時にここを編集
 // ============================================================
@@ -1061,10 +1064,6 @@ function renderHeader() {
         <a href="/about/" style="display:block;width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;background:#f9fafb;color:#4b5563;text-decoration:none;">運営者情報</a>
       </div>
     </div>
-    <script>
-    function openGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.display='block';p.style.display='block';requestAnimationFrame(function(){o.style.opacity='1';p.style.transform='translateX(0)';});document.body.style.overflow='hidden';}
-    function closeGlobalMenu(){var o=document.getElementById('global-menu-overlay'),p=document.getElementById('global-menu-panel');if(!o||!p)return;o.style.opacity='0';p.style.transform='translateX(100%)';document.body.style.overflow='';setTimeout(function(){o.style.display='none';p.style.display='none';},300);}
-    </script>
     <!-- タイトル（スクロールで消える） -->
     <header class="glass border-b border-gray-200">
       <div class="max-w-6xl mx-auto px-4 py-4">
