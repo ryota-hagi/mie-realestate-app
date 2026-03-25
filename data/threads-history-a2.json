@@ -1969,7 +1969,16 @@
       "text": "引き渡し日、300枚撮った。\n\n全部同じ角度だった。",
       "threadId": "18143299462439003",
       "charCount": 26,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 61,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-25T04:47:29.618Z"
     },
     {
       "date": "2026-03-24T04:46:23.016Z",
@@ -1978,7 +1987,16 @@
       "text": "変動と固定、月6000円の差だった。\n\nその6000円、35年で250万になる。\n\nどっちが正解か、今もわからない。",
       "threadId": "18170333614397264",
       "charCount": 58,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 889,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-03-25T04:47:30.334Z"
     },
     {
       "date": "2026-03-24T07:10:45.505Z",
@@ -2005,6 +2023,15 @@
       "text": "「坪いくら？」、答えるたびに虚しくなる。\n\n仕様も設備も違うのに、その数字で全部判断される。",
       "threadId": "18098638960803400",
       "charCount": 46,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-25T04:47:43.814Z",
+      "category": "kinshi",
+      "topicKey": "aruaru:3",
+      "text": "コンセントの位置で、3回揉めた。\n\n「ここに欲しい」「いや邪魔」「見えないとこでいい」「でも使えない」\n\n結局、多めにつけた側が正解だったかどうか、今もわからない。",
+      "threadId": "18132853930474256",
+      "charCount": 82,
       "account": "a2"
     }
   ]
