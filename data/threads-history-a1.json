@@ -1825,7 +1825,16 @@
       "text": "引き戸にしたら、子どもが指挟んだ。\n\n開き戸のほうが指挟みやすいって聞いてたのに、引き戸でもやるんだね😅\n\nみんなはどっちにした？",
       "threadId": "18158025250384392",
       "charCount": 66,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 303,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-24T23:36:43.146Z"
     },
     {
       "date": "2026-03-23T21:54:02.735Z",
@@ -1834,7 +1843,16 @@
       "text": "リビング広くしたくて、部屋数削ろうとしたら夫に反対された。\n\n子どもが増えたら部屋が足りないって言われて、確かにそうなんだけど……うちもそこで揉めたな😅",
       "threadId": "18069525002295525",
       "charCount": 77,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 775,
+        "likes": 1,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 9,
+      "engagementUpdatedAt": "2026-03-24T23:36:43.884Z"
     }
   ]
 }
