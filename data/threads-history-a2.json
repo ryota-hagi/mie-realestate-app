@@ -2023,7 +2023,16 @@
       "text": "アパート、楽だったな。\n\n一瞬だけ思う。",
       "threadId": "18451157632107976",
       "charCount": 20,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 514,
+        "likes": 0,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 8,
+      "engagementUpdatedAt": "2026-03-25T23:30:26.685Z"
     },
     {
       "date": "2026-03-24T23:28:23.712Z",
@@ -2032,7 +2041,16 @@
       "text": "「坪いくら？」、答えるたびに虚しくなる。\n\n仕様も設備も違うのに、その数字で全部判断される。",
       "threadId": "18098638960803400",
       "charCount": 46,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 53,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-25T23:30:27.544Z"
     },
     {
       "date": "2026-03-25T04:47:43.814Z",
