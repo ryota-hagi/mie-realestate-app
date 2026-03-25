@@ -1486,8 +1486,8 @@ function generateAboutPage() {
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); color: #374151; line-height: 1.8; min-height: 100vh; }
-  
-  
+  ${GLOBAL_HEADER_CSS}
+
   
   
   
@@ -2313,10 +2313,7 @@ ${collectionJsonLd}
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); min-height: 100vh; color: #1f2937; }
-
-
-
-
+${GLOBAL_HEADER_CSS}
 
 
 .site-logo img { height: 44px; width: auto; display: block; }
@@ -2535,10 +2532,7 @@ ${businessJsonLd}
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); min-height: 100vh; color: #1f2937; }
-
-
-
-
+${GLOBAL_HEADER_CSS}
 
 
 .site-logo img { height: 44px; width: auto; display: block; }
@@ -2785,10 +2779,7 @@ ${breadcrumbJsonLd}
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f5f0ff 100%); min-height: 100vh; color: #1f2937; }
-
-
-
-
+${GLOBAL_HEADER_CSS}
 
 
 .site-logo img { height: 44px; width: auto; display: block; }
