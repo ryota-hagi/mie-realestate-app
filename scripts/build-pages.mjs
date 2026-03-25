@@ -2442,7 +2442,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
         <a href="/builders/">工務店情報</a>
         <a href="/builders/events/">イベント情報</a>
         <a href="/knowledge/">知識</a>
-      <a href="/builders/" class="active">会社情報</a>
+      <a href="/builders/" class="active">工務店情報</a>
       <a href="/about/">運営者情報</a>
     </nav>
   </div>
@@ -2682,7 +2682,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
         <a href="/builders/">工務店情報</a>
         <a href="/builders/events/">イベント情報</a>
         <a href="/knowledge/">知識</a>
-      <a href="/builders/" class="active">会社情報</a>
+      <a href="/builders/" class="active">工務店情報</a>
       <a href="/about/">運営者情報</a>
     </nav>
   </div>
@@ -2697,7 +2697,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
 
 <main class="builder-main">
   <nav class="breadcrumb">
-    <a href="/">トップ</a> / <a href="/builders/">会社情報</a> / <span>${escHtml(builder.name)}</span>
+    <a href="/">トップ</a> / <a href="/builders/">工務店情報</a> / <span>${escHtml(builder.name)}</span>
   </nav>
 
   <!-- 概要 -->
@@ -2952,7 +2952,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP
         <a href="/builders/">工務店情報</a>
         <a href="/builders/events/">イベント情報</a>
         <a href="/knowledge/">知識</a>
-      <a href="/builders/" class="active">会社情報</a>
+      <a href="/builders/" class="active">工務店情報</a>
       <a href="/about/">運営者情報</a>
     </nav>
   </div>
