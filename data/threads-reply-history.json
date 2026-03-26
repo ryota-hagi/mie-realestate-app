@@ -3499,6 +3499,34 @@
         "likes": 0,
         "replies": 1
       }
+    },
+    {
+      "date": "2026-03-26T10:44:11.907Z",
+      "originalThreadId": "18451157632107976",
+      "originalAccount": "a2",
+      "originalText": "アパート、楽だったな。\n\n一瞬だけ思う。",
+      "replyText": "みんなここに引っかかるんだよなぁ。戸建は維持費と手間が…ってなる瞬間あるよね。",
+      "replyId": "17997995405864476",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 514,
+        "likes": 0,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-03-26T10:47:06.993Z",
+      "originalThreadId": "18132853930474256",
+      "originalAccount": "a2",
+      "originalText": "コンセントの位置で、3回揉めた。\n\n「ここに欲しい」「いや邪魔」「見えないとこでいい」「でも使えない」\n\n結局、多めにつけた側が正解だったかどうか、今もわからない。",
+      "replyText": "ちなみに結局何個つけた？多めってどのくらいの差なんだろう",
+      "replyId": "18097993615968474",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 251,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
