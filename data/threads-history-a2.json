@@ -2077,7 +2077,16 @@
       "text": "三重は、土地に金かけすぎると詰む。\n\n建物に回せる額が変わる。そこだけ最初に知っておけばよかった。",
       "threadId": "18155223529445516",
       "charCount": 49,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 564,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-26T07:16:08.178Z"
     },
     {
       "date": "2026-03-25T14:19:38.998Z",
@@ -2095,6 +2104,15 @@
       "text": "友達の家、正解だった。",
       "threadId": "18172358311361176",
       "charCount": 11,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-26T07:16:21.330Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:25",
+      "text": "南向き、そこまで重要じゃなかったかも。\n\n土地の価格差、100万以上あったりする。\n\n日当たりより立地と間取りで変わる気がしてる。\n\nみんなはどっち選んだ？",
+      "threadId": "18072462554221922",
+      "charCount": 78,
       "account": "a2"
     }
   ]
