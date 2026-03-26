@@ -2059,7 +2059,16 @@
       "text": "コンセントの位置で、3回揉めた。\n\n「ここに欲しい」「いや邪魔」「見えないとこでいい」「でも使えない」\n\n結局、多めにつけた側が正解だったかどうか、今もわからない。",
       "threadId": "18132853930474256",
       "charCount": 82,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 251,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-26T04:59:15.665Z"
     },
     {
       "date": "2026-03-25T07:08:43.803Z",
@@ -2077,6 +2086,15 @@
       "text": "床材、こだわらなかった。\n\n標準グレードのまま1年住んで、不満ゼロだった。\n\nこだわりが必要な場所と、どうでもいい場所がある。見分け方、今もわからない。",
       "threadId": "18095054381026263",
       "charCount": 76,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-26T04:59:25.521Z",
+      "category": "kinshi",
+      "topicKey": "aruaru:4",
+      "text": "友達の家、正解だった。",
+      "threadId": "18172358311361176",
+      "charCount": 11,
       "account": "a2"
     }
   ]
