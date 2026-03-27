@@ -2167,7 +2167,16 @@
       "text": "カタログ、部屋を占領する。\n\n展示場を3社まわっただけで、もう床に積み上がってた。\n\n全部読んだのは1冊だけ。残りは重みだけ感じて捨てた。",
       "threadId": "18097575154825207",
       "charCount": 69,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 310,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-27T23:28:35.456Z"
     },
     {
       "date": "2026-03-26T23:28:16.583Z",
@@ -2176,7 +2185,16 @@
       "text": "外構、100万で終わると思ってた。\n\n全然足りなかった。",
       "threadId": "17867104443602460",
       "charCount": 28,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 152,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-27T23:28:36.177Z"
     },
     {
       "date": "2026-03-27T05:00:30.809Z",
@@ -2203,6 +2221,15 @@
       "text": "ボーナス払いあり、月々は楽になる。ただ、ボーナス消えた年のヒヤヒヤは想定外だった。\n\nなしにした人、逆に「均等の方が怖い」って言ってた。\n\nどっち選んだ？",
       "threadId": "17951583054029412",
       "charCount": 77,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-27T23:28:46.866Z",
+      "category": "gyakusetsu",
+      "topicKey": "aruaru:13",
+      "text": "YouTube、100本見た。\n\n全員言ってること違う。\n\n結局、自分が何を優先したいかを考えるより、動画を探す時間の方が長くなってた。",
+      "threadId": "17964665831897402",
+      "charCount": 68,
       "account": "a2"
     }
   ]
