@@ -2113,7 +2113,16 @@
       "text": "友達の家、正解だった。",
       "threadId": "18172358311361176",
       "charCount": 11,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 115,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-27T05:00:19.086Z"
     },
     {
       "date": "2026-03-26T07:16:21.330Z",
@@ -2149,6 +2158,15 @@
       "text": "外構、100万で終わると思ってた。\n\n全然足りなかった。",
       "threadId": "17867104443602460",
       "charCount": 28,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-27T05:00:30.809Z",
+      "category": "kinshi",
+      "topicKey": "aruaru:2",
+      "text": "打ち合わせ、5回で終わると思ってた。\n\n実際は17回だった。\n\n回数を減らすか、細かく詰めるか。どちらが正解だったか、今もわかってない。",
+      "threadId": "18095544800015716",
+      "charCount": 68,
       "account": "a2"
     }
   ]
