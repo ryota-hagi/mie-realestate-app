@@ -2149,7 +2149,16 @@
       "text": "全部任せて、後から文句言った。\n\n最悪だった。",
       "threadId": "17925555882254826",
       "charCount": 23,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 134,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-03-27T14:13:30.867Z"
     },
     {
       "date": "2026-03-26T14:26:48.983Z",
@@ -2185,6 +2194,15 @@
       "text": "玄関の手洗い、ケチった。\n\nコスト削減で外した。15万くらい節約できた。\n\nでも帰宅してすぐ洗面所まで歩く、毎日これ。\n距離にして5mくらい。たった5m。\n\n365日×5m、もう飽きた。",
       "threadId": "17988909221954523",
       "charCount": 93,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-27T14:13:46.541Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:16",
+      "text": "ボーナス払いあり、月々は楽になる。ただ、ボーナス消えた年のヒヤヒヤは想定外だった。\n\nなしにした人、逆に「均等の方が怖い」って言ってた。\n\nどっち選んだ？",
+      "threadId": "17951583054029412",
+      "charCount": 77,
       "account": "a2"
     }
   ]
