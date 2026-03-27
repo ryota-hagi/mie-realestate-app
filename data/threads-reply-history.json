@@ -3583,6 +3583,34 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-27T10:39:42.913Z",
+      "originalThreadId": "18172358311361176",
+      "originalAccount": "a2",
+      "originalText": "友達の家、正解だった。",
+      "replyText": "体感で新築建てた人の8割が友達の家見に行ってるんだよなぁ。実物見ると判断基準ガラッと変わる。",
+      "replyId": "18082946771583565",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 115,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-27T10:41:43.978Z",
+      "originalThreadId": "18095544800015716",
+      "originalAccount": "a2",
+      "originalText": "打ち合わせ、5回で終わると思ってた。\n\n実際は17回だった。\n\n回数を減らすか、細かく詰めるか。どちらが正解だったか、今もわかってない。",
+      "replyText": "みんなここ甘く見るんだよなぁ。10回超えてくるのがデフォなんだけど、最初は信じない人ばっかりだわ",
+      "replyId": "18151126408457617",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 12,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
