@@ -3555,6 +3555,34 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-27T05:30:32.992Z",
+      "originalThreadId": "17867104443602460",
+      "originalAccount": "a2",
+      "originalText": "外構、100万で終わると思ってた。\n\n全然足りなかった。",
+      "replyText": "みんなここケチって後から泣くんだよなぁ…。実際150万超えるのがザラだわ。",
+      "replyId": "17855704308652284",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 152,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-27T05:33:46.838Z",
+      "originalThreadId": "18005317142887848",
+      "originalAccount": "a3",
+      "originalText": "インスタの家、見すぎた。\n\nアイランドキッチン、土間、吹き抜け。全部「やりたい」リストに入れてた。\n\n現実の予算で全部削られて、最後に残ったのは普通の家だった。\n\nあの時間、何だったんだろって今でも思",
+      "replyText": "みんなここからスタートするんだよなぁ…。SNS家は予算度外視で作られてるって気づくまでが長いんだわ",
+      "replyId": "18184079149335737",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 0,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
