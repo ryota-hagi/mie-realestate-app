@@ -3653,6 +3653,76 @@
         "likes": 1,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-28T05:18:03.145Z",
+      "originalThreadId": "18072462554221922",
+      "originalAccount": "a2",
+      "originalText": "南向き、そこまで重要じゃなかったかも。\n\n土地の価格差、100万以上あったりする。\n\n日当たりより立地と間取りで変わる気がしてる。\n\nみんなはどっち選んだ？",
+      "replyText": "うちのサイトにも同じ声めちゃ届いてるわ。実際、朝日より駅距離と生活動線の方が満足度に効くんだよね。",
+      "replyId": "18004199018903873",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 342,
+        "likes": 0,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-03-28T05:21:12.164Z",
+      "originalThreadId": "17925555882254826",
+      "originalAccount": "a2",
+      "originalText": "全部任せて、後から文句言った。\n\n最悪だった。",
+      "replyText": "ちなみに、設計の打ち合わせって何回くらい行った？1回とか2回だと後悔率めっちゃ高いんだよ",
+      "replyId": "18090927593129973",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 134,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-28T05:23:30.705Z",
+      "originalThreadId": "17988909221954523",
+      "originalAccount": "a2",
+      "originalText": "玄関の手洗い、ケチった。\n\nコスト削減で外した。15万くらい節約できた。\n\nでも帰宅してすぐ洗面所まで歩く、毎日これ。\n距離にして5mくらい。たった5m。\n\n365日×5m、もう飽きた。",
+      "replyText": "あと土間の広さもそこ系の後悔で多いんだよね。狭いと靴脱ぐまでに家の中汚れちゃう人結構いる。",
+      "replyId": "18224217052312063",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 551,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-28T05:26:21.581Z",
+      "originalThreadId": "17951583054029412",
+      "originalAccount": "a2",
+      "originalText": "ボーナス払いあり、月々は楽になる。ただ、ボーナス消えた年のヒヤヒヤは想定外だった。\n\nなしにした人、逆に「均等の方が怖い」って言ってた。\n\nどっち選んだ？",
+      "replyText": "ボーナス払いは経済状況の変化に弱いんだよなぁ。あと子どもの教育費が思ったより膨らむ年とかぶると最悪だわ。",
+      "replyId": "18110814586800302",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 701,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-28T05:28:18.195Z",
+      "originalThreadId": "17964665831897402",
+      "originalAccount": "a2",
+      "originalText": "YouTube、100本見た。\n\n全員言ってること違う。\n\n結局、自分が何を優先したいかを考えるより、動画を探す時間の方が長くなってた。",
+      "replyText": "ちなみに今、何を優先したいか決まった？それとも迷ったままなの？",
+      "replyId": "18317969599248652",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 343,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
