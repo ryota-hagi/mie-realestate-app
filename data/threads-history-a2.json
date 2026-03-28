@@ -2239,7 +2239,16 @@
       "text": "ボーナス払いあり、月々は楽になる。ただ、ボーナス消えた年のヒヤヒヤは想定外だった。\n\nなしにした人、逆に「均等の方が怖い」って言ってた。\n\nどっち選んだ？",
       "threadId": "17951583054029412",
       "charCount": 77,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 715,
+        "likes": 0,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 8,
+      "engagementUpdatedAt": "2026-03-28T23:27:05.992Z"
     },
     {
       "date": "2026-03-27T23:28:46.866Z",
@@ -2266,6 +2275,15 @@
       "text": "見に行く前に、売れてた。",
       "threadId": "18050164439705894",
       "charCount": 12,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-28T23:27:15.953Z",
+      "category": "kinshi",
+      "topicKey": "aruaru:27",
+      "text": "現地、5回行った。\n\n朝イチ、昼、夕方、曇りの日、晴れの日。\n\n結局「悪くない」で決めた。何回行っても確信にはならなかった。",
+      "threadId": "17907289278204974",
+      "charCount": 62,
       "account": "a2"
     }
   ]
