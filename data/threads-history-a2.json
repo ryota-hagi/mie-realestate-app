@@ -2221,7 +2221,16 @@
       "text": "玄関の手洗い、ケチった。\n\nコスト削減で外した。15万くらい節約できた。\n\nでも帰宅してすぐ洗面所まで歩く、毎日これ。\n距離にして5mくらい。たった5m。\n\n365日×5m、もう飽きた。",
       "threadId": "17988909221954523",
       "charCount": 93,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 551,
+        "likes": 0,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 8,
+      "engagementUpdatedAt": "2026-03-28T10:40:23.897Z"
     },
     {
       "date": "2026-03-27T14:13:46.541Z",
@@ -2248,6 +2257,15 @@
       "text": "土地、焦って決めた。\n\n2ヶ月後に同じ沿線で、100万安い物件が出た。\n\n「いい土地は早い」は半分本当で、半分は焦らせるための言葉だったかもしれない。",
       "threadId": "17871059658584246",
       "charCount": 75,
+      "account": "a2"
+    },
+    {
+      "date": "2026-03-28T10:40:31.713Z",
+      "category": "koukai",
+      "topicKey": "aruaru:25",
+      "text": "見に行く前に、売れてた。",
+      "threadId": "18050164439705894",
+      "charCount": 12,
       "account": "a2"
     }
   ]
