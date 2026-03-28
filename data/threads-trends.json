@@ -1,11 +1,57 @@
 {
-  "scannedAt": "2026-03-28T05:49:41.814Z",
+  "scannedAt": "2026-03-28T10:22:01.207Z",
   "keywords": {
-    "住宅補助金": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
+    "注文住宅": {
+      "resultCount": 9,
+      "totalScore": 128,
+      "avgScore": 25.6,
+      "topPosts": [
+        {
+          "id": "17934678636184978",
+          "text": "注文住宅にして後悔はないけど、建売の友達の方が楽しそうに暮らしてる。",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-02-25T08:36:24+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVLKYeNDkTt",
+          "insights": {
+            "views": 30277,
+            "likes": 46,
+            "replies": 11,
+            "reposts": 0,
+            "quotes": 1
+          },
+          "score": 93
+        },
+        {
+          "id": "18574551910041700",
+          "text": "注文住宅にして後悔はないけど、完成までが大変だったって人、ほぼ全員。\n\n建売の友達を見て「あっちの方が楽だったかも」って思う瞬間、絶対あるんだよね。\n\nそれでも「自分で決めた家」への愛着は別物らしい。\nみんなはどっちがよかった？",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-03-24T10:40:50+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DWQ6FeGlMIz",
+          "insights": {
+            "views": 1673,
+            "likes": 10,
+            "replies": 4,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 26
+        },
+        {
+          "id": "18107293333839405",
+          "text": "マンション価格、また過去最高更新したらしい。\n\n注文住宅も建材費と人件費が上がり続けてて、3年前の見積もりはもう参考にならないって相談が増えてる。\n\n「もう少し待てば下がるかも」って思ってる人、逆に高くなってく可能性の方が高いんだよね。\n🏡",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-03-15T10:19:59+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DV5sixdEdoa",
+          "insights": {
+            "views": 528,
+            "likes": 1,
+            "replies": 1,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 5
+        }
+      ]
     },
     "間取り": {
       "resultCount": 10,
@@ -56,58 +102,6 @@
             "quotes": 0
           },
           "score": 0
-        }
-      ]
-    },
-    "注文住宅": {
-      "resultCount": 9,
-      "totalScore": 128,
-      "avgScore": 25.6,
-      "topPosts": [
-        {
-          "id": "17934678636184978",
-          "text": "注文住宅にして後悔はないけど、建売の友達の方が楽しそうに暮らしてる。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-25T08:36:24+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVLKYeNDkTt",
-          "insights": {
-            "views": 30277,
-            "likes": 46,
-            "replies": 11,
-            "reposts": 0,
-            "quotes": 1
-          },
-          "score": 93
-        },
-        {
-          "id": "18574551910041700",
-          "text": "注文住宅にして後悔はないけど、完成までが大変だったって人、ほぼ全員。\n\n建売の友達を見て「あっちの方が楽だったかも」って思う瞬間、絶対あるんだよね。\n\nそれでも「自分で決めた家」への愛着は別物らしい。\nみんなはどっちがよかった？",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-24T10:40:50+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DWQ6FeGlMIz",
-          "insights": {
-            "views": 1670,
-            "likes": 10,
-            "replies": 4,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 26
-        },
-        {
-          "id": "18107293333839405",
-          "text": "マンション価格、また過去最高更新したらしい。\n\n注文住宅も建材費と人件費が上がり続けてて、3年前の見積もりはもう参考にならないって相談が増えてる。\n\n「もう少し待てば下がるかも」って思ってる人、逆に高くなってく可能性の方が高いんだよね。\n🏡",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-15T10:19:59+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DV5sixdEdoa",
-          "insights": {
-            "views": 528,
-            "likes": 1,
-            "replies": 1,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 5
         }
       ]
     },
@@ -163,49 +157,49 @@
         }
       ]
     },
-    "工務店": {
-      "resultCount": 10,
-      "totalScore": 0,
-      "avgScore": 0,
+    "土地探し": {
+      "resultCount": 4,
+      "totalScore": 8,
+      "avgScore": 2,
       "topPosts": [
         {
-          "id": "17852806470687026",
-          "text": "体感だと工務店選んだ人で「もっと打ち合わせ回数増やせばよかった」って後悔する人が6割くらいいるんだよね。安心感って結局そこだわ",
+          "id": "17877469524485298",
+          "text": "三重で土地探してる人に朗報。\n\nうちのサイト、エリア別の土地相場ページ作ったんだけど、これがめちゃくちゃ使えると思ってる。\n\n津と四日市でこんなに違うんだとか、松阪ならこのくらいで探せるんだとか、比べながら見られる。\n「どのエリアにするか決めてない」段階の人こそ、先に見てほしい。\n\nプロフィールにリンクあるよ。",
           "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-19T05:19:58+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DWDdY1pEb73",
+          "timestamp": "2026-02-28T13:30:34+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVTabmEEY4Y",
           "insights": {
-            "views": 0,
+            "views": 57,
             "likes": 0,
-            "replies": 0,
+            "replies": 1,
             "reposts": 0,
             "quotes": 0
           },
-          "score": 0
+          "score": 4
         },
         {
-          "id": "17899958928406895",
-          "text": "ちなみに3社の中に工務店入ってた？大手だけで比較すると後悔率跳ね上がるんだよなぁ",
+          "id": "18044765177733474",
+          "text": "土地探しの時、こういうサイトが欲しかった。\n\n三重県の注文住宅情報サイト作ってるんだけど、エリアごとに学区情報とか住みやすさをまとめたページを追加した。\n\n土地探してた頃、これが全然ネット上になくて困ったんだよね。\nリンクはプロフィールに貼ってあるから見てみて。",
           "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-18T05:30:46+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DWA51F6EcOB",
+          "timestamp": "2026-02-24T22:23:00+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVKELwzFGsJ",
           "insights": {
-            "views": 0,
+            "views": 264,
             "likes": 0,
-            "replies": 0,
+            "replies": 1,
             "reposts": 0,
             "quotes": 0
           },
-          "score": 0
+          "score": 4
         },
         {
-          "id": "17936282607179199",
-          "text": "体感で工務店が直接対応した案件、8割は施主に報告遅れてるんだよなぁ。その間に自分で謝り倒すハメになる人多い",
+          "id": "18090978671515031",
+          "text": "「三重で2,500万で建てたい」って相談、すごく多い。\n\nただ土地代によって、建物に使える金額が全然変わる。\n駅の近くで土地探してたら、建物予算が1,500万切ってた、なんてことも普通にある。\n\n予算って「総額」で考えないと後でしんどくなる。\n💡",
           "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-15T05:47:02+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DV5NTppDaLp",
+          "timestamp": "2026-03-18T05:56:50+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DWA80BJFHgp",
           "insights": {
-            "views": 2,
+            "views": 384,
             "likes": 0,
             "replies": 0,
             "reposts": 0,
@@ -215,57 +209,17 @@
         }
       ]
     },
-    "ハウスメーカー": {
-      "resultCount": 5,
-      "totalScore": 102,
-      "avgScore": 20.4,
-      "topPosts": [
-        {
-          "id": "17911201170338958",
-          "text": "ハウスメーカーじゃなくて工務店にした。\n\n正直、まだ正解だったかわからない。\n\n保証とか大手の安心感は捨てた。\nでも担当者と直接話せる距離感はよかった。\n\nみんなはどっちにした？",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-02-26T10:35:50+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVN81_TkbgM",
-          "insights": {
-            "views": 5558,
-            "likes": 40,
-            "replies": 15,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 100
-        },
-        {
-          "id": "17967184536044556",
-          "text": "📊📍 ハウスメーカーか工務店か、どっちにするか迷ったって相談、すごく多い。\n\n結局どっちも正解とも言えるし、後悔してる人もいる。\n\n「大手の安心感を取った」「でも担当者と全然話せなかった」って声も聞くし、逆に「工務店にしたら想定外のことが多かった」って声もある。\n\n三重だと選択肢どのくらいあった？",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-02T10:35:13+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVYP87ckWJh",
-          "insights": {
-            "views": 207,
-            "likes": 2,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 2
-        },
-        {
-          "id": "18076060955134228",
-          "text": "三重で家建てようと思ってるけど、何から始めればいいかわからない。🏠\n\nそういう人のためにうちのサイト作った。\n\n地元ハウスメーカーの比較とか、土地の相場とか、三重に絞った情報まとめてるから、使ってみてほしい。プロフィールにリンクあるよ。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-03-08T05:36:57+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DVnKli7jbLx",
-          "insights": {
-            "views": 212,
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 0
-        }
-      ]
+    "マイホーム": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "住宅補助金": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
     },
     "亀山": {
       "resultCount": 0,
@@ -310,13 +264,13 @@
         }
       ]
     },
-    "引っ越し 新居": {
+    "住宅展示場 春": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "住宅展示場 春": {
+    "引っ越し 新居": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
