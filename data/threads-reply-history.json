@@ -3821,6 +3821,62 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-29T16:34:46.816Z",
+      "originalThreadId": "17871059658584246",
+      "originalAccount": "a2",
+      "originalText": "土地、焦って決めた。\n\n2ヶ月後に同じ沿線で、100万安い物件が出た。\n\n「いい土地は早い」は半分本当で、半分は焦らせるための言葉だったかもしれない。",
+      "replyText": "日当たりと隣人で9割決まるのに、時間かけずに決めちゃう人ほんと多いんだよなぁ。午後も見ないとマジで後悔する。",
+      "replyId": "18578775817023344",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 2674,
+        "likes": 2,
+        "replies": 3
+      }
+    },
+    {
+      "date": "2026-03-29T16:36:31.035Z",
+      "originalThreadId": "18050164439705894",
+      "originalAccount": "a2",
+      "originalText": "見に行く前に、売れてた。",
+      "replyText": "土地って特にそれだな。いい立地は本当に一瞬で消える",
+      "replyId": "17865835122608112",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 441,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-29T16:38:35.152Z",
+      "originalThreadId": "18060196286401690",
+      "originalAccount": "a2",
+      "originalText": "高い土地が損とは限らない。\n\n外構・地盤改良・アクセスの差で、安い土地が結局高くついた話、けっこう聞く。\n\n「価格」より「総額」で見ないと、比べた意味がない。",
+      "replyText": "みんなここケチって後から泣くんだよなぁ。地盤改良だけで200万超えたって話、結構聞くし",
+      "replyId": "17919275550126295",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 860,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-29T16:40:28.047Z",
+      "originalThreadId": "18001184984860446",
+      "originalAccount": "a3",
+      "originalText": "土地代、あれこんなに取られるの？\n\n仲介手数料とか登記費用とか、土地の値段以外に100万以上かかるって、最初全然わかってなかった。\n\n「土地2000万です」って言われて、じゃあ2000万用意すればいい",
+      "replyText": "みんなここケチって後から泣くんだよなぁ…土地代の1割は諸費用で見といた方がいい",
+      "replyId": "18045235175726059",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1647,
+        "likes": 1,
+        "replies": 1
+      }
     }
   ]
 }
