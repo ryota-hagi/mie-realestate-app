@@ -3751,6 +3751,34 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-29T05:32:01.884Z",
+      "originalThreadId": "17871059658584246",
+      "originalAccount": "a2",
+      "originalText": "土地、焦って決めた。\n\n2ヶ月後に同じ沿線で、100万安い物件が出た。\n\n「いい土地は早い」は半分本当で、半分は焦らせるための言葉だったかもしれない。",
+      "replyText": "あと近所の騒音って内見じゃ絶対わからないんだよね。引っ越してから気づく人多い。",
+      "replyId": "17990492888781810",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 2555,
+        "likes": 2,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-29T05:33:52.960Z",
+      "originalThreadId": "17907289278204974",
+      "originalAccount": "a2",
+      "originalText": "現地、5回行った。\n\n朝イチ、昼、夕方、曇りの日、晴れの日。\n\n結局「悪くない」で決めた。何回行っても確信にはならなかった。",
+      "replyText": "みんなここケチるんだよなぁ…。実際は「最悪のシーン」を1回見るだけで十分なんだよね。雨の日の水はけとか。",
+      "replyId": "18572093926013324",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 424,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
