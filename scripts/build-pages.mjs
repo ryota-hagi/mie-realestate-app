@@ -793,8 +793,8 @@ function buildStaticHubContent() {
         <li><a href="/knowledge/housing-loan/">住宅ローン完全ガイド</a></li>
         <li><a href="/knowledge/land-selection/">土地探しで失敗しない10のポイント</a></li>
         <li><a href="/knowledge/builder-comparison/">ハウスメーカー・工務店の選び方</a></li>
-        <li><a href="/builders/">三重県のハウスメーカー・工務店15社一覧</a></li>
-        <li><a href="/knowledge/mie-builder-guide/">三重県ハウスメーカーおすすめ15社ガイド</a></li>
+        <li><a href="/builders/">三重県のハウスメーカー・工務店16社一覧</a></li>
+        <li><a href="/knowledge/mie-builder-guide/">三重県ハウスメーカーおすすめ16社ガイド</a></li>
         <li><a href="/knowledge/energy-efficiency/">断熱性能・省エネ基準ガイド</a></li>
         <li><a href="/knowledge/earthquake-resistance/">耐震性能ガイド</a></li>
         <li><a href="/knowledge/floor-plan/">間取り実例集</a></li>
@@ -1552,16 +1552,17 @@ function generateAboutPage() {
     </ul>
 
     <h2>データ出典</h2>
-    <p>当サイトで使用しているデータは、以下の公的機関のオープンデータに基づいています。</p>
+    <p>当サイトで使用しているデータは、以下の情報源に基づいています。</p>
     <ul>
       <li><a href="https://www.reinfolib.mlit.go.jp/" rel="noopener" target="_blank">国土交通省 不動産情報ライブラリ（REINFOLIB）</a> — 不動産取引価格情報</li>
       <li><a href="https://www.land.mlit.go.jp/landPrice/AriaServlet?MOD=2&TYP=0" rel="noopener" target="_blank">国土交通省 地価公示</a> — 公示地価データ</li>
       <li><a href="https://www.e-stat.go.jp/" rel="noopener" target="_blank">総務省 e-Stat</a> — 統計データ（人口・世帯数等）</li>
     </ul>
+    <p>ハウスメーカー・工務店の坪単価・特徴・保証内容は、各社の公式サイト・カタログ・住宅情報サイト等を参考に編集部が調査したものであり、実際の契約条件とは異なる場合があります。正確な費用・仕様は各社に直接お問い合わせください。</p>
 
     <h2>免責事項</h2>
     <p>当サイトは注文住宅の土地探し・費用検討を支援する参考情報を提供するものであり、不動産取引に関する助言を行うものではありません。掲載情報の正確性には最大限の注意を払っていますが、実際の不動産購入にあたっては、必ず不動産会社・建築会社・金融機関等の専門家にご相談ください。</p>
-    <p>土地価格・建築費等の数値は、公的データに基づく参考値であり、実際の取引価格とは異なる場合があります。</p>
+    <p>土地価格・建築費等の数値は参考値であり、実際の取引価格・契約条件とは異なる場合があります。</p>
 
     <h2>お問い合わせ</h2>
     <p>サイトに関するご意見・ご要望・データの修正依頼等がございましたら、以下までご連絡ください。</p>
@@ -2276,7 +2277,7 @@ function generateBuildersHubPage() {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: '三重県のハウスメーカー・工務店一覧',
-    description: '三重県で注文住宅を建てられるハウスメーカー・工務店15社を3つの価格帯で比較。坪単価・特徴・対応エリアを一覧で確認できます。',
+    description: '三重県で注文住宅を建てられるハウスメーカー・工務店16社を3つの価格帯で比較。坪単価・特徴・対応エリアを一覧で確認できます。',
     url: `${DOMAIN}/builders/`,
     mainEntity: {
       '@type': 'ItemList',
@@ -2334,11 +2335,11 @@ function generateBuildersHubPage() {
   gtag('js', new Date());
   gtag('config', 'G-SZV3XF0W0G');
 </script>
-<title>三重県のハウスメーカー・工務店15社一覧｜注文住宅比較.com</title>
-<meta name="description" content="三重県で注文住宅を建てられるハウスメーカー・工務店15社を3つの価格帯で比較。坪単価・特徴・対応エリアを一覧で確認。ローコストから高性能住宅まで最適な1社を見つけましょう。">
+<title>三重県のハウスメーカー・工務店16社一覧｜注文住宅比較.com</title>
+<meta name="description" content="三重県で注文住宅を建てられるハウスメーカー・工務店16社を3つの価格帯で比較。坪単価・特徴・対応エリアを一覧で確認。ローコストから高性能住宅まで最適な1社を見つけましょう。">
 <link rel="canonical" href="${DOMAIN}/builders/">
-<meta property="og:title" content="三重県のハウスメーカー・工務店15社一覧｜注文住宅比較.com">
-<meta property="og:description" content="三重県で注文住宅を建てられるハウスメーカー・工務店15社を3つの価格帯で比較。ローコストから高性能住宅まで。">
+<meta property="og:title" content="三重県のハウスメーカー・工務店16社一覧｜注文住宅比較.com">
+<meta property="og:description" content="三重県で注文住宅を建てられるハウスメーカー・工務店16社を3つの価格帯で比較。ローコストから高性能住宅まで。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${DOMAIN}/builders/">
 <meta property="og:site_name" content="注文住宅比較.com">
@@ -2438,7 +2439,7 @@ ${generateGlobalHeader('builders')}
 
   <div class="bh-cta">
     <h3>ハウスメーカーの選び方を詳しく知る</h3>
-    <p>15社の詳細比較、エリア別対応一覧、失敗しない選び方のコツをまとめた完全ガイド</p>
+    <p>16社の詳細比較、エリア別対応一覧、失敗しない選び方のコツをまとめた完全ガイド</p>
     <a href="/knowledge/mie-builder-guide/">三重県ハウスメーカーおすすめガイド →</a>
   </div>
 </main>
