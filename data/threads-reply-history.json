@@ -3947,6 +3947,48 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-30T16:54:42.359Z",
+      "originalThreadId": "18335322820174886",
+      "originalAccount": "a1",
+      "originalText": "「今だけ値引き」に焦って契約した。\n\nあれ、今だけじゃなかったよ。",
+      "replyText": "営業の常套句だよなぁ。同じセールス文句、毎月何十件も聞くわ。契約後に気づくパターンほんと多い。",
+      "replyId": "17952280331960967",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1045,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-03-30T16:57:37.825Z",
+      "originalThreadId": "17907289278204974",
+      "originalAccount": "a2",
+      "originalText": "現地、5回行った。\n\n朝イチ、昼、夕方、曇りの日、晴れの日。\n\n結局「悪くない」で決めた。何回行っても確信にはならなかった。",
+      "replyText": "ちなみに5回中何回くらい、実際に住む時間帯（朝とか夜）も見に行った？日中だけだと意外と見えない部分あるんだよね。",
+      "replyId": "17926177842255559",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 435,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-30T17:00:01.525Z",
+      "originalThreadId": "18071383328304131",
+      "originalAccount": "a3",
+      "originalText": "いい土地、見に行く前になくなる。\n\n「明日行こう」って言ってる間に、もう売約済みなんだよね。",
+      "replyText": "みんなここで決断遅れて後悔するんだよなぁ…24時間以内に判断しないと、まず消えると思っといた方がいい",
+      "replyId": "17995725470925709",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 267,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
