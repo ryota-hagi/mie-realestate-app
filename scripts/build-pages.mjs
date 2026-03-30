@@ -13,6 +13,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 import { minify } from 'terser';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -40,6 +41,12 @@ const mlitHazard = existsSync(mlitHazardPath)
 
 const DOMAIN = 'https://research.chuumon-soudan.com';
 const TODAY = new Date().toISOString().split('T')[0];
+
+// 大手HMビルダー: SEOで勝てないためnoindex化 & sitemap除外
+const NOINDEX_BUILDER_IDS = new Set([
+  'daiwa-house', 'toyota-home', 'sekisui-heim',
+  'panasonic-homes', 'sumitomo-ringyo', 'ichijo-koumuten'
+]);
 
 const CITIES = [
   { id: 'yokkaichi', name: '四日市市' },
@@ -992,7 +999,7 @@ function generateHubPage() {
   );
   html = html.replace(
     '"author": { "@type": "Organization", "name": "注文住宅比較.com" }',
-    '"author": { "@type": "Organization", "name": "注文住宅比較.com", "url": "https://research.chuumon-soudan.com/about/", "description": "注文住宅の土地探し・費用比較をサポートする情報サイト" }, "publisher": { "@type": "Organization", "name": "注文住宅比較.com", "url": "https://research.chuumon-soudan.com/about/" }, "dateModified": "' + TODAY + '"'
+    '"author": { "@type": "Organization", "name": "株式会社ariGaT", "url": "https://research.chuumon-soudan.com/about/", "description": "三重県鈴鹿市のWeb企業。注文住宅比較.comを運営" }, "publisher": { "@type": "Organization", "name": "株式会社ariGaT", "url": "https://research.chuumon-soudan.com/about/" }, "dateModified": "' + TODAY + '"'
   );
 
   // 7. Add tooltip CSS + static content CSS before </style>
@@ -1299,7 +1306,7 @@ function generateCityPage(cityId) {
   );
   html = html.replace(
     '"author": { "@type": "Organization", "name": "注文住宅比較.com" }',
-    '"author": { "@type": "Organization", "name": "注文住宅比較.com", "url": "https://research.chuumon-soudan.com/about/", "description": "注文住宅の土地探し・費用比較をサポートする情報サイト" }, "publisher": { "@type": "Organization", "name": "注文住宅比較.com", "url": "https://research.chuumon-soudan.com/about/" }, "dateModified": "' + TODAY + '"'
+    '"author": { "@type": "Organization", "name": "株式会社ariGaT", "url": "https://research.chuumon-soudan.com/about/", "description": "三重県鈴鹿市のWeb企業。注文住宅比較.comを運営" }, "publisher": { "@type": "Organization", "name": "株式会社ariGaT", "url": "https://research.chuumon-soudan.com/about/" }, "dateModified": "' + TODAY + '"'
   );
 
   // 7. Add tooltip CSS + static content CSS
@@ -1517,6 +1524,17 @@ function generateAboutPage() {
   <main class="about-main">
     <h1>運営者情報</h1>
 
+    <h2>運営会社</h2>
+    <table>
+      <tr><th>会社名</th><td>株式会社ariGaT</td></tr>
+      <tr><th>代表者</th><td>萩 良太</td></tr>
+      <tr><th>所在地</th><td>〒513-0816 三重県鈴鹿市南玉垣町5707番2・2階</td></tr>
+      <tr><th>設立</th><td>2020年5月</td></tr>
+      <tr><th>法人番号</th><td>6190001027349</td></tr>
+      <tr><th>事業内容</th><td>Webメディア運営 / コンサルティング / 補助金申請サポート / 資金調達支援</td></tr>
+      <tr><th>関連サービス</th><td><a href="https://miepita.com/" rel="noopener" target="_blank">ミエピタ</a>（三重企業のビジネスマッチングサイト）</td></tr>
+    </table>
+
     <h2>サイト概要</h2>
     <table>
       <tr><th>サイト名</th><td>注文住宅比較.com</td></tr>
@@ -1524,6 +1542,7 @@ function generateAboutPage() {
       <tr><th>サービス内容</th><td>注文住宅の土地探し・費用比較をサポートする無料Webツール</td></tr>
       <tr><th>対象エリア</th><td>三重県北部（四日市市・桑名市・鈴鹿市・いなべ市・亀山市・菰野町・東員町）</td></tr>
     </table>
+    <p>注文住宅比較.comは、三重県鈴鹿市に本社を置く株式会社ariGaTが運営する住宅情報メディアです。三重県で注文住宅を検討されている方に向けて、地元企業ならではの視点で地域に密着した住宅情報をお届けしています。</p>
 
     <h2>提供ツール</h2>
     <ul>
@@ -1546,7 +1565,10 @@ function generateAboutPage() {
 
     <h2>お問い合わせ</h2>
     <p>サイトに関するご意見・ご要望・データの修正依頼等がございましたら、以下までご連絡ください。</p>
-    <p>お問い合わせ先の準備中です。</p>
+    <table>
+      <tr><th>運営会社</th><td>株式会社ariGaT</td></tr>
+      <tr><th>所在地</th><td>〒513-0816 三重県鈴鹿市南玉垣町5707番2・2階</td></tr>
+    </table>
 
     <p style="font-size:12px;color:#9ca3af;margin-top:32px;">最終更新: ${TODAY}</p>
   </main>
@@ -1554,7 +1576,7 @@ function generateAboutPage() {
   <footer class="about-footer">
     <p><a href="/">注文住宅比較.com</a> | <a href="/area/mie/">三重県エリア比較</a> | <a href="/builders/">工務店情報</a>
         <a href="/builders/events/">イベント情報</a> | <a href="/knowledge/">注文住宅の知識</a></p>
-    <p style="margin-top: 8px;">&copy; 注文住宅比較.com</p>
+    <p style="margin-top: 8px;">&copy; 株式会社ariGaT</p>
   </footer>
 </body>
 </html>`;
@@ -1591,8 +1613,8 @@ ${JSON.stringify({
   '@type': 'Article',
   headline: article.title,
   description: article.description,
-  author: { '@type': 'Organization', name: '注文住宅比較.com', url: DOMAIN + '/about/' },
-  publisher: { '@type': 'Organization', name: '注文住宅比較.com', url: DOMAIN + '/about/' },
+  author: { '@type': 'Organization', name: '株式会社ariGaT', url: DOMAIN + '/about/', description: '三重県鈴鹿市のWeb企業。注文住宅比較.comを運営' },
+  publisher: { '@type': 'Organization', name: '株式会社ariGaT', url: DOMAIN + '/about/' },
   datePublished: TODAY,
   dateModified: TODAY,
   mainEntityOfPage: { '@type': 'WebPage', '@id': `${DOMAIN}/knowledge/${article.id}/` }
@@ -1665,7 +1687,9 @@ ${JSON.stringify({
 <title>${escHtml(article.title)} | 注文住宅比較.com</title>
 <meta name="description" content="${escHtml(article.description)}">
 <meta name="keywords" content="${escHtml(article.keywords)}">
-<link rel="canonical" href="${DOMAIN}/knowledge/${article.id}/">
+${article.id === 'builder-comparison'
+    ? `<link rel="canonical" href="${DOMAIN}/knowledge/mie-builder-guide/">`
+    : `<link rel="canonical" href="${DOMAIN}/knowledge/${article.id}/">`}
 <meta property="og:title" content="${escHtml(article.title)}">
 <meta property="og:description" content="${escHtml(article.description)}">
 <meta property="og:type" content="article">
@@ -1859,7 +1883,7 @@ ${faqJsonLd}
     <p><a href="/">注文住宅比較.com</a> | <a href="/area/mie/">三重県エリア比較</a> | <a href="/builders/">工務店情報</a>
         <a href="/builders/events/">イベント情報</a> | <a href="/knowledge/">注文住宅の知識</a></p>
     <p style="margin-top: 8px;">データ出典: <a href="https://www.reinfolib.mlit.go.jp/" rel="noopener">国土交通省 不動産情報ライブラリ</a></p>
-    <p style="margin-top: 4px;">&copy; 注文住宅比較.com</p>
+    <p style="margin-top: 4px;">&copy; 株式会社ariGaT</p>
   </footer>
 </body>
 </html>`;
@@ -2121,7 +2145,7 @@ ${collectionJsonLd}
   <footer class="ka-hub-footer">
     <p><a href="/">注文住宅比較.com</a> | <a href="/area/mie/">三重県エリア比較</a> | <a href="/builders/">工務店情報</a>
         <a href="/builders/events/">イベント情報</a> | <a href="/knowledge/">注文住宅の知識</a></p>
-    <p style="margin-top:8px;">&copy; 注文住宅比較.com</p>
+    <p style="margin-top:8px;">&copy; 株式会社ariGaT</p>
   </footer>
 </body>
 </html>`;
@@ -2131,23 +2155,35 @@ ${collectionJsonLd}
 // Generate sitemap.xml
 // ---------------------------------------------------------------------------
 function generateSitemap() {
+  // git log からページの最終更新日を取得
+  function getGitLastmod(filePath) {
+    try {
+      const fullPath = join(ROOT, filePath);
+      if (!existsSync(fullPath)) return TODAY;
+      const date = execSync(`git log -1 --format=%cs -- "${fullPath}"`, { cwd: ROOT, encoding: 'utf-8' }).trim();
+      return date || TODAY;
+    } catch {
+      return TODAY;
+    }
+  }
+
   const urls = [
-    { loc: '/', priority: '1.0', changefreq: 'weekly' },
-    { loc: '/area/mie/', priority: '0.9', changefreq: 'weekly' },
-    ...CITIES.map(c => ({ loc: `/area/mie/${c.id}/`, priority: '0.8', changefreq: 'weekly' })),
-    { loc: '/knowledge/', priority: '0.8', changefreq: 'monthly' },
-    ...knowledgeData.articles.map(a => ({ loc: `/knowledge/${a.id}/`, priority: '0.7', changefreq: 'monthly' })),
-    { loc: '/builders/', priority: '0.8', changefreq: 'monthly' },
-    { loc: '/builders/events/', priority: '0.7', changefreq: 'weekly' },
-    ...buildersData.map(b => ({ loc: `/builders/${b.id}/`, priority: '0.6', changefreq: 'monthly' })),
-    { loc: '/about/', priority: '0.3', changefreq: 'monthly' }
+    { loc: '/', priority: '1.0', changefreq: 'weekly', lastmod: TODAY },
+    { loc: '/area/mie/', priority: '0.9', changefreq: 'weekly', lastmod: getGitLastmod('area/mie/index.html') },
+    ...CITIES.map(c => ({ loc: `/area/mie/${c.id}/`, priority: '0.8', changefreq: 'weekly', lastmod: getGitLastmod(`area/mie/${c.id}/index.html`) })),
+    { loc: '/knowledge/', priority: '0.8', changefreq: 'monthly', lastmod: TODAY },
+    ...knowledgeData.articles.map(a => ({ loc: `/knowledge/${a.id}/`, priority: '0.7', changefreq: 'monthly', lastmod: getGitLastmod(`knowledge/${a.id}/index.html`) })),
+    { loc: '/builders/', priority: '0.8', changefreq: 'monthly', lastmod: getGitLastmod('builders/index.html') },
+    { loc: '/builders/events/', priority: '0.7', changefreq: 'weekly', lastmod: TODAY },
+    ...buildersData.filter(b => !NOINDEX_BUILDER_IDS.has(b.id)).map(b => ({ loc: `/builders/${b.id}/`, priority: '0.6', changefreq: 'monthly', lastmod: getGitLastmod(`builders/${b.id}/index.html`) })),
+    { loc: '/about/', priority: '0.3', changefreq: 'monthly', lastmod: getGitLastmod('about/index.html') }
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url>
     <loc>${DOMAIN}${u.loc}</loc>
-    <lastmod>${TODAY}</lastmod>
+    <lastmod>${u.lastmod}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
   </url>`).join('\n')}
@@ -2503,13 +2539,16 @@ function generateBuilderPage(builder) {
     </div>
   </div>` : '';
 
+  const noindexTag = NOINDEX_BUILDER_IDS.has(builder.id)
+    ? '\n<meta name="robots" content="noindex, follow">' : '';
+
   return `<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${escHtml(pageTitle)}</title>
-<meta name="description" content="${escHtml(pageDesc)}">
+<meta name="description" content="${escHtml(pageDesc)}">${noindexTag}
 <link rel="canonical" href="${DOMAIN}/builders/${escHtml(builder.id)}/">
 <meta property="og:title" content="${escHtml(pageTitle)}">
 <meta property="og:description" content="${escHtml(pageDesc)}">
@@ -2523,8 +2562,8 @@ ${businessJsonLd}
   '@type': 'Article',
   headline: pageTitle,
   description: pageDesc,
-  author: { '@type': 'Organization', name: '注文住宅比較.com', url: DOMAIN + '/about/' },
-  publisher: { '@type': 'Organization', name: '注文住宅比較.com', url: DOMAIN + '/about/' },
+  author: { '@type': 'Organization', name: '株式会社ariGaT', url: DOMAIN + '/about/', description: '三重県鈴鹿市のWeb企業。注文住宅比較.comを運営' },
+  publisher: { '@type': 'Organization', name: '株式会社ariGaT', url: DOMAIN + '/about/' },
   datePublished: TODAY,
   dateModified: TODAY,
   mainEntityOfPage: { '@type': 'WebPage', '@id': `${DOMAIN}/builders/${builder.id}/` }
