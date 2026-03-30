@@ -1871,6 +1871,15 @@
       },
       "engagementScore": 8,
       "engagementUpdatedAt": "2026-03-26T11:42:55.860Z"
+    },
+    {
+      "date": "2026-03-30T15:49:26.030Z",
+      "category": "aruaru",
+      "topicKey": "koukai:26",
+      "text": "「今だけ値引き」に焦って契約した。\n\nあれ、今だけじゃなかったよ。",
+      "threadId": "18335322820174886",
+      "charCount": 33,
+      "account": "a1"
     }
   ]
 }
