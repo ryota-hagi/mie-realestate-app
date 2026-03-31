@@ -1879,7 +1879,16 @@
       "text": "「今だけ値引き」に焦って契約した。\n\nあれ、今だけじゃなかったよ。",
       "threadId": "18335322820174886",
       "charCount": 33,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 1060,
+        "likes": 0,
+        "replies": 3,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 12,
+      "engagementUpdatedAt": "2026-03-31T22:00:13.933Z"
     },
     {
       "date": "2026-03-30T22:01:05.777Z",
@@ -1924,6 +1933,15 @@
       "text": "角地、高いって知ってたけど。\n\n実際に価格表見て、思ってたより全然高くてため息出た。\n\n「日当たりいいから仕方ない」って自分に言い聞かせて、結局諦めたよ。",
       "threadId": "18168535306407222",
       "charCount": 77,
+      "account": "a1"
+    },
+    {
+      "date": "2026-03-31T22:00:26.684Z",
+      "category": "aruaru",
+      "topicKey": "aruaru:5",
+      "text": "完成見学会、行くんじゃなかった。\n\n「すごいですね」って言ったら、その日の夜に電話来たよ。",
+      "threadId": "18098207173974795",
+      "charCount": 45,
       "account": "a1"
     }
   ]
