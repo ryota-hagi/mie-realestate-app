@@ -1213,7 +1213,16 @@
       "text": "いい土地、見に行く前になくなる。\n\n「明日行こう」って言ってる間に、もう売約済みなんだよね。",
       "threadId": "18071383328304131",
       "charCount": 46,
-      "account": "a3"
+      "account": "a3",
+      "engagement": {
+        "views": 269,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-03-31T14:46:04.291Z"
     },
     {
       "date": "2026-03-30T14:49:11.391Z",
@@ -1240,6 +1249,15 @@
       "text": "お隣との境界線、認識が違った。\n\nどっちが正しいか、今でもよくわからないまま。",
       "threadId": "18039214217566310",
       "charCount": 39,
+      "account": "a3"
+    },
+    {
+      "date": "2026-03-31T14:46:17.397Z",
+      "category": "loan",
+      "topicKey": "loan:subsidy-2026:section:6",
+      "text": "補助金、引き渡し後に調べた。\n\n申請期限、とっくに過ぎてた。\n条件も思ってたより厳しくて、そもそも対象外だったかもしれない。\n\n早く動けばよかった、じゃなくて、最初から知らなすぎた。",
+      "threadId": "18094529099012056",
+      "charCount": 91,
       "account": "a3"
     }
   ]
