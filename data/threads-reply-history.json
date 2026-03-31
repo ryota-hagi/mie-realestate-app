@@ -4073,6 +4073,62 @@
         "likes": 2,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-03-31T10:45:19.718Z",
+      "originalThreadId": "18335322820174886",
+      "originalAccount": "a1",
+      "originalText": "「今だけ値引き」に焦って契約した。\n\nあれ、今だけじゃなかったよ。",
+      "replyText": "ちなみに値引き幅どのくらいだった？営業に「いつまで？」って聞いた？",
+      "replyId": "17878595733415306",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1058,
+        "likes": 0,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-03-31T10:47:20.835Z",
+      "originalThreadId": "18062853668694106",
+      "originalAccount": "a2",
+      "originalText": "変動か固定か、2ヶ月悩んだ。\n\n結局どっちが正解かは、まだわからない。",
+      "replyText": "金利予測なんて誰にもわかんないからな。その時点での判断が全てだわ",
+      "replyId": "17879275671544142",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 345,
+        "likes": 1,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-31T10:49:09.087Z",
+      "originalThreadId": "18367000555205401",
+      "originalAccount": "a3",
+      "originalText": "全部私に投げといて、後から「こうすればよかった」って言ってきた。\n\nいや、じゃあ一緒に決めようよ、って。\n\nその「後から」が一番しんどい。同じ思いした人、います？",
+      "replyText": "みんなここケチるんだよなぁ…って感じで後悔するパターンね。夫婦で意思決定のタイミング合わせるの、めっちゃ重要だわ",
+      "replyId": "18143486833437238",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 104,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-03-31T10:51:48.600Z",
+      "originalThreadId": "18578708521043173",
+      "originalAccount": "a3",
+      "originalText": "隣の木、こんなに落ちてくるんだ。\n\n新築で庭作って、芝も張って、割と気に入ってたのに。\n\n秋になったら隣の大きい木から葉っぱがどっさり入ってきて、週2で掃除してる。\n庭のこと、家の中ばっかり考えてて、",
+      "replyText": "体感10人に9人、隣地の樹木で後悔してるんだよなぁ。内覧時って隣の状況まで見ない人がほとんどだわ。",
+      "replyId": "18088092641190990",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 224,
+        "likes": 0,
+        "replies": 1
+      }
     }
   ]
 }
