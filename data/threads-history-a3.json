@@ -1267,7 +1267,16 @@
       "text": "お隣との境界線、認識が違った。\n\nどっちが正しいか、今でもよくわからないまま。",
       "threadId": "18039214217566310",
       "charCount": 39,
-      "account": "a3"
+      "account": "a3",
+      "engagement": {
+        "views": 150,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-01T11:56:49.111Z"
     },
     {
       "date": "2026-03-31T14:46:17.397Z",
