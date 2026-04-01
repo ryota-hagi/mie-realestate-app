@@ -1933,7 +1933,16 @@
       "text": "和室、完全に物置になってる。\n\n荷物の一時置き場として使い始めたら、そこから動かなくなった。\n\n畳の上に段ボールが積まれてる家って、なんか悲しいな🥲",
       "threadId": "17929434714246486",
       "charCount": 75,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 351,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-01T06:25:27.739Z"
     },
     {
       "date": "2026-03-31T08:10:38.211Z",
@@ -1978,6 +1987,15 @@
       "text": "パントリー、削ったんだよね。\n\n予算オーバーで「まあキッチンに収まるか」って思って。\n\n全然収まらなかった。毎日ごちゃごちゃのまま料理してる😭",
       "threadId": "17880229722405923",
       "charCount": 72,
+      "account": "a1"
+    },
+    {
+      "date": "2026-04-01T06:25:39.674Z",
+      "category": "koukai",
+      "topicKey": "koukai:5",
+      "text": "窓、大きくしすぎた。\n\n夏、リビングが灼熱になった。",
+      "threadId": "18148941841477523",
+      "charCount": 26,
       "account": "a1"
     }
   ]
