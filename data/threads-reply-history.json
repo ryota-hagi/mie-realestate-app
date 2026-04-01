@@ -4213,6 +4213,62 @@
         "likes": 2,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-04-01T10:45:59.348Z",
+      "originalThreadId": "18168535306407222",
+      "originalAccount": "a1",
+      "originalText": "角地、高いって知ってたけど。\n\n実際に価格表見て、思ってたより全然高くてため息出た。\n\n「日当たりいいから仕方ない」って自分に言い聞かせて、結局諦めたよ。",
+      "replyText": "角地プレミアム、ほんと容赦ないんだよなぁ。南向きなら余計に跳ね上がる。諦めずに土地の形いろいろ見比べた？意外と凹地とかの方がコスパいいこともあるぞ。",
+      "replyId": "18104535538918333",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1116,
+        "likes": 1,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-01T10:48:31.325Z",
+      "originalThreadId": "18443862532116086",
+      "originalAccount": "a1",
+      "originalText": "見に行く前に、なくなってた。\n\n気になる土地って、連絡した時点でもう売れてるんだよね。うちもそれ、3回やった。",
+      "replyText": "みんなここでモタつくんだよなぁ。土地は本当に秒だわ。連絡する前に仮押さえするくらいの気持ちで動かないとダメなやつだ。",
+      "replyId": "18095781068323257",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1177,
+        "likes": 1,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-01T10:50:58.931Z",
+      "originalThreadId": "17880229722405923",
+      "originalAccount": "a1",
+      "originalText": "パントリー、削ったんだよね。\n\n予算オーバーで「まあキッチンに収まるか」って思って。\n\n全然収まらなかった。毎日ごちゃごちゃのまま料理してる😭",
+      "replyText": "体感来客時に後悔する人9割以上だわ。キッチンだけじゃ絶対足りなくなるやつ。最低でも1坪は見といた方がいい",
+      "replyId": "18057281963472405",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 529,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-01T10:53:08.760Z",
+      "originalThreadId": "18148941841477523",
+      "originalAccount": "a1",
+      "originalText": "窓、大きくしすぎた。\n\n夏、リビングが灼熱になった。",
+      "replyText": "ちなみに日射遮蔽対策とかは考えなかったの？遮熱フィルムとか外付けシェードとか。",
+      "replyId": "18107587528675850",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1080,
+        "likes": 2,
+        "replies": 1
+      }
     }
   ]
 }
