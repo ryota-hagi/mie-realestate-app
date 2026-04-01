@@ -2365,7 +2365,16 @@
       "text": "変動か固定か、2ヶ月悩んだ。\n\n結局どっちが正解かは、まだわからない。",
       "threadId": "18062853668694106",
       "charCount": 35,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 347,
+        "likes": 1,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 9,
+      "engagementUpdatedAt": "2026-04-01T05:15:08.244Z"
     },
     {
       "date": "2026-03-31T05:02:27.762Z",
@@ -2374,6 +2383,24 @@
       "text": "頭金、もっと積んでから動けばよかった。\n\n300万入れたけど、あと200万あれば月々の返済が1.2万変わってた。\n\nその差、35年で500万超える。\n\nわかってたけど、当時は「早く建てたい」が勝った。いまもその判断が正しかったのか、正直わからない。",
       "threadId": "18223732378309594",
       "charCount": 124,
+      "account": "a2",
+      "engagement": {
+        "views": 2477,
+        "likes": 2,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 2,
+      "engagementUpdatedAt": "2026-04-01T05:15:08.932Z"
+    },
+    {
+      "date": "2026-04-01T05:15:18.775Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:18",
+      "text": "土地だけは、決め直せない。\n\n3/28に「焦って決めた」って書いたけど、あれからずっと引きずってる。\n\n場所の失敗は、どう頑張っても壁紙みたいに貼り替えられない。",
+      "threadId": "18100525135752995",
+      "charCount": 81,
       "account": "a2"
     }
   ]
