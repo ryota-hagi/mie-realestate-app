@@ -4129,6 +4129,90 @@
         "likes": 0,
         "replies": 1
       }
+    },
+    {
+      "date": "2026-04-01T05:51:21.487Z",
+      "originalThreadId": "18335322820174886",
+      "originalAccount": "a1",
+      "originalText": "「今だけ値引き」に焦って契約した。\n\nあれ、今だけじゃなかったよ。",
+      "replyText": "営業のテンプレートなんだよなぁ。来月も「今月中なら」って言ってくる。焦らせるのが手口だわ。",
+      "replyId": "18090035018180694",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1061,
+        "likes": 0,
+        "replies": 3
+      }
+    },
+    {
+      "date": "2026-04-01T05:54:00.515Z",
+      "originalThreadId": "17929434714246486",
+      "originalAccount": "a1",
+      "originalText": "和室、完全に物置になってる。\n\n荷物の一時置き場として使い始めたら、そこから動かなくなった。\n\n畳の上に段ボールが積まれてる家って、なんか悲しいな🥲",
+      "replyText": "畳の上に段ボール、これ体感で8割くらいの家がなってるんだよなぁ。最初は「たまに使う部屋」で始まるんだけど、そこからが長い",
+      "replyId": "17860272225674478",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 351,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-01T05:56:48.284Z",
+      "originalThreadId": "18223732378309594",
+      "originalAccount": "a2",
+      "originalText": "頭金、もっと積んでから動けばよかった。\n\n300万入れたけど、あと200万あれば月々の返済が1.2万変わってた。\n\nその差、35年で500万超える。\n\nわかってたけど、当時は「早く建てたい」が勝った。",
+      "replyText": "うちのサイトにも同じ声めちゃ届いてるわ。頭金の後悔って一番長く引きずるやつなんだよね。",
+      "replyId": "18457538473097175",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 2479,
+        "likes": 2,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-01T05:59:34.181Z",
+      "originalThreadId": "18071383328304131",
+      "originalAccount": "a3",
+      "originalText": "いい土地、見に行く前になくなる。\n\n「明日行こう」って言ってる間に、もう売約済みなんだよね。",
+      "replyText": "ちなみに何件くらい内見する予定だった？1件だけ見に行く感じ？",
+      "replyId": "18306518563277253",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 279,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-01T06:02:44.238Z",
+      "originalThreadId": "18574819474011016",
+      "originalAccount": "a3",
+      "originalText": "リビング階段、冬が来て初めて後悔した。\n\n暖房つけても、階段から冷気が降りてくる。\n\n「おしゃれだから」で決めたやつ、ちゃんと冬のこと考えてなかった。",
+      "replyText": "みんなここケチるんだよなぁ。階段に断熱材入れるだけで全然違うのに、デザイン優先で後付けしようとしてから泣く人多い。",
+      "replyId": "18348023581209409",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 929,
+        "likes": 1,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-01T06:05:50.961Z",
+      "originalThreadId": "18094529099012056",
+      "originalAccount": "a3",
+      "originalText": "補助金、引き渡し後に調べた。\n\n申請期限、とっくに過ぎてた。\n条件も思ってたより厳しくて、そもそも対象外だったかもしれない。\n\n早く動けばよかった、じゃなくて、最初から知らなすぎた。",
+      "replyText": "補助金の後悔、うちのサイトにも毎週届く相談だわ。事前調査が全てなんだよね。",
+      "replyId": "17917051752324909",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 2912,
+        "likes": 2,
+        "replies": 0
+      }
     }
   ]
 }
