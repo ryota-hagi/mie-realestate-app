@@ -1951,7 +1951,16 @@
       "text": "工期、2ヶ月延びた。\n\nアパートの契約、どうするんって話になって、1ヶ月だけ延長したんだけど、それもズレてさ😅\n\n結局また延長して、出費えぐかった。\n\n「だいたい〇月頃の予定です」ってあの言葉、もう信じないって心に決めた。",
       "threadId": "18110352127808508",
       "charCount": 112,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 682,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-01T08:17:01.647Z"
     },
     {
       "date": "2026-03-31T15:43:59.624Z",
@@ -1996,6 +2005,15 @@
       "text": "窓、大きくしすぎた。\n\n夏、リビングが灼熱になった。",
       "threadId": "18148941841477523",
       "charCount": 26,
+      "account": "a1"
+    },
+    {
+      "date": "2026-04-01T08:17:13.101Z",
+      "category": "momegoto",
+      "topicKey": "momegoto:11",
+      "text": "言ったのに、反映されてなかった😤\n\n図面見て「あれ？」ってなるやつ、うちだけじゃないよね。",
+      "threadId": "18177087346390249",
+      "charCount": 46,
       "account": "a1"
     }
   ]
