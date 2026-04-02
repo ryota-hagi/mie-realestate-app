@@ -2437,7 +2437,16 @@
       "text": "コンセント、ケチった。\n\n延長コード、3本買い足した。\n\n新築なのに。",
       "threadId": "18086363237001898",
       "charCount": 35,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 835,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-04-02T14:22:41.853Z"
     },
     {
       "date": "2026-04-01T14:42:45.091Z",
@@ -2464,6 +2473,15 @@
       "text": "朝のラッシュ、試しに走らなかった。\n\n完全に盲点だった。\n\n地図上は20分。現実は45分だった。",
       "threadId": "18131638258554782",
       "charCount": 48,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-02T14:22:53.472Z",
+      "category": "gyakusetsu",
+      "topicKey": "koukai:18",
+      "text": "ボーナス払い、ボーナスが減った年は本当にきつかった。\n\n月々は楽に見えるけど、ボーナスが当てにならない年の圧は完全に想定外だった。",
+      "threadId": "17954184432102640",
+      "charCount": 65,
       "account": "a2"
     }
   ]
