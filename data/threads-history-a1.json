@@ -2113,7 +2113,16 @@
       "text": "ウォークインクローゼット、通路に面積とられてた。\n\n広いと思って作ったのに、実際にしまえる量、壁面クローゼットとほぼ変わらなかったよ。\n\n通路って歩くためだけの場所なんだよね😅 なんで気づかなかったんだろ。",
       "threadId": "18092323334165259",
       "charCount": 104,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 1335,
+        "likes": 2,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 2,
+      "engagementUpdatedAt": "2026-04-02T21:57:32.983Z"
     },
     {
       "date": "2026-04-01T22:01:46.950Z",
@@ -2176,6 +2185,15 @@
       "text": "YouTube見すぎて、何もわからなくなった。\n\n情報多すぎて、最終的に何も決められなかったよ。",
       "threadId": "17947456272129848",
       "charCount": 48,
+      "account": "a1"
+    },
+    {
+      "date": "2026-04-02T21:57:43.327Z",
+      "category": "shippai",
+      "topicKey": "koukai:15",
+      "text": "火災保険、適当に選んだ。\n\nなんか入ってればいいかって思ってた。",
+      "threadId": "18074294516559538",
+      "charCount": 32,
       "account": "a1"
     }
   ]
