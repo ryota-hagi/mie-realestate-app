@@ -2095,7 +2095,16 @@
       "text": "住宅ローン控除、全然わかってなかった。\n\n入居してから初めてちゃんと調べて、「あ、これ申請しないと何もならないやつだ」ってなった😅\n\n知ってれば絶対もっと計算してたのに。",
       "threadId": "17885715033469559",
       "charCount": 86,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 2369,
+        "likes": 4,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 12,
+      "engagementUpdatedAt": "2026-04-02T14:19:51.653Z"
     },
     {
       "date": "2026-04-01T15:51:24.437Z",
@@ -2149,6 +2158,15 @@
       "text": "打ち合わせ、こんなに多いと思わなかった。\n\n週1で半年以上続いて、途中から何を決めてるかわからなくなってたよ。",
       "threadId": "18157592323443350",
       "charCount": 55,
+      "account": "a1"
+    },
+    {
+      "date": "2026-04-02T14:20:02.399Z",
+      "category": "aruaru",
+      "topicKey": "koukai:28",
+      "text": "全部任せて、後から文句言ったんだよね。\n\nそれが一番後悔してる。",
+      "threadId": "17961893181072844",
+      "charCount": 32,
       "account": "a1"
     }
   ]
