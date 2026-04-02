@@ -2401,7 +2401,16 @@
       "text": "土地だけは、決め直せない。\n\n3/28に「焦って決めた」って書いたけど、あれからずっと引きずってる。\n\n場所の失敗は、どう頑張っても壁紙みたいに貼り替えられない。",
       "threadId": "18100525135752995",
       "charCount": 81,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 497,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-02T11:00:34.624Z"
     },
     {
       "date": "2026-04-01T07:28:01.549Z",
@@ -2410,7 +2419,16 @@
       "text": "頭金、貯めるほど有利とは限らない。\n\n2年待って200万増やしたとして、その間に物件価格が300万上がってたら普通にマイナスだった。\n\n自分は早めに動いたけど、正解だったのかはまだわからない。",
       "threadId": "17860041933624326",
       "charCount": 96,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 471,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-02T11:00:35.264Z"
     },
     {
       "date": "2026-04-01T11:06:48.123Z",
@@ -2437,6 +2455,15 @@
       "text": "食洗機、浅型にして1年。たぶん深型でよかった。\n\n鍋が入らない。毎回手洗いしてる。\n差額は3万くらいだったと思う。\n\nみんなはどっちにした？",
       "threadId": "18071512880269193",
       "charCount": 70,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-02T11:00:45.944Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:21",
+      "text": "朝のラッシュ、試しに走らなかった。\n\n完全に盲点だった。\n\n地図上は20分。現実は45分だった。",
+      "threadId": "18131638258554782",
+      "charCount": 48,
       "account": "a2"
     }
   ]
