@@ -2131,7 +2131,16 @@
       "text": "完成見学会、1回しか行かなかった。\n\n写真で全部わかるって思ってたんだよね。\n\n実際入ってみたら、天井の圧迫感とか、隣の部屋の音の抜け方とか、全然違うんだなってなった。\n\n写真じゃわからないことの方が多かったよ😅",
       "threadId": "18123625588524969",
       "charCount": 107,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 417,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-02T23:39:53.352Z"
     },
     {
       "date": "2026-04-01T23:40:39.346Z",
@@ -2194,6 +2203,15 @@
       "text": "火災保険、適当に選んだ。\n\nなんか入ってればいいかって思ってた。",
       "threadId": "18074294516559538",
       "charCount": 32,
+      "account": "a1"
+    },
+    {
+      "date": "2026-04-02T23:40:02.775Z",
+      "category": "koukai",
+      "topicKey": "koukai:1",
+      "text": "コンセント、ケチった。\n\n延長コードだらけの家になったよ。",
+      "threadId": "18073402535203248",
+      "charCount": 29,
       "account": "a1"
     }
   ]
