@@ -2021,7 +2021,16 @@
       "text": "完成見学会で「いいですね〜」って言ったら翌日から電話が来るやつ。\n\n社交辞令だったのに、って人けっこういる。\n見学会、気軽に行けないんだよね実際。\n📝",
       "threadId": "18085565681338118",
       "charCount": 76,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 557,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-03T10:33:39.692Z"
     },
     {
       "date": "2026-04-02T09:54:17.830Z",
@@ -2061,6 +2070,15 @@
       "repliedTo": "18198856222341658",
       "keyword": "四日市",
       "charCount": 57
+    },
+    {
+      "date": "2026-04-03T10:34:06.235Z",
+      "category": "loan",
+      "topicKey": "loan:mortgage-rate-guide:section:3",
+      "text": "変動か固定か、どっちにするか迷ってる人、めちゃくちゃ多い。\n\n「安い時期に変動にしたけど、金利上がって怖くなってきた」って声、最近特に増えてる。\n\nどっちにした？",
+      "threadId": "17885947392470276",
+      "charCount": 81,
+      "account": "business"
     }
   ]
 }
