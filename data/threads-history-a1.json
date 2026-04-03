@@ -2203,7 +2203,16 @@
       "text": "打ち合わせ、こんなに多いと思わなかった。\n\n週1で半年以上続いて、途中から何を決めてるかわからなくなってたよ。",
       "threadId": "18157592323443350",
       "charCount": 55,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 234,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-03T06:11:34.177Z"
     },
     {
       "date": "2026-04-02T14:20:02.399Z",
@@ -2239,6 +2248,15 @@
       "text": "コンセント、ケチった。\n\n延長コードだらけの家になったよ。",
       "threadId": "18073402535203248",
       "charCount": 29,
+      "account": "a1"
+    },
+    {
+      "date": "2026-04-03T06:11:44.981Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:3",
+      "text": "平屋か2階建てか、ずっと迷って2階建てにしたけど、老後のこと全然考えてなかった。\n\nみんなはどっちにした？",
+      "threadId": "18345676681242751",
+      "charCount": 53,
       "account": "a1"
     }
   ]
