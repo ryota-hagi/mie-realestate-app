@@ -4549,6 +4549,76 @@
         "likes": 1,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-04-04T05:17:42.096Z",
+      "originalThreadId": "18074294516559538",
+      "originalAccount": "a1",
+      "originalText": "火災保険、適当に選んだ。\n\nなんか入ってればいいかって思ってた。",
+      "replyText": "みんなここケチるんだよなぁ…水害特約つけてないパターン多すぎて、あとで大変なことになってるやつ結構見るわ。",
+      "replyId": "18098045728818342",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 2258,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-04T05:20:25.536Z",
+      "originalThreadId": "18166204900413191",
+      "originalAccount": "a1",
+      "originalText": "頭金、もっと貯めてからにすればよかった。\n\nあの時「早く建てたい」って焦ったせいで、毎月の返済がしんどい。\n\n「あと1年待てばよかっただけ」ってずっと思ってる。",
+      "replyText": "ちなみに頭金の比率、どのくらいだったんですか？実際のとこ、いくら貯めてれば納得できてた？",
+      "replyId": "18400871227150743",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1240,
+        "likes": 2,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-04T05:22:39.907Z",
+      "originalThreadId": "18131638258554782",
+      "originalAccount": "a2",
+      "originalText": "朝のラッシュ、試しに走らなかった。\n\n完全に盲点だった。\n\n地図上は20分。現実は45分だった。",
+      "replyText": "朝8時の駅前、信号待ちだけで5分吹っ飛ぶんだよなぁ。歩く速度じゃなくて、人の流れに支配されるんだよね。",
+      "replyId": "18126542062578266",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 131,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-04T05:24:54.940Z",
+      "originalThreadId": "18099466669787680",
+      "originalAccount": "a3",
+      "originalText": "分譲地の近所付き合い、想像の3倍あった。\n\n独立した土地にすれば良かったかって言われると、正直わからない。\n\nみんなどっちにした？",
+      "replyText": "ちなみに分譲地で一番大変だったことって何？町内会とか管理費？それとも隣同士の距離感？",
+      "replyId": "18128320654500138",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 4,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-04T05:26:52.324Z",
+      "originalThreadId": "17922124410290198",
+      "originalAccount": "a3",
+      "originalText": "火災保険、適当に決めた。\n\n引き渡し直前でバタバタしてて、もう早く終わらせたくて。\n補償の内容とかよく見ずに、なんとなく安いやつにした。\n\n住んでから調べたら、うちの地域ってそこそこ水害リスクあるらし",
+      "replyText": "地域の水害リスク見落とし、体感で10人に3人はやってる失敗だわ。引き渡し前は火災保険まで頭回らない人多いんだよなぁ。",
+      "replyId": "18457109857107833",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 385,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
