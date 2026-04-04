@@ -2275,7 +2275,16 @@
       "text": "コンセント、ケチった。\n\n延長コードだらけの家になったよ。",
       "threadId": "18073402535203248",
       "charCount": 29,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 970,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-04T03:36:05.881Z"
     },
     {
       "date": "2026-04-03T06:11:44.981Z",
@@ -2329,6 +2338,15 @@
       "text": "バルコニー、年に3回しか出てない。\n\n洗濯物は乾燥機になったし、子どもが小さいから出るのも怖くて。\n\n作るのにいくらかかったか、思い出したくないよ。",
       "threadId": "18343053700211920",
       "charCount": 74,
+      "account": "a1"
+    },
+    {
+      "date": "2026-04-04T03:36:15.435Z",
+      "category": "koukai",
+      "topicKey": "koukai:16",
+      "text": "固定資産税、存在は知ってた。\n\nでも毎年払うって、ちゃんとわかってなかった。\n\n請求きて「あ、これ一生くるやつだ」ってなった。",
+      "threadId": "17871234714595667",
+      "charCount": 63,
       "account": "a1"
     }
   ]
