@@ -2059,7 +2059,16 @@
       "text": "鈴鹿で建てた人、四日市より土地が広く取れたって声、よく聞く。💡\n\n同じ予算なのに駐車場2台＋庭まで確保できたって人が結構いて、それ聞くたびに「場所ってデカいな」って思う。\n\nみんなはエリア選び、何を基準にした？",
       "threadId": "18198856222341658",
       "charCount": 106,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 136,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-04T05:50:06.901Z"
     },
     {
       "date": "2026-04-03T09:44:25.090Z",
@@ -2078,6 +2087,15 @@
       "text": "変動か固定か、どっちにするか迷ってる人、めちゃくちゃ多い。\n\n「安い時期に変動にしたけど、金利上がって怖くなってきた」って声、最近特に増えてる。\n\nどっちにした？",
       "threadId": "17885947392470276",
       "charCount": 81,
+      "account": "business"
+    },
+    {
+      "date": "2026-04-04T05:50:32.743Z",
+      "category": "taiken",
+      "topicKey": "taiken:kameyama:tip:1",
+      "text": "亀山で建てた人、「歴史ある街に住んでる感」が意外と好きって人が多い。💰\n\n関宿の古い街並みが近くにあって、でも自分の家は新しい。\nそのギャップが気に入ってるって声、ちょいちょい聞く。",
+      "threadId": "17885225601495343",
+      "charCount": 92,
       "account": "business"
     }
   ]
