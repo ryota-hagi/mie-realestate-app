@@ -2491,7 +2491,16 @@
       "text": "「この予算じゃ厳しいですね」、普通に傷つくよ。\n\nうちも最初に言われて、なんかもう帰りたくなったんだよね。",
       "threadId": "18096234110042368",
       "charCount": 53,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 115,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-05T15:00:09.646Z"
     },
     {
       "date": "2026-04-04T21:52:26.459Z",
