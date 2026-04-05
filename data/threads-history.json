@@ -2087,7 +2087,16 @@
       "text": "変動か固定か、どっちにするか迷ってる人、めちゃくちゃ多い。\n\n「安い時期に変動にしたけど、金利上がって怖くなってきた」って声、最近特に増えてる。\n\nどっちにした？",
       "threadId": "17885947392470276",
       "charCount": 81,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 604,
+        "likes": 4,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 12,
+      "engagementUpdatedAt": "2026-04-05T10:22:47.632Z"
     },
     {
       "date": "2026-04-04T05:50:32.743Z",
@@ -2096,7 +2105,16 @@
       "text": "亀山で建てた人、「歴史ある街に住んでる感」が意外と好きって人が多い。💰\n\n関宿の古い街並みが近くにあって、でも自分の家は新しい。\nそのギャップが気に入ってるって声、ちょいちょい聞く。",
       "threadId": "17885225601495343",
       "charCount": 92,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 94,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-05T10:22:48.253Z"
     },
     {
       "date": "2026-04-04T09:28:22.448Z",
@@ -2115,6 +2133,15 @@
       "text": "桑名で建てた人、名古屋より家広くとれて満足って声、けっこう多い。\n\n土地代が全然違うのに、名古屋まで電車で30分台って人もいるから。\n「遠い」って思い込んでたって相談、あるある。",
       "threadId": "18356197693228839",
       "charCount": 89,
+      "account": "business"
+    },
+    {
+      "date": "2026-04-05T10:23:15.692Z",
+      "category": "kisetsu",
+      "topicKey": "kisetsu:4:1",
+      "text": "GW、住宅展示場に行くと子連れだらけで全然見れないって声、毎年増える。🏠\n\n平日に有休とって行った人の方が「ゆっくり見れてよかった」って言ってる。",
+      "threadId": "18108479299880053",
+      "charCount": 74,
       "account": "business"
     }
   ]
