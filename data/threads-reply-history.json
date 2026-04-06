@@ -4829,6 +4829,90 @@
         "likes": 1,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-04-06T05:54:54.421Z",
+      "originalThreadId": "18097538198001629",
+      "originalAccount": "a1",
+      "originalText": "無垢、憧れて選んだけど、キズと水染みでメンタルやられてる😭\n\n合板にしとけばよかったのかな、でも踏み心地は好きなんだよな。\n\nみんなどっちにした？",
+      "replyText": "うちのサイトにも同じ相談めちゃ多いんだよね。無垢の踏み心地は捨てがたいけど、メンテ代考えるとトータルコスト結構かかるんだわ",
+      "replyId": "18091853981176503",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 2227,
+        "likes": 2,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-06T05:57:58.154Z",
+      "originalThreadId": "18099764971978053",
+      "originalAccount": "a1",
+      "originalText": "午前中しか確認しなかった、日当たり。\n\n午後に行ったら、がっつり影だった。\n\n季節も1回しか見てないし、そりゃそうだよって今なら思う。",
+      "replyText": "あと冬至の時間帯も見とかないと、リビングが真っ暗になることあるんだよなぁ。夏と冬で日当たり全然違うやつ。",
+      "replyId": "17865878514528647",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 94,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-06T06:00:58.482Z",
+      "originalThreadId": "18147937723468887",
+      "originalAccount": "a1",
+      "originalText": "3社しか見なかった。",
+      "replyText": "ちなみに何社くらい見た？3社以下だと後悔率えぐいんだよね",
+      "replyId": "17871472233477686",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 401,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-06T06:03:16.487Z",
+      "originalThreadId": "18110773816805441",
+      "originalAccount": "a2",
+      "originalText": "固定資産税、完全に忘れてた。\n\n毎年払うやつ。",
+      "replyText": "固定資産税の話、ほんと初心者は見落としやすいんだよなぁ。建築費だけで予算組む人多すぎるわ。",
+      "replyId": "18098251375822180",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 13,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-06T06:06:29.329Z",
+      "originalThreadId": "18315090229283323",
+      "originalAccount": "a2",
+      "originalText": "収納、「まぁ足りるだろ」で決めた。\n\n足りなかった。\n\n1年住んで、クローゼットの前に箱が3つ常駐してる。\n結局、収納の外に収納が生えた。",
+      "replyText": "みんなここケチるんだよなぁ…。後付けだと倍かかるから、最初から多めに見積もっといた方が安上がりだわ",
+      "replyId": "18364590886229355",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 614,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-06T06:09:01.890Z",
+      "originalThreadId": "18106582072807630",
+      "originalAccount": "a3",
+      "originalText": "子ども部屋、6畳か4.5畳か。\n\n受験するかも、友達呼ぶかも、でも巣立ったら荷物置き場になるかも。\n\n考えれば考えるほど、10年後のこどもが全然イメージできなくて、結局「まぁどっちでもいいか」で終わっ",
+      "replyText": "みんなここで1ヶ月悩むんだよなぁ。結局どっちでも子どもは育つってことに気づくまでが長い",
+      "replyId": "17984312603808812",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1359,
+        "likes": 0,
+        "replies": 1
+      }
     }
   ]
 }
