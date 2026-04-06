@@ -2133,7 +2133,16 @@
       "text": "桑名で建てた人、名古屋より家広くとれて満足って声、けっこう多い。\n\n土地代が全然違うのに、名古屋まで電車で30分台って人もいるから。\n「遠い」って思い込んでたって相談、あるある。",
       "threadId": "18356197693228839",
       "charCount": 89,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 2044,
+        "likes": 3,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 7,
+      "engagementUpdatedAt": "2026-04-06T10:59:33.281Z"
     },
     {
       "date": "2026-04-05T10:23:15.692Z",
@@ -2142,6 +2151,24 @@
       "text": "GW、住宅展示場に行くと子連れだらけで全然見れないって声、毎年増える。🏠\n\n平日に有休とって行った人の方が「ゆっくり見れてよかった」って言ってる。",
       "threadId": "18108479299880053",
       "charCount": 74,
+      "account": "business",
+      "engagement": {
+        "views": 495,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-06T10:59:33.961Z"
+    },
+    {
+      "date": "2026-04-06T10:59:59.518Z",
+      "category": "trend",
+      "topicKey": "trend:注文住宅:2026-04-06",
+      "text": "注文住宅、やっぱり大変だったって人、相談でほぼ全員言う。📍\n\nでも「建売にしとけばよかった」になる人は、ほぼいないんだよね。\n\nこの差、なんなんだろうって思う。",
+      "threadId": "18112408132690625",
+      "charCount": 81,
       "account": "business"
     }
   ]
