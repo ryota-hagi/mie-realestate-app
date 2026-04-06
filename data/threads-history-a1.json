@@ -2599,7 +2599,16 @@
       "text": "棚、ない。絶対ここに必要だったのに。\n\n引っ越してから気づくんだよね、こういうの。打ち合わせ中は全然思い浮かばなかった😅",
       "threadId": "18166199455423383",
       "charCount": 61,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 1519,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-06T21:56:55.121Z"
     },
     {
       "date": "2026-04-05T23:38:57.260Z",
@@ -2635,6 +2644,15 @@
       "text": "通勤、倍かかってる。",
       "threadId": "17941823979170487",
       "charCount": 10,
+      "account": "a1"
+    },
+    {
+      "date": "2026-04-06T21:57:03.285Z",
+      "category": "aruaru",
+      "topicKey": "aruaru:27",
+      "text": "日当たり、曇りの日に確認してた😅\n\n全然意味なかった。",
+      "threadId": "17854708668638142",
+      "charCount": 28,
       "account": "a1"
     }
   ]
