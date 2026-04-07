@@ -2671,7 +2671,16 @@
       "text": "通勤、倍かかってる。",
       "threadId": "17941823979170487",
       "charCount": 10,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 739,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-07T15:52:36.328Z"
     },
     {
       "date": "2026-04-06T21:57:03.285Z",
@@ -2743,6 +2752,15 @@
       "text": "現場、毎日見に行ってた。\n\nなんか見ないと不安で、仕事帰りに寄り道してたんだよね。今日も特に何も変わってないのに。",
       "threadId": "18578225290039221",
       "charCount": 57,
+      "account": "a1"
+    },
+    {
+      "date": "2026-04-07T15:52:49.008Z",
+      "category": "shippai",
+      "topicKey": "aruaru:6",
+      "text": "カタログ、部屋を占領してた。\n\nハウスメーカー回るたびにどっさりもらって、気づいたらリビングの床がカタログまみれになってたよ。\n\n結局ほとんど読まないまま捨てたんだよね🥲",
+      "threadId": "18117601261647270",
+      "charCount": 86,
       "account": "a1"
     }
   ]
