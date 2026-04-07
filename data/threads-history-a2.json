@@ -2761,7 +2761,16 @@
       "text": "トイレ、1個にした。\n\n朝7時台、家族3人で完全に詰まる。\n\n2個にしても月数百円しか変わらなかった計算だった。",
       "threadId": "18134668924526170",
       "charCount": 56,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 1608,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 5,
+      "engagementUpdatedAt": "2026-04-07T23:33:45.720Z"
     },
     {
       "date": "2026-04-07T05:02:18.167Z",
@@ -2779,6 +2788,15 @@
       "text": "「今月末までです」に負けた。",
       "threadId": "18386373838085727",
       "charCount": 14,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-07T23:33:54.048Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:14",
+      "text": "カーテン代、予算に入れてなかった。\n\n全部屋で30万超えた。",
+      "threadId": "18074357996447007",
+      "charCount": 30,
       "account": "a2"
     }
   ]
