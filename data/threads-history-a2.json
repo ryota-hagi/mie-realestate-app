@@ -2797,7 +2797,16 @@
       "text": "「今月末までです」に負けた。",
       "threadId": "18386373838085727",
       "charCount": 14,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 139,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-08T14:46:21.323Z"
     },
     {
       "date": "2026-04-07T23:33:54.048Z",
@@ -2806,6 +2815,15 @@
       "text": "カーテン代、予算に入れてなかった。\n\n全部屋で30万超えた。",
       "threadId": "18074357996447007",
       "charCount": 30,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-08T14:46:39.361Z",
+      "category": "gyakusetsu",
+      "topicKey": "koukai:27",
+      "text": "インスタの家、見すぎた。\n\n打ち合わせで「吹き抜けにしたい」「造作棚も」「間接照明も」って言い続けた。\n\n全部インスタで見たやつ。自分の予算も生活スタイルも、完全に無視してた。\n\n結果、削りまくって普通の家になった。最初からそうすればよかった。インスタの家、誰かの家だった。",
+      "threadId": "18077648612395895",
+      "charCount": 137,
       "account": "a2"
     }
   ]
