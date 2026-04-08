@@ -2169,7 +2169,16 @@
       "text": "注文住宅、やっぱり大変だったって人、相談でほぼ全員言う。📍\n\nでも「建売にしとけばよかった」になる人は、ほぼいないんだよね。\n\nこの差、なんなんだろうって思う。",
       "threadId": "18112408132690625",
       "charCount": 81,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 13232,
+        "likes": 17,
+        "replies": 6,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 41,
+      "engagementUpdatedAt": "2026-04-08T10:55:49.041Z"
     },
     {
       "date": "2026-04-07T09:58:36.959Z",
@@ -2188,6 +2197,24 @@
       "text": "いなべ市に建てた人、「休日の過ごし方が変わった」って声、けっこう多い。\n\nキャンプも登山も、わざわざ遠出しなくてよくなったって。\n子どもが自然の中で育つのが嬉しいって親の声も多い。\n💰",
       "threadId": "18098237684282201",
       "charCount": 93,
+      "account": "business",
+      "engagement": {
+        "views": 161,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-04-08T10:55:49.713Z"
+    },
+    {
+      "date": "2026-04-08T10:56:23.385Z",
+      "category": "site",
+      "topicKey": "site:17",
+      "text": "三重の注文住宅情報、まとまってるサイトがなかったから自分で作った。💰\n\n地元で建てたい人に使ってほしくて、ずっとコツコツ更新してる。\n最近じわじわ使ってくれる人が増えてきて、正直めちゃくちゃ嬉しい。\n\nプロフィールにリンクあるから、よかったら見てみて。",
+      "threadId": "18108170251860105",
+      "charCount": 127,
       "account": "business"
     }
   ]
