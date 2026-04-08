@@ -2743,7 +2743,16 @@
       "text": "近所に新築、建ち始めた。\n\n散歩のルート、そっちに変わったよ 🏠",
       "threadId": "17864991219612366",
       "charCount": 33,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 795,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-08T05:03:53.262Z"
     },
     {
       "date": "2026-04-07T06:18:48.733Z",
@@ -2806,6 +2815,15 @@
       "text": "電気代、えぐかった。\n\n夏の最初の請求、数字見て固まったんだよね。\n\n広くなったぶんエアコン効かせなきゃいけないって、なんで建てる前に気づかなかったんだろ😅",
       "threadId": "18100098889793365",
       "charCount": 79,
+      "account": "a1"
+    },
+    {
+      "date": "2026-04-08T05:04:01.606Z",
+      "category": "aruaru",
+      "topicKey": "koukai:6",
+      "text": "ベランダ、お金だった。",
+      "threadId": "18091996586275532",
+      "charCount": 11,
       "account": "a1"
     }
   ]
