@@ -2761,7 +2761,16 @@
       "text": "お風呂に窓、いらなかった。\n\n寒いだけ。冬、本当に寒いだけ。\n\n換気は換気扇があるし、景色なんて見えないし。なんで「窓あったほうがいい」って思い込んでたんだろ😅",
       "threadId": "18176515753386950",
       "charCount": 81,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 424,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-08T08:13:43.801Z"
     },
     {
       "date": "2026-04-07T08:14:47.052Z",
@@ -2824,6 +2833,15 @@
       "text": "ベランダ、お金だった。",
       "threadId": "18091996586275532",
       "charCount": 11,
+      "account": "a1"
+    },
+    {
+      "date": "2026-04-08T08:13:56.802Z",
+      "category": "shippai",
+      "topicKey": "aruaru:1",
+      "text": "ショールーム、魔法がかかってた。\n\n設備全部「最上位グレードにしたい」ってなって、気づいたら100万以上オーバーしてた😅\n\n家に帰ってから見積もり見て、夫と顔真っ青になったよ。",
+      "threadId": "18096446906039334",
+      "charCount": 89,
       "account": "a1"
     }
   ]
