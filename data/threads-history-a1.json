@@ -2815,7 +2815,16 @@
       "text": "現場、毎日見に行ってた。\n\nなんか見ないと不安で、仕事帰りに寄り道してたんだよね。今日も特に何も変わってないのに。",
       "threadId": "18578225290039221",
       "charCount": 57,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 1032,
+        "likes": 3,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 7,
+      "engagementUpdatedAt": "2026-04-08T14:29:12.261Z"
     },
     {
       "date": "2026-04-07T15:52:49.008Z",
