@@ -2887,7 +2887,16 @@
       "text": "ベランダ、お金だった。",
       "threadId": "18091996586275532",
       "charCount": 11,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 405,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-04-09T06:20:56.188Z"
     },
     {
       "date": "2026-04-08T08:13:56.802Z",
@@ -2905,6 +2914,15 @@
       "text": "土地、焦って決めた。\n\nもう1ヶ月粘ればよかったって、今でも思う。",
       "threadId": "18086445377194809",
       "charCount": 33,
+      "account": "a1"
+    },
+    {
+      "date": "2026-04-09T06:21:08.283Z",
+      "category": "koukai",
+      "topicKey": "koukai:0",
+      "text": "玄関に手洗い場、つけなかった。\n\nコロナ以降、毎回「洗面所まで行って洗って」って言い続けてる。子どもたち、絶対途中で寄り道するし。\n\nあのとき「いらないかな」ってなった自分を呪ってる🥲",
+      "threadId": "17863225284617547",
+      "charCount": 93,
       "account": "a1"
     }
   ]
