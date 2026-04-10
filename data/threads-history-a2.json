@@ -2879,6 +2879,15 @@
       "threadId": "18102053716764941",
       "charCount": 50,
       "account": "a2"
+    },
+    {
+      "date": "2026-04-10T05:16:12.900Z",
+      "category": "loan",
+      "topicKey": "loan:housing-loan:section:6",
+      "text": "繰上げ返済の手数料、完全に盲点だった。\n\n数万単位で取られる銀行、普通にある。「早く返せば得」だけで選ぶと詰む。",
+      "threadId": "17987353964971203",
+      "charCount": 56,
+      "account": "a2"
     }
   ]
 }
