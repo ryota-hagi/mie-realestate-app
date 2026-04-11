@@ -2995,7 +2995,16 @@
       "text": "ボーナス払い、当てにしすぎた。\n\n※過去履歴に同一ネタあり（4/4）。この投稿は重複になります。別のネタに変更するか、確認してください。",
       "threadId": "17952798512962667",
       "charCount": 68,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 304,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-11T03:39:27.075Z"
     },
     {
       "date": "2026-04-10T04:10:20.649Z",
