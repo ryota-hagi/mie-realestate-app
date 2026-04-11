@@ -3013,7 +3013,16 @@
       "text": "地盤改良、100万飛んだ。\n\n知ったの、契約後だよ。",
       "threadId": "18404639644182542",
       "charCount": 26,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 1533,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 5,
+      "engagementUpdatedAt": "2026-04-11T04:47:45.500Z"
     },
     {
       "date": "2026-04-10T11:40:49.882Z",
@@ -3031,6 +3040,15 @@
       "text": "リビング階段、冬やばかった。\n\n暖房つけても全然あったまらなくて、リビングの熱が全部2階に逃げてくの、入居してから気づいたよ。\n\nおしゃれだと思って選んだのに、毎冬後悔してる🥲",
       "threadId": "18126794428573218",
       "charCount": 89,
+      "account": "a1"
+    },
+    {
+      "date": "2026-04-11T04:47:53.235Z",
+      "category": "aruaru",
+      "topicKey": "aruaru:24",
+      "text": "金利のニュース、見るたびに心臓が痛い。\n\n変動で組んだのちょっと後悔してる😅",
+      "threadId": "18386968819083172",
+      "charCount": 39,
       "account": "a1"
     }
   ]
