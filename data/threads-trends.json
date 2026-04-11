@@ -1,7 +1,13 @@
 {
-  "scannedAt": "2026-04-10T10:00:28.251Z",
+  "scannedAt": "2026-04-11T05:53:34.503Z",
   "keywords": {
-    "住宅補助金": {
+    "工務店": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "新築": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -13,41 +19,19 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "間取り": {
-      "resultCount": 1,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": [
-        {
-          "id": "18111964984696644",
-          "text": "カタログ、体感10人に9人は同じことしてる。結局ネットで間取り見るしね。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-04-09T05:49:27+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DW5ldPskUKO",
-          "insights": {
-            "views": 0,
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 0
-        }
-      ]
-    },
-    "新築": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "マイホーム": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
     "土地探し": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "住宅補助金": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "ハウスメーカー": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -59,19 +43,19 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "いなべ": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "新生活 マイホーム": {
+    "桑名": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
     "住宅展示場": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "新生活 マイホーム": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
