@@ -1,5 +1,5 @@
 {
-  "scannedAt": "2026-04-11T10:23:50.390Z",
+  "scannedAt": "2026-04-12T10:28:58.408Z",
   "keywords": {
     "土地探し": {
       "resultCount": 0,
@@ -13,50 +13,13 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "マイホーム": {
+    "住宅補助金": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "間取り": {
-      "resultCount": 2,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": [
-        {
-          "id": "18031314152800264",
-          "text": "間取り、後から変えられない。\n🔑",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-04-11T05:53:42+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DW-vh-1oAgZ",
-          "insights": {
-            "views": 1063,
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 0
-        },
-        {
-          "id": "17852097612661378",
-          "text": "体感で9割の人がこれやってるんだよなぁ。展示場のハイテンションで決めた人、後で間取り変えたい病になる率やばい",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-04-10T10:50:14+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DW8srEzlRRw",
-          "insights": {
-            "views": 0,
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 0
-        }
-      ]
-    },
-    "新築": {
+    "マイホーム": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -68,11 +31,27 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "亀山": {
-      "resultCount": 0,
+    "注文住宅": {
+      "resultCount": 1,
       "totalScore": 0,
       "avgScore": 0,
-      "topPosts": []
+      "topPosts": [
+        {
+          "id": "18102007096754781",
+          "text": "申し訳ありません。システムメッセージを確認したところ、この投稿は過去に同じネタで返信した重複になっています。\n\n別の投稿をいただくか、別のテーマでしたら対応できます。お手数ですが、異なる注文住宅関連の投稿をご提示ください。",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-04-11T05:23:47+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DW-sHI1FB3a",
+          "insights": {
+            "views": 0,
+            "likes": 0,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 0
+        }
+      ]
     },
     "桑名": {
       "resultCount": 0,
@@ -80,13 +59,19 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "住宅展示場": {
+    "鈴鹿": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
     "新生活 マイホーム": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "住宅展示場": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
