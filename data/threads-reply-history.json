@@ -5753,6 +5753,48 @@
         "likes": 2,
         "replies": 3
       }
+    },
+    {
+      "date": "2026-04-12T16:38:38.300Z",
+      "originalThreadId": "18126794428573218",
+      "originalAccount": "a1",
+      "originalText": "リビング階段、冬やばかった。\n\n暖房つけても全然あったまらなくて、リビングの熱が全部2階に逃げてくの、入居してから気づいたよ。\n\nおしゃれだと思って選んだのに、毎冬後悔してる🥲",
+      "replyText": "みんなここやっちゃうんだよなぁ…。冬の暖房費、階段ありだと1.5倍くらい変わるって言う人多い",
+      "replyId": "18078380222135906",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1547,
+        "likes": 1,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-12T16:40:40.663Z",
+      "originalThreadId": "18386968819083172",
+      "originalAccount": "a1",
+      "originalText": "金利のニュース、見るたびに心臓が痛い。\n\n変動で組んだのちょっと後悔してる😅",
+      "replyText": "体感10人中7人が同じこと言ってるやつだわ。今から固定への借り換え相談する人、これからぐっと増えるんだろうなぁ。",
+      "replyId": "18002444309907378",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1080,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-12T16:43:07.352Z",
+      "originalThreadId": "17961753017918580",
+      "originalAccount": "a1",
+      "originalText": "子ども部屋、最初から分けるか後で仕切るかで揉めた。\n\n結局「将来仕切る」にしたんだけど、仕切ったらドアが1個しかないって気づいたの、契約後だよ。",
+      "replyText": "うちのサイトにも同じ声めちゃ届くわ。ドア2個ないと後悔率やばいんだよね",
+      "replyId": "18335854675216439",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 373,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
