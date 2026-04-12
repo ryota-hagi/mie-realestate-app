@@ -3031,7 +3031,16 @@
       "text": "リビング階段、冷暖房費が地味に跳ね上がった。\n\n1階と2階、空気がつながるから当然なんだけど、完全に計算してなかった。",
       "threadId": "17874450753454769",
       "charCount": 59,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 2407,
+        "likes": 1,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 5,
+      "engagementUpdatedAt": "2026-04-12T14:00:38.077Z"
     },
     {
       "date": "2026-04-11T23:29:48.408Z",
@@ -3067,6 +3076,15 @@
       "text": "坪単価、そのままローンに反映させた。\n\nそれが間違いだった。\n\n坪数が増えれば単価は下がるけど、総額は当然上がる。\n30坪と35坪、月々の返済で3〜4万変わる計算だった。",
       "threadId": "18104706781920611",
       "charCount": 85,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-12T14:00:46.068Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:5",
+      "text": "モデルハウスの設備、標準だと思ってた。\n\n全部オプションだった。",
+      "threadId": "18100490512948691",
+      "charCount": 32,
       "account": "a2"
     }
   ]
