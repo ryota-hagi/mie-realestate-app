@@ -3013,7 +3013,16 @@
       "text": "お風呂の窓、いらなかった。\n\n寒いだけだった。",
       "threadId": "18055431413491206",
       "charCount": 23,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 714,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-04-12T10:49:47.036Z"
     },
     {
       "date": "2026-04-11T13:57:24.403Z",
@@ -3049,6 +3058,15 @@
       "text": "リビング階段、冬が寒かった。\n\nそれだけ。",
       "threadId": "17984473826969123",
       "charCount": 21,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-12T10:49:55.816Z",
+      "category": "loan",
+      "topicKey": "loan:mie-housing-cost:section:3",
+      "text": "坪単価、そのままローンに反映させた。\n\nそれが間違いだった。\n\n坪数が増えれば単価は下がるけど、総額は当然上がる。\n30坪と35坪、月々の返済で3〜4万変わる計算だった。",
+      "threadId": "18104706781920611",
+      "charCount": 85,
       "account": "a2"
     }
   ]
