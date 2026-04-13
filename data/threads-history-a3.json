@@ -1645,7 +1645,16 @@
       "text": "照明の色、늦게 決めた。\n\n---\n\nすみません、文字化けしました。\n\n---\n\n照明の色、最後まで迷った。",
       "threadId": "18581643745007697",
       "charCount": 54,
-      "account": "a3"
+      "account": "a3",
+      "engagement": {
+        "views": 10,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-13T05:59:13.685Z"
     },
     {
       "date": "2026-04-12T14:08:45.096Z",
@@ -1654,6 +1663,15 @@
       "text": "追加工事、最初から言ってよ。\n\n最終金額、想定の1割増えてた。",
       "threadId": "17874368844455375",
       "charCount": 31,
+      "account": "a3"
+    },
+    {
+      "date": "2026-04-13T05:59:24.167Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:11",
+      "text": "お風呂の窓、つけた。一度も開けてない。\n\n換気は換気扇があるし、景色が見えるわけでもない。\n\nでもなんか、ないと落ち着かない気がして。結局「気分」でつけた。\n\n窓なしにした人、後悔してる？",
+      "threadId": "18430462219140765",
+      "charCount": 94,
       "account": "a3"
     }
   ]
