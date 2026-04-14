@@ -3175,7 +3175,16 @@
       "text": "カーテン代、完全に盲点だった。\n\n窓の数だけ請求が来る。",
       "threadId": "18078582404139597",
       "charCount": 28,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 0,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-14T23:38:41.519Z"
     },
     {
       "date": "2026-04-13T23:38:50.641Z",
@@ -3220,6 +3229,15 @@
       "text": "ハザードマップ、見た瞬間に詰んだ。\n\n気になってた土地が3つあって、全部なんらかのリスクゾーンにかかってた。\n\n見る前に戻れない。知識って損することもある。",
       "threadId": "17959483865935063",
       "charCount": 78,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-14T23:38:52.134Z",
+      "category": "koukai",
+      "topicKey": "koukai:6",
+      "text": "ベランダ広くしたの、無駄だった。\n\n乾燥機使うから、結局ただの物置。",
+      "threadId": "18086163734198396",
+      "charCount": 34,
       "account": "a2"
     }
   ]
