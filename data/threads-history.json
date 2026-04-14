@@ -2287,7 +2287,16 @@
       "text": "友達の家見るたびに後悔が増える。",
       "threadId": "18108891808883218",
       "charCount": 16,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 1010,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-14T10:06:39.658Z"
     }
   ]
 }
