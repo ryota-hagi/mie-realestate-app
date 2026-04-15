@@ -3284,6 +3284,15 @@
       "threadId": "18575516383054831",
       "charCount": 29,
       "account": "a2"
+    },
+    {
+      "date": "2026-04-15T11:07:59.803Z",
+      "category": "loan",
+      "topicKey": "loan:housing-loan:section:0",
+      "text": "つなぎ融資、存在すら知らなかった。\n\n家が完成するまでの間、お金が2重に出ていく期間がある。\n\nローンの返済、始まってないのに。\n\n気づいたのは契約後だった。",
+      "threadId": "17974195952858808",
+      "charCount": 79,
+      "account": "a2"
     }
   ]
 }
