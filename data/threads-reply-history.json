@@ -6075,6 +6075,76 @@
         "likes": 1,
         "replies": 2
       }
+    },
+    {
+      "date": "2026-04-15T05:55:37.266Z",
+      "originalThreadId": "17883708441521401",
+      "originalAccount": "a1",
+      "originalText": "外観の好み、真逆だった。\n\nうちが「シンプルなネイビー」、夫が「なんか木っぽい感じ」って言い出して、全然かみ合わなかった。\n\n結局グレーで落ち着いたけど、どっちも「まあ…いいか」で終わった感じ😅\n\n",
+      "replyText": "外観の色選びで夫婦揉めるやつ、体感で一番多いんだよなぁ。どっちかに譲歩すると後悔するからやっかいだわ",
+      "replyId": "18216403753316966",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 68,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-15T05:57:32.563Z",
+      "originalThreadId": "18319527781251085",
+      "originalAccount": "a1",
+      "originalText": "間取り、全然決まらなかった。\n\n夫は「リビング広くしたい」、うちは「収納ほしい」で毎回平行線。打ち合わせのたびに軽く揉めてた😅",
+      "replyText": "体感で夫婦揉める理由ってそこなんだよね。リビング派と収納派、10組中7組くらいこのパターン。プロに「どっちか譲るしかない」って言わせるのが手だわ",
+      "replyId": "18099637003959714",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 143,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-15T05:59:25.369Z",
+      "originalThreadId": "18021504470824748",
+      "originalAccount": "a2",
+      "originalText": "火災保険、適当に選んだ。",
+      "replyText": "ちなみに何年契約で入った？5年と10年で保険料けっこう変わるんだよね",
+      "replyId": "18112819300696747",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1283,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-15T06:02:20.847Z",
+      "originalThreadId": "18086163734198396",
+      "originalAccount": "a2",
+      "originalText": "ベランダ広くしたの、無駄だった。\n\n乾燥機使うから、結局ただの物置。",
+      "replyText": "ベランダの広さって体感で8割が後悔してるんだよなぁ。乾燥機導入で一気に不要になるの、相談でも本当多いわ。",
+      "replyId": "17961793229918815",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1102,
+        "likes": 1,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-15T06:04:29.740Z",
+      "originalThreadId": "17881706424397979",
+      "originalAccount": "a3",
+      "originalText": "完成して、図面と違う。\n\nいや待って、これ私の目がおかしいの？ってなったけど、やっぱり違った。\n\n「誤差の範囲です」って言われた。誤差ってそんなに広い意味なんだ。",
+      "replyText": "みんなここで揉めるんだよなぁ…。図面のサイズと実際の壁の厚さで寸法変わるやつだわ。確認書類に「施工誤差±○○mm」って書いてあったはず。",
+      "replyId": "17853764886645812",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 221,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
