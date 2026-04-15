@@ -3193,7 +3193,16 @@
       "text": "電気代、想定の1.5倍だった。",
       "threadId": "18264485062290529",
       "charCount": 15,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 1097,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-15T05:14:13.055Z"
     },
     {
       "date": "2026-04-14T05:14:05.574Z",
@@ -3202,7 +3211,16 @@
       "text": "トイレ、1個にするな。\n\n朝8時、家族3人で取り合いになった。\n\n建築中は「まぁ1個でいける」と思ってた。住んでから気づく。\n\n2個目、つけておけばよかった。",
       "threadId": "18115936609708416",
       "charCount": 79,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 1084,
+        "likes": 1,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 1,
+      "engagementUpdatedAt": "2026-04-15T05:14:13.703Z"
     },
     {
       "date": "2026-04-14T07:54:10.891Z",
@@ -3238,6 +3256,15 @@
       "text": "ベランダ広くしたの、無駄だった。\n\n乾燥機使うから、結局ただの物置。",
       "threadId": "18086163734198396",
       "charCount": 34,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-15T05:14:23.222Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:16",
+      "text": "月々の返済額、信じるな。\n\n35年で計算し直したら、利息だけで数百万飛んでた。\n\n「払える額」と「払う総額」は別の話。",
+      "threadId": "18112775224695578",
+      "charCount": 59,
       "account": "a2"
     }
   ]
