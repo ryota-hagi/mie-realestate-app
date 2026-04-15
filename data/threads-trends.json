@@ -1,45 +1,11 @@
 {
-  "scannedAt": "2026-04-14T10:06:47.765Z",
+  "scannedAt": "2026-04-15T10:07:38.471Z",
   "keywords": {
-    "ハウスメーカー": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
     "住宅補助金": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
-    },
-    "土地探し": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "間取り": {
-      "resultCount": 1,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": [
-        {
-          "id": "18014533370681146",
-          "text": "間取り打ち合わせの回数で大手と工務店分かれるんだよなぁ。大手は決まった枠、工務店は融通きくけどその分自分たちで決めることになるってやつ。",
-          "username": "custom_housing_hikaku",
-          "timestamp": "2026-04-14T05:57:26+0000",
-          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DXGeWDxFcyi",
-          "insights": {
-            "views": 0,
-            "likes": 0,
-            "replies": 0,
-            "reposts": 0,
-            "quotes": 0
-          },
-          "score": 0
-        }
-      ]
     },
     "家づくり": {
       "resultCount": 0,
@@ -53,25 +19,43 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "桑名": {
+    "住宅ローン": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "いなべ": {
+    "土地探し": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "住宅展示場": {
+    "マイホーム": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "四日市": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "亀山": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
     "新生活 マイホーム": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "住宅展示場": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
