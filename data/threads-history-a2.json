@@ -3247,7 +3247,16 @@
       "text": "火災保険、適当に選んだ。",
       "threadId": "18021504470824748",
       "charCount": 12,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 1289,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-15T23:38:23.040Z"
     },
     {
       "date": "2026-04-14T14:52:03.934Z",
@@ -3256,7 +3265,16 @@
       "text": "ハザードマップ、見た瞬間に詰んだ。\n\n気になってた土地が3つあって、全部なんらかのリスクゾーンにかかってた。\n\n見る前に戻れない。知識って損することもある。",
       "threadId": "17959483865935063",
       "charCount": 78,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 233,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-15T23:38:23.711Z"
     },
     {
       "date": "2026-04-14T23:38:52.134Z",
@@ -3291,6 +3309,15 @@
       "topicKey": "loan:housing-loan:section:0",
       "text": "つなぎ融資、存在すら知らなかった。\n\n家が完成するまでの間、お金が2重に出ていく期間がある。\n\nローンの返済、始まってないのに。\n\n気づいたのは契約後だった。",
       "threadId": "17974195952858808",
+      "charCount": 79,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-15T23:38:34.784Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:8",
+      "text": "タンクレス、見た目7割で選んだ。1年住んで後悔は3割くらい。\n\n手入れはタンク付きの方が楽らしい。でも正直どっちも慣れる気がしてる。\n\nみんなはどっちにした？",
+      "threadId": "17865577512672346",
       "charCount": 79,
       "account": "a2"
     }
