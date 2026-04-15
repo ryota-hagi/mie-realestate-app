@@ -6145,6 +6145,76 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-04-15T10:53:25.061Z",
+      "originalThreadId": "18102291970765285",
+      "originalAccount": "a2",
+      "originalText": "本体価格より、諸費用が地味に高かった。\n\n三重、物価が安いイメージがあるのかもしれないけど、諸費用は比率でかかるから結局同じだった。\n\n登記、保険、火災、地盤調査。\n全部足したら100万は超えた。\n\n",
+      "replyText": "登記と火災保険、みんなここで金額感ズレるんだよなぁ。特に地盤調査は土地によって跳ね上がるやつだからキツい。本体価格だけ見てると確実に後悔する。",
+      "replyId": "18571474417012648",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 316,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-15T10:55:13.123Z",
+      "originalThreadId": "18264485062290529",
+      "originalAccount": "a2",
+      "originalText": "電気代、想定の1.5倍だった。",
+      "replyText": "「冷房と暖房両方フル稼働する時期が想定外に長いんだよなぁ。あと断熱材のグレード下げた人は年間20万以上変わるって聞くわ」",
+      "replyId": "18134481520534987",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1098,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-15T10:57:26.981Z",
+      "originalThreadId": "18115936609708416",
+      "originalAccount": "a2",
+      "originalText": "トイレ、1個にするな。\n\n朝8時、家族3人で取り合いになった。\n\n建築中は「まぁ1個でいける」と思ってた。住んでから気づく。\n\n2個目、つけておけばよかった。",
+      "replyText": "トイレ1個の後悔率やばいんだよね。朝の時間帯は本当に地獄らしい。2個目は必須レベルだわ。",
+      "replyId": "18073373051240312",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1086,
+        "likes": 1,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-15T11:00:35.408Z",
+      "originalThreadId": "18086163734198396",
+      "originalAccount": "a2",
+      "originalText": "ベランダ広くしたの、無駄だった。\n\n乾燥機使うから、結局ただの物置。",
+      "replyText": "みんなここケチるんだよなぁ…。実際使わない人、体感7割超えてる。むしろ小さめにして、その分別のとこに予算振った方が後悔少ないんだよね。",
+      "replyId": "18084491465457522",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1104,
+        "likes": 1,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-15T11:03:08.071Z",
+      "originalThreadId": "18112775224695578",
+      "originalAccount": "a2",
+      "originalText": "月々の返済額、信じるな。\n\n35年で計算し直したら、利息だけで数百万飛んでた。\n\n「払える額」と「払う総額」は別の話。",
+      "replyText": "利息の総額で後悔する人、うちのサイトにもめちゃ多いんだよ。試算段階で総返済額まで見てない人がほとんど。",
+      "replyId": "17964786942058574",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 2,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
