@@ -3283,7 +3283,16 @@
       "text": "ベランダ広くしたの、無駄だった。\n\n乾燥機使うから、結局ただの物置。",
       "threadId": "18086163734198396",
       "charCount": 34,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 1113,
+        "likes": 1,
+        "replies": 2,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 9,
+      "engagementUpdatedAt": "2026-04-16T05:21:24.810Z"
     },
     {
       "date": "2026-04-15T05:14:23.222Z",
@@ -3292,7 +3301,16 @@
       "text": "月々の返済額、信じるな。\n\n35年で計算し直したら、利息だけで数百万飛んでた。\n\n「払える額」と「払う総額」は別の話。",
       "threadId": "18112775224695578",
       "charCount": 59,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 10,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-16T05:21:25.467Z"
     },
     {
       "date": "2026-04-15T07:55:08.781Z",
@@ -3319,6 +3337,15 @@
       "text": "タンクレス、見た目7割で選んだ。1年住んで後悔は3割くらい。\n\n手入れはタンク付きの方が楽らしい。でも正直どっちも慣れる気がしてる。\n\nみんなはどっちにした？",
       "threadId": "17865577512672346",
       "charCount": 79,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-16T05:21:35.475Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:12",
+      "text": "お風呂の窓、なんとなくでつけるな。\n\n寒いだけだった。\n\n断熱性は落ちる。掃除の手間は増える。換気は換気扇で十分だった。\n\n窓なしにしておけば、10万近く削れてたかもしれない。",
+      "threadId": "18175252741401699",
+      "charCount": 88,
       "account": "a2"
     }
   ]
