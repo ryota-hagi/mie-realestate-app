@@ -3392,6 +3392,15 @@
       "threadId": "18110188015834518",
       "charCount": 71,
       "account": "a2"
+    },
+    {
+      "date": "2026-04-16T23:36:56.828Z",
+      "category": "loan",
+      "topicKey": "loan:mie-housing-cost:section:1",
+      "text": "坪単価、あてにならない数字だった。\n\n延床面積に含まれない部分がある。気づいたら見積もりと100万単位でズレてた。",
+      "threadId": "17948645703139429",
+      "charCount": 57,
+      "account": "a2"
     }
   ]
 }
