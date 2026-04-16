@@ -3319,7 +3319,16 @@
       "text": "パントリー、削った。\n\nキッチンが毎日ごちゃごちゃのまま。",
       "threadId": "18575516383054831",
       "charCount": 29,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 512,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-16T11:11:55.314Z"
     },
     {
       "date": "2026-04-15T11:07:59.803Z",
@@ -3328,7 +3337,16 @@
       "text": "つなぎ融資、存在すら知らなかった。\n\n家が完成するまでの間、お金が2重に出ていく期間がある。\n\nローンの返済、始まってないのに。\n\n気づいたのは契約後だった。",
       "threadId": "17974195952858808",
       "charCount": 79,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 3763,
+        "likes": 11,
+        "replies": 4,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 27,
+      "engagementUpdatedAt": "2026-04-16T11:11:55.939Z"
     },
     {
       "date": "2026-04-15T23:38:34.784Z",
@@ -3355,6 +3373,15 @@
       "text": "住宅ローン控除、仕組みをわかってなかった。",
       "threadId": "18209843935333307",
       "charCount": 21,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-16T11:12:22.599Z",
+      "category": "gyakusetsu",
+      "topicKey": "aruaru:26",
+      "text": "「この予算じゃ厳しいですね」、一番へこむ一言だった。\n\nでも今思うと、あれで予算の上限を正直に言いすぎたのが原因だった。",
+      "threadId": "17941009185017613",
+      "charCount": 60,
       "account": "a2"
     }
   ]
