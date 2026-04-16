@@ -6299,6 +6299,62 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-04-16T10:56:15.647Z",
+      "originalThreadId": "18021504470824748",
+      "originalAccount": "a2",
+      "originalText": "火災保険、適当に選んだ。",
+      "replyText": "みんなここケチるんだよなぁ…。水害補償の範囲とか後から気付いても遅いやつだわ",
+      "replyId": "17934053964230844",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1290,
+        "likes": 0,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-04-16T10:59:27.822Z",
+      "originalThreadId": "18112775224695578",
+      "originalAccount": "a2",
+      "originalText": "月々の返済額、信じるな。\n\n35年で計算し直したら、利息だけで数百万飛んでた。\n\n「払える額」と「払う総額」は別の話。",
+      "replyText": "みんなここ甘く見るんだよなぁ…。金利0.5%違うだけで1000万近く変わるのに、営業に言われた額で判子押す人多すぎる。",
+      "replyId": "18086781344019807",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 16,
+        "likes": 0,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-04-16T11:01:36.896Z",
+      "originalThreadId": "18575516383054831",
+      "originalAccount": "a2",
+      "originalText": "パントリー、削った。\n\nキッチンが毎日ごちゃごちゃのまま。",
+      "replyText": "ちなみに今、食器棚とか別で置いてる？それとも吊り棚とかで対応してるのかな",
+      "replyId": "18099505535056188",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 512,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-16T11:03:53.120Z",
+      "originalThreadId": "17974195952858808",
+      "originalAccount": "a2",
+      "originalText": "つなぎ融資、存在すら知らなかった。\n\n家が完成するまでの間、お金が2重に出ていく期間がある。\n\nローンの返済、始まってないのに。\n\n気づいたのは契約後だった。",
+      "replyText": "体感で後から知った人7割超えてるんだよね。銀行の説明が雑すぎるんだよなぁ。つなぎ融資なしだと200万くらい別に用意しないとヤバい。",
+      "replyId": "18168921394416554",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 3763,
+        "likes": 11,
+        "replies": 3
+      }
     }
   ]
 }
