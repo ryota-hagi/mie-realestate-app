@@ -6215,6 +6215,90 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-04-16T05:55:25.446Z",
+      "originalThreadId": "18021504470824748",
+      "originalAccount": "a2",
+      "originalText": "火災保険、適当に選んだ。",
+      "replyText": "火災保険って家建てた後になって相談される話、めちゃ多いんだよなぁ。補償内容で後から気づく人も結構いる。",
+      "replyId": "18149023537479239",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1289,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-16T05:57:32.431Z",
+      "originalThreadId": "18086163734198396",
+      "originalAccount": "a2",
+      "originalText": "ベランダ広くしたの、無駄だった。\n\n乾燥機使うから、結局ただの物置。",
+      "replyText": "ベランダ広くした後悔、うちのサイトにも多い声だわ。洗濯動線を先に固めてから決めるべきだったって人、ほんとに多いんだよね。",
+      "replyId": "18096207499864854",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1114,
+        "likes": 1,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-04-16T06:00:17.376Z",
+      "originalThreadId": "18112775224695578",
+      "originalAccount": "a2",
+      "originalText": "月々の返済額、信じるな。\n\n35年で計算し直したら、利息だけで数百万飛んでた。\n\n「払える額」と「払う総額」は別の話。",
+      "replyText": "ちなみに金利何%で計算してた？変動と固定だと数百万変わることあるんだよね",
+      "replyId": "17962347692921409",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 11,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-16T06:03:20.411Z",
+      "originalThreadId": "17974195952858808",
+      "originalAccount": "a2",
+      "originalText": "つなぎ融資、存在すら知らなかった。\n\n家が完成するまでの間、お金が2重に出ていく期間がある。\n\nローンの返済、始まってないのに。\n\n気づいたのは契約後だった。",
+      "replyText": "つなぎ融資知らずに契約する人、マジで多いんだよなぁ。数百万単位で資金計画狂うのに、営業も詳しく説明しない場合けっこあるわ。",
+      "replyId": "18131254849559101",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1403,
+        "likes": 3,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-16T06:05:49.099Z",
+      "originalThreadId": "17865577512672346",
+      "originalAccount": "a2",
+      "originalText": "タンクレス、見た目7割で選んだ。1年住んで後悔は3割くらい。\n\n手入れはタンク付きの方が楽らしい。でも正直どっちも慣れる気がしてる。\n\nみんなはどっちにした？",
+      "replyText": "みんなここ見た目で選んで、後から掃除で泣くんだよなぁ…。実際は毎週の手入れ考えたら圧倒的にタンク付きが楽だわ",
+      "replyId": "18161285578391010",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 511,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-16T06:07:39.763Z",
+      "originalThreadId": "17891468211331951",
+      "originalAccount": "a3",
+      "originalText": "現場、毎日見に行ってた。\n\n骨組みができた日、壁ができた日、窓がついた日。\n用もないのに夕方立ち寄って、しばらく眺めて帰る。\n\nでも結局、完成したら自分の思ってたのと微妙にちがう部屋があった。\n\nあん",
+      "replyText": "毎日見てても完成後に違和感感じる人、体感7割くらいいるんだよ。実際の生活サイズで見ないと気づかないやつだわ",
+      "replyId": "17867533056611691",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 112,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
