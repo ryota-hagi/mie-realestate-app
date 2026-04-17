@@ -6425,6 +6425,48 @@
         "likes": 0,
         "replies": 1
       }
+    },
+    {
+      "date": "2026-04-17T16:54:58.209Z",
+      "originalThreadId": "18209843935333307",
+      "originalAccount": "a2",
+      "originalText": "住宅ローン控除、仕組みをわかってなかった。",
+      "replyText": "あと税務署への申告忘れてて翌年急いで修正申告した人、体感で結構多いんだよね",
+      "replyId": "17972249415034455",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 2567,
+        "likes": 0,
+        "replies": 2
+      }
+    },
+    {
+      "date": "2026-04-17T16:57:52.359Z",
+      "originalThreadId": "18042896417554998",
+      "originalAccount": "a2",
+      "originalText": "ハザードマップ、契約後に初めて見た。\n\n浸水想定区域だった。\n\n後悔は10割。取り返しがつかない失敗って、これくらいしかないと思ってる。",
+      "replyText": "ちなみに営業さんには事前に聞いた？地域によっては浸水リスク低いって言い張る営業もいるんだよなぁ",
+      "replyId": "18093325610277269",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 443,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-17T17:00:26.802Z",
+      "originalThreadId": "17877404475561608",
+      "originalAccount": "a3",
+      "originalText": "コンセントの位置で本気で喧嘩した。\n\n「ここに欲しい」「なんで？」「なんで？じゃないよ」ってなった。\n\n結局、私の言う通りにしなかった場所、今は旦那の充電器がぶら下がってる。",
+      "replyText": "うちのサイトにも同じ声めちゃ届いてるわ。後から「やっぱりあっち側に欲しかった」パターン、本当多い",
+      "replyId": "18079308818128130",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 78,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
