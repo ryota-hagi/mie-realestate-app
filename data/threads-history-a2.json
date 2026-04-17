@@ -3373,7 +3373,16 @@
       "text": "お風呂の窓、なんとなくでつけるな。\n\n寒いだけだった。\n\n断熱性は落ちる。掃除の手間は増える。換気は換気扇で十分だった。\n\n窓なしにしておけば、10万近く削れてたかもしれない。",
       "threadId": "18175252741401699",
       "charCount": 88,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 564,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-17T07:55:40.327Z"
     },
     {
       "date": "2026-04-16T07:55:10.968Z",
@@ -3382,7 +3391,16 @@
       "text": "住宅ローン控除、仕組みをわかってなかった。",
       "threadId": "18209843935333307",
       "charCount": 21,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 2552,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-17T07:55:41.026Z"
     },
     {
       "date": "2026-04-16T11:12:22.599Z",
@@ -3418,6 +3436,15 @@
       "text": "3社しか比較しなかった。\n\nそれが後悔の一番上にある。",
       "threadId": "18071375204359620",
       "charCount": 27,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-17T07:55:53.092Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:20",
+      "text": "ハザードマップ、契約後に初めて見た。\n\n浸水想定区域だった。\n\n後悔は10割。取り返しがつかない失敗って、これくらいしかないと思ってる。",
+      "threadId": "18042896417554998",
+      "charCount": 68,
       "account": "a2"
     }
   ]
