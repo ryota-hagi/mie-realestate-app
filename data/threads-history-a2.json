@@ -3409,7 +3409,16 @@
       "text": "「この予算じゃ厳しいですね」、一番へこむ一言だった。\n\nでも今思うと、あれで予算の上限を正直に言いすぎたのが原因だった。",
       "threadId": "17941009185017613",
       "charCount": 60,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 206,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-17T14:21:36.830Z"
     },
     {
       "date": "2026-04-16T14:58:38.011Z",
@@ -3454,6 +3463,15 @@
       "text": "バルコニー、年3回しか出ない。\n\n1年住んで気づいた。\n\n洗濯は乾燥機で完結してるし、外に出る理由がない。\n\n削って正解だったな、と思う場所ナンバーワンかも。",
       "threadId": "18013712096687106",
       "charCount": 79,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-17T14:21:45.004Z",
+      "category": "gyakusetsu",
+      "topicKey": "aruaru:9",
+      "text": "審査結果の通知、人生で一番メールを確認した3日間だった。",
+      "threadId": "17875533156449457",
+      "charCount": 28,
       "account": "a2"
     }
   ]
