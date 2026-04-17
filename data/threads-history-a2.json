@@ -3355,7 +3355,16 @@
       "text": "タンクレス、見た目7割で選んだ。1年住んで後悔は3割くらい。\n\n手入れはタンク付きの方が楽らしい。でも正直どっちも慣れる気がしてる。\n\nみんなはどっちにした？",
       "threadId": "17865577512672346",
       "charCount": 79,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 528,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-17T05:19:23.356Z"
     },
     {
       "date": "2026-04-16T05:21:35.475Z",
@@ -3400,6 +3409,15 @@
       "text": "坪単価、あてにならない数字だった。\n\n延床面積に含まれない部分がある。気づいたら見積もりと100万単位でズレてた。",
       "threadId": "17948645703139429",
       "charCount": 57,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-17T05:19:33.497Z",
+      "category": "hikaku",
+      "topicKey": "koukai:25",
+      "text": "3社しか比較しなかった。\n\nそれが後悔の一番上にある。",
+      "threadId": "18071375204359620",
+      "charCount": 27,
       "account": "a2"
     }
   ]
