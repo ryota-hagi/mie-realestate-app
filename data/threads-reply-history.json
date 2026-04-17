@@ -6355,6 +6355,48 @@
         "likes": 11,
         "replies": 3
       }
+    },
+    {
+      "date": "2026-04-17T05:58:51.088Z",
+      "originalThreadId": "17974195952858808",
+      "originalAccount": "a2",
+      "originalText": "つなぎ融資、存在すら知らなかった。\n\n家が完成するまでの間、お金が2重に出ていく期間がある。\n\nローンの返済、始まってないのに。\n\n気づいたのは契約後だった。",
+      "replyText": "うちのサイトにも同じ声めちゃ届く。つなぎ融資の存在を知らずに資金計画立ててる人、本当に多いんだよなぁ。契約前に気づけるかどうかで、精神的な余裕が全然違う。",
+      "replyId": "17969972106044623",
+      "buzzLevel": "SUPER_BUZZ",
+      "insights": {
+        "views": 5050,
+        "likes": 11,
+        "replies": 4
+      }
+    },
+    {
+      "date": "2026-04-17T06:01:29.525Z",
+      "originalThreadId": "18209843935333307",
+      "originalAccount": "a2",
+      "originalText": "住宅ローン控除、仕組みをわかってなかった。",
+      "replyText": "ちなみに何年くらい前に家建てた？控除額の計算ミスしてる人、めちゃ多いんだよね",
+      "replyId": "18100789610490826",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 2548,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-17T06:04:12.823Z",
+      "originalThreadId": "17891468211331951",
+      "originalAccount": "a3",
+      "originalText": "現場、毎日見に行ってた。\n\n骨組みができた日、壁ができた日、窓がついた日。\n用もないのに夕方立ち寄って、しばらく眺めて帰る。\n\nでも結局、完成したら自分の思ってたのと微妙にちがう部屋があった。\n\nあん",
+      "replyText": "ちなみに現場で気になった部分と、完成後にギャップ感じた場所は関連あった？",
+      "replyId": "18521558350072699",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 117,
+        "likes": 0,
+        "replies": 1
+      }
     }
   ]
 }
