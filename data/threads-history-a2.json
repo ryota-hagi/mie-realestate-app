@@ -3427,7 +3427,16 @@
       "text": "諸費用、本体価格の10%じゃ足りなかった。\n\n登記費用、引越し代、外構、カーテン。\n全部「別途」だった。\n\n気づいたら150万オーバーしてた。",
       "threadId": "18110188015834518",
       "charCount": 71,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 764,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-17T23:35:24.540Z"
     },
     {
       "date": "2026-04-16T23:36:56.828Z",
@@ -3472,6 +3481,15 @@
       "text": "審査結果の通知、人生で一番メールを確認した3日間だった。",
       "threadId": "17875533156449457",
       "charCount": 28,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-17T23:35:33.524Z",
+      "category": "hikaku",
+      "topicKey": "hikaku:11",
+      "text": "お風呂の窓、1年で開けた回数ゼロだった。\n\nなくても困らないし、あっても困らない。\nただ、掃除は増えた。\n\nみんなはどっちにした？",
+      "threadId": "18063975236381129",
+      "charCount": 65,
       "account": "a2"
     }
   ]
