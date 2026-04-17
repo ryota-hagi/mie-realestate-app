@@ -6397,6 +6397,34 @@
         "likes": 0,
         "replies": 1
       }
+    },
+    {
+      "date": "2026-04-17T10:47:12.072Z",
+      "originalThreadId": "17974195952858808",
+      "originalAccount": "a2",
+      "originalText": "つなぎ融資、存在すら知らなかった。\n\n家が完成するまでの間、お金が2重に出ていく期間がある。\n\nローンの返済、始まってないのに。\n\n気づいたのは契約後だった。",
+      "replyText": "みんなここ気づくの遅いんだよなぁ。契約前に言ってほしい情報なのに、銀行も工務店も教えてくれない人多い。",
+      "replyId": "18108998458933018",
+      "buzzLevel": "SUPER_BUZZ",
+      "insights": {
+        "views": 5054,
+        "likes": 11,
+        "replies": 5
+      }
+    },
+    {
+      "date": "2026-04-17T10:50:23.538Z",
+      "originalThreadId": "18209843935333307",
+      "originalAccount": "a2",
+      "originalText": "住宅ローン控除、仕組みをわかってなかった。",
+      "replyText": "ローン控除で損してる人、体感10人に3人くらいいるんだよなぁ。税理士に相談してから申告した方がいいやつ。",
+      "replyId": "18121336903622613",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 2555,
+        "likes": 0,
+        "replies": 1
+      }
     }
   ]
 }
