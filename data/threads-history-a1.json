@@ -3265,7 +3265,16 @@
       "text": "繰上げ返済か投資か、いまだに正解わからない。\n\nみんなどっちにした？",
       "threadId": "17971752807044826",
       "charCount": 34,
-      "account": "a1"
+      "account": "a1",
+      "engagement": {
+        "views": 14,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-18T15:03:49.218Z"
     }
   ]
 }
