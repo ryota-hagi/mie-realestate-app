@@ -3499,7 +3499,16 @@
       "text": "バルコニー、年3回しか出ない。\n\n1年住んで気づいた。\n\n洗濯は乾燥機で完結してるし、外に出る理由がない。\n\n削って正解だったな、と思う場所ナンバーワンかも。",
       "threadId": "18013712096687106",
       "charCount": 79,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 546,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-18T14:02:03.987Z"
     },
     {
       "date": "2026-04-17T14:21:45.004Z",
@@ -3535,6 +3544,15 @@
       "text": "ここに棚があれば、って毎月思う場所がある。\n\n設計中には気づかなかった。住んで初めてわかる。",
       "threadId": "18019458491827984",
       "charCount": 46,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-18T14:02:17.137Z",
+      "category": "koukai",
+      "topicKey": "aruaru:11",
+      "text": "外壁の色、サンプルと全然違った。\n\n手のひらサイズで見た色が、家1軒分になるとほぼ別物だった。",
+      "threadId": "18110465431835493",
+      "charCount": 47,
       "account": "a2"
     }
   ]
