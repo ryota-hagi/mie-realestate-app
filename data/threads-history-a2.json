@@ -3463,7 +3463,16 @@
       "text": "3社しか比較しなかった。\n\nそれが後悔の一番上にある。",
       "threadId": "18071375204359620",
       "charCount": 27,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 0,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-18T07:15:13.905Z"
     },
     {
       "date": "2026-04-17T07:55:53.092Z",
