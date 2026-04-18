@@ -1,13 +1,41 @@
 {
-  "scannedAt": "2026-04-17T10:04:52.161Z",
+  "scannedAt": "2026-04-18T10:31:23.723Z",
   "keywords": {
-    "工務店": {
+    "家づくり": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "新築": {
+    "マイホーム": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "ハウスメーカー": {
+      "resultCount": 1,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": [
+        {
+          "id": "17864006730543502",
+          "text": "みんなここ引っかかるんだよなぁ。延床面積の定義、ハウスメーカーごとに微妙に違うんだよね。",
+          "username": "custom_housing_hikaku",
+          "timestamp": "2026-04-18T05:30:50+0000",
+          "permalink": "https://www.threads.com/@custom_housing_hikaku/post/DXQue5YFGG0",
+          "insights": {
+            "views": 0,
+            "likes": 0,
+            "replies": 0,
+            "reposts": 0,
+            "quotes": 0
+          },
+          "score": 0
+        }
+      ]
+    },
+    "間取り": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -19,31 +47,19 @@
       "avgScore": 0,
       "topPosts": []
     },
-    "家づくり": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
     "注文住宅": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "住宅補助金": {
+    "いなべ": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "鈴鹿": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "三重県": {
+    "四日市": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,

@@ -2323,7 +2323,16 @@
       "text": "完成してから「図面と違う」ってなる人、意外と多い。\n\nドアの開く向きとか、コンセントの位置とか、細かいところが違ってたって相談、けっこう聞く。\n\n大きい見落としじゃないだけに業者に言いにくくて、モヤモヤしたまま住み続けてる人もいる。",
       "threadId": "18165184141422785",
       "charCount": 116,
-      "account": "business"
+      "account": "business",
+      "engagement": {
+        "views": 213,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-18T10:31:15.170Z"
     },
     {
       "date": "2026-04-17T10:05:01.591Z",
@@ -2332,6 +2341,24 @@
       "text": "4月になると「家ほしい」って思い始める人、急に増える。\n\n新生活で周りが動き始めると焦るのか、この時期の相談件数、体感で1.5倍くらいになる。\n\nただ動機が「なんとなく」のままだと、後で「なんでこの土地にしたんだっけ」ってなりやすい。",
       "threadId": "18099017204045980",
       "charCount": 117,
+      "account": "business",
+      "engagement": {
+        "views": 201,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-18T10:31:15.824Z"
+    },
+    {
+      "date": "2026-04-18T10:31:35.150Z",
+      "category": "aruaru",
+      "topicKey": "aruaru:23",
+      "text": "ローン通った瞬間、嬉しさと絶望が同時に来るって人、多い。\n\n「やった、通った！」ってなった1秒後に「あ、35年か」って気づくやつ。\n\nみんなはどっちの感情が先にきた？\n🏡",
+      "threadId": "18061936679415008",
+      "charCount": 86,
       "account": "business"
     }
   ]
