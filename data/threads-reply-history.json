@@ -6509,6 +6509,20 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-04-18T10:34:05.261Z",
+      "originalThreadId": "18456919432111558",
+      "originalAccount": "a2",
+      "originalText": "ボーナス払い、消えた。",
+      "replyText": "みんなここで計算ミスするんだよなぁ。手取りで考えないと危ない",
+      "replyId": "18117822886657143",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 243,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
