@@ -6523,6 +6523,20 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-04-18T16:39:47.277Z",
+      "originalThreadId": "17948645703139429",
+      "originalAccount": "a2",
+      "originalText": "坪単価、あてにならない数字だった。\n\n延床面積に含まれない部分がある。気づいたら見積もりと100万単位でズレてた。",
+      "replyText": "あと階段や廊下の広さも坪単価に入ってるのに、実際に家具置くと「あ、これ無駄だったな」ってなるんだよなぁ。",
+      "replyId": "18178404265389601",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 984,
+        "likes": 0,
+        "replies": 1
+      }
     }
   ]
 }
