@@ -6467,6 +6467,48 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-04-18T05:29:01.579Z",
+      "originalThreadId": "18209843935333307",
+      "originalAccount": "a2",
+      "originalText": "住宅ローン控除、仕組みをわかってなかった。",
+      "replyText": "ちなみに何年目で気づいた？1年目だと取り戻せることもあるんだよね",
+      "replyId": "17893895757575026",
+      "buzzLevel": "BUZZ",
+      "insights": {
+        "views": 2568,
+        "likes": 0,
+        "replies": 3
+      }
+    },
+    {
+      "date": "2026-04-18T05:30:53.244Z",
+      "originalThreadId": "17948645703139429",
+      "originalAccount": "a2",
+      "originalText": "坪単価、あてにならない数字だった。\n\n延床面積に含まれない部分がある。気づいたら見積もりと100万単位でズレてた。",
+      "replyText": "みんなここ引っかかるんだよなぁ。延床面積の定義、ハウスメーカーごとに微妙に違うんだよね。",
+      "replyId": "17864006730543502",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 981,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-18T05:32:56.470Z",
+      "originalThreadId": "17875533156449457",
+      "originalAccount": "a2",
+      "originalText": "審査結果の通知、人生で一番メールを確認した3日間だった。",
+      "replyText": "ローン本審査の待ってる間、心臓バクバクだよなぁ。その3日間で人生変わるから気持ちわかる。",
+      "replyId": "18101581723948792",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 97,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
