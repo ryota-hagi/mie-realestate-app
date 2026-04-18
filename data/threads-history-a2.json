@@ -3481,7 +3481,16 @@
       "text": "ハザードマップ、契約後に初めて見た。\n\n浸水想定区域だった。\n\n後悔は10割。取り返しがつかない失敗って、これくらいしかないと思ってる。",
       "threadId": "18042896417554998",
       "charCount": 68,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 446,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-18T10:50:45.879Z"
     },
     {
       "date": "2026-04-17T11:04:32.932Z",
@@ -3517,6 +3526,15 @@
       "text": "ボーナス払い、消えた。",
       "threadId": "18456919432111558",
       "charCount": 11,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-18T10:50:53.855Z",
+      "category": "kinshi",
+      "topicKey": "aruaru:8",
+      "text": "ここに棚があれば、って毎月思う場所がある。\n\n設計中には気づかなかった。住んで初めてわかる。",
+      "threadId": "18019458491827984",
+      "charCount": 46,
       "account": "a2"
     }
   ]
