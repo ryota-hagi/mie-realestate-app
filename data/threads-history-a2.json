@@ -3517,7 +3517,16 @@
       "text": "審査結果の通知、人生で一番メールを確認した3日間だった。",
       "threadId": "17875533156449457",
       "charCount": 28,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 101,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-18T23:30:37.587Z"
     },
     {
       "date": "2026-04-17T23:35:33.524Z",
@@ -3553,6 +3562,15 @@
       "text": "外壁の色、サンプルと全然違った。\n\n手のひらサイズで見た色が、家1軒分になるとほぼ別物だった。",
       "threadId": "18110465431835493",
       "charCount": 47,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-18T23:30:47.488Z",
+      "category": "gyakusetsu",
+      "topicKey": "gyakusetsu:5",
+      "text": "おしゃれな家、1年で飽きた。\n\n映える間取りって、毎日過ごすには刺激が強すぎる。\n\n「いい家だね」って言われ続けたけど、住んでる自分が一番落ち着かなかった。",
+      "threadId": "17894371518445327",
+      "charCount": 78,
       "account": "a2"
     }
   ]
