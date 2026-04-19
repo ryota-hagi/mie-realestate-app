@@ -3571,7 +3571,16 @@
       "text": "ここに棚があれば、って毎月思う場所がある。\n\n設計中には気づかなかった。住んで初めてわかる。",
       "threadId": "18019458491827984",
       "charCount": 46,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 384,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-19T10:50:57.708Z"
     },
     {
       "date": "2026-04-18T14:02:17.137Z",
@@ -3589,6 +3598,15 @@
       "text": "おしゃれな家、1年で飽きた。\n\n映える間取りって、毎日過ごすには刺激が強すぎる。\n\n「いい家だね」って言われ続けたけど、住んでる自分が一番落ち着かなかった。",
       "threadId": "17894371518445327",
       "charCount": 78,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-19T10:51:05.945Z",
+      "category": "kinshi",
+      "topicKey": "kinshi:9",
+      "text": "南向きの大窓、夏が地獄だった。",
+      "threadId": "17914999710162385",
+      "charCount": 15,
       "account": "a2"
     }
   ]
