@@ -6537,6 +6537,48 @@
         "likes": 0,
         "replies": 1
       }
+    },
+    {
+      "date": "2026-04-19T05:53:04.334Z",
+      "originalThreadId": "18042896417554998",
+      "originalAccount": "a2",
+      "originalText": "ハザードマップ、契約後に初めて見た。\n\n浸水想定区域だった。\n\n後悔は10割。取り返しがつかない失敗って、これくらいしかないと思ってる。",
+      "replyText": "契約前のハザードマップ確認、体感で相談者の6割が見落としてるんだよなぁ。銀行の融資判定では引っかからないから気づきにくいんだよね。",
+      "replyId": "18081595898107018",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 453,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-19T05:55:26.407Z",
+      "originalThreadId": "17875533156449457",
+      "originalAccount": "a2",
+      "originalText": "審査結果の通知、人生で一番メールを確認した3日間だった。",
+      "replyText": "ローン審査の通知待ちって、体感9割の人がスマホ中毒になるんだよなぁ。メール来た瞬間に心臓バクバクするやつ。",
+      "replyId": "18007412522898383",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 106,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-19T05:57:51.790Z",
+      "originalThreadId": "18110465431835493",
+      "originalAccount": "a2",
+      "originalText": "外壁の色、サンプルと全然違った。\n\n手のひらサイズで見た色が、家1軒分になるとほぼ別物だった。",
+      "replyText": "外壁の色、実物サイズで見ないと絶対失敗するやつだわ。うちのサイトにも同じ後悔めちゃ届いてる",
+      "replyId": "18085433447579960",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1060,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
