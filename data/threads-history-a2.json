@@ -3535,7 +3535,16 @@
       "text": "お風呂の窓、1年で開けた回数ゼロだった。\n\nなくても困らないし、あっても困らない。\nただ、掃除は増えた。\n\nみんなはどっちにした？",
       "threadId": "18063975236381129",
       "charCount": 65,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 259,
+        "likes": 0,
+        "replies": 0,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 0,
+      "engagementUpdatedAt": "2026-04-19T05:19:16.607Z"
     },
     {
       "date": "2026-04-18T04:59:28.838Z",
@@ -3544,7 +3553,16 @@
       "text": "ボーナス払い、消えた。",
       "threadId": "18456919432111558",
       "charCount": 11,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 250,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-19T05:19:17.255Z"
     },
     {
       "date": "2026-04-18T10:50:53.855Z",
