@@ -6579,6 +6579,62 @@
         "likes": 0,
         "replies": 0
       }
+    },
+    {
+      "date": "2026-04-19T16:39:51.444Z",
+      "originalThreadId": "18087659993245512",
+      "originalAccount": "a1",
+      "originalText": "タンクレスにして、後悔はないけど、正直ちょっと複雑。\n\n見た目がきれいで選んだんだけど、停電のとき手動で流す手順が面倒で、説明書引っ張り出した😅\n\nみんなはどっちにした？",
+      "replyText": "ちなみに停電ってどのくらいの頻度で経験してる？うちのエリアだと年1回レベルなんだけど、そこまで気になってないって声の方が多いんだよね",
+      "replyId": "18125632804596647",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 188,
+        "likes": 1,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-19T16:42:28.081Z",
+      "originalThreadId": "18110465431835493",
+      "originalAccount": "a2",
+      "originalText": "外壁の色、サンプルと全然違った。\n\n手のひらサイズで見た色が、家1軒分になるとほぼ別物だった。",
+      "replyText": "うちのサイトにも同じ声めちゃ届いてる。面積効果で色の見え方ガラッと変わるんだよね。",
+      "replyId": "18120009139723408",
+      "buzzLevel": "RISING",
+      "insights": {
+        "views": 1060,
+        "likes": 0,
+        "replies": 1
+      }
+    },
+    {
+      "date": "2026-04-19T16:45:01.093Z",
+      "originalThreadId": "17914999710162385",
+      "originalAccount": "a2",
+      "originalText": "南向きの大窓、夏が地獄だった。",
+      "replyText": "冬は最高でも、夏のカーテン代と冷房代で後悔してる人めっちゃ多いんだよなぁ。あと西向きも同じくらいやばい。",
+      "replyId": "18075413393197370",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 495,
+        "likes": 0,
+        "replies": 0
+      }
+    },
+    {
+      "date": "2026-04-19T16:47:43.964Z",
+      "originalThreadId": "17942084928193351",
+      "originalAccount": "a3",
+      "originalText": "「もう少し貯めてから」vs「今の金利で」、2ヶ月揉めた。\n\n結局折れたのは私だった。今もどっちが正解かわからない。",
+      "replyText": "金利と貯金額のトレードオフ、判断めちゃ難しいよね。後から「あの時○○だったら」って考えるのは誰もが通る道だわ。",
+      "replyId": "18313834156256833",
+      "buzzLevel": "NORMAL",
+      "insights": {
+        "views": 341,
+        "likes": 0,
+        "replies": 0
+      }
     }
   ]
 }
