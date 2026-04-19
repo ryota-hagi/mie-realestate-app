@@ -1,13 +1,7 @@
 {
-  "scannedAt": "2026-04-18T10:31:23.723Z",
+  "scannedAt": "2026-04-19T10:30:29.208Z",
   "keywords": {
-    "家づくり": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "マイホーム": {
+    "住宅ローン": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -35,13 +29,7 @@
         }
       ]
     },
-    "間取り": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "土地探し": {
+    "工務店": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
@@ -53,25 +41,37 @@
       "avgScore": 0,
       "topPosts": []
     },
+    "新築": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "住宅補助金": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
     "いなべ": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
-    "四日市": {
-      "resultCount": 0,
-      "totalScore": 0,
-      "avgScore": 0,
-      "topPosts": []
-    },
-    "新生活 マイホーム": {
+    "亀山": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,
       "topPosts": []
     },
     "住宅展示場": {
+      "resultCount": 0,
+      "totalScore": 0,
+      "avgScore": 0,
+      "topPosts": []
+    },
+    "新生活 マイホーム": {
       "resultCount": 0,
       "totalScore": 0,
       "avgScore": 0,

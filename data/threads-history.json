@@ -2360,6 +2360,15 @@
       "threadId": "18061936679415008",
       "charCount": 86,
       "account": "business"
+    },
+    {
+      "date": "2026-04-19T10:30:37.916Z",
+      "category": "loan",
+      "topicKey": "loan:housing-loan:section:3",
+      "text": "審査に落ちた原因、カードの分割払い残ってたせいだったって人、けっこういる。",
+      "threadId": "18110485741643054",
+      "charCount": 37,
+      "account": "business"
     }
   ]
 }
