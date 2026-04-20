@@ -3625,7 +3625,16 @@
       "text": "南向きの大窓、夏が地獄だった。",
       "threadId": "17914999710162385",
       "charCount": 15,
-      "account": "a2"
+      "account": "a2",
+      "engagement": {
+        "views": 497,
+        "likes": 0,
+        "replies": 1,
+        "reposts": 0,
+        "quotes": 0
+      },
+      "engagementScore": 4,
+      "engagementUpdatedAt": "2026-04-20T11:24:44.289Z"
     },
     {
       "date": "2026-04-19T23:32:06.007Z",
@@ -3643,6 +3652,15 @@
       "text": "2階リビング、日当たりは最高だった。\n\n買い物の荷物を運ぶたびに、1階でよかったかもって思う。\n\nどっちにした？",
       "threadId": "18521289220073679",
       "charCount": 56,
+      "account": "a2"
+    },
+    {
+      "date": "2026-04-20T11:24:54.046Z",
+      "category": "loan",
+      "topicKey": "koukai:22",
+      "text": "近くのスーパー、入居2年で閉店した。\n\n立地で選んだ部分もあって、完全に抜けてた視点だった。\n\n建物は変えられても、周りの環境は変えられない。",
+      "threadId": "18064767266349392",
+      "charCount": 71,
       "account": "a2"
     }
   ]
